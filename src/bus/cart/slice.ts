@@ -6,17 +6,15 @@ import * as types from './types';
 
 // Reducers
 import * as reducers from './reducers';
-// MarkerGen import extraReducers
 
 export const initialState = null;
 
 export const nameSlice = 'cart';
-
-export const cartSlice = createSlice<types.CartState, typeof reducers>({
+//TODO selectors types
+export const cartSlice = createSlice<types.CartState, typeof reducers, "cart", any>({
     name: nameSlice,
     initialState,
     reducers,
-    // MarkerGen use extraReducers
 });
 
 export const sliceName = cartSlice.name;

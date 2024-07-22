@@ -4,7 +4,7 @@ import { createAction } from '@reduxjs/toolkit';
 import { put, takeLatest } from 'redux-saga/effects';
 
 // Init
-import { LOCAL_STORAGE } from '@/init';
+import { LOCAL_STORAGE } from '@/lib';
 
 // Slice
 import { sliceName } from '../slice';

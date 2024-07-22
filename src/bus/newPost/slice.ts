@@ -6,18 +6,16 @@ import * as types from './types';
 
 // Reducers
 import * as reducers from './reducers';
-// MarkerGen import extraReducers
 
 export const initialState: types.NewPostState = {
     cities:     null,
     warehouses: null,
 };
-
-export const newPostSlice = createSlice<types.NewPostState, typeof reducers>({
+//TODO selectors types
+export const newPostSlice = createSlice<types.NewPostState, typeof reducers, 'newPost', any>({
     name: 'newPost',
     initialState,
     reducers,
-    // MarkerGen use extraReducers
 });
 
 export const sliceName = newPostSlice.name;

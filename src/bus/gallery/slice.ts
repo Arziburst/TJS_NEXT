@@ -6,17 +6,15 @@ import * as types from './types';
 
 // Reducers
 import * as reducers from './reducers';
-// MarkerGen import extraReducers
 
 const initialState: types.GalleryState = {
     gallery: null,
 };
-
-export const gallerySlice = createSlice<types.GalleryState, typeof reducers>({
+//TODO selectors types
+export const gallerySlice = createSlice<types.GalleryState, typeof reducers, 'gallery', any>({
     name: 'gallery',
     initialState,
     reducers,
-    // MarkerGen use extraReducers
 });
 
 export const sliceName = gallerySlice.name;

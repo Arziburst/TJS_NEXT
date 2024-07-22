@@ -18,9 +18,8 @@ export const initialState: types.ProductsState = {
     products:       null,
     currentProduct: null,
 };
-
-// export const productsSlice = createSlice<types.ProductsState, typeof reducers>({ // TODO
-export const productsSlice = createSlice({
+//TODO selectors types
+export const productsSlice = createSlice<types.ProductsState, typeof reducers, 'products', any>({
     name: 'products',
     initialState,
     reducers,

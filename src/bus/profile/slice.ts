@@ -1,18 +1,16 @@
 // Core
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Types
 import * as types from './types';
 
 // Reducers
 import * as reducers from './reducers';
-// MarkerGen import extraReducers
 
 export const initialState: types.ProfileState = null;
-
-// export const profileSlice = createSlice<types.ProfileState, typeof reducers>({
-export const profileSlice = createSlice({
-    name: 'profile',
+//TODO selectors types
+export const profileSlice = createSlice<types.ProfileState, typeof reducers, "profile", any>({
+    name: "profile",
     initialState,
     reducers,
 });

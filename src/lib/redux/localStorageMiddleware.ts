@@ -10,15 +10,13 @@ import { nameSlice } from '@/bus/cart/slice';
 
 // Reducer
 import * as reducers from '@/bus/cart/reducers';
+
 import { RootState } from './store';
 import { ls } from '@/tools/utils';
 
-// Types
-type Actions = PayloadAction<any>;
-
 const convertNameToAction = (name: string) => `${nameSlice}/${name}`;
 
-export const localStorageMiddleware: Middleware<{}, RootState> = (store) => (next) => (action: Actions) => {
+export const localStorageMiddleware: Middleware<{}, RootState> = (store) => (next) => (action: any) => {
     const cart = store.getState().cart;
 
     switch (action.type) {
