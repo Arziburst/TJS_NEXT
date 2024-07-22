@@ -1,0 +1,32 @@
+.root {
+    min-height: calc(var(--vh, 1vh) * 100 - var(--vh_header) - var(--vh_cookie_consent_banner));
+    min-height: calc(100svh - var(--vh_header) - var(--vh_cookie_consent_banner));
+}
+
+.el {
+    position: relative;
+}
+
+.el + *::after {
+    position: absolute;
+    top: calc(calc(-12px / 2) - 2px);
+    left: 50%;
+    transform: translate(-50%, 50%);
+    content: "";
+    height: 2px;
+    width: 200vw;
+    background-color: var(--tertiary_100);
+    opacity: .1;
+}
+
+@media (min-width: 768px) {
+    .grid > *:nth-child(2n):not(:last-child)::after {
+        display: none;
+    }   
+}
+
+@media (min-height: 700px) and (min-width: 1024px) {
+    .footer {
+        @apply py-16
+    }
+}

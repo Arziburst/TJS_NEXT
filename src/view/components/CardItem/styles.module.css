@@ -1,0 +1,42 @@
+.root {
+    @apply w-[164px] 
+        sb:w-[200px];
+}
+
+.images_container {
+    @apply w-[164px] h-[154px] rounded 
+        sb:w-[200px] sb:h-[200px];
+}
+
+.images_container__small {
+    @apply w-[120px] h-[120px] 
+        sb:w-[100px] sb:h-[100px]
+}
+
+.images_container:hover .first_image {
+    @apply opacity-0;
+}
+
+.images_container:hover .second_image {
+    @apply opacity-100;
+}
+
+.first_image, 
+.second_image {
+    @apply transition duration-500;
+}
+
+.second_image {
+    @apply absolute inset-0 opacity-0;
+}
+
+.title {
+    @apply text-sm text-[15px] transition duration-500;
+}
+.title:hover {
+    @apply text-quaternary;
+}
+
+.price {
+    @apply text-sm text-[15px] text-quaternary;
+}

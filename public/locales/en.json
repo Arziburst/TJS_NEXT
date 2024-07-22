@@ -1,0 +1,187 @@
+{
+    "categories": {
+        "see-all": "See all",
+        "brooch": "Brooch",
+        "earrings": "Earrings",
+        "bestsellers": "Bestsellers",
+        "bracelets": "Bracelets",
+        "necklace": "Necklace",
+        "rings": "Rings"
+    },
+    "filtersByPrice": {
+        "init": "select filter",
+        "lowToHigh": "price (low to high)",
+        "highToLow": "price (high to low)"
+    },
+    "pages": {
+        "common": {
+            "total": "Total"
+        },
+        "contacts": {
+            "root": "Contacts"
+        },
+        "aboutUs": {
+            "root": "About us",
+            "firstTitle": "My name is Elena , I follow the news and trends, have extensive experience working with jewelry.",
+            "mainAltImage": "Main image of \"About us\" page",
+            "firstPartOfSecondTitle": "love my work and want to bring joy and beauty to our world.",
+            "secondPartOfSecondTitle": "Affordable luxury - is my motto!",
+            "text": "I also create custom jewelry. And always take into account the wishes of customers.",
+            "phone": "Phone",
+            "email": "Email"
+        },
+        "cart": {
+            "root": "Cart",
+            "title": "Cart",
+            "textIfNotData": "Your cart is empty",
+            "yourOrder": "Your order",
+            "continueToCheckout": "Continue to checkout"
+        },
+        "management": {
+            "title": "Please enter product information.",
+            "labelTitle": "Enter title",
+            "labelType": "Choose the correct type for the product",
+            "labelDescription": "Enter description",
+            "labelWeight": "Enter the product weight in grams",
+            "labelPrice": "Enter product price in UAH/₴",
+            "labelAvailable": "Product available",
+            "availability": "Availability",
+            "nonAvailability": "Non-availability",
+            "confirmCompleteDeletion": "Confirm complete deletion!",
+            "uninstallError": "Uninstall error",
+            "buttonAddImageFromGallery": "Add images from the Gallery",
+            "buttonDeleteAllImages": "Delete all images",
+            "altImageFromGallery": "Image from the Gallery"
+        },
+        "order": {
+            "textIfNotData": "Order did not find",
+            "firstTitle": "Information about order.",
+            "email": "Email",
+            "phone": "Phone",
+            "comment": "Comment",
+            "secondTitle": "Please enter product information.",
+            "label": "Choose the correct type for the product"
+        },
+        "orderDetails": {
+            "title": "Cart",
+            "firstTitleForm": "Contact Details",
+            "secondTitleForm": "Shipping details",
+            "yourOrder": "Your Order",
+            "buttonMakeOrder": "Make Order"
+        },
+        "paymentFail": {
+            "title": "The payment failed!"
+        },
+        "paymentSuccess": {
+            "title": "Order success",
+            "grandTotal": "grand total",
+            "buttonContinueShopping": "Continue shopping"
+        },
+        "product": {
+            "link": "Size Guide",
+            "buttonProductAddedToCart": "The product added to the cart",
+            "buttonAddToCart": "Add to Cart"
+        },
+        "root": {
+            "text": "is a store of fashionable and stylish jewelry, which the author-designer brings to life.",
+            "seeAll": "See all",
+            "altImage": "Image see all",
+            "linkAltImage": "Image of category"
+        },
+        "shop": {
+            "root": "Shop",
+            "titleFilterShopBy": "Shop by",
+            "titleFilterByPrice": "Filter by",
+            "buttonShowMore": "Show more",
+            "textShowed": "Showed",
+            "textFrom": "from",
+            "textProducts": "products"
+        },
+        "signInAndUp": {
+            "root": "Sign In & Up",
+            "signIn": {
+                "root": "Sign In",
+                "title": "Please enter your authentication information."
+            },
+            "signUp": {
+                "root": "Sign Up",
+                "title": "Please enter your registration information."
+            }
+        }
+    },
+    "components": {
+        "cookieConsentBanner": {
+            "text": "We use cookies to provide you the best experience on our website. By continuing to use our site, we will assume you are happy with it.",
+            "gotIt": "Got it"
+        },
+        "header": {
+            "textSettings": "Settings",
+            "buttonAddProduct": "Add product",
+            "buttonOrders": "Orders",
+            "buttonLogout": "Logout",
+            "buttonSignInUp": "Sign In & Up"
+        },
+        "nav": {
+            "language": "Language"
+        },
+        "notData": "Not data",
+        "footer": {
+            "textPhone": "Phone",
+            "textEmail": "Email"
+        }
+    },
+    "errors": {
+        "clickRightCity": "You have to write right city and click your city",
+        "clickRightWarehouse": "You have to click your warehouse",
+        "clickNumberWarehouse": "You have to write or click to number of warehouse",
+        "required": "This field is required",
+        "invalidEmail": "Invalid email format",
+        "invalidPhone": "Invalid phone number format. For example +380946826242",
+        "nameMinLength": "Name must be at least {{ index }} characters long",
+        "priceMinLength": "The price must be at least {{ index }} UAH.",
+        "passwordMinLength": "Password must be at least {{ index }} characters long",
+        "fieldMustHaveAtLeast": "The field must have at least {{ index }} items"
+    },
+    "cards": {
+        "product": {
+            "onlyOrder": "Only order",
+            "firstAltImageOfCard": "First image of product",
+            "secondAltImageOfCard": "Second image of product"
+        },
+        "order": {
+            "status": {
+                "canceled": "Canceled",
+                "inProcessing": "In processing",
+                "accepted": "Accepted",
+                "closed": "Closed"
+            }
+        }
+    },
+    "pagination": {
+        "text": "of"
+    },
+    "placeholders": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "nameAndSurname": "Name and Surname",
+        "email": "Email",
+        "phone": "Phone",
+        "password": "Password",
+        "passwordAgain": "Password again",
+        "choosePostOffice": "Choose post office",
+        "comment": "Information that can help fulfill an order",
+        "city": "City",
+        "someData": "Enter some data..."
+    },
+    "buttons": {
+        "submit": "Submit",
+        "remove": "Remove",
+        "create": "Create",
+        "edit": "Edit"
+    },
+    "altImages": {
+        "product": "Image of Product",
+        "numberProduct": "{{ index }} image of the product",
+        "imageByURL": "Image by URL-adress {{ url }}"
+    }
+}

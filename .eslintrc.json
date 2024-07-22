@@ -1,0 +1,12 @@
+{
+  "extends": "next/core-web-vitals",
+  "globals": {
+    "__": "off"
+  },
+  "rules": {
+    "indent": [
+      "error",
+      4
+    ]
+  }
+}

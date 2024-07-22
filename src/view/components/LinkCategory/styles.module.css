@@ -1,0 +1,19 @@
+
+.root:hover img {
+    @apply brightness-110;
+}
+
+.root p {
+    @apply transition duration-1000 ease-out;
+    background: linear-gradient(0deg, var(--secondary_100) 0%, var(--secondary_100) 100%);
+    background-clip: text;
+    color: transparent;
+    /* todo add transition-duration, how to add it? */
+    /* transition-duration: 1000ms;  */
+}
+
+.root:hover p {
+    background: linear-gradient(96deg, var(--quaternary) 3.15%, var(--secondary_100) 86.85%);
+    background-clip: text;
+    color: transparent; 
+}

@@ -1,0 +1,187 @@
+{
+    "categories": {
+        "see-all": "Все",
+        "brooch": "Брошь",
+        "earrings": "Серьги",
+        "bestsellers": "Бестселлеры",
+        "bracelets": "Браслеты",
+        "necklace": "Ожерелье",
+        "rings": "Кольца"
+    },
+    "filtersByPrice": {
+        "init": "выбрать",
+        "lowToHigh": "цена (от низкой к высокой)",
+        "highToLow": "цена (от высокой к низкой)"
+    },
+    "pages": {
+        "common": {
+            "total": "Всего"
+        },
+        "contacts": {
+            "root": "Контакты"
+        },
+        "aboutUs": {
+            "root": "О нас",
+            "firstTitle": "Меня зовут Елена , я слежу за новинками и трендами, имею большой опыт работы с украшениями.",
+            "mainAltImage": "Главное изображение страницы «О нас»",
+            "firstPartOfSecondTitle": "люблю своё дело и хочу принести радость и красоту в наш мир.",
+            "secondPartOfSecondTitle": "Доступная роскошь - вот мой девиз!",
+            "text": "Также я создаю украшения и под заказ. И всегда учитываю желания клиентов.",
+            "phone": "Телефон",
+            "email": "Эл. Почта"
+        },
+        "cart": {
+            "root": "Корзина",
+            "title": "Корзина",
+            "textIfNotData": "Ваша корзина пуста",
+            "yourOrder": "Сумма заказа",
+            "continueToCheckout": "Продолжить оформление заказа"
+        },
+        "management": {
+            "title": "Пожалуйста, введите информацию о продукте.",
+            "labelTitle": "Введите название",
+            "labelType": "Выберите правильный тип продукта",
+            "labelDescription": "Введите описание",
+            "labelWeight": "Введите вес продукта в граммах",
+            "labelPrice": "Введите цену продукта в гривнах/₴",
+            "labelAvailable": "Товар в наличии",
+            "availability": "Наличие",
+            "nonAvailability": "Отсутствие",
+            "confirmCompleteDeletion": "Подтвердите полное удаление!",
+            "uninstallError": "Ошибка удаления",
+            "buttonAddImageFromGallery": "Добавить изображения из галереи",
+            "buttonDeleteAllImages": "Удалить все изображения",
+            "altImageFromGallery": "Изображение из галереи"
+        },
+        "order": {
+            "textIfNotData": "Заказ не найден",
+            "firstTitle": "Информация о заказе.",
+            "email": "Электронная почта",
+            "phone": "Телефон",
+            "comment": "Комментарий",
+            "secondTitle": "Пожалуйста, введите информацию о продукте.",
+            "label": "Выберите правильный тип продукта"
+        },
+        "orderDetails": {
+            "title": "Корзина",
+            "firstTitleForm": "Данные заказчика",
+            "secondTitleForm": "Доставка",
+            "yourOrder": "Заказ",
+            "buttonMakeOrder": "Оформить Заказ"
+        },
+        "paymentFail": {
+            "title": "Платеж не прошел!"
+        },
+        "paymentSuccess": {
+            "title": "Заказ принят",
+            "grandTotal": "общая сумма",
+            "buttonContinueShopping": "Продолжить покупки"
+        },
+        "product": {
+            "link": "Руководство по размерам",
+            "buttonProductAddedToCart": "Продукт был добавлен в корзину",
+            "buttonAddToCart": "Добавить в корзину"
+        },
+        "root": {
+            "text": "это магазин модных и стильных украшений, которые воплощает в жизнь автор-дизайнер.",
+            "seeAll": "все",
+            "altImage": "Изображение все",
+            "linkAltImage": "Изображение категории"
+        },
+        "shop": {
+            "root": "Магазин",
+            "titleFilterShopBy": "Каталог",
+            "titleFilterByPrice": "Фильтр",
+            "buttonShowMore": "Показать больше",
+            "textShowed": "Показано",
+            "textFrom": "из",
+            "textProducts": "товаров"
+        },
+        "signInAndUp": {
+            "root": "Войти или Зарегистрироваться",
+            "signIn": {
+                "root": "Войти",
+                "title": "Пожалуйста, введите данные для аутентификации."
+            },
+            "signUp": {
+                "root": "Зарегистрироваться",
+                "title": "Пожалуйста, введите вашу регистрационную информацию."
+            }
+        }
+    },
+    "components": {
+        "cookieConsentBanner": {
+            "text": "Мы используем файлы cookie, чтобы предоставить вам максимально удобные возможности использования нашего веб-сайта. Продолжая использовать наш сайт, мы будем считать, что вы им довольны.",
+            "gotIt": "Понятно"
+        },
+        "header": {
+            "textSettings": "Настройки",
+            "buttonAddProduct": "Добавить товар",
+            "buttonOrders": "Заказы",
+            "buttonLogout": "Выход",
+            "buttonSignInUp": "Войти или Зарегистрироваться"
+        },
+        "nav": {
+            "language": "Язык"
+        },
+        "notData": "Нет данных",
+        "footer": {
+            "textPhone": "Телефон",
+            "textEmail": "Эл. Почта"
+        }
+    },
+    "errors": {
+        "clickRightCity": "Вам нужно написать правильный город и нажать на свой город",
+        "clickRightWarehouse": "Вам нужно нажать на свой склад",
+        "clickNumberWarehouse": "Вам нужно написать или нажать номер склада",
+        "required": "Это поле обязательно",
+        "invalidEmail": "Неверный формат электронной почты",
+        "invalidPhone": "Неверный формат номера телефона. Например +380946826242",
+        "nameMinLength": "Имя должно содержать не менее {{ index }} символов",
+        "priceMinLength": "Цена должна быть не менее {{ index }}грн.",
+        "passwordMinLength": "Пароль должен содержать не менее {{ index }} символов",
+        "fieldMustHaveAtLeast": "В поле должно быть минимум {{ index }} элемента"
+    },
+    "cards": {
+        "product": {
+            "onlyOrder": "Только заказ",
+            "firstAltImageOfCard": "Первое изображение товара",
+            "secondAltImageOfCard": "Второе изображение товара"
+        },
+        "order": {
+            "status": {
+                "canceled": "Отменено",
+                "inProcessing": "В обработке",
+                "accepted": "Принято",
+                "closed": "Закрыто"
+            }
+        }
+    },
+    "pagination": {
+        "text": "из"
+    },
+    "placeholders": {
+        "firstName": "Имя",
+        "lastName": "Фамилия",
+        "nameAndSurname": "Имя и Фамилия",
+        "email": "Эл. Почта",
+        "phone": "Телефон",
+        "password": "Пароль",
+        "passwordAgain": "Повторите пароль",
+        "choosePostOffice": "Выберете почтовое отделение",
+        "comment": "Информация, которая может помочь выполнить заказ",
+        "city": "Город",
+        "someData": "Введите некоторые данные..."
+    },
+    "buttons": {
+        "submit": "Отправить",
+        "remove": "Удалить",
+        "create": "Создать",
+        "edit": "Редактировать"
+    },
+    "altImages": {
+        "product": "Изображение продукта",
+        "numberProduct": "{{ index }}-е изображение товара",
+        "imageByURL": "Изображение по URL-адресе {{ url }}"
+    }
+}

@@ -1,0 +1,13 @@
+/* .viewport {
+    @apply h-full;
+} */
+
+.viewport, .viewport > div {
+    @apply h-full flex flex-col justify-between;
+}
+
+.viewport > div {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}

@@ -1,0 +1,55 @@
+.root {
+    min-height: calc(var(--vh, 1vh) * 100 - var(--vh_header) - var(--vh_cookie_consent_banner));
+    min-height: calc(100svh - var(--vh_header) - var(--vh_cookie_consent_banner));
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, auto);
+    grid-template-areas: 
+        "images"
+        "text"
+        "contacts";
+}
+.images {
+    grid-area: images;
+}
+.text {
+    grid-area: text;
+}
+.contacts {
+    grid-area: contacts;
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: 
+        "text text"
+        "contacts images"
+        "contacts images";
+    }
+    .images {
+        align-self: flex-end;
+        justify-self: flex-end;
+    }
+    .container_images {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: repeat(4, auto);
+        grid-template-areas: 
+            "item_0 item_0"
+            "item_1 item_1"
+            "_ item_3"
+            "item_2 item_3";
+        justify-items: flex-end;
+        gap: 12px;
+    }
+    .text {
+    }
+    .contacts {
+        justify-content: flex-end;
+    }
+}

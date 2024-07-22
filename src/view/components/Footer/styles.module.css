@@ -1,0 +1,59 @@
+.footer {
+    @apply pt-6 pb-3.5 gap-5 border-t-2 
+    sb:mt-6 sb:pb-6;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, auto);
+    row-gap: 18px;
+    grid-template-areas: 
+        "logo"
+        "address"
+        "description_1"
+        "description_2";
+}
+
+.footer_logo {
+    grid-area: logo;
+}
+
+.footer_address {
+    grid-area: address;
+}
+.footer_description_1 {
+    grid-area: description_1;
+}
+.footer_description_2 {
+    grid-area: description_2;
+}
+
+.footer_description_1,
+.footer_description_2 {
+    @apply max-sb:text-quaternary max-sb:text-center
+}
+
+.contact_title {
+    @apply text-xs font-tertiary font-medium
+}
+
+.contact_subtitle {
+    @apply text-xs font-secondary font-medium tracking-[1.2px]
+        hover:underline
+        sb:text-[10px];
+}
+
+.contact_small {
+    @apply text-xs font-secondary font-normal tracking-[0.24px] 
+}
+
+@media (min-width: 1024px) {
+    .footer {
+        display: grid;
+        grid-template-areas: "description_1 address description_2";
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto;
+        gap: 10px; 
+    }
+    .footer_description_2 {
+        justify-self: end;
+    }
+}

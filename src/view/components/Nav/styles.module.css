@@ -1,0 +1,19 @@
+.nav__item_category {
+    @apply text-3xl text-[28px] font-primary font-normal uppercase tracking-[2.8px]
+}
+
+.nav__item_category > span {
+    @apply text-[34px]
+}
+
+@media (max-height: 800px) {
+    .nav_list {
+        @apply gap-[10px]
+    }
+    .nav__item_category {
+        @apply text-xl
+    }
+    .nav__item_category > span {
+        @apply text-[22px]
+    }
+}

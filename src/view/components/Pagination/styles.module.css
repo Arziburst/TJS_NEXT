@@ -1,0 +1,7 @@
+.text {
+    @apply text-2xl
+}
+
+.arrow {
+    @apply h-[18px] aspect-square
+}

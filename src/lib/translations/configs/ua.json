@@ -1,0 +1,187 @@
+{
+    "categories": {
+        "see-all": "Всі",
+        "brooch": "Брошь",
+        "earrings": "Сережки",
+        "bestsellers": "Бестселери",
+        "bracelets": "Браслети",
+        "necklace": "Намисто",
+        "rings": "Кільця"
+    },
+    "filtersByPrice": {
+        "init": "вибрати",
+        "lowToHigh": "ціна (від низької до високої)",
+        "highToLow": "ціна (від високої до низької)"
+    },
+    "pages": {
+        "common": {
+            "total": "Усього"
+        },
+        "contacts": {
+            "root": "Контакти"
+        },
+        "aboutUs": {
+            "root": "Про нас",
+            "firstTitle": "Мене звати Олена, я стежу за новинками та трендами, маю великий досвід роботи з прикрасами",
+            "mainAltImage": "Головне зображення сторінки \"Про нас\"",
+            "firstPartOfSecondTitle": "люблю свою справу і хочу принести радість і красу в наш світ.",
+            "secondPartOfSecondTitle": "Доступна розкіш - ось мій девіз!",
+            "text": "Також я створюю прикраси на замовлення. І завжди враховую бажання клієнтів.",
+            "phone": "Телефон",
+            "email": "Ел. Пошта"
+        },
+        "cart": {
+            "root": "Кошик",
+            "title": "Кошик",
+            "textIfNotData": "Ваш кошик порожній",
+            "yourOrder": "Сума замовлення",
+            "continueToCheckout": "Продовжити оформлення замовлення"
+        },
+        "management": {
+            "title": "Будь ласка, введіть інформацію про продукт.",
+            "labelTitle": "Введіть назву",
+            "labelType": "Виберіть правильний тип продукту",
+            "labelDescription": "Введіть опис",
+            "labelWeight": "Введіть вагу продукту в грамах",
+            "labelPrice": "Введіть ціну товару у гривнях/₴",
+            "labelAvailable": "Товар у наявності",
+            "availability": "Наявність",
+            "nonAvailability": "Відсутність",
+            "confirmCompleteDeletion": "Підтвердіть повне видалення!",
+            "uninstallError": "Помилка видалення",
+            "buttonAddImageFromGallery": "Додати зображення з галереї",
+            "buttonDeleteAllImages": "Видалити всі зображення",
+            "altImageFromGallery": "Зображення з галереї"
+        },
+        "order": {
+            "textIfNotData": "Замовлення не знайдено",
+            "firstTitle": "Інформація про замовлення.",
+            "email": "Електронна пошта",
+            "phone": "Телефон",
+            "comment": "Коментар",
+            "secondTitle": "Будь ласка, введіть інформацію про продукт.",
+            "label": "Виберіть правильний тип продукту"
+        },
+        "orderDetails": {
+            "title": "Кошик",
+            "firstTitleForm": "Дані замовника",
+            "secondTitleForm": "Доставка",
+            "yourOrder": "Замовлення",
+            "buttonMakeOrder": "Оформити Замовлення"
+        },
+        "paymentFail": {
+            "title": "Платіж не пройшов!"
+        },
+        "paymentSuccess": {
+            "title": "Замовлення прийняте",
+            "grandTotal": "загальна сума",
+            "buttonContinueShopping": "Продовжити покупки"
+        },
+        "product": {
+            "link": "Посібник за розмірами",
+            "buttonProductAddedToCart": "Продукт було додано до кошика",
+            "buttonAddToCart": "Додати до кошика"
+        },
+        "root": {
+            "text": "це магазин модних та стильних прикрас, які втілює у життя автор-дизайнер.",
+            "seeAll": "все",
+            "altImage": "Зображення все",
+            "linkAltImage": "Зображення категорії"
+        },
+        "shop": {
+            "root": "Магазин",
+            "titleFilterShopBy": "Каталог",
+            "titleFilterByPrice": "Фільтр",
+            "buttonShowMore": "Показати більше",
+            "textShowed": "Показано",
+            "textFrom": "з",
+            "textProducts": "товарів"
+        },
+        "signInAndUp": {
+            "root": "Увійти або Зареєструватися",
+            "signIn": {
+                "root": "Увійти",
+                "title": "Будь ласка, введіть дані для автентифікації."
+            },
+            "signUp": {
+                "root": "Зареєструватися",
+                "title": "Будь ласка, введіть вашу реєстраційну інформацію."
+            }
+        }
+    },
+    "components": {
+        "cookieConsentBanner": {
+            "text": "Ми використовуємо файли cookie, щоб забезпечити вам найкращий досвід роботи на нашому веб-сайті. Продовжуючи користуватися нашим сайтом, ми вважатимемо, що ви ним задоволені.",
+            "gotIt": "Зрозумів"
+        },
+        "header": {
+            "textSettings": "Налаштування",
+            "buttonAddProduct": "Додати товар",
+            "buttonOrders": "Замовлення",
+            "buttonLogout": "Вихід",
+            "buttonSignInUp": "Увійти або Зареєструватися"
+        },
+        "nav": {
+            "language": "Мова"
+        },
+        "notData": "Немає даних",
+        "footer": {
+            "textPhone": "Телефон",
+            "textEmail": "Ел. Пошта"
+        }
+    },
+    "errors": {
+        "clickRightCity": "Вам потрібно написати правильне місто і натиснути на своє місто",
+        "clickRightWarehouse": "Вам потрібно натиснути на свій склад",
+        "clickNumberWarehouse": "Вам потрібно написати або натиснути номер складу",
+        "required": "Це поле обов'язкове",
+        "invalidEmail": "Неправильний формат електронної пошти",
+        "invalidPhone": "Неправильний формат номера телефону. Наприклад +380946826242",
+        "nameMinLength": "Ім'я має містити не менше {{ index }} символів",
+        "priceMinLength": "Ціна повинна бути не менше {{ index }}грн.",
+        "passwordMinLength": "Пароль повинен містити не менше {{ index }} символів",
+        "fieldMustHaveAtLeast": "В поле должно быть минимум {{ index }} элемента"
+    },
+    "cards": {
+        "product": {
+            "onlyOrder": "Тільки замовлення",
+            "firstAltImageOfCard": "Перше зображення товару",
+            "secondAltImageOfCard": "Друге зображення товару"
+        },
+        "order": {
+            "status": {
+                "canceled": "Скасовано",
+                "inProcessing": "В обробці",
+                "accepted": "Прийнято",
+                "closed": "Закрито"
+            }
+        }
+    },
+    "pagination": {
+        "text": "із"
+    },
+    "placeholders": {
+        "firstName": "Ім'я",
+        "lastName": "Прізвище",
+        "nameAndSurname": "Ім'я та Прізвище",
+        "email": "Ел. Пошта",
+        "phone": "Телефон",
+        "password": "Пароль",
+        "passwordAgain": "Повторіть пароль",
+        "choosePostOffice": "Виберіть поштове відділення",
+        "comment": "Інформація, яка може допомогти виконати замовлення",
+        "city": "Місто",
+        "someData": "Введіть деякі дані..."
+    },
+    "buttons": {
+        "submit": "Надіслати",
+        "remove": "Видалити",
+        "create": "Створити",
+        "edit": "Редагувати"
+    },
+    "altImages": {
+        "product": "Зображення продукту",
+        "numberProduct": "{{ index }} зображення товару",
+        "imageByURL": "Зображення за URL-адресою {{url}}"
+    }
+}

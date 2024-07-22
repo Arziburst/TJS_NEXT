@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* TT Ricordi Allegria Trial */ 
+/* todo find new font "TT Ricordi Allegria Trial" */
+@font-face {
+    font-family: 'TT Ricordi Allegria Trial';
+    src: local('TT Ricordi Allegria Trial Regular'), local('TT-Ricordi-Allegria-Trial-Regular'), local('TTRicordiAllegriaTrial-Regular'), local('TTRicordiAllegriaTrialRegular'), local('TTRicordiAllegriaTrial'),
+        url('../fonts/TT-Ricordi-Allegria-Trial-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Raleway */
+@font-face {
+    font-family: 'Raleway';
+    src: local('Raleway Regular'), local('Raleway-Regular'), local('RalewayRegular'), local('Raleway'),
+        url('../fonts/Raleway-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Raleway';
+    src: local('Raleway Medium'), local('Raleway-Medium'), local('RalewayMedium'), local('Raleway'),
+        url('../fonts/Raleway-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Raleway';
+    src: local('Raleway SemiBold'), local('Raleway-SemiBold'), local('RalewaySemiBold'), local('Raleway'),
+        url('../fonts/Raleway-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Raleway';
+    src: local('Raleway SemiBoldItalic'), local('Raleway-SemiBoldItalic'), local('RalewaySemiBoldItalic'), local('Raleway'),
+        url('../fonts/Raleway-SemiBoldItalic.woff2') format('woff2');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Raleway';
+    src: local('Raleway Bold'), local('Raleway-Bold'), local('RalewayBold'), local('Raleway'),
+        url('../fonts/Raleway-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Inter */
+@font-face {
+    font-family: 'Inter';
+    src: local('Inter Medium'), local('Inter-Medium'), local('InterMedium'), local('Inter')
+        url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+ 
+/*! If you add, remove or update color, you have to update ./tailwind.config.ts and reload the Burst. Just stop "npm run start" and start "npm run start". */
+@layer base {
+  :root {
+    /* Primary (White) */
+    --primary: #FFFFFF;
+    --primary_100:     #F8F8F8;
+    --primary_200:     #F4F0EB;
+    
+    /* Secondary (Black) */
+    --secondary: #000;
+    --secondary_100:     #635A59;
+    --secondary_200:     #5F6368;
+    --secondary_300:     #635a5985;
+
+    /* Tertiary (Blue) */
+    --tertiary: #0E307D;
+    --tertiary_100:     #36475C;
+    --tertiary_200:     #5F6368;
+
+    /* Quaternary (Red) */
+    --quaternary: #FF614A;
+
+    /* Quinary (Green) */
+    --quinary: #00C853;
+    --quinary_100: #00c85388;
+
+    /* Senary (Yellow) */
+    --senary: #FFD600;
+
+    /* Border */
+    --border: rgba(99, 90, 89, 0.1);
+    --border_100: var(--secondary_100);
+
+    --background: var(--primary_200); 
+    --foreground: 222.2 84% 4.9%;
+
+    /* from shadcn-ui */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  /* .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  } */
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-primary-200 font-primary text-secondary-100;
+  }
+}
+
+@layer components {
+  .interaction {
+    @apply cursor-pointer transition
+        hover:opacity-70 
+        focus-visible:opacity-70
+        active:opacity-100 active:scale-[0.99]
+    }
+    .absolute-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Swiper */
+:root {
+    --swiper-pagination-color: var(--quaternary);
+
+}
