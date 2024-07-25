@@ -2,8 +2,8 @@
 
 // Core
 import React, { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { redirect } from 'next/navigation'
+import { useSearchParams, redirect } from 'next/navigation';
+
 
 // Assets
 import { SCREENS_NUMBER } from '@/assets';
@@ -48,11 +48,6 @@ import {
 import SCardItem from '@/view/components/CardItem/styles.module.css';
 import { initialLimitOfProducts, initialPageOfProducts } from '@/bus/products/slice';
 
-// Types
-type PropTypes = {
-    /* type props here */
-}
-
 const S = {
     common_gap:    'gap-[32px]',
     sb_common_gap: 'sb:gap-[32px]',
@@ -60,14 +55,10 @@ const S = {
 };
 
 export default function Shop(){
+    const categoryFromURL = useSearchParams().toString().replace("=", '');
+    console.log("🚀 ~ Shop ~ categoryFromURL:", categoryFromURL)
     
-    const pathname = usePathname();
-    console.log("🚀 ~ pathname:", pathname)
-
-    const categoryFromURL = false
-
     const { t } = useCustomTranslation();
-
 
     const [ width ] = useWindowWidth();
 
@@ -110,10 +101,14 @@ export default function Shop(){
         redirect(`${BOOK.PRODUCT}/${id}${BOOK.MANAGEMENT}`);
     };
 
-    const onClickChangeCategoryHandler = (categoryString: string) => {
+    const setSettingsToInitial = () => {
         setLimitOfProducts(initialLimitOfProducts);
         setPageOfProducts(initialPageOfProducts);
-        redirect(`${BOOK.SHOP}/${categoryString}`);
+    }
+
+    const onClickChangeCategoryHandler = (categoryString: string) => {
+        setSettingsToInitial()
+        redirect(`${BOOK.SHOP}?${categoryString}`);
     };
 
     const onClickItemsOfSelectFilterByPriceHandler = (item: string) => {
@@ -144,23 +139,21 @@ export default function Shop(){
     // init
     useEffect(() => {
         setFilterByCategoryState(categoryFromURL || ENUM_CATEGORIES.ALL);
-        // fetchProductsByPagination({
-        //     limit,
-        //     type:        categoryFromURL || ENUM_CATEGORIES.ALL,
-        //     page,
-        //     isLowToHigh: isFilterByLowToHigh,
-        // });
+        fetchProductsByPagination({
+            limit,
+            type:        categoryFromURL || ENUM_CATEGORIES.ALL,
+            page,
+            isLowToHigh: isFilterByLowToHigh,
+        });
     }, [ categoryFromURL, limit, page, isFilterByLowToHigh ]);
-    // }, [ categoryFromURL, limit, page, isFilterByLowToHigh ]);
 
-    // step 1 // Select // redirect another category
-    useEffect(() => {
-        if (filterByCategoryState && filterByCategoryState !== ENUM_CATEGORIES.ALL) {
-            redirect(`${BOOK.SHOP}/${filterByCategoryState}`);
-        } else {
-            redirect(`${BOOK.SHOP}`);
-        }
-    }, [ filterByCategoryState ]);
+    // useEffect(() => { // TODO
+    //     if (filterByCategoryState && filterByCategoryState !== ENUM_CATEGORIES.ALL) {
+    //         redirect(`${BOOK.SHOP}?${filterByCategoryState}`);
+    //     } else {
+    //         redirect(`${BOOK.SHOP}`);
+    //     }
+    // }, [ filterByCategoryState ]);
 
     useEffect(() => {
         setLocalPageState(page);
@@ -221,9 +214,14 @@ export default function Shop(){
                                         asChild
                                         variant = 'skipFirstLine'>
                                         <NavLink
-                                            href = { `${BOOK.SHOP}/${item === ENUM_CATEGORIES.ALL ? '' : item}` }
+                                            href={
+                                                `${BOOK.SHOP}${item === ENUM_CATEGORIES.ALL 
+                                                    ? '' 
+                                                    : `?${item}`
+                                                }` 
+                                            }
                                             variant = 'default'
-                                            onClick = { () => onClickChangeCategoryHandler(item) }>
+                                            onClick={ () => setSettingsToInitial() }>
                                             <NavItemText className = 'text-[15px]'>
                                                 {t(`categories.${item}`)}
                                             </NavItemText>

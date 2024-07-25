@@ -106,10 +106,10 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                                 isSetHeightToCssVariable
                                 className={wrapperVariants({ className: 'fixed inset-x-0' })}
                                 i18n={i18n}
-                                // style={paddingLeftWrapper ? {
-                                //     paddingLeft: paddingLeftWrapper,
-                                //     paddingRight: paddingLeftWrapper,
-                                // } : {}}
+                                style={paddingLeftWrapper ? {
+                                    paddingLeft: paddingLeftWrapper,
+                                    paddingRight: paddingLeftWrapper,
+                                } : {}}
                                 t={t}
                                 variant='open'
                             />

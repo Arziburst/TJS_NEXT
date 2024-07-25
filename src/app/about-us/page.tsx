@@ -117,7 +117,7 @@ export default function AboutUs() {
                                             'self-center': width > SCREENS_NUMBER.SB && index === 1,
                                             'self-end':    width > SCREENS_NUMBER.SB && (index === 3 || index === 2),
                                         }) }
-                                        key = { src }
+                                        key={ index }
                                         src = { src }
                                         // style = {{ // TODO
                                         //     gridArea: `item_${index}`,

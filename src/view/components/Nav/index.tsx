@@ -116,7 +116,7 @@ export const Nav: FC<NavPropTypes> = ({
                                                 </svg>
                                                 <NavLink
                                                     className = { S.nav__item_category }
-                                                    href = { `${BOOK.SHOP}/${category}` }
+                                                    href = { `${BOOK.SHOP}?${category}` }
                                                     onClick = { onClickCloseSidebarHandler }>
                                                     <span>{rightCategory[ 0 ]}</span>{rightCategory.substring(1)}
                                                 </NavLink>

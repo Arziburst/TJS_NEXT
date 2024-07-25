@@ -30,8 +30,6 @@ export const SideBar: FC<SideBarPropTypes> = ({
     const { togglesRedux: { isOpenSideBar }, setToggleAction } = useTogglesRedux();
 
     const onClickCloseSideBarHandler = () => {
-        console.log(1);
-        
         setToggleAction({
             type:  'isOpenSideBar',
             value: false,
