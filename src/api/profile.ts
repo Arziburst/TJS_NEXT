@@ -4,7 +4,7 @@ import { API, HEADERS } from './config';
 // Types
 import * as types from '../bus/profile/saga/types';
 
-export const registrationProfileFetcher = (body: Omit<types.FetchRegistrationProfileRequest, 'navigate'>) => {
+export const registrationProfileFetcher = (body: Omit<types.FetchRegistrationProfileRequest, 'redirect'>) => {
     return fetch(API.PROFILE.REGISTRATION, {
         method:      'POST',
         credentials: 'include',
@@ -15,7 +15,7 @@ export const registrationProfileFetcher = (body: Omit<types.FetchRegistrationPro
     });
 };
 
-export const loginProfileFetcher = ({ email, password }: Omit<types.FetchLoginProfileRequest, 'navigate'>) => {
+export const loginProfileFetcher = ({ email, password }: Omit<types.FetchLoginProfileRequest, 'redirect'>) => {
     return fetch(API.PROFILE.LOGIN, {
         method:      'POST',
         credentials: 'include',

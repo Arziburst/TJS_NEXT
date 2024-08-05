@@ -1,0 +1,22 @@
+.root {
+  	min-height: 100px;
+}
+
+.root .swiper-container {
+}
+
+.root .swiper-slide {
+}
+
+.button {
+	@apply absolute top-1/2 translate-y-[-50%] w-auto z-[1];
+}
+
+.arrow {
+	height: clamp(50px, 6vh, 100px);
+	aspect-ratio: 1;
+}
+
+.arrow, .arrow path {
+	fill: var(--quaternary);
+}

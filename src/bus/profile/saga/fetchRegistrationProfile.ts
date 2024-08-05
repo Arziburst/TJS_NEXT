@@ -32,8 +32,8 @@ const fetchRegistrationProfile = (
     toggleType:   'isLoadingRegistrationProfile',
     fetchOptions: {
         successStatusCode: 200,
-        fetch:             () => registrationProfileFetcher(removeKeysOfObject<types.FetchRegistrationProfileRequest, 'navigate'>({
-            keys:   [ 'navigate' ],
+        fetch:             () => registrationProfileFetcher(removeKeysOfObject<types.FetchRegistrationProfileRequest, 'redirect'>({
+            keys:   [ 'redirect' ],
             object: callAction.payload,
         })),
     },
@@ -46,7 +46,7 @@ const fetchRegistrationProfile = (
         }));
         toast.success('Success Registration!');
         toast.success('Success Login!');
-        yield callAction.payload.navigate(BOOK.ROOT);
+        yield callAction.payload.redirect(BOOK.ROOT);
     },
 });
 

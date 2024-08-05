@@ -32,8 +32,8 @@ const fetchLoginProfile = (
     toggleType:   'isLoadingLoginProfile',
     fetchOptions: {
         successStatusCode: 200,
-        fetch:             () => loginProfileFetcher(removeKeysOfObject<types.FetchLoginProfileRequest, 'navigate'>({
-            keys:   [ 'navigate' ],
+        fetch:             () => loginProfileFetcher(removeKeysOfObject<types.FetchLoginProfileRequest, 'redirect'>({
+            keys:   [ 'redirect' ],
             object: callAction.payload,
         })),
     },
@@ -44,7 +44,7 @@ const fetchLoginProfile = (
             value: true,
         }));
         toast.success('Success Login!');
-        yield callAction.payload.navigate(BOOK.ROOT);
+        yield callAction.payload.redirect(BOOK.ROOT);
     },
 });
 

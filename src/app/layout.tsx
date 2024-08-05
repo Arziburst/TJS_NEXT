@@ -33,7 +33,6 @@ import { Alert, CookieConsentBanner, Footer, Header, SideBar } from '@/view/comp
 //     metadataBase: new URL('https://www.google.com'),
 // };
 
-
 // I18N
 import '@/lib/translations';
 
@@ -56,26 +55,13 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     // const { fetchAuthenticateProfile } = useProfileSaga();
     // const { fetchCheckCart } = useCartSaga();
 
-    // const setOnlineStatusHandler = useCallback(() => void setTogglerAction({
-    //     type: 'isOnline',
-    //     value: navigator.onLine ?? false,
-    // }), [setTogglerAction]);
-
-    
     // useEffect(() => {
-    //     // fetchAuthenticateProfile();
-    //     setOnlineStatusHandler();
+    // fetchAuthenticateProfile();
 
-    //     if (window !== void 0) {
-    //         window.addEventListener('online', setOnlineStatusHandler);
-    //         window.addEventListener('offline', setOnlineStatusHandler);
-    //     }
-
-    //     // if (window.location.pathname !== BOOK.PAYMENT_SUCCESS) {
-    //     //     fetchCheckCart(ls.get(LOCAL_STORAGE.CART) || []);
-    //     // }
+    // if (window.location.pathname !== BOOK.PAYMENT_SUCCESS) {
+    //     fetchCheckCart(ls.get(LOCAL_STORAGE.CART) || []);
+    // }
     // }, []);
-
 
     postcssViewportHeightCorrection();
 

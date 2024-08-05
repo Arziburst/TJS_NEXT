@@ -1,5 +1,5 @@
 // Types
-import { NavigateFunction } from 'react-router';
+import { redirect } from "next/navigation";
 import * as commonTypes from '@/bus/commonTypes';
 import * as types from '../types';
 
@@ -33,8 +33,8 @@ export type FetchCreateNewProductResponse = types.ExtendedProduct;
 
 // Delete product
 export type FetchDeleteProductRequest = {
-    _id: types.ExtendedProduct['_id'];
-    navigate: NavigateFunction;
+  _id: types.ExtendedProduct["_id"];
+  redirect: typeof redirect;
 };
 export type FetchDeleteProductResponse = types.ExtendedProduct['_id'];
 

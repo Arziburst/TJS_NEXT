@@ -1,0 +1,8 @@
+.sticky {
+    top: var(--vh_header);
+}
+
+.img {
+    height: calc(100vh - var(--vh_header) - var(--vh_header));
+    min-height: 100px;
+}

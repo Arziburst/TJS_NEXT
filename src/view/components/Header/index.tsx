@@ -44,7 +44,6 @@ export const Header: FC<PropTypes> = ({
 }) => {
     const refHeader = useRef<null | HTMLElement>(null);
 
-
     const [ width ] = useWindowWidth();
 
     const isOpen = variant === 'open';

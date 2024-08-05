@@ -24,25 +24,29 @@ export const fetchCreateOrderAction = createAction<types.FetchCreateOrderRequest
 
 // Saga
 const fetchCreateOrder = (
-    callAction: ReturnType<typeof fetchCreateOrderAction>,
-) => makeRequest<types.FetchCreateOrderResponse, commonTypes.Error>({
-    callAction,
-    toggleType:   'isLoadingFetchCreateOrder',
-    fetchOptions: {
-        successStatusCode: 201,
-        fetch:             () => createOrderFetcher(removeKeysOfObject<types.FetchCreateOrderRequest, 'navigate'>({
-            keys:   [ 'navigate' ],
-            object: callAction.payload,
-        })),
-    },
-    success: function* (result) {
-        yield put(ordersActions.setCurrentOrder(result));
-        yield callAction.payload.navigate(BOOK.PAYMENT_SUCCESS);
-    },
-    error: function* () {
-        yield callAction.payload.navigate(BOOK.PAYMENT_FAIL);
-    },
-});
+    callAction: ReturnType<typeof fetchCreateOrderAction>
+) =>
+    makeRequest<types.FetchCreateOrderResponse, commonTypes.Error>({
+        callAction,
+        toggleType: "isLoadingFetchCreateOrder",
+        fetchOptions: {
+            successStatusCode: 201,
+            fetch: () =>
+                createOrderFetcher(
+                    removeKeysOfObject<types.FetchCreateOrderRequest, "redirect">({
+                        keys: ["redirect"],
+                        object: callAction.payload,
+                    })
+                ),
+        },
+        success: function* (result) {
+            yield put(ordersActions.setCurrentOrder(result));
+            yield callAction.payload.redirect(BOOK.PAYMENT_SUCCESS);
+        },
+        error: function* () {
+            yield callAction.payload.redirect(BOOK.PAYMENT_FAIL);
+        },
+    });
 
 // Watcher
 export function* watchFetchCreateOrder(): SagaIterator {

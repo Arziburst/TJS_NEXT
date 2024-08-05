@@ -1,5 +1,6 @@
 // Types
-import { NavigateFunction } from 'react-router';
+import { redirect } from "next/navigation";
+
 import * as types from '../types';
 
 // Get Orders
@@ -10,9 +11,16 @@ export type FetchGetOrderRequest = string;
 export type FetchGetOrderResponse = types.Order;
 
 // Create Order
-export interface FetchCreateOrderRequest extends Required<Pick<types.Order, 'firstName' | 'lastName' | 'phone' | 'email' | 'city' | 'warehouse'>>, Pick<types.Order, 'comment'> {
-    orderedPIDs: Array<string>;
-    navigate: NavigateFunction;
+export interface FetchCreateOrderRequest
+  extends Required<
+      Pick<
+        types.Order,
+        "firstName" | "lastName" | "phone" | "email" | "city" | "warehouse"
+      >
+    >,
+    Pick<types.Order, "comment"> {
+  orderedPIDs: Array<string>;
+  redirect: typeof redirect;
 }
 export type FetchCreateOrderResponse = types.Order;
 

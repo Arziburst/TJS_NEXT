@@ -28,7 +28,7 @@ export const BOOK = {
     ADD_ITEM: '/add-item',
     EDIT_ITEM: '/edit-item',
     MANAGEMENT: '/management',
-    SIGN_IN_AND_UP: '/sign-in-and-up',
+    LOGIN: '/login',
     ABOUT_US: '/about-us',
     CART: '/cart',
     SHOP: '/shop',

@@ -1,6 +1,6 @@
 // Core
-import React, { FC, forwardRef } from 'react';
-import { LinkProps } from 'react-router-dom';
+import React, { FC } from 'react';
+import { LinkProps } from 'next/link'
 
 // Tools
 import { clsx, cn } from '@/tools/lib/utils';
@@ -12,8 +12,9 @@ import { BOOK } from '@/lib/book';
 import { Link } from '@/view/elements';
 
 // Types
-interface PropTypes extends Omit<LinkProps, 'to'> {
+interface PropTypes extends Omit<LinkProps, 'href'> {
     variant: 'mobile' | 'desktop';
+    className?: string
 }
 
 export const Logo: FC<PropTypes> = ({ variant, className, ...props }) => {

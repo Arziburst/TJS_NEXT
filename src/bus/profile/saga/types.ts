@@ -1,5 +1,6 @@
 // Types
-import { NavigateFunction } from 'react-router-dom';
+
+import { redirect } from 'next/navigation';
 import * as types from '../types';
 
 // Registration
@@ -8,7 +9,7 @@ export type FetchRegistrationProfileRequest = {
     phone: string;
     email: string;
     password: string;
-    navigate: NavigateFunction;
+    redirect: typeof redirect;
 };
 export type FetchRegistrationProfileResponse = types.Profile;
 
@@ -16,7 +17,7 @@ export type FetchRegistrationProfileResponse = types.Profile;
 export type FetchLoginProfileRequest = {
     email: string;
     password: string;
-    navigate: NavigateFunction;
+    redirect: typeof redirect;
 };
 export type FetchLoginProfileResponse = types.Profile;
 

@@ -42,7 +42,7 @@ export const createNewProductFetcher = (body: Omit<types.FetchCreateNewProductRe
     });
 };
 
-export const deleteProductFetcher = (payload: Omit<types.FetchDeleteProductRequest, 'navigate'>) => {
+export const deleteProductFetcher = (payload: Omit<types.FetchDeleteProductRequest, 'redirect'>) => {
     return fetch(API.PRODUCTS.PRODUCT(payload._id), {
         method:      'DELETE',
         credentials: 'include',

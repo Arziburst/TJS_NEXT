@@ -1,7 +1,6 @@
-// MarkerGen re-export
 export * from './CookieConsentBanner';
 export * from './HorizontalRuleWithPrice';
-// export * from './CartDetails';
+export * from './CartDetails';
 export * from './Pagination';
 export * from './Dialog';
 export * from './Tooltip';

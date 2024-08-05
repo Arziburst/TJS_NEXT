@@ -1,5 +1,5 @@
 // Tools
-import { useDispatch, useSelector } from '../../tools/hooks'; /* Typed selector */
+import { useDispatch, useSelector } from '../../tools/hooks';
 
 // Slice
 import { ordersActions } from './slice';
@@ -7,12 +7,10 @@ import { ordersActions } from './slice';
 // Types
 import * as types from './types';
 
-// MarkerGen middleware
-import { useOrdersSaga } from './saga'; /* Choose one technology, Saga or Thunk */
+import { useOrdersSaga } from './saga';
 
 export const useOrders = () => {
-    // MarkerGen api hook
-    const ordersSagas = useOrdersSaga();  /* Saga api hook */
+    const ordersSagas = useOrdersSaga();
 
     const dispatch = useDispatch();
     const orders = useSelector((state) => state.orders);

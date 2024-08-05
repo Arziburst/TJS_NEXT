@@ -30,8 +30,8 @@ import { MoveUnderline, NotData } from '@/view/containers';
 
 // Components
 import { Icons, CardItem, Pagination } from '@/view/components';
-import { Select } from './Select';
-import { Label } from './Label';
+import { Select } from './(root)/Select';
+import { Label } from './(root)/Label';
 import { NavItemText } from '@/view/components/Nav/NavItem/NavItemText';
 
 // Elements
@@ -42,7 +42,7 @@ import {
     ARRAY_FILTERS_BY_PRICE,
     ENUM_FILTERS_BY_PRICE,
     getValueOfSelectFilterByPrice,
-} from './static';
+} from './(root)/static';
 
 // Styles
 import SCardItem from '@/view/components/CardItem/styles.module.css';
@@ -296,7 +296,7 @@ export default function Shop(){
                             }}
                             t = { t }
                             title = { item.title }
-                            href = { `${BOOK.PRODUCT}/${item._id}` }
+                            href = { `${BOOK.SHOP}/${item._id}` }
                             onClickEditItem = { () => onClickEditItemHandler(item._id) }
                         />
                     ))}

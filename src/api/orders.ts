@@ -24,7 +24,7 @@ export const getOrderFetcher = (payload: types.FetchGetOrderRequest) => {
     });
 };
 
-export const createOrderFetcher = (body: Omit<types.FetchCreateOrderRequest, 'navigate'>) => {
+export const createOrderFetcher = (body: Omit<types.FetchCreateOrderRequest, 'redirect'>) => {
     return fetch(API.ORDERS.ROOT, {
         method:      'POST',
         credentials: 'include',

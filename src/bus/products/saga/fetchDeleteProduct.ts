@@ -31,14 +31,14 @@ const fetchDeleteProduct = (
     toggleType:   'isLoadingDeleteProduct',
     fetchOptions: {
         successStatusCode: 200,
-        fetch:             () => deleteProductFetcher(removeKeysOfObject<types.FetchDeleteProductRequest, 'navigate'>({
-            keys:   [ 'navigate' ],
+        fetch:             () => deleteProductFetcher(removeKeysOfObject<types.FetchDeleteProductRequest, 'redirect'>({
+            keys:   [ 'redirect' ],
             object: callAction.payload,
         })),
     },
     success: function* (result) {
         yield put(productsActions.setDeleteProduct(result));
-        yield callAction.payload.navigate(BOOK.SHOP);
+        yield callAction.payload.redirect(BOOK.SHOP);
         yield toast.success('Product deleted successfully!');
     },
 });
