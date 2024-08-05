@@ -76,7 +76,7 @@ export default function Home() {
                 <div className='flex gap-6 justify-end items-center'>
                     <NavLink
                         className='text-sm font-secondary font-semibold capitalize'
-                        href={`${BOOK.SHOP}/${ENUM_CATEGORIES.ALL}`}
+                        href={`${BOOK.SHOP}?${ENUM_CATEGORIES.ALL}`}
                         variant='underline'>
                         {t('pages.root.seeAll')}
                     </NavLink>

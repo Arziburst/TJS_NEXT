@@ -36,7 +36,7 @@ export const LinkCategory: FC<PropTypes> = ({
             className = { cn('flex sm:justify-center', className) }>
             <NavLink
                 className = { cn(`${S.root} flex gap-3 flex-wrap items-center`, className) }
-                href = { `${BOOK.SHOP}/${category}` }>
+                href = { `${BOOK.SHOP}?${category}` }>
                 <Image
                     alt = { t('pages.root.linkAltImage') }
                     className = 'w-[60px] aspect-[10/8] sb:w-[100px]'

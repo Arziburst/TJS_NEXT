@@ -10,6 +10,7 @@ export interface ImagePropTypes {
     src: string;
     alt: string;
     className: string;
+    fill?: boolean
 }
 
 export const Image = forwardRef<HTMLImageElement, ImagePropTypes>(({ src, className, ...props }, ref) => {
