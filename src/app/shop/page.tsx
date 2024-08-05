@@ -56,7 +56,6 @@ const S = {
 
 export default function Shop(){
     const categoryFromURL = useSearchParams().toString().replace("=", '');
-    console.log("🚀 ~ Shop ~ categoryFromURL:", categoryFromURL)
     
     const { t } = useCustomTranslation();
 

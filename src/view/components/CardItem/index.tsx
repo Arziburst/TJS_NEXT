@@ -93,6 +93,7 @@ export const CardItem: FC<PropTypes> = ({
                         )}
 
                         <Image
+                            fill
                             alt = { firstImage.alt }
                             className = { cn('w-full h-full', {
                                 [ `${S.first_image}` ]: !!secondImage,
@@ -101,6 +102,7 @@ export const CardItem: FC<PropTypes> = ({
                         />
                         {secondImage && (
                             <Image
+                                fill
                                 alt = { secondImage.alt }
                                 className = { `${S.second_image} w-full h-full` }
                                 src = { secondImage.src || firstImage.src }
