@@ -16,7 +16,7 @@ import { useCssPropertyValue, useCustomTranslation, useWindowWidth } from '@/too
 
 // Bus
 import { StoreProvider } from "./StoreProvider";
-import { useTogglesRedux } from '@/bus/client/toggles'
+// import { useTogglesRedux } from '@/bus/client/toggles'
 
 // Containers
 import { Wrapper, wrapperVariants } from '@/view/containers';
@@ -39,7 +39,7 @@ import '@/lib/translations';
 // Styles
 import '@/assets/globalStyles/index.css';
 
-export default function RootLayout({children}: Readonly<{ children: React.ReactNode; }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const refWrapper = React.useRef<null | HTMLDivElement>(null);
 
     const [paddingLeftWrapper] = useCssPropertyValue({
@@ -50,18 +50,6 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     const { t, i18n } = useCustomTranslation();
 
     const [width] = useWindowWidth();
-
-    // const { setToggleAction: setTogglerAction } = useTogglesRedux();
-    // const { fetchAuthenticateProfile } = useProfileSaga();
-    // const { fetchCheckCart } = useCartSaga();
-
-    // useEffect(() => {
-    // fetchAuthenticateProfile();
-
-    // if (window.location.pathname !== BOOK.PAYMENT_SUCCESS) {
-    //     fetchCheckCart(ls.get(LOCAL_STORAGE.CART) || []);
-    // }
-    // }, []);
 
     postcssViewportHeightCorrection();
 
@@ -83,8 +71,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                     )}
                     <Alert />
                     <Wrapper
-                        className='grid grid-rows-[auto_1fr_auto] min-h-screen'
-                        /* ref={refWrapper} */>
+                        className='grid grid-rows-[auto_1fr_auto] min-h-screen'>
                         <div style={{
                             minHeight: `var(${CSS_VARIABLES.HEADER})`,
                         }}>

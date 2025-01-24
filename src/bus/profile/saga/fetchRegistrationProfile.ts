@@ -15,7 +15,7 @@ import { profileActions, sliceName } from '../slice';
 import { togglesActions } from '@/bus/client/toggles';
 
 // Tools
-import { makeRequest, removeKeysOfObject } from '../../../tools/utils';
+import { makeRequest } from '../../../tools/utils';
 
 // Types
 import * as commonTypes from '../../commonTypes';
@@ -27,28 +27,24 @@ export const fetchRegistrationProfileAction = createAction<types.FetchRegistrati
 // Saga
 const fetchRegistrationProfile = (
     callAction: ReturnType<typeof fetchRegistrationProfileAction>,
-) => makeRequest<types.FetchRegistrationProfileResponse, commonTypes.Error>({
-    callAction,
-    toggleType:   'isLoadingRegistrationProfile',
-    fetchOptions: {
-        successStatusCode: 200,
-        fetch:             () => registrationProfileFetcher(removeKeysOfObject<types.FetchRegistrationProfileRequest, 'redirect'>({
-            keys:   [ 'redirect' ],
-            object: callAction.payload,
-        })),
-    },
-    skipAttemptsIfStatusCode: 400,
-    success:                  function* (result) {
-        yield put(profileActions.setProfile(result));
-        yield put(togglesActions.toggleCreatorAction({
-            type:  'isLoggedIn',
-            value: true,
-        }));
-        toast.success('Success Registration!');
-        toast.success('Success Login!');
-        yield callAction.payload.redirect(BOOK.ROOT);
-    },
-});
+) => {
+    return makeRequest<types.FetchRegistrationProfileResponse, commonTypes.Error>({
+        callAction,
+        toggleType:   'isLoadingRegistrationProfile',
+        fetchOptions: {
+            successStatusCode: 200,
+            fetch:             () => registrationProfileFetcher(callAction.payload),
+        },
+        success:                  function* (result) {
+            yield put(profileActions.setProfile(result));
+            yield put(togglesActions.toggleCreatorAction({
+                type:  'isLoggedIn',
+                value: true,
+            }));
+            toast.success('Success Registration!');
+            toast.success('Success Login!');
+        },
+    })};
 
 // Watcher
 export function* watchFetchRegistrationProfile(): SagaIterator {

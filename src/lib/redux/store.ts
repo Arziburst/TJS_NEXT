@@ -1,9 +1,7 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import {
     combineSlices,
-    //   configureStore, // TODO
-    applyMiddleware,
-    legacy_createStore as createStore,
+    configureStore
 } from "@reduxjs/toolkit";
 
 import { togglesSlice } from "@/bus/client/toggles";
@@ -29,26 +27,18 @@ const rootReducer = combineSlices(
 );
 
 export const makeStore = () => {
-    const Store = createStore(
-        rootReducer, 
-        applyMiddleware(sagaMiddleware)
-    );
-    
+    const Store = configureStore({
+        devTools: process.env.NODE_ENV === 'development',
+        reducer: rootReducer,
+        middleware: (getDefaultMiddleware) => {
+            return getDefaultMiddleware().concat(middleware);
+        },
+    });
+
     sagaMiddleware.run(rootSaga);
+
     return Store;
 };
-
-// export const makeStore = () => { // TODO
-//     return configureStore({
-//         devTools: process.env.NODE_ENV === 'development',
-//         reducer: rootReducer,
-//         middleware: (getDefaultMiddleware) => {
-//             const mid = getDefaultMiddleware().concat(middleware);
-
-//             return mid;
-//         },
-//     });
-// };
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof makeStore>;

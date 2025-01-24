@@ -16,6 +16,7 @@ import { makeRequest } from '../../../tools/utils';
 // Types
 import * as commonTypes from '../../commonTypes';
 import * as types from './types';
+import { redirect } from 'next/navigation';
 
 // Action
 export const fetchAuthenticateProfileAction = createAction(`${sliceName}/FETCH_AUTHENTICATE_PROFILE_ASYNC`);
@@ -23,28 +24,28 @@ export const fetchAuthenticateProfileAction = createAction(`${sliceName}/FETCH_A
 // Saga
 const fetchAuthenticateProfile = (
     callAction: ReturnType<typeof fetchAuthenticateProfileAction>,
-) => makeRequest<types.FetchAuthenticateProfileResponse, commonTypes.Error>({
-    callAction,
-    fetchOptions: {
-        successStatusCode: 200,
-        fetch:             () => authenticateProfileFetcher(),
-    },
-    skipAttemptsIfStatusCode: 401,
-    skipAlertIfStatusCode:    401,
-    success:                  function* (result) {
-        yield put(profileActions.setProfile(result));
-        yield put(togglesActions.toggleCreatorAction({
-            type:  'isLoggedIn',
-            value: true,
-        }));
-    },
-    error: function* () {
-        yield put(togglesActions.toggleCreatorAction({
-            type:  'isLoggedIn',
-            value: false,
-        }));
-    },
-});
+) => {
+    return makeRequest<types.FetchAuthenticateProfileResponse, commonTypes.Error>({
+        callAction,
+        fetchOptions: {
+            successStatusCode: 200,
+            fetch:             () => authenticateProfileFetcher(),
+        },
+        skipAttemptsIfStatusCode: 401,
+        success:                  function* (result) {
+            yield put(profileActions.setProfile(result));
+            yield put(togglesActions.toggleCreatorAction({
+                type:  'isLoggedIn',
+                value: true,
+            }));
+        },
+        error: function* () {
+            yield put(togglesActions.toggleCreatorAction({
+                type:  'isLoggedIn',
+                value: false,
+            }));
+        },
+    })};
 
 // Watcher
 export function* watchFetchAuthenticateProfile(): SagaIterator {

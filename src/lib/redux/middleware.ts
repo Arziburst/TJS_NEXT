@@ -12,8 +12,8 @@ import { localStorageMiddleware } from './localStorageMiddleware';
 const sagaMiddleware = createSagaMiddleware();
 
 const middleware: Middleware[] = [
-    // sagaMiddleware,
     localStorageMiddleware,
+    sagaMiddleware,
 ];
 
 isDev && middleware.push(

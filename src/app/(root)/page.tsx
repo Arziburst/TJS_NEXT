@@ -16,7 +16,7 @@ import { useCustomTranslation, useWindowWidth } from '@/tools/hooks';
 import { BOOK } from '@/lib/book';
 
 // Bus 
-import {useTogglesRedux} from '@/bus/client/toggles'
+// import { useTogglesRedux } from '@/bus/client/toggles'
 
 // Elements
 import { Image, NavLink } from '@/view/elements';
@@ -29,7 +29,7 @@ import { CATEGORIES_ITEMS_WITH_IMAGES, makeJustifySelf, useStatic } from './stat
 import S from './styles.module.css';
 
 export default function Home() {
-    const { togglesRedux } = useTogglesRedux()
+    // const { togglesRedux } = useTogglesRedux()
 
     const refRoot = useRef<null | HTMLDivElement>(null);
     const refGrid = useRef<null | HTMLDivElement>(null);
@@ -70,7 +70,7 @@ export default function Home() {
                     md:text-[24px]
                     sb:max-w-[680px] sb:gap-5` }>
                     <span className='text-quaternary'>
-              TJStore
+                        TJStore
                     </span> {t('pages.root.text')}
                 </p>
                 <div className='flex gap-6 justify-end items-center'>

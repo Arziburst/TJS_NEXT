@@ -10,7 +10,7 @@ import type { AppStore } from "../lib/redux/store";
 import { makeStore } from "../lib/redux/store";
 
 interface Props {
-  readonly children: ReactNode;
+    readonly children: ReactNode;
 }
 
 export const StoreProvider = ({ children }: Props) => {

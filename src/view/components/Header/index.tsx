@@ -44,7 +44,7 @@ export const Header: FC<PropTypes> = ({
 }) => {
     const refHeader = useRef<null | HTMLElement>(null);
 
-    const [ width ] = useWindowWidth();
+    const [width] = useWindowWidth();
 
     const isOpen = variant === 'open';
     const isSB = width < SCREENS_NUMBER.SB;
@@ -53,14 +53,14 @@ export const Header: FC<PropTypes> = ({
 
     const onClickOpenSideBarHandler = () => {
         setToggleAction({
-            type:  'isOpenSideBar',
+            type: 'isOpenSideBar',
             value: true,
         });
     };
 
     const onClickCloseSideBarHandler = () => {
         setToggleAction({
-            type:  'isOpenSideBar',
+            type: 'isOpenSideBar',
             value: false,
         });
     };
@@ -69,22 +69,22 @@ export const Header: FC<PropTypes> = ({
         if (isSetHeightToCssVariable && refHeader.current && refHeader.current.clientHeight) {
             document.documentElement.style.setProperty(CSS_VARIABLES.HEADER, `${refHeader.current.clientHeight}px`);
         }
-    }, [ refHeader.current?.clientHeight ]);
+    }, [refHeader.current?.clientHeight, isSetHeightToCssVariable]);
 
     return (
         <header
-            { ...props }
-            className = { cn(
+            {...props}
+            className={cn(
                 `py-4 flex justify-between items-center bg-background z-10
                     sb:pt-[24px] sb:pb-[12px]
                     sb:items-start sb:gap-x-between-items-of-header`,
                 className,
-            ) }
-            ref = { refHeader }>
+            )}
+            ref={refHeader}>
             {isSB ? (
                 <button
-                    className = 'aspect-square transition-opacity hover:opacity-70'
-                    onClick = { isOpen ? onClickOpenSideBarHandler : onClickCloseSideBarHandler }>
+                    className='aspect-square transition-opacity hover:opacity-70'
+                    onClick={isOpen ? onClickOpenSideBarHandler : onClickCloseSideBarHandler}>
                     {isOpen ? (
                         <Icons.SideBarOpen />
                     ) : (
@@ -94,34 +94,34 @@ export const Header: FC<PropTypes> = ({
             ) : (
                 <>
                     <Logo
-                        className = 'whitespace-nowrap'
-                        variant = 'desktop'
+                        className='whitespace-nowrap'
+                        variant='desktop'
                     />
                     <Nav
-                        i18n = { i18n }
-                        t = { t }
-                        variant = 'desktop'
+                        i18n={i18n}
+                        t={t}
+                        variant='desktop'
                     />
                 </>
             )}
             {isSB && (
                 <Logo
-                    variant = 'mobile'
-                    onClick = { onClickCloseSideBarHandler }
+                    variant='mobile'
+                    onClick={onClickCloseSideBarHandler}
                 />
             )}
-            <ul className = 'flex flex-col items-end self-stretch'>
+            <ul className='flex flex-col items-end self-stretch'>
                 <ButtonCart
-                    className = 'whitespace-nowrap'
-                    t = { t }
-                    onClick = { onClickCloseSideBarHandler }
+                    className='whitespace-nowrap'
+                    t={t}
+                    onClick={onClickCloseSideBarHandler}
                 />
                 {isOpen && !isSB && (
                     <ButtonSignInAndUp
-                        className = 'whitespace-nowrap'
-                        isMobile = { false }
-                        t = { t }
-                        onClick = { onClickCloseSideBarHandler }
+                        className='whitespace-nowrap'
+                        isMobile={false}
+                        t={t}
+                        onClick={onClickCloseSideBarHandler}
                     />
                 )}
             </ul>

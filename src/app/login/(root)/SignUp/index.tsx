@@ -1,12 +1,14 @@
+'use client'
+
 // Core
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TFunction } from 'i18next';
 import { redirect } from 'next/navigation';
 
 // Init
-import { INPUT_VALIDATION_VALUES } from '@/lib';
+import { BOOK, INPUT_VALIDATION_VALUES } from '@/lib';
 
 // Bus
 import { useTogglesRedux } from '@/bus/client/toggles';
@@ -35,124 +37,123 @@ export const SignUp: FC<PropTypes> = ({ t }) => {
         defaultValues,
     });
 
-    const { togglesRedux: { isLoadingRegistrationProfile }} =  useTogglesRedux();
+    const { togglesRedux: { isLoadingRegistrationProfile } } = useTogglesRedux();
 
     const { fetchRegistrationProfile } = useProfile();
 
     const onSubmit = (values: typeof defaultValues) => {
         fetchRegistrationProfile({
-            name:     values.name,
-            phone:    values.phone,
-            email:    values.email,
+            name: values.name,
+            phone: values.phone,
+            email: values.email,
             password: values.password,
-            redirect,
         });
     };
 
     return (
-        <Form.Root { ...form }>
+        <Form.Root {...form}>
             <InputGroup
-                onSubmit = { form.handleSubmit(onSubmit) }>
-                <FormTitle className = 'text-center'>
+                onSubmit={form.handleSubmit(onSubmit)}>
+                <FormTitle className='text-center'>
                     {t('pages.signInAndUp.signUp.title')}
                 </FormTitle>
                 <Form.FormField
-                    control = { form.control }
-                    name = 'name'
-                    render = { ({ field, fieldState }) => (
+                    control={form.control}
+                    name='name'
+                    render={({ field, fieldState }) => (
                         <Form.FormItem>
                             <Form.FormControl>
                                 <Input
-                                    autoCapitalize = 'words'
-                                    isValidate = { fieldState.invalid }
-                                    placeholder = { t('placeholders.nameAndSurname') }
-                                    { ...field }
+                                    autoCapitalize='words'
+                                    isValidate={fieldState.invalid}
+                                    placeholder={t('placeholders.nameAndSurname')}
+                                    {...field}
                                 />
                             </Form.FormControl>
                             <Form.FormMessage
-                                options = {{ index: INPUT_VALIDATION_VALUES.NAME }}
-                                t = { t }
+                                options={{ index: INPUT_VALIDATION_VALUES.NAME }}
+                                t={t}
                             />
                         </Form.FormItem>
-                    ) }
+                    )}
                 />
                 <Form.FormField
-                    control = { form.control }
-                    name = 'email'
-                    render = { ({ field, fieldState }) => (
+                    control={form.control}
+                    name='email'
+                    render={({ field, fieldState }) => (
                         <Form.FormItem>
                             <Form.FormControl>
                                 <Input
-                                    autoCapitalize = 'off'
-                                    isValidate = { fieldState.invalid }
-                                    placeholder = { t('placeholders.email') }
-                                    { ...field }
+                                    autoCapitalize='off'
+                                    isValidate={fieldState.invalid}
+                                    placeholder={t('placeholders.email')}
+                                    {...field}
                                 />
                             </Form.FormControl>
-                            <Form.FormMessage t = { t } />
+                            <Form.FormMessage t={t} />
                         </Form.FormItem>
-                    ) }
+                    )}
                 />
                 <Form.FormField
-                    control = { form.control }
-                    name = 'phone'
-                    render = { ({ field, fieldState }) => (
+                    control={form.control}
+                    name='phone'
+                    render={({ field, fieldState }) => (
                         <Form.FormItem>
                             <Form.FormControl>
                                 <Input
-                                    autoCapitalize = 'off'
-                                    isValidate = { fieldState.invalid }
-                                    placeholder = { t('placeholders.phone') }
-                                    { ...field }
+                                    autoCapitalize='off'
+                                    isValidate={fieldState.invalid}
+                                    placeholder={t('placeholders.phone')}
+                                    {...field}
                                 />
                             </Form.FormControl>
-                            <Form.FormMessage t = { t } />
+                            <Form.FormMessage t={t} />
                         </Form.FormItem>
-                    ) }
+                    )}
                 />
                 <Form.FormField
-                    control = { form.control }
-                    name = 'password'
-                    render = { ({ field, fieldState }) => (
+                    control={form.control}
+                    name='password'
+                    render={({ field, fieldState }) => (
                         <Form.FormItem>
                             <Form.FormControl>
                                 <Input
-                                    autoCapitalize = 'off'
-                                    isValidate = { fieldState.invalid }
-                                    placeholder = { t('placeholders.password') }
-                                    type = 'password'
-                                    { ...field }
+                                    autoCapitalize='off'
+                                    isValidate={fieldState.invalid}
+                                    placeholder={t('placeholders.password')}
+                                    type='password'
+                                    {...field}
                                 />
                             </Form.FormControl>
                             <Form.FormMessage
-                                options = {{ index: INPUT_VALIDATION_VALUES.PASSWORD }}
-                                t = { t }
+                                options={{ index: INPUT_VALIDATION_VALUES.PASSWORD }}
+                                t={t}
                             />
                         </Form.FormItem>
-                    ) }
+                    )}
                 />
                 <Form.FormField
-                    control = { form.control }
-                    name = 'passwordAgain'
-                    render = { ({ field, fieldState }) => (
+                    control={form.control}
+                    name='passwordAgain'
+                    render={({ field, fieldState }) => (
                         <Form.FormItem>
                             <Form.FormControl>
                                 <Input
-                                    autoCapitalize = 'off'
-                                    isValidate = { fieldState.invalid }
-                                    placeholder = { t('placeholders.passwordAgain') }
-                                    type = 'password'
-                                    { ...field }
+                                    autoCapitalize='off'
+                                    isValidate={fieldState.invalid}
+                                    placeholder={t('placeholders.passwordAgain')}
+                                    type='password'
+                                    {...field}
                                 />
                             </Form.FormControl>
-                            <Form.FormMessage t = { t } />
+                            <Form.FormMessage t={t} />
                         </Form.FormItem>
-                    ) }
+                    )}
                 />
                 <Button
-                    isLoading = { isLoadingRegistrationProfile }
-                    type = 'submit'
-                    variant = 'contain'>
+                    isLoading={isLoadingRegistrationProfile}
+                    type='submit'
+                    variant='contain'>
                     {t('buttons.submit')}
                 </Button>
             </InputGroup>

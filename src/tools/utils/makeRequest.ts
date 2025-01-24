@@ -41,8 +41,8 @@ type OptionsType<SuccessData, ErrorData> = {
 
 export function* makeRequest<SuccessData, ErrorData = {}>(options: OptionsType<SuccessData, ErrorData>) {
     const {
-        skipAttemptsIfStatusCode = 0,
-        skipAlertIfStatusCode = 0,
+        skipAttemptsIfStatusCode = 200,
+        skipAlertIfStatusCode = 200,
         fetchOptions,
         callAction,
         toggleType,
@@ -66,6 +66,7 @@ export function* makeRequest<SuccessData, ErrorData = {}>(options: OptionsType<S
         }
 
         const result: { data: SuccessData } = yield call(() => customFetch(fetchOptions));
+        
         if (success) {
             yield success(result.data);
         }
@@ -86,13 +87,13 @@ export function* makeRequest<SuccessData, ErrorData = {}>(options: OptionsType<S
             yield error(errorData);
         }
 
-        if (callAction && errorData.statusCode !== skipAttemptsIfStatusCode) {
+        if (callAction && errorData?.statusCode !== skipAttemptsIfStatusCode && errorData?.statusCode !== 204) {
             yield put(callAction);
         }
 
-        if (skipAlertIfStatusCode !== errorData.statusCode && errorData.message) {
-            yield toast.error(errorData.data.message);
-            yield console.error(errorData.data.message);
+        if (skipAlertIfStatusCode !== errorData?.statusCode && errorData?.message) {
+            yield toast.error(errorData?.data?.message);
+            yield console.error(errorData?.data?.message);
         }
 
         if (catchEnd) {

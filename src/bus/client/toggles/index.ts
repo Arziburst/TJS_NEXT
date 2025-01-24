@@ -46,7 +46,7 @@ export type InitialStateToggles = {
 
 const initialState: InitialStateToggles = {
     isOnline:            /* navigator.onLine */ true, // TODO
-    isLoggedIn:          true, // isAuthenticated
+    isLoggedIn:          false, // isAuthenticated
     isOpenSideBar:       false,
     isFilterByLowToHigh: null,
 
@@ -104,7 +104,7 @@ export default togglesSlice.reducer;
 
 export const useTogglesRedux = () => {
     const dispatch = useDispatch();
-
+    
     return {
         togglesRedux: useSelector(({ toggles }) => toggles),
         setToggleAction: (options: Options) =>
