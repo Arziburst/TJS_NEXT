@@ -13,8 +13,8 @@ export interface ImagePropTypes
 export const Image = forwardRef<HTMLImageElement, ImageProps>(({ src, className, ...props }, ref) => {
     return (
         <NextImage
-            width={0}
-            height={0}
+            width={100}
+            height={100}
             unoptimized={true}
             className={cn('block max-w-full h-auto object-cover', className)}
             ref={ref}

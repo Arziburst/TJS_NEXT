@@ -1,9 +1,8 @@
 'use client'
 
 // Core
-import React, { useEffect, useState } from 'react';
-import { useSearchParams, redirect } from 'next/navigation';
-
+import React, { Suspense, useEffect, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 // Assets
 import { SCREENS_NUMBER } from '@/assets';
@@ -49,17 +48,19 @@ import SCardItem from '@/view/components/CardItem/styles.module.css';
 import { initialLimitOfProducts, initialPageOfProducts } from '@/bus/products/slice';
 
 const S = {
-    common_gap:    'gap-[32px]',
+    common_gap: 'gap-[32px]',
     sb_common_gap: 'sb:gap-[32px]',
-    semibold:      'font-semibold',
+    semibold: 'font-semibold',
 };
 
-export default function Shop(){
-    const categoryFromURL = useSearchParams().toString().replace("=", '');
-    
+const ShopContent = () => {
+    const params = useSearchParams();
+    const categoryFromURL = params.toString().replace("=", '');
+    const router = useRouter();
+
     const { t } = useCustomTranslation();
 
-    const [ width ] = useWindowWidth();
+    const [width] = useWindowWidth();
 
     // Hooks of Bus
     const {
@@ -89,7 +90,7 @@ export default function Shop(){
     } = useProducts();
 
     // States
-    const [ localPageState, setLocalPageState ] = useState(page);
+    const [localPageState, setLocalPageState] = useState(page);
     const [
         filterByCategoryState,
         setFilterByCategoryState,
@@ -97,7 +98,9 @@ export default function Shop(){
 
     // Handlers
     const onClickEditItemHandler = (id: string) => {
-        redirect(`${BOOK.PRODUCT}/${id}${BOOK.MANAGEMENT}`);
+        console.log(1);
+
+        router.push(`${BOOK.MANAGEMENT}?id=${id}`);
     };
 
     const setSettingsToInitial = () => {
@@ -107,18 +110,18 @@ export default function Shop(){
 
     const onClickChangeCategoryHandler = (categoryString: string) => {
         setSettingsToInitial()
-        redirect(`${BOOK.SHOP}?${categoryString}`);
+        router.push(`${BOOK.SHOP}?${categoryString}`);
     };
 
     const onClickItemsOfSelectFilterByPriceHandler = (item: string) => {
         if (item === ENUM_FILTERS_BY_PRICE.LOW_TO_HIGH) {
             setToggleAction({
-                type:  'isFilterByLowToHigh',
+                type: 'isFilterByLowToHigh',
                 value: true,
             });
         } else {
             setToggleAction({
-                type:  'isFilterByLowToHigh',
+                type: 'isFilterByLowToHigh',
                 value: false,
             });
         }
@@ -128,9 +131,9 @@ export default function Shop(){
         const rightPage = localPageState + 1;
         setLocalPageState(rightPage);
         fetchProductsByPaginationAtEnd({
-            limit:       limit,
-            type:        categoryFromURL || ENUM_CATEGORIES.ALL,
-            page:        rightPage,
+            limit: limit,
+            type: categoryFromURL || ENUM_CATEGORIES.ALL,
+            page: rightPage,
             isLowToHigh: isFilterByLowToHigh,
         });
     };
@@ -140,88 +143,81 @@ export default function Shop(){
         setFilterByCategoryState(categoryFromURL || ENUM_CATEGORIES.ALL);
         fetchProductsByPagination({
             limit,
-            type:        categoryFromURL || ENUM_CATEGORIES.ALL,
+            type: categoryFromURL || ENUM_CATEGORIES.ALL,
             page,
             isLowToHigh: isFilterByLowToHigh,
         });
-    }, [ categoryFromURL, limit, page, isFilterByLowToHigh ]);
+    }, [categoryFromURL, limit, page, isFilterByLowToHigh]);
 
-    // useEffect(() => { // TODO
-    //     if (filterByCategoryState && filterByCategoryState !== ENUM_CATEGORIES.ALL) {
-    //         redirect(`${BOOK.SHOP}?${filterByCategoryState}`);
-    //     } else {
-    //         redirect(`${BOOK.SHOP}`);
-    //     }
-    // }, [ filterByCategoryState ]);
 
     useEffect(() => {
         setLocalPageState(page);
-    }, [ categoryFromURL, isFilterByLowToHigh ]);
+    }, [categoryFromURL, isFilterByLowToHigh]);
 
     useEffect(() => {
         setLocalPageState(page);
-    }, [ page ]);
+    }, [page]);
 
     return (
-        <div className = { `flex flex-col ${S.common_gap} 
+        <div className={`flex flex-col ${S.common_gap} 
             sb:flex-row sb:gap-20` }>
             <div>
                 {width < SCREENS_NUMBER.SB ? (
-                    <div className = 'flex flex-col'>
+                    <div className='flex flex-col'>
                         {categoryFromURL && (
                             <TitlePage>
                                 {t(`categories.${categoryFromURL}`)}
                             </TitlePage>
                         )}
-                        <div className = { `flex gap-4
+                        <div className={`flex gap-4
                             [&>*]:w-1/2
                             max-[360px]:flex-col 
                             max-[360px]:[&>*]:w-full` }>
                             <Select
-                                items = { [ ENUM_CATEGORIES.ALL, ...CATEGORIES_ITEMS ] }
-                                label = 'Shop by'
-                                setValue = { onClickChangeCategoryHandler }
-                                showValue = { t(`categories.${filterByCategoryState}`) }
-                                t = { t }
-                                tString = 'categories'
-                                value = { filterByCategoryState }
+                                items={[ENUM_CATEGORIES.ALL, ...CATEGORIES_ITEMS]}
+                                label='Shop by'
+                                setValue={onClickChangeCategoryHandler}
+                                showValue={t(`categories.${filterByCategoryState}`)}
+                                t={t}
+                                tString='categories'
+                                value={filterByCategoryState}
                             />
                             <Select
-                                items = { ARRAY_FILTERS_BY_PRICE }
-                                label = 'Filter by'
-                                setValue = { onClickItemsOfSelectFilterByPriceHandler }
-                                showValue = { t(`filtersByPrice.${getValueOfSelectFilterByPrice(isFilterByLowToHigh) }`) }
-                                t = { t }
-                                tString = 'filtersByPrice'
-                                value = { getValueOfSelectFilterByPrice(isFilterByLowToHigh) }
+                                items={ARRAY_FILTERS_BY_PRICE}
+                                label='Filter by'
+                                setValue={onClickItemsOfSelectFilterByPriceHandler}
+                                showValue={t(`filtersByPrice.${getValueOfSelectFilterByPrice(isFilterByLowToHigh)}`)}
+                                t={t}
+                                tString='filtersByPrice'
+                                value={getValueOfSelectFilterByPrice(isFilterByLowToHigh)}
                             />
                         </div>
                     </div>
                 ) : (
-                    <div className = 'flex flex-col gap-8'>
-                        <ul className = 'flex flex-col gap-5'>
+                    <div className='flex flex-col gap-8'>
+                        <ul className='flex flex-col gap-5'>
                             <li>
-                                <Label className = 'capitalize'>
+                                <Label className='capitalize'>
                                     {t('pages.shop.titleFilterShopBy')}
                                 </Label>
                             </li>
-                            {[ ENUM_CATEGORIES.ALL, ...CATEGORIES_ITEMS ].map((item) => (
+                            {[ENUM_CATEGORIES.ALL, ...CATEGORIES_ITEMS].map((item) => (
                                 <li
-                                    className = 'leading-none'
-                                    key = { item }>
+                                    className='leading-none'
+                                    key={item}>
                                     <MoveUnderline
                                         asChild
-                                        variant = 'skipFirstLine'>
+                                        variant='skipFirstLine'>
                                         <NavLink
                                             href={
-                                                `${BOOK.SHOP}${item === ENUM_CATEGORIES.ALL 
-                                                    ? '' 
+                                                `${BOOK.SHOP}${item === ENUM_CATEGORIES.ALL
+                                                    ? ''
                                                     : `?${item}`
-                                                }` 
+                                                }`
                                             }
-                                            variant = 'default'
-                                            onClick={ () => setSettingsToInitial() }>
-                                            <NavItemText className = 'text-[15px]'>
+                                            variant='default'
+                                            onClick={() => setSettingsToInitial()}>
+                                            <NavItemText className='text-[15px]'>
                                                 {t(`categories.${item}`)}
                                             </NavItemText>
                                         </NavLink>
@@ -229,28 +225,28 @@ export default function Shop(){
                                 </li>
                             ))}
                         </ul>
-                        <ul className = 'flex flex-col gap-5'>
+                        <ul className='flex flex-col gap-5'>
                             <li>
-                                <Label className = 'capitalize'>
+                                <Label className='capitalize'>
                                     {t('pages.shop.titleFilterByPrice')}
                                 </Label>
                             </li>
                             {ARRAY_FILTERS_BY_PRICE.map((str, index) => (
-                                <li key = { str }>
+                                <li key={str}>
                                     <MoveUnderline
                                         asChild
-                                        variant = 'skipFirstLine'>
+                                        variant='skipFirstLine'>
                                         <Button
-                                            className = { cn(
+                                            className={cn(
                                                 `font-secondary text-xs text-[13px] font-semibold whitespace-nowrap capitalize
                                                     hover:text-quaternary`,
-                                                { 'text-quaternary': typeof isFilterByLowToHigh === 'boolean' &&  Boolean(index) !== isFilterByLowToHigh },
-                                            ) }
-                                            variant = 'default'
-                                            onClick = { () => setToggleAction({
-                                                type:  'isFilterByLowToHigh',
+                                                { 'text-quaternary': typeof isFilterByLowToHigh === 'boolean' && Boolean(index) !== isFilterByLowToHigh },
+                                            )}
+                                            variant='default'
+                                            onClick={() => setToggleAction({
+                                                type: 'isFilterByLowToHigh',
                                                 value: str === ENUM_FILTERS_BY_PRICE.LOW_TO_HIGH,
-                                            }) }>
+                                            })}>
                                             {t(`filtersByPrice.${str}`)}
                                         </Button>
                                     </MoveUnderline>
@@ -260,84 +256,92 @@ export default function Shop(){
                     </div>
                 )}
             </div>
-            <div className = { `flex flex-col ${S.common_gap} grow justify-between
+            <div className={`flex flex-col ${S.common_gap} grow justify-between
                 sb:gap-14` }>
                 <NotData
-                    className = { `flex flex-wrap gap-[14px] justify-center
+                    className={`flex flex-wrap gap-[14px] justify-center
                     sb:gap-[20px]` }
-                    firstElement = { isLoggedIn && profile?.role === 'admin' && (
-                        <div className = { SCardItem.images_container }>
-                            <NavLink href = { BOOK.ADD_ITEM }>
+                    firstElement={isLoggedIn && profile?.role === 'admin' && (
+                        <div className={SCardItem.images_container}>
+                            <NavLink href={BOOK.MANAGEMENT}>
                                 <Button
-                                    className = 'h-full'
-                                    variant = 'default'>
-                                    <Icons.AddItem className = 'h-24 w-auto [&_path]:stroke-secondary-100' />
+                                    className='h-full'
+                                    variant='default'>
+                                    <Icons.AddItem className='h-24 w-auto [&_path]:stroke-secondary-100' />
                                 </Button>
                             </NavLink>
 
                         </div>
-                    ) }
-                    isLoading = { isLoadingFetchProductsByPagination }
-                    t = { t }>
+                    )}
+                    isLoading={isLoadingFetchProductsByPagination}
+                    t={t}>
                     {products?.map((item) => (
                         <CardItem
-                            _id = { item._id }
-                            available = { item.available }
-                            firstImage = {{
-                                src: item.images[ 0 ],
+                            _id={item._id}
+                            available={item.available}
+                            firstImage={{
+                                src: item.images[0],
                                 alt: t('cards.product.firstAltImageOfCard'),
                             }}
-                            key = { item._id }
-                            price = { item.price }
-                            role = { profile?.role }
-                            secondImage = {{
-                                src: item.images[ 1 ],
+                            key={item._id}
+                            price={item.price}
+                            role={profile?.role}
+                            secondImage={{
+                                src: item.images[1],
                                 alt: t('cards.product.secondAltImageOfCard'),
                             }}
-                            t = { t }
-                            title = { item.title }
-                            href = { `${BOOK.SHOP}/${item._id}` }
-                            onClickEditItem = { () => onClickEditItemHandler(item._id) }
+                            t={t}
+                            title={item.title}
+                            href={`${BOOK.SHOP}/${item._id}`}
+                            onClickEditItem={() => onClickEditItemHandler(item._id)}
                         />
                     ))}
                 </NotData>
-                <div className = { `flex flex-col gap-4 items-center
-                    ${S.sb_common_gap}` }>
+                <div className={`flex flex-col gap-4 items-center
+                    ${S.sb_common_gap}`}>
                     {totalShowed < total && (
                         <NotData
-                            className = 'w-full flex justify-center'
-                            isLoading = { isLoadingFetchProductsByPaginationAtEnd }
-                            t = { t }>
+                            className='w-full flex justify-center'
+                            isLoading={isLoadingFetchProductsByPaginationAtEnd}
+                            t={t}>
                             <Button
-                                className = 'capitalize max-w-[540px]'
-                                onClick = { onClickShowMoreHandler }>
+                                className='capitalize max-w-[540px]'
+                                onClick={onClickShowMoreHandler}>
                                 {t('pages.shop.buttonShowMore')}
                             </Button>
                         </NotData>
                     )}
-                    <p className = { `text-xs font-secondary tracking-[0.24px]
+                    <p className={`text-xs font-secondary tracking-[0.24px]
                         sb:text-sm sb:tracking-[0.28px]` }>
                         {t('pages.shop.textShowed')}
-                        <span className = { S.semibold }>
+                        <span className={S.semibold}>
                             {` ${totalShowed} `}
                         </span>
                         {t('pages.shop.textFrom')}
-                        <span className = { S.semibold }>
+                        <span className={S.semibold}>
                             {' ' + total + ' '}
                         </span>
                         {t('pages.shop.textProducts')}
                     </p>
                     <Pagination
-                        array = { products }
-                        className = 'w-full'
-                        limit = { limit }
-                        setValue = { (value: number) => setPageOfProducts(value) }
-                        total = { total }
-                        value = { page }
-                        onClickDesktopNumber = { () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }) }
+                        array={products}
+                        className='w-full'
+                        limit={limit}
+                        setValue={(value: number) => setPageOfProducts(value)}
+                        total={total}
+                        value={page}
+                        onClickDesktopNumber={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
                     />
                 </div>
             </div>
         </div>
     );
 };
+
+export default function Shop() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ShopContent />
+        </Suspense>
+    );
+}

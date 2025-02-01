@@ -7,7 +7,6 @@ import { SCREENS_NUMBER } from '@/assets';
 // Images
 import image_category_brooch from '@/assets/images/image_category_brooch.png';
 import image_category_earrings from '@/assets/images/image_category_earrings.png';
-import image_category_bestsellers from '@/assets/images/image_category_bestsellers.png';
 import image_category_bracelets from '@/assets/images/image_category_bracelets.png';
 import image_category_necklace from '@/assets/images/image_category_necklace.png';
 import image_category_rings from '@/assets/images/image_category_rings.png';
@@ -28,28 +27,24 @@ type MakeJustifySelf = {
 
 export const CATEGORIES_ITEMS_WITH_IMAGES = [
     {
-        category: ENUM_CATEGORIES.BROOCH,
-        image:    image_category_brooch,
-    },
-    {
         category: ENUM_CATEGORIES.EARRINGS,
         image:    image_category_earrings,
-    },
-    {
-        category: ENUM_CATEGORIES.BESTSELLERS,
-        image:    image_category_bestsellers,
-    },
-    {
-        category: ENUM_CATEGORIES.BRACELETS,
-        image:    image_category_bracelets,
     },
     {
         category: ENUM_CATEGORIES.NECKLACE,
         image:    image_category_necklace,
     },
     {
+        category: ENUM_CATEGORIES.BRACELETS,
+        image:    image_category_bracelets,
+    },
+    {
         category: ENUM_CATEGORIES.RINGS,
         image:    image_category_rings,
+    },
+    {
+        category: ENUM_CATEGORIES.BROOCH,
+        image:    image_category_brooch,
     },
 ];
 

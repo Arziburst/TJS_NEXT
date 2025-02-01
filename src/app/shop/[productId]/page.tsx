@@ -2,7 +2,7 @@
 
 // Core
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 // Assets
 import { SCREENS_NUMBER } from '@/assets';
@@ -11,15 +11,17 @@ import { SCREENS_NUMBER } from '@/assets';
 import { useCustomTranslation, useWindowWidth } from '@/tools/hooks';
 
 // Book
-import { ParamsLowerCase } from '@/lib/book';
+import { BOOK } from '@/lib/book';
 
 // Bus
 import { useProducts } from '@/bus/products';
 import { useCart } from '@/bus/cart';
+import { useProfile } from '@/bus/profile';
 
 // Components
 import { Slider } from './(root)/Slider';
 import { ImageProduct } from './(root)/ImageProduct';
+import { Icons } from '@/view/components';
 
 // Elements
 import { Button, Link, TitlePage } from '@/view/elements';
@@ -31,6 +33,7 @@ import S from './(root)/styles.module.css';
 import { checkIsProductAddedToCart } from './(root)/static';
 
 export default function Product() {
+    const router = useRouter();
     const refDescriptionProduct = useRef<null | HTMLDivElement>(null);
 
     const { productId } = useParams<{ productId: string }>()
@@ -42,6 +45,7 @@ export default function Product() {
     // Hooks of Bus
     const { products: { currentProduct }, fetchProduct, setCurrentProduct } = useProducts();
     const { cart, setProductOfCart } = useCart();
+    const { profile } = useProfile();
 
     // States
     const [heightState, setHeightState] = useState(0);
@@ -54,6 +58,10 @@ export default function Product() {
     // Handlers
     const onClickAddToCartHandler = () => {
         currentProduct && setProductOfCart(currentProduct._id);
+    };
+
+    const onClickEditItemHandler = () => {
+        router.push(`${BOOK.MANAGEMENT}?id=${productId}`);
     };
 
     useEffect(() => {
@@ -77,8 +85,18 @@ export default function Product() {
 
     return (
         <div
-            className={'flex flex-row gap-6'}
+            className={'relative flex flex-row gap-6'}
             style={{ minWidth: 0 }}>
+            {profile?.role === 'admin' && (
+                <Button
+                    style={{ border: "1px solid #FF614A", color: "#FF614A" }}
+                    className='absolute top-0 right-0 z-[1] w-auto p-3 bg-white shadow-md'
+                    variant='outline'
+                    onClick={onClickEditItemHandler}
+                >
+                    <Icons.EditItem />
+                </Button>
+            )}
             {width > SCREENS_NUMBER.SB && (
                 <div className='w-1/2 space-y-[50px]'>
                     <div ref={refDescriptionProduct}>
@@ -115,6 +133,13 @@ export default function Product() {
                             ? `${refDescriptionProduct.current.clientHeight}px`
                             : 'auto'
                     }}>
+                    <Button
+                        className='mb-6 h-5 w-44'
+                        variant='outline'
+                        onClick={() => router.back()}
+                    >
+                        {t('buttons.goBack')}
+                    </Button>
                     <div className='space-y-[12px]'>
                         {currentProduct?.type && (
                             <TitlePage>

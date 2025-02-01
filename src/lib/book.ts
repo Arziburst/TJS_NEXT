@@ -25,7 +25,6 @@ export const BOOK = {
     PAYMENT_SUCCESS: '/payment-success',
     ORDER_DETAILS: '/order-details',
     PRODUCT: '/product',
-    ADD_ITEM: '/add-item',
     EDIT_ITEM: '/edit-item',
     MANAGEMENT: '/management',
     LOGIN: '/login',

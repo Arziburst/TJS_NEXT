@@ -2,7 +2,7 @@
 import { toast } from 'react-toastify';
 
 // Constants
-import { typesOfImage } from '@/init';
+import { typesOfImage } from '@/lib/constants';
 
 // Tools
 import { useDispatch, useSelector } from '../../tools/hooks'; /* Typed selector */

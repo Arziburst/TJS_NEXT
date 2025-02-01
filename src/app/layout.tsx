@@ -90,10 +90,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                         {children}
                         <Footer t={t} />
                     </Wrapper>
-                    <CookieConsentBanner
-                        t={t}
-                        width={width}
-                    />
                 </StoreProvider>
             </body>
         </html>

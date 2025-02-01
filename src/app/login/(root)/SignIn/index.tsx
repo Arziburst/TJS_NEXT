@@ -24,7 +24,7 @@ import { Button, FormTitle, Input } from '@/view/elements';
 
 // Static
 import { validationForm, defaultValues } from './static';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 // Types
 type PropTypes = {
@@ -32,6 +32,7 @@ type PropTypes = {
 }
 
 export const SignIn: FC<PropTypes> = ({ t }) => {
+    const router = useRouter();
     const form = useForm({
         resolver: yupResolver(validationForm),
         defaultValues,
@@ -42,7 +43,10 @@ export const SignIn: FC<PropTypes> = ({ t }) => {
     const { fetchLoginProfile } = useProfile();
 
     const onSubmit = (values: typeof defaultValues) => {
-        fetchLoginProfile(values);
+        fetchLoginProfile({
+            body: values,
+        });
+        // router.push(BOOK.ROOT)
     };
 
     return (

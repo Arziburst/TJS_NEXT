@@ -1,6 +1,3 @@
-// Core
-import { UseFormReset } from 'react-hook-form/dist/types';
-
 // Types
 export type Error = {
     message: string;
@@ -8,5 +5,5 @@ export type Error = {
 };
 
 export type ResetForm = {
-    reset: UseFormReset<any>; // todo remove any
+    reset: () => void;
 }

@@ -1,0 +1,30 @@
+.grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        "title"
+        "type"
+        "description"
+        "weight"
+        "price"
+        "images"
+        "available"
+        "delete"
+        "submit";
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr 1fr ;
+        grid-template-rows: auto;
+        grid-template-areas: 
+            "title type"
+            "description description"
+            "weight price"
+            "images available"
+            "delete delete"
+            "submit submit";
+    }
+}

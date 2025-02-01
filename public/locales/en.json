@@ -3,7 +3,6 @@
         "see-all": "See all",
         "brooch": "Brooch",
         "earrings": "Earrings",
-        "bestsellers": "Bestsellers",
         "bracelets": "Bracelets",
         "necklace": "Necklace",
         "rings": "Rings"
@@ -48,10 +47,13 @@
             "availability": "Availability",
             "nonAvailability": "Non-availability",
             "confirmCompleteDeletion": "Confirm complete deletion!",
+            "confirmCompleteDeletionTwice": "Are you sure you want to delete this product?",
             "uninstallError": "Uninstall error",
+            "galery": "Gallery",
             "buttonAddImageFromGallery": "Add images from the Gallery",
-            "buttonDeleteAllImages": "Delete all images",
-            "altImageFromGallery": "Image from the Gallery"
+            "openFileDialog": "Choose image",
+            "altImageFromGallery": "Image from the Gallery",
+            "continueEditing": "Continue editing"
         },
         "order": {
             "textIfNotData": "Order did not find",
@@ -177,7 +179,8 @@
         "submit": "Submit",
         "remove": "Remove",
         "create": "Create",
-        "edit": "Edit"
+        "edit": "Edit",
+        "goBack": "Go back"
     },
     "altImages": {
         "product": "Image of Product",

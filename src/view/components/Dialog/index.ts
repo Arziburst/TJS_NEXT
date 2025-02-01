@@ -13,6 +13,7 @@ import { DialogTitle } from './DialogTitle';
 export const Dialog = {
     Root:          DialogPrimitive.Root,
     DialogTrigger: DialogPrimitive.Trigger,
+    DialogClose: DialogPrimitive.Close,
     DialogContent,
     DialogDescription,
     DialogFooter,

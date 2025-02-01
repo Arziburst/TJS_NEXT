@@ -42,6 +42,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
     asChild?: boolean;
     isLoading?: boolean;
+    variant?: any;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -52,18 +53,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
         return (
             <Comp
-                className = { cn(
+                className={cn(
                     buttonVariants({ variant, className }),
                     {
-                        'cursor-wait':        isLoading,
+                        'cursor-wait': isLoading,
                         'cursor-not-allowed': disabled,
                     },
-                ) }
-                disabled = { isDisabled }
-                ref = { ref }
-                { ...props }>
+                )}
+                disabled={isDisabled}
+                ref={ref}
+                {...props}>
                 {isLoading && (
-                    <Loader2 className = 'mr-2 h-4 w-4 animate-spin' />
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                 )}
                 {children}
             </Comp>

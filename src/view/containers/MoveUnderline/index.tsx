@@ -29,6 +29,7 @@ const moveUnderlineVariants = cva(
 export interface PropTypes
     extends React.AllHTMLAttributes<HTMLButtonElement>, VariantProps<typeof moveUnderlineVariants> {
     asChild?: boolean;
+    variant?: any;
 }
 
 
@@ -38,9 +39,9 @@ const MoveUnderline = React.forwardRef<HTMLSpanElement, PropTypes>(
 
         return (
             <Comp
-                className = { cn(moveUnderlineVariants({ variant, className })) }
-                ref = { ref }
-                { ...props }>
+                className={cn(moveUnderlineVariants({ variant, className }))}
+                ref={ref}
+                {...props}>
                 {children}
             </Comp>
         );

@@ -1,12 +1,11 @@
 {
     "categories": {
         "see-all": "Всі",
-        "brooch": "Брошь",
+        "brooch": "Брошка",
         "earrings": "Сережки",
-        "bestsellers": "Бестселери",
         "bracelets": "Браслети",
         "necklace": "Намисто",
-        "rings": "Кільця"
+        "rings": "Обручки"
     },
     "filtersByPrice": {
         "init": "вибрати",
@@ -48,10 +47,13 @@
             "availability": "Наявність",
             "nonAvailability": "Відсутність",
             "confirmCompleteDeletion": "Підтвердіть повне видалення!",
+            "confirmCompleteDeletionTwice": "Ви впевнені, що хочете видалити цей продукт?",
             "uninstallError": "Помилка видалення",
+            "galery": "Галерея",
             "buttonAddImageFromGallery": "Додати зображення з галереї",
-            "buttonDeleteAllImages": "Видалити всі зображення",
-            "altImageFromGallery": "Зображення з галереї"
+            "openFileDialog": "Вибрати зображення",
+            "altImageFromGallery": "Зображення з галереї",
+            "continueEditing": "Продовжити редагування"
         },
         "order": {
             "textIfNotData": "Замовлення не знайдено",
@@ -177,7 +179,8 @@
         "submit": "Надіслати",
         "remove": "Видалити",
         "create": "Створити",
-        "edit": "Редагувати"
+        "edit": "Редагувати",
+        "goBack": "Повернутися назад"
     },
     "altImages": {
         "product": "Зображення продукту",

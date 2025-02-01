@@ -32,9 +32,10 @@ const navLinkVariants = cva(
 export interface NavLinkPropTypes extends LinkProps, VariantProps<typeof navLinkVariants> {
     className?: string
     children: React.ReactNode
+    variant?: any
 }
 
-export const NavLink: FC<NavLinkPropTypes> = ({ children, variant, className,  ...props }) => {
+export const NavLink: FC<NavLinkPropTypes> = ({ children, variant, className, ...props }) => {
     return (
         <Link
             // className = { // TODO
@@ -42,10 +43,10 @@ export const NavLink: FC<NavLinkPropTypes> = ({ children, variant, className,  .
             //         ? cn(navLinkVariants({ variant, className }), 'text-quaternary') 
             //         : cn(navLinkVariants({ variant, className })) 
             // }
-            className = { 
+            className={
                 cn(navLinkVariants({ variant, className }), 'text-quaternary')
             }
-            { ...props }>
+            {...props}>
             {children}
         </Link>
     );

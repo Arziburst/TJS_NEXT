@@ -3,7 +3,6 @@
         "see-all": "Все",
         "brooch": "Брошь",
         "earrings": "Серьги",
-        "bestsellers": "Бестселлеры",
         "bracelets": "Браслеты",
         "necklace": "Ожерелье",
         "rings": "Кольца"
@@ -48,10 +47,13 @@
             "availability": "Наличие",
             "nonAvailability": "Отсутствие",
             "confirmCompleteDeletion": "Подтвердите полное удаление!",
+            "confirmCompleteDeletionTwice": "Вы уверены, что хотите удалить этот продукт?",
             "uninstallError": "Ошибка удаления",
+            "galery": "Галерея",
             "buttonAddImageFromGallery": "Добавить изображения из галереи",
-            "buttonDeleteAllImages": "Удалить все изображения",
-            "altImageFromGallery": "Изображение из галереи"
+            "openFileDialog": "Выбрать изображение",
+            "altImageFromGallery": "Изображение из галереи",
+            "continueEditing": "Продолжить редактирование"
         },
         "order": {
             "textIfNotData": "Заказ не найден",
@@ -177,7 +179,8 @@
         "submit": "Отправить",
         "remove": "Удалить",
         "create": "Создать",
-        "edit": "Редактировать"
+        "edit": "Редактировать",
+        "goBack": "Вернуться назад"
     },
     "altImages": {
         "product": "Изображение продукта",

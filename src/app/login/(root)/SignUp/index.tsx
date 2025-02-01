@@ -43,10 +43,12 @@ export const SignUp: FC<PropTypes> = ({ t }) => {
 
     const onSubmit = (values: typeof defaultValues) => {
         fetchRegistrationProfile({
-            name: values.name,
-            phone: values.phone,
-            email: values.email,
-            password: values.password,
+            body: {
+                name: values.name,
+                phone: values.phone,
+                email: values.email,
+                password: values.password,
+            }
         });
     };
 

@@ -4,17 +4,23 @@ import * as types from '../types';
 
 // Registration
 export type FetchRegistrationProfileRequest = {
+    body: {
     name: string;
     phone: string;
     email: string;
     password: string;
+    },
+    redirect?: () => void;
 };
 export type FetchRegistrationProfileResponse = types.Profile;
 
 // Login
 export type FetchLoginProfileRequest = {
-    email: string;
-    password: string;
+    body: {
+        email: string;
+        password: string;
+    }
+    redirect?: () => void;
 };
 export type FetchLoginProfileResponse = types.Profile;
 

@@ -31,30 +31,30 @@ export const Select: FC<SelectShopPropTypes> = ({
     onClick,
 }) => {
     return (
-        <div className = 'flex flex-col gap-[10px]'>
+        <div className='flex flex-col gap-[10px]'>
             <Label>
                 {label}
             </Label>
             <SelectCore.Root
-                value = { value || '' }
-                onValueChange = { setValue }>
+                value={value || ''}
+                onValueChange={setValue}>
                 <SelectCore.SelectTrigger
                     isArrow
-                    className = 'capitalize'
-                    variant = 'ghost'>
+                    className='capitalize'
+                    variant='ghost'>
                     <SelectCore.SelectValue
-                        aria-label = { value || '' }
-                        className = 'text-[15px]'>
+                        aria-label={value || ''}
+                        className='text-[15px]'>
                         {showValue || placeholder}
                     </SelectCore.SelectValue>
                 </SelectCore.SelectTrigger>
-                <SelectCore.SelectContent variant = 'outline'>
+                <SelectCore.SelectContent variant='outline'>
                     {items.map((item) => (
                         <SelectCore.SelectItem
-                            className = 'py-2 px-3 capitalize'
-                            key = { item }
-                            value = { item }
-                            onClick = { () => onClick && onClick(item) }>
+                            className='py-2 px-3 capitalize'
+                            key={item}
+                            value={item}
+                            onClick={() => onClick && onClick(item)}>
                             {t(`${tString}.${item}`)}
                         </SelectCore.SelectItem>
                     ))}

@@ -1,5 +1,4 @@
 // Types
-import { redirect } from "next/navigation";
 import * as commonTypes from '@/bus/commonTypes';
 import * as types from '../types';
 
@@ -34,7 +33,7 @@ export type FetchCreateNewProductResponse = types.ExtendedProduct;
 // Delete product
 export type FetchDeleteProductRequest = {
   _id: types.ExtendedProduct["_id"];
-  redirect: typeof redirect;
+  redirect: Function;
 };
 export type FetchDeleteProductResponse = types.ExtendedProduct['_id'];
 

@@ -32,7 +32,7 @@ export const ButtonSignInAndUp: FC<PropTypes> = ({
 
     const closeSideBar = () => {
         isMobile && setToggleAction({
-            type:  'isOpenSideBar',
+            type: 'isOpenSideBar',
             value: false,
         });
     };
@@ -44,33 +44,33 @@ export const ButtonSignInAndUp: FC<PropTypes> = ({
 
     if (isLoggedIn) {
         return (
-            <li className = { className }>
+            <li className={className}>
                 <DropdownMenu.Root modal>
                     <DropdownMenu.Trigger asChild>
                         <Avatar
-                            fallback = { profile ? profile.name.slice(0, 2) : 'XX' }
+                            fallback={profile ? profile.name.slice(0, 2) : 'XX'}
                         />
                     </DropdownMenu.Trigger>
-                    <DropdownMenu.Content side = { isMobile ? 'top' : 'right' }>
+                    <DropdownMenu.Content side={isMobile ? 'top' : 'right'}>
                         <DropdownMenu.Label>
                             {t('components.header.textSettings')}
                         </DropdownMenu.Label>
                         <DropdownMenu.Separator />
                         {profile?.role === 'admin' && (
                             <>
-                                <DropdownMenu.Item onClick = { () => redirect(BOOK.ADD_ITEM) }>
+                                <DropdownMenu.Item onClick={() => redirect(BOOK.MANAGEMENT)}>
                                     {t('components.header.buttonAddProduct')}
                                 </DropdownMenu.Item>
-                                <DropdownMenu.Item onClick = { () => redirect(BOOK.ORDERS) }>
+                                <DropdownMenu.Item onClick={() => redirect(BOOK.ORDERS)}>
                                     {t('components.header.buttonOrders')}
                                 </DropdownMenu.Item>
                             </>
                         )}
                         <DropdownMenu.Item
-                            propsButton = {{
+                            propsButton={{
                                 isLoading: isLoadingLogoutProfile,
                             }}
-                            onClick = { onClickLogoutHandler }>
+                            onClick={onClickLogoutHandler}>
                             {t('components.header.buttonLogout')}
                         </DropdownMenu.Item>
                     </DropdownMenu.Content>
@@ -81,10 +81,10 @@ export const ButtonSignInAndUp: FC<PropTypes> = ({
 
     return (
         <NavItem
-            className = { className }
-            href={BOOK.LOGIN }
-            onClick = { () => closeSideBar() }
-            { ...props }>
+            className={className}
+            href={BOOK.LOGIN}
+            onClick={() => closeSideBar()}
+            {...props}>
             {t('pages.signInAndUp.root')}
         </NavItem>
     );

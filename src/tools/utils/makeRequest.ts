@@ -41,8 +41,6 @@ type OptionsType<SuccessData, ErrorData> = {
 
 export function* makeRequest<SuccessData, ErrorData = {}>(options: OptionsType<SuccessData, ErrorData>) {
     const {
-        skipAttemptsIfStatusCode = 200,
-        skipAlertIfStatusCode = 200,
         fetchOptions,
         callAction,
         toggleType,
@@ -53,11 +51,6 @@ export function* makeRequest<SuccessData, ErrorData = {}>(options: OptionsType<S
     } = options;
 
     try {
-        // ------------- TRY BLOCK START -------------
-        if (tryStart) {
-            yield tryStart();
-        }
-
         if (toggleType) {
             yield put(toggleCreatorAction({
                 type:  toggleType,
@@ -71,34 +64,10 @@ export function* makeRequest<SuccessData, ErrorData = {}>(options: OptionsType<S
             yield success(result.data);
         }
 
-        if (tryEnd) {
-            yield tryEnd(result.data);
-        }
-
         return result;
         // ------------- TRY BLOCK END -------------
     } catch (errorData: ErrorData | any) {
         // ------------- CATCH BLOCK START -------------
-        if (catchStart) {
-            yield catchStart(errorData);
-        }
-
-        if (error) {
-            yield error(errorData);
-        }
-
-        if (callAction && errorData?.statusCode !== skipAttemptsIfStatusCode && errorData?.statusCode !== 204) {
-            yield put(callAction);
-        }
-
-        if (skipAlertIfStatusCode !== errorData?.statusCode && errorData?.message) {
-            yield toast.error(errorData?.data?.message);
-            yield console.error(errorData?.data?.message);
-        }
-
-        if (catchEnd) {
-            yield catchEnd(errorData);
-        }
 
         return errorData;
         // ------------- CATCH BLOCK END -------------

@@ -26,14 +26,12 @@ export const validationForm = yup.object({
         .min(INPUT_VALIDATION_VALUES.PASSWORD, ERRORS.PASSWORD_MIN_LENGTH),
 });
 
-const getTimeForDevelopmentMode = new Date().getTime();
-
 export const defaultValues: DefaultValues = process.env.NODE_ENV === 'development' ? {
-    name:          `user_${getTimeForDevelopmentMode}`,
-    email:         `email${getTimeForDevelopmentMode}@gmail.com`,
-    phone:         `+3809${getTimeForDevelopmentMode.toString().slice(-8) }`,
-    password:      '12345678',
-    passwordAgain: '12345678',
+    name:          `TEST TEST`,
+    email:         `test_admin@email.com`,
+    phone:         `+380666666666`,
+    password:      'test',
+    passwordAgain: 'test',
 } : {
     name:          '',
     email:         '',
