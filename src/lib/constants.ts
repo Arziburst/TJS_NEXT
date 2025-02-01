@@ -1,8 +1,8 @@
 // Network
-export const API_URL = process.env.API_URL || 'http://localhost:4000';
+export const API_URL = process.env.API_URL || 'https://dev-api.tjstore.pp.ua';
 
 // Local
-export const APP_NAME = process.env.APP_NAME || 'burst-template';
+export const APP_NAME = process.env.APP_NAME || 'TJS_NEXT';
 
 export enum LOCAL_STORAGE {
     CART = 'cart',

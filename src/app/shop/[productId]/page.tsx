@@ -1,4 +1,4 @@
-"use client" // TODO to server
+"use client"
 
 // Core
 import React, { useEffect, useRef, useState } from 'react';
@@ -75,13 +75,13 @@ export default function Product() {
     }, []);
 
     useEffect(() => {
-        const result = refDescriptionProduct.current?.clientHeight; // todo how to fix this? how to get height of element from the ref?
+        const result = refDescriptionProduct.current?.clientHeight;
         setHeightState(result || 0);
     }, [currentProduct]);
 
     useEffect(() => {
         setIsProductAddedToCartState(checkIsProductAddedToCart({ cart, productId }));
-    }, [cart]);
+    }, [cart, productId]);
 
     return (
         <div
