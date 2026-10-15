@@ -241,7 +241,7 @@ test.describe("auth on the local stack", () => {
       "Invalid phone number format. For example +380946826242",
     );
     await expect(form.getByLabel("Password", { exact: true })).toHaveAccessibleDescription(
-      "Password must be at least 6 characters long",
+      "Password must be at least 8 characters long",
     );
     await expect(form.getByLabel("Password again")).toHaveAccessibleDescription("Passwords do not match");
     for (const label of ["Name and surname", "Email", "Phone"]) {
