@@ -28,10 +28,17 @@ describe("proxy locale detection", () => {
     expect(redirectTarget(await proxy(request("/", { "accept-language": "pt-BR,pt;q=0.9" })))).toBe("/pt");
   });
 
-  // next-intl's "best fit" matcher uses CLDR language distance, so a Russian browser lands on /uk;
-  // documented here so a change of that behaviour is a visible decision
-  it("sends an Accept-Language of ru to /uk (CLDR best fit)", async () => {
-    expect(redirectTarget(await proxy(request("/", { "accept-language": "ru-RU,ru;q=0.9" })))).toBe("/uk");
+  // D27: next-intl's "best fit" matcher alone would send Russian to /uk by CLDR language distance
+  it("sends a browser language outside the 11 locales to /en, Russian included", async () => {
+    expect(redirectTarget(await proxy(request("/", { "accept-language": "ru-RU,ru" })))).toBe("/en");
+    expect(redirectTarget(await proxy(request("/", { "accept-language": "ru-RU,ru;q=0.9" })))).toBe("/en");
+    expect(redirectTarget(await proxy(request("/", { "accept-language": "be-BY,be;q=0.9" })))).toBe("/en");
+    expect(redirectTarget(await proxy(request("/", { "accept-language": "sk,hr;q=0.8" })))).toBe("/en");
+  });
+
+  it("takes the first served language after an unserved one", async () => {
+    expect(redirectTarget(await proxy(request("/", { "accept-language": "ru-RU,ru;q=0.9,uk;q=0.8,en;q=0.7" })))).toBe("/uk");
+    expect(redirectTarget(await proxy(request("/", { "accept-language": "ru,en-US;q=0.8,de;q=0.6" })))).toBe("/en");
   });
 
   it("prefers the NEXT_LOCALE cookie over Accept-Language", async () => {
