@@ -1,0 +1,48 @@
+{
+  "brand": "TJS",
+  "noData": "Keine Daten",
+  "total": "Gesamt",
+  "pagination": {
+    "of": "von"
+  },
+  "actions": {
+    "submit": "Absenden",
+    "remove": "Entfernen",
+    "create": "Erstellen",
+    "edit": "Bearbeiten",
+    "goBack": "Zurück",
+    "close": "Schließen"
+  },
+  "fields": {
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "fullName": "Vor- und Nachname",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "password": "Passwort",
+    "passwordAgain": "Passwort wiederholen",
+    "city": "Stadt",
+    "someData": "Daten eingeben ..."
+  },
+  "contact": {
+    "phone": "Telefon",
+    "email": "E-Mail"
+  },
+  "cookieConsent": {
+    "text": "Wir verwenden Cookies, um Ihnen das beste Erlebnis auf unserer Website zu bieten. Wenn Sie unsere Seite weiter nutzen, gehen wir davon aus, dass Sie damit einverstanden sind.",
+    "accept": "Verstanden"
+  },
+  "about": {
+    "title": "Über uns",
+    "intro": "Mein Name ist Elena. Ich verfolge Neuigkeiten und Trends und habe viel Erfahrung im Umgang mit Schmuck.",
+    "imageAlt": "Hauptbild der Seite „Über uns“",
+    "missionStart": "liebe meine Arbeit und möchte Freude und Schönheit in unsere Welt bringen.",
+    "motto": "Erschwinglicher Luxus ist mein Motto!",
+    "customOrders": "Ich fertige auch individuellen Schmuck an und berücksichtige dabei immer die Wünsche meiner Kundinnen und Kunden."
+  },
+  "footer": {
+    "contactsTbd": "Kontakte: TBD",
+    "rights": "Trend Jewelry Store. Alle Rechte vorbehalten",
+    "developedBy": "Entwickelt von <link>Arziburst*</link>"
+  }
+}

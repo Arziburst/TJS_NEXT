@@ -1,0 +1,19 @@
+{
+  "notFound": {
+    "title": "Pagina nu a fost găsită",
+    "description": "Pagina pe care o cauți nu există.",
+    "home": "Mergi la pagina principală"
+  },
+  "form": {
+    "required": "Acest câmp este obligatoriu",
+    "invalidEmail": "Format de e-mail invalid",
+    "invalidPhone": "Format invalid al numărului de telefon. De exemplu +380946826242",
+    "nameMinLength": "Numele trebuie să aibă cel puțin {min} caractere",
+    "priceMin": "Prețul trebuie să fie de cel puțin {min} {currency}.",
+    "passwordMinLength": "Parola trebuie să aibă cel puțin {min} caractere",
+    "minItems": "Câmpul trebuie să conțină cel puțin {min} elemente",
+    "chooseCity": "Trebuie să scrii corect orașul și să îți alegi orașul",
+    "chooseWarehouse": "Trebuie să alegi oficiul poștal",
+    "chooseWarehouseNumber": "Trebuie să scrii sau să alegi numărul oficiului poștal"
+  }
+}

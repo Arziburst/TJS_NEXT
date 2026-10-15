@@ -1,0 +1,17 @@
+{
+  "title": "Panier",
+  "contactDetails": "Coordonnées",
+  "shippingDetails": "Informations de livraison",
+  "yourOrder": "Votre commande",
+  "placeOrder": "Passer la commande",
+  "fields": {
+    "choosePostOffice": "Choisir un bureau de poste",
+    "comment": "Informations utiles pour traiter la commande"
+  },
+  "payment": {
+    "failed": "Le paiement a échoué !",
+    "success": "Commande réussie",
+    "grandTotal": "Total général",
+    "continueShopping": "Continuer mes achats"
+  }
+}

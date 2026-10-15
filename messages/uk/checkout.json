@@ -1,0 +1,17 @@
+{
+  "title": "Кошик",
+  "contactDetails": "Дані замовника",
+  "shippingDetails": "Доставка",
+  "yourOrder": "Замовлення",
+  "placeOrder": "Оформити замовлення",
+  "fields": {
+    "choosePostOffice": "Виберіть поштове відділення",
+    "comment": "Інформація, яка може допомогти виконати замовлення"
+  },
+  "payment": {
+    "failed": "Платіж не пройшов!",
+    "success": "Замовлення прийняте",
+    "grandTotal": "Загальна сума",
+    "continueShopping": "Продовжити покупки"
+  }
+}

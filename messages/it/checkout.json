@@ -1,0 +1,17 @@
+{
+  "title": "Carrello",
+  "contactDetails": "Dati di contatto",
+  "shippingDetails": "Dati di spedizione",
+  "yourOrder": "Il tuo ordine",
+  "placeOrder": "Effettua l’ordine",
+  "fields": {
+    "choosePostOffice": "Scegli l’ufficio postale",
+    "comment": "Informazioni utili per l’evasione dell’ordine"
+  },
+  "payment": {
+    "failed": "Pagamento non riuscito!",
+    "success": "Ordine completato",
+    "grandTotal": "Totale complessivo",
+    "continueShopping": "Continua lo shopping"
+  }
+}

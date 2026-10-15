@@ -1,0 +1,17 @@
+{
+  "title": "Košík",
+  "contactDetails": "Kontaktní údaje",
+  "shippingDetails": "Údaje o doručení",
+  "yourOrder": "Vaše objednávka",
+  "placeOrder": "Odeslat objednávku",
+  "fields": {
+    "choosePostOffice": "Vyberte pobočku pošty",
+    "comment": "Informace, které mohou pomoci při vyřízení objednávky"
+  },
+  "payment": {
+    "failed": "Platba se nezdařila!",
+    "success": "Objednávka byla úspěšně odeslána",
+    "grandTotal": "Celková částka",
+    "continueShopping": "Pokračovat v nákupu"
+  }
+}

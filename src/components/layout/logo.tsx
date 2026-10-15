@@ -1,8 +1,11 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 // Text placeholder until the owner supplies a logo.
 export function Logo({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
+  const t = useTranslations("common");
+
   return (
     <Link
       href="/"
@@ -12,7 +15,7 @@ export function Logo({ className, onNavigate }: { className?: string; onNavigate
         className,
       )}
     >
-      TJS
+      {t("brand")}
     </Link>
   );
 }

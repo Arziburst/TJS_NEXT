@@ -1,0 +1,28 @@
+{
+  "product": {
+    "title": "Voer de productinformatie in.",
+    "titleLabel": "Voer de titel in",
+    "typeLabel": "Kies het juiste type voor het product",
+    "descriptionLabel": "Voer de beschrijving in",
+    "weightLabel": "Voer het gewicht van het product in gram in",
+    "priceLabel": "Voer de prijs van het product in {currency} in",
+    "availableLabel": "Product beschikbaar",
+    "available": "Beschikbaarheid",
+    "unavailable": "Niet beschikbaar",
+    "confirmDeletion": "Bevestig definitieve verwijdering!",
+    "confirmDeletionTwice": "Weet je zeker dat je dit product wilt verwijderen?",
+    "deletionError": "Fout bij verwijderen",
+    "gallery": "Galerij",
+    "addImagesFromGallery": "Afbeeldingen uit de galerij toevoegen",
+    "chooseImage": "Kies een afbeelding",
+    "galleryImageAlt": "Afbeelding uit de galerij",
+    "continueEditing": "Verder bewerken"
+  },
+  "order": {
+    "notFound": "Bestelling niet gevonden",
+    "title": "Informatie over de bestelling.",
+    "email": "E-mail",
+    "phone": "Telefoon",
+    "comment": "Opmerking"
+  }
+}

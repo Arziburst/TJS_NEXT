@@ -1,0 +1,15 @@
+{
+  "sizeGuide": "Guide des tailles",
+  "addToCart": "Ajouter au panier",
+  "addedToCart": "Le produit a été ajouté au panier",
+  "card": {
+    "onlyOrder": "Fait sur commande",
+    "firstImageAlt": "Première image du produit",
+    "secondImageAlt": "Deuxième image du produit"
+  },
+  "images": {
+    "alt": "Image du produit",
+    "numberedAlt": "Image {index} du produit",
+    "byUrlAlt": "Image depuis l’URL {url}"
+  }
+}

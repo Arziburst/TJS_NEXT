@@ -1,0 +1,21 @@
+{
+  "title": "Sklep",
+  "filterShopBy": "Kupuj według",
+  "filterBy": "Filtruj według",
+  "showMore": "Pokaż więcej",
+  "shownCount": "Wyświetlono {shown} z {total} produktów",
+  "categories": {
+    "all": "Zobacz wszystko",
+    "earrings": "Kolczyki",
+    "necklaces": "Naszyjniki",
+    "bracelets": "Bransoletki",
+    "corals": "Korale",
+    "rings": "Pierścionki",
+    "brooches": "Broszki"
+  },
+  "sort": {
+    "placeholder": "Wybierz filtr",
+    "priceAsc": "Cena (od najniższej)",
+    "priceDesc": "Cena (od najwyższej)"
+  }
+}

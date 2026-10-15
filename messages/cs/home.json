@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "TJS: módní a stylová bižuterie",
+    "description": "TJS je obchod s módní a stylovou bižuterií, kterou autorka-designérka přivádí k životu."
+  },
+  "placeholder": {
+    "text": "Zástupná úvodní stránka. Obchod bude vytvořen v dalších úkolech.",
+    "comingSoon": "Již brzy"
+  },
+  "intro": "je obchod s módní a stylovou bižuterií, kterou autorka-designérka přivádí k životu.",
+  "seeAll": "Zobrazit vše",
+  "seeAllImageAlt": "Obrázek „Zobrazit vše“",
+  "categoryImageAlt": "Obrázek kategorie"
+}

@@ -1,0 +1,48 @@
+{
+  "brand": "TJS",
+  "noData": "Geen gegevens",
+  "total": "Totaal",
+  "pagination": {
+    "of": "van"
+  },
+  "actions": {
+    "submit": "Verzenden",
+    "remove": "Verwijderen",
+    "create": "Aanmaken",
+    "edit": "Bewerken",
+    "goBack": "Terug",
+    "close": "Sluiten"
+  },
+  "fields": {
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
+    "fullName": "Voor- en achternaam",
+    "email": "E-mail",
+    "phone": "Telefoon",
+    "password": "Wachtwoord",
+    "passwordAgain": "Wachtwoord herhalen",
+    "city": "Stad",
+    "someData": "Voer gegevens in..."
+  },
+  "contact": {
+    "phone": "Telefoon",
+    "email": "E-mail"
+  },
+  "cookieConsent": {
+    "text": "We gebruiken cookies om je de beste ervaring op onze website te bieden. Door onze site te blijven gebruiken, gaan we ervan uit dat je ermee akkoord gaat.",
+    "accept": "Begrepen"
+  },
+  "about": {
+    "title": "Over ons",
+    "intro": "Mijn naam is Elena, ik volg het nieuws en de trends en heb veel ervaring met sieraden.",
+    "imageAlt": "Hoofdafbeelding van de pagina \"Over ons\"",
+    "missionStart": "hou van mijn werk en wil vreugde en schoonheid in onze wereld brengen.",
+    "motto": "Betaalbare luxe is mijn motto!",
+    "customOrders": "Ik maak ook sieraden op maat en houd altijd rekening met de wensen van klanten."
+  },
+  "footer": {
+    "contactsTbd": "Contact: TBD",
+    "rights": "Trend Jewelry Store. Alle rechten voorbehouden",
+    "developedBy": "Ontwikkeld door <link>Arziburst*</link>"
+  }
+}

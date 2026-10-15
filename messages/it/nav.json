@@ -1,0 +1,29 @@
+{
+  "shop": "Negozio",
+  "aboutUs": "Chi siamo",
+  "contacts": "Contatti",
+  "cart": "Carrello",
+  "settings": "Impostazioni",
+  "addProduct": "Aggiungi prodotto",
+  "orders": "Ordini",
+  "logout": "Esci",
+  "signInUp": "Accedi e registrati",
+  "language": "Lingua",
+  "account": "Account",
+  "openMenu": "Apri menu",
+  "closeMenu": "Chiudi menu",
+  "main": "Navigazione principale",
+  "localeNames": {
+    "uk": "Українська",
+    "en": "English",
+    "de": "Deutsch",
+    "fr": "Français",
+    "es": "Español",
+    "it": "Italiano",
+    "pl": "Polski",
+    "nl": "Nederlands",
+    "cs": "Čeština",
+    "pt": "Português",
+    "ro": "Română"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Magazin",
+  "filterShopBy": "Cumpără după",
+  "filterBy": "Filtrează după",
+  "showMore": "Arată mai multe",
+  "shownCount": "Se afișează {shown} din {total} produse",
+  "categories": {
+    "all": "Vezi tot",
+    "earrings": "Cercei",
+    "necklaces": "Coliere",
+    "bracelets": "Brățări",
+    "corals": "Corali",
+    "rings": "Inele",
+    "brooches": "Broșe"
+  },
+  "sort": {
+    "placeholder": "Selectează filtrul",
+    "priceAsc": "Preț (crescător)",
+    "priceDesc": "Preț (descrescător)"
+  }
+}

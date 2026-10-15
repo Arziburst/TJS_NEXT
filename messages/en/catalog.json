@@ -1,0 +1,21 @@
+{
+  "title": "Shop",
+  "filterShopBy": "Shop by",
+  "filterBy": "Filter by",
+  "showMore": "Show more",
+  "shownCount": "Showed {shown} of {total} products",
+  "categories": {
+    "all": "See all",
+    "earrings": "Earrings",
+    "necklaces": "Necklaces",
+    "bracelets": "Bracelets",
+    "corals": "Corals",
+    "rings": "Rings",
+    "brooches": "Brooches"
+  },
+  "sort": {
+    "placeholder": "Select filter",
+    "priceAsc": "Price (low to high)",
+    "priceDesc": "Price (high to low)"
+  }
+}

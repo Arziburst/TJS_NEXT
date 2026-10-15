@@ -1,0 +1,19 @@
+{
+  "notFound": {
+    "title": "Stránka nebyla nalezena",
+    "description": "Stránka, kterou hledáte, neexistuje.",
+    "home": "Přejít na úvodní stránku"
+  },
+  "form": {
+    "required": "Toto pole je povinné",
+    "invalidEmail": "Neplatný formát e-mailu",
+    "invalidPhone": "Neplatný formát telefonního čísla. Například +380946826242",
+    "nameMinLength": "Jméno musí mít alespoň {min} znaků",
+    "priceMin": "Cena musí být alespoň {min} {currency}.",
+    "passwordMinLength": "Heslo musí mít alespoň {min} znaků",
+    "minItems": "Pole musí obsahovat alespoň {min} položek",
+    "chooseCity": "Musíte zadat správné město a vybrat své město",
+    "chooseWarehouse": "Musíte vybrat svou pobočku pošty",
+    "chooseWarehouseNumber": "Musíte zadat nebo vybrat číslo pobočky pošty"
+  }
+}

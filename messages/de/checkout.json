@@ -1,0 +1,17 @@
+{
+  "title": "Warenkorb",
+  "contactDetails": "Kontaktdaten",
+  "shippingDetails": "Lieferdaten",
+  "yourOrder": "Ihre Bestellung",
+  "placeOrder": "Bestellung aufgeben",
+  "fields": {
+    "choosePostOffice": "Postfiliale wählen",
+    "comment": "Informationen, die bei der Abwicklung der Bestellung helfen"
+  },
+  "payment": {
+    "failed": "Die Zahlung ist fehlgeschlagen!",
+    "success": "Bestellung erfolgreich",
+    "grandTotal": "Gesamtsumme",
+    "continueShopping": "Weiter einkaufen"
+  }
+}
