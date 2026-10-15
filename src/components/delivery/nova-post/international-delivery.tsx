@@ -16,6 +16,11 @@ import { SettlementCombobox } from "./settlement-combobox";
 
 type Method = "division" | "address";
 
+// What the checkout (#24) stores on the order request; null until the destination is complete
+export type NovaPostSelection =
+  | { kind: "division"; country: DeliveryCountry; settlement: Settlement; division: Division }
+  | { kind: "address"; country: DeliveryCountry; address: AddressValue };
+
 type InternationalDeliveryProps = {
   countries: CountryOption[];
   // true when the Nova Post API is configured: branches, lockers and pick-up points can then be searched
@@ -23,6 +28,9 @@ type InternationalDeliveryProps = {
   // the order's goods (goodsOf on the server-side cart); null leaves the estimate to the zone flat rate
   goods: OrderGoods | null;
   defaultCountry?: DeliveryCountry;
+  // the country is chosen outside (the checkout's own country field): no country select here
+  fixedCountry?: DeliveryCountry;
+  onChange?: (selection: NovaPostSelection | null) => void;
   className?: string;
 };
 
@@ -33,11 +41,19 @@ type QuoteState = { quote: QuoteView | null; failure: QuoteFailure | null };
  * courier address → the estimate in the visitor's currency with the customs notice. Without the API only
  * the address is asked, and the zone's flat rate is the estimate.
  */
-export function InternationalDelivery({ countries, live, goods, defaultCountry, className }: InternationalDeliveryProps) {
+export function InternationalDelivery({
+  countries,
+  live,
+  goods,
+  defaultCountry,
+  fixedCountry,
+  onChange,
+  className,
+}: InternationalDeliveryProps) {
   const t = useTranslations("checkout.internationalDelivery");
   const locale = useLocale();
   const methodName = useId();
-  const [country, setCountry] = useState<DeliveryCountry | null>(defaultCountry ?? null);
+  const [chosenCountry, setCountry] = useState<DeliveryCountry | null>(defaultCountry ?? null);
   const [method, setMethod] = useState<Method>("division");
   const [settlement, setSettlement] = useState<Settlement | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
@@ -45,6 +61,7 @@ export function InternationalDelivery({ countries, live, goods, defaultCountry, 
   const [isPending, startTransition] = useTransition();
   const request = useRef(0);
 
+  const country = fixedCountry ?? chosenCountry;
   const divisionsOffered = live && country !== null && hasDivisions(country);
   const activeMethod: Method = divisionsOffered ? method : "address";
   const countryName = countries.find((option) => option.code === country)?.label ?? "";
@@ -52,6 +69,7 @@ export function InternationalDelivery({ countries, live, goods, defaultCountry, 
   function reset() {
     request.current++;
     setState({ quote: null, failure: null });
+    onChange?.(null);
   }
 
   function estimate(destination: Destination) {
@@ -69,21 +87,24 @@ export function InternationalDelivery({ countries, live, goods, defaultCountry, 
   }
 
   function submitAddress(address: AddressValue) {
+    if (country) onChange?.({ kind: "address", country, address });
     estimate({ kind: "address", ...address, flat: address.flat || undefined });
   }
 
   return (
     <section className={cn("grid gap-6", className)} data-slot="international-delivery">
-      <CountrySelect
-        countries={countries}
-        value={country}
-        onChange={(next) => {
-          setCountry(next);
-          setSettlement(null);
-          setDivision(null);
-          reset();
-        }}
-      />
+      {fixedCountry ? null : (
+        <CountrySelect
+          countries={countries}
+          value={country}
+          onChange={(next) => {
+            setCountry(next);
+            setSettlement(null);
+            setDivision(null);
+            reset();
+          }}
+        />
+      )}
 
       {country ? (
         <>
@@ -131,7 +152,12 @@ export function InternationalDelivery({ countries, live, goods, defaultCountry, 
                   value={division}
                   onChange={(next) => {
                     setDivision(next);
-                    if (next) estimate({ kind: "division", divisionId: next.id });
+                    if (next) {
+                      onChange?.({ kind: "division", country, settlement, division: next });
+                      estimate({ kind: "division", divisionId: next.id });
+                    } else {
+                      reset();
+                    }
                   }}
                 />
               ) : null}

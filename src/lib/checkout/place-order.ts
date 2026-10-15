@@ -33,6 +33,8 @@ export type PlaceOrderDeps = {
   currentUser: () => Promise<{ id: string } | null>;
   // CHECKOUT_RATE_LIMIT for the account or the client IP; false also when the counter is unreachable
   allow: (userId: string | null) => Promise<boolean>;
+  // the order this attempt already created, if any (a resubmit after the cart was emptied by the first one)
+  findOrder: (attempt: string) => Promise<{ number: number; userId: string | null } | null>;
   readCart: (locale: Locale) => Promise<CartView>;
   currency: (locale: Locale) => Promise<{ current: Currency; tables: MoneyTables | null }>;
   delivery: Omit<DeliveryDeps, "tables">;
@@ -81,6 +83,9 @@ export async function placeOrder(input: unknown, deps: PlaceOrderDeps): Promise<
   if (!(await deps.allow(user?.id ?? null))) return { ok: false, reason: "rateLimited" };
 
   try {
+    const placed = await deps.findOrder(request.attempt);
+    if (placed) return confirm(placed, user?.id ?? null, request.attempt, deps);
+
     const cart = await deps.readCart(request.locale);
     if (!cart.ok) return { ok: false, reason: "unexpectedError" };
     const changed = compareWithExpected(cart.items, request.expected);
@@ -152,23 +157,34 @@ export async function placeOrder(input: unknown, deps: PlaceOrderDeps): Promise<
       const titles = quote.lines.filter((line) => created.productIds.includes(line.productId)).map((line) => line.title);
       return { ok: false, reason: "unavailable", titles };
     }
-    // a replayed attempt belongs to whoever placed it first: never hand another visitor its confirmation
-    if (created.replayed && created.userId !== (user?.id ?? null)) return { ok: false, reason: "unexpectedError" };
+    if (created.replayed) return confirm(created, user?.id ?? null, request.attempt, deps);
 
-    // the order is stored: neither a cart that could not be emptied nor a lost cookie is reported as a failure
+    // the order is stored: a cart that could not be emptied is not reported as a failure
     try {
       await deps.removeFromCart(quote.lines.map((line) => line.productId));
     } catch (error) {
       console.error("checkout: the ordered lines could not be removed from the cart", error);
     }
-    try {
-      await deps.rememberOrder({ number: created.number, token: request.attempt });
-    } catch (error) {
-      console.error("checkout: the confirmation cookie could not be set", error);
-    }
-    return { ok: true, number: created.number };
+    return confirm(created, user?.id ?? null, request.attempt, deps);
   } catch (error) {
     console.error("checkout: placing the order failed", error);
     return { ok: false, reason: "unexpectedError" };
   }
+}
+
+/** The answer for an attempt that has its order; a lost cookie is not reported as a failure. */
+async function confirm(
+  order: { number: number; userId: string | null },
+  userId: string | null,
+  attempt: string,
+  deps: PlaceOrderDeps,
+): Promise<PlaceOrderResult> {
+  // an attempt belongs to whoever placed it: never hand another visitor its confirmation
+  if (order.userId !== userId) return { ok: false, reason: "unexpectedError" };
+  try {
+    await deps.rememberOrder({ number: order.number, token: attempt });
+  } catch (error) {
+    console.error("checkout: the confirmation cookie could not be set", error);
+  }
+  return { ok: true, number: order.number };
 }

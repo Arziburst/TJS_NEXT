@@ -13,7 +13,7 @@ import { getNovaPostClient } from "@/lib/delivery/nova-post/config";
 import { estimateDelivery } from "@/lib/delivery/nova-post/quote";
 import { readZoneRates } from "@/lib/delivery/nova-post/zone-rates";
 import { getCurrencyChoiceFor } from "@/lib/money/prices";
-import { createOrderRequest } from "@/lib/orders/store";
+import { createOrderRequest, findOrderByAttempt } from "@/lib/orders/store";
 import { createServiceClient } from "@/lib/supabase/server";
 
 /**
@@ -25,6 +25,7 @@ export async function placeOrderAction(input: unknown): Promise<PlaceOrderResult
   const result = await placeOrder(input, {
     currentUser: getCurrentUser,
     allow: (userId) => allowVisitorAction("checkout", CHECKOUT_RATE_LIMIT, userId),
+    findOrder: (attempt) => findOrderByAttempt(createServiceClient(), attempt),
     readCart: readCartView,
     currency: getCurrencyChoiceFor,
     delivery: {

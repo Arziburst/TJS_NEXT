@@ -14,6 +14,64 @@
     "grandTotal": "Totale complessivo",
     "continueShopping": "Continua lo shopping"
   },
+  "request": {
+    "title": "Richiesta d’ordine",
+    "intro": "Sul sito non si paga nulla: invia la richiesta e il negozio ti contatterà per confermare l’ordine e concordare il pagamento.",
+    "loadError": "Impossibile caricare l’ordine. Riprova più tardi.",
+    "empty": "Nel carrello non c’è nulla che si possa ordinare.",
+    "backToCart": "Torna al carrello",
+    "contact": {
+      "firstName": "Nome",
+      "lastName": "Cognome (facoltativo)",
+      "phone": "Telefono",
+      "phoneHint": "Con il prefisso internazionale, ad esempio +39 312 345 6789",
+      "email": "E-mail"
+    },
+    "commentHint": "Facoltativo",
+    "summary": {
+      "lines": "Pezzi nell’ordine",
+      "quantity": "Quantità: {quantity}",
+      "goodsTotal": "Totale dei pezzi",
+      "pieces": "{count, plural, one {# pezzo} other {# pezzi}}",
+      "deliveryNote": "La spedizione non è inclusa: la paghi al corriere alla consegna (vedi la stima nei dati di spedizione).",
+      "unavailableNote": "I pezzi che non si possono più ordinare restano nel carrello e non fanno parte di questa richiesta.",
+      "editCart": "Modifica il carrello"
+    },
+    "submit": "Invia la richiesta d’ordine",
+    "sending": "Invio in corso…",
+    "errors": {
+      "title": "Controlla il modulo",
+      "firstName": "Inserisci il tuo nome.",
+      "lastName": "Il cognome è troppo lungo.",
+      "phone": "Inserisci il numero di telefono con il prefisso internazionale, ad esempio +393123456789.",
+      "email": "Inserisci un indirizzo e-mail valido.",
+      "delivery": "Scegli dove consegnare l’ordine.",
+      "comment": "Il commento è troppo lungo.",
+      "rateLimited": "Troppe richieste. Attendi qualche minuto e riprova.",
+      "unavailable": "Ci dispiace, questi pezzi sono appena stati ordinati da qualcun altro: {titles}. Non è stato inviato nulla. Rimuovili dal carrello e invia di nuovo la richiesta.",
+      "cartChanged": "Nel frattempo il tuo carrello è cambiato. Controlla l’ordine e invialo di nuovo.",
+      "emptyCart": "Nel carrello non c’è nulla che si possa ordinare.",
+      "pricesUnavailable": "Al momento non è possibile calcolare i prezzi. Riprova più tardi.",
+      "unexpected": "Impossibile inviare la richiesta. Riprova."
+    }
+  },
+  "done": {
+    "title": "Richiesta d’ordine inviata",
+    "thanks": "Grazie, {name}! Abbiamo ricevuto la tua richiesta d’ordine.",
+    "number": "Numero d’ordine",
+    "next": "Il negozio ti contatterà per confermare l’ordine e concordare pagamento e spedizione. Sul sito non viene incassato alcun pagamento.",
+    "contactTitle": "Contatta il negozio",
+    "contactTbd": "Canali di contatto: TBD",
+    "lines": "Pezzi ordinati",
+    "quantity": "Quantità: {quantity}",
+    "goodsTotal": "Totale dei pezzi",
+    "delivery": "Spedizione (stima)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "calcolata dal corriere",
+    "deliveryNote": "Il prezzo effettivo della spedizione lo paghi al corriere alla consegna.",
+    "notAvailable": "Questo ordine non può essere mostrato qui.",
+    "notAvailableHint": "La conferma si apre solo nel browser che ha inviato la richiesta o quando hai effettuato l’accesso all’account da cui è stata inviata."
+  },
   "delivery": {
     "title": "Consegna in Ucraina",
     "city": {

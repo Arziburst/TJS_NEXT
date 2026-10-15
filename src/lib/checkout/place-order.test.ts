@@ -83,6 +83,7 @@ function deps(overrides: Partial<PlaceOrderDeps> = {}) {
   const base: PlaceOrderDeps = {
     currentUser: async () => null,
     allow: vi.fn(async () => true),
+    findOrder: vi.fn(async () => null),
     readCart: vi.fn(async () => ({ ok: true as const, items: [item(earrings, 2), item(coral)], pieces: 3, pendingMerge: false })),
     currency: async () => ({ current: "EUR" as const, tables }),
     delivery: {
@@ -237,6 +238,18 @@ describe("placeOrder", () => {
     const replay = vi.fn(async () => ({ ok: true as const, replayed: true, orderId: "0d3c7d1e-6a3e-4a59-9b0e-1c8d5f2a7b10", number: 10001, userId: null }));
     const { deps: d } = deps({ createOrder: replay });
     expect(await placeOrder(input(), d)).toEqual({ ok: true, number: 10001 });
+  });
+
+  it("answers a resubmit after the first one emptied the cart with the same order, storing nothing", async () => {
+    const { deps: d } = deps({
+      findOrder: vi.fn(async () => ({ number: 10001, userId: null })),
+      readCart: vi.fn(async () => ({ ok: true as const, items: [], pieces: 0, pendingMerge: false })),
+    });
+    expect(await placeOrder(input(), d)).toEqual({ ok: true, number: 10001 });
+    expect(d.findOrder).toHaveBeenCalledWith(ATTEMPT);
+    expect(d.readCart).not.toHaveBeenCalled();
+    expect(d.createOrder).not.toHaveBeenCalled();
+    expect(d.rememberOrder).toHaveBeenCalledWith({ number: 10001, token: ATTEMPT });
   });
 
   it("never hands another visitor the confirmation of a replayed attempt", async () => {

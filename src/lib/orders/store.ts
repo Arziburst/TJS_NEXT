@@ -94,6 +94,16 @@ export async function createOrderRequest(
   return { ok: true, replayed: answer.replayed, orderId: answer.order_id, number: answer.number, userId: answer.user_id };
 }
 
+/** The order a checkout attempt already created (service-role client), or null; throws when the read fails. */
+export async function findOrderByAttempt(
+  service: ServerSupabaseClient,
+  attempt: string,
+): Promise<{ number: number; userId: string | null } | null> {
+  const { data, error } = await service.from("orders").select("number, user_id").eq("idempotency_key", attempt).maybeSingle();
+  if (error) throw new Error(`orders: ${error.message}`);
+  return data && { number: data.number, userId: data.user_id };
+}
+
 export type OrderLineView = {
   position: number;
   productId: string | null;

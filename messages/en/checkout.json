@@ -14,6 +14,64 @@
     "grandTotal": "Grand total",
     "continueShopping": "Continue shopping"
   },
+  "request": {
+    "title": "Order request",
+    "intro": "Nothing is paid on the site: send the request, and the shop will contact you to confirm the order and agree on the payment.",
+    "loadError": "The order could not be loaded. Please try again later.",
+    "empty": "There is nothing in the cart that can be ordered.",
+    "backToCart": "Back to the cart",
+    "contact": {
+      "firstName": "First name",
+      "lastName": "Last name (optional)",
+      "phone": "Phone",
+      "phoneHint": "With the country code, for example +380 50 123 45 67",
+      "email": "Email"
+    },
+    "commentHint": "Optional",
+    "summary": {
+      "lines": "Pieces in the order",
+      "quantity": "Quantity: {quantity}",
+      "goodsTotal": "Total for the pieces",
+      "pieces": "{count, plural, one {# piece} other {# pieces}}",
+      "deliveryNote": "Delivery is not included: you pay the carrier on receipt (see the estimate in the delivery details).",
+      "unavailableNote": "Pieces that can no longer be ordered stay in the cart and are not part of this request.",
+      "editCart": "Change the cart"
+    },
+    "submit": "Send the order request",
+    "sending": "Sending…",
+    "errors": {
+      "title": "Please check the form",
+      "firstName": "Enter your first name.",
+      "lastName": "The last name is too long.",
+      "phone": "Enter the phone number with the country code, for example +380501234567.",
+      "email": "Enter a valid email address.",
+      "delivery": "Choose where to deliver the order.",
+      "comment": "The comment is too long.",
+      "rateLimited": "Too many requests. Please wait a few minutes and try again.",
+      "unavailable": "Sorry, these pieces have just been ordered by someone else: {titles}. Nothing was sent. Remove them from the cart and send the request again.",
+      "cartChanged": "Your cart has changed in the meantime. Please check the order and send it again.",
+      "emptyCart": "There is nothing in the cart that can be ordered.",
+      "pricesUnavailable": "The prices cannot be calculated right now. Please try again later.",
+      "unexpected": "The request could not be sent. Please try again."
+    }
+  },
+  "done": {
+    "title": "Order request sent",
+    "thanks": "Thank you, {name}! Your order request has been received.",
+    "number": "Order number",
+    "next": "The shop will contact you to confirm the order and agree on the payment and the delivery. Payment is not taken on the site.",
+    "contactTitle": "Contact the shop",
+    "contactTbd": "Contact channels: TBD",
+    "lines": "Ordered pieces",
+    "quantity": "Quantity: {quantity}",
+    "goodsTotal": "Total for the pieces",
+    "delivery": "Delivery (estimate)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "calculated by the carrier",
+    "deliveryNote": "You pay the actual delivery price to the carrier on receipt.",
+    "notAvailable": "This order cannot be shown here.",
+    "notAvailableHint": "Its confirmation opens only in the browser that sent the request, or when you are signed in to the account it was sent from."
+  },
   "delivery": {
     "title": "Delivery in Ukraine",
     "city": {

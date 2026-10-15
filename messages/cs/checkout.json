@@ -14,6 +14,64 @@
     "grandTotal": "Celková částka",
     "continueShopping": "Pokračovat v nákupu"
   },
+  "request": {
+    "title": "Žádost o objednávku",
+    "intro": "Na webu se nic neplatí: odešlete žádost a obchod vás bude kontaktovat, aby objednávku potvrdil a domluvil se s vámi na platbě.",
+    "loadError": "Objednávku se nepodařilo načíst. Zkuste to prosím později.",
+    "empty": "V košíku není nic, co by šlo objednat.",
+    "backToCart": "Zpět do košíku",
+    "contact": {
+      "firstName": "Jméno",
+      "lastName": "Příjmení (nepovinné)",
+      "phone": "Telefon",
+      "phoneHint": "S předvolbou země, například +420 601 234 567",
+      "email": "E-mail"
+    },
+    "commentHint": "Nepovinné",
+    "summary": {
+      "lines": "Kusy v objednávce",
+      "quantity": "Množství: {quantity}",
+      "goodsTotal": "Celkem za kusy",
+      "pieces": "{count, plural, one {# kus} few {# kusy} many {# kusu} other {# kusů}}",
+      "deliveryNote": "Doprava není zahrnuta: platíte ji dopravci při převzetí (odhad najdete v údajích o dopravě).",
+      "unavailableNote": "Kusy, které už nelze objednat, zůstávají v košíku a nejsou součástí této žádosti.",
+      "editCart": "Upravit košík"
+    },
+    "submit": "Odeslat žádost o objednávku",
+    "sending": "Odesílání…",
+    "errors": {
+      "title": "Zkontrolujte prosím formulář",
+      "firstName": "Zadejte své jméno.",
+      "lastName": "Příjmení je příliš dlouhé.",
+      "phone": "Zadejte telefonní číslo s předvolbou země, například +420601234567.",
+      "email": "Zadejte platnou e-mailovou adresu.",
+      "delivery": "Vyberte, kam objednávku doručit.",
+      "comment": "Komentář je příliš dlouhý.",
+      "rateLimited": "Příliš mnoho žádostí. Počkejte několik minut a zkuste to znovu.",
+      "unavailable": "Bohužel tyto kusy si právě objednal někdo jiný: {titles}. Nic nebylo odesláno. Odeberte je z košíku a odešlete žádost znovu.",
+      "cartChanged": "Váš košík se mezitím změnil. Zkontrolujte objednávku a odešlete ji znovu.",
+      "emptyCart": "V košíku není nic, co by šlo objednat.",
+      "pricesUnavailable": "Ceny teď nelze spočítat. Zkuste to prosím později.",
+      "unexpected": "Žádost se nepodařilo odeslat. Zkuste to znovu."
+    }
+  },
+  "done": {
+    "title": "Žádost o objednávku odeslána",
+    "thanks": "Děkujeme, {name}! Vaši žádost o objednávku jsme přijali.",
+    "number": "Číslo objednávky",
+    "next": "Obchod vás bude kontaktovat, aby objednávku potvrdil a domluvil platbu a doručení. Na webu se neplatí.",
+    "contactTitle": "Kontaktovat obchod",
+    "contactTbd": "Kontaktní kanály: TBD",
+    "lines": "Objednané kusy",
+    "quantity": "Množství: {quantity}",
+    "goodsTotal": "Celkem za kusy",
+    "delivery": "Doprava (odhad)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "spočítá dopravce",
+    "deliveryNote": "Skutečnou cenu dopravy platíte dopravci při převzetí.",
+    "notAvailable": "Tuto objednávku zde nelze zobrazit.",
+    "notAvailableHint": "Potvrzení se otevře jen v prohlížeči, ze kterého byla žádost odeslána, nebo když jste přihlášeni k účtu, ze kterého byla odeslána."
+  },
   "delivery": {
     "title": "Doručení na Ukrajině",
     "city": {

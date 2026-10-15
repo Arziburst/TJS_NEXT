@@ -93,6 +93,8 @@ describe("message catalogs", () => {
       date: "21 October 2026",
       kg: 30,
       price: "96,45 ₴",
+      titles: "Coral drop earrings, Pearl ring",
+      name: "Olena",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

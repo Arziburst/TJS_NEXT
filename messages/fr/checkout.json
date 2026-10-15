@@ -14,6 +14,64 @@
     "grandTotal": "Total général",
     "continueShopping": "Continuer mes achats"
   },
+  "request": {
+    "title": "Demande de commande",
+    "intro": "Rien n’est payé sur le site : envoyez la demande, et la boutique vous contactera pour confirmer la commande et convenir du paiement.",
+    "loadError": "La commande n’a pas pu être chargée. Veuillez réessayer plus tard.",
+    "empty": "Le panier ne contient rien qui puisse être commandé.",
+    "backToCart": "Retour au panier",
+    "contact": {
+      "firstName": "Prénom",
+      "lastName": "Nom (facultatif)",
+      "phone": "Téléphone",
+      "phoneHint": "Avec l’indicatif du pays, par exemple +33 6 12 34 56 78",
+      "email": "E-mail"
+    },
+    "commentHint": "Facultatif",
+    "summary": {
+      "lines": "Pièces de la commande",
+      "quantity": "Quantité : {quantity}",
+      "goodsTotal": "Total des pièces",
+      "pieces": "{count, plural, one {# pièce} other {# pièces}}",
+      "deliveryNote": "La livraison n’est pas incluse : vous la payez au transporteur à la réception (voir l’estimation dans les détails de livraison).",
+      "unavailableNote": "Les pièces qui ne peuvent plus être commandées restent dans le panier et ne font pas partie de cette demande.",
+      "editCart": "Modifier le panier"
+    },
+    "submit": "Envoyer la demande de commande",
+    "sending": "Envoi…",
+    "errors": {
+      "title": "Veuillez vérifier le formulaire",
+      "firstName": "Indiquez votre prénom.",
+      "lastName": "Le nom est trop long.",
+      "phone": "Indiquez le numéro de téléphone avec l’indicatif du pays, par exemple +33612345678.",
+      "email": "Indiquez une adresse e-mail valide.",
+      "delivery": "Choisissez où livrer la commande.",
+      "comment": "Le commentaire est trop long.",
+      "rateLimited": "Trop de demandes. Veuillez patienter quelques minutes et réessayer.",
+      "unavailable": "Désolé, ces pièces viennent d’être commandées par quelqu’un d’autre : {titles}. Rien n’a été envoyé. Retirez-les du panier et envoyez à nouveau la demande.",
+      "cartChanged": "Votre panier a changé entre-temps. Veuillez vérifier la commande et l’envoyer à nouveau.",
+      "emptyCart": "Le panier ne contient rien qui puisse être commandé.",
+      "pricesUnavailable": "Les prix ne peuvent pas être calculés pour le moment. Veuillez réessayer plus tard.",
+      "unexpected": "La demande n’a pas pu être envoyée. Veuillez réessayer."
+    }
+  },
+  "done": {
+    "title": "Demande de commande envoyée",
+    "thanks": "Merci, {name} ! Votre demande de commande a bien été reçue.",
+    "number": "Numéro de commande",
+    "next": "La boutique vous contactera pour confirmer la commande et convenir du paiement et de la livraison. Aucun paiement n’est encaissé sur le site.",
+    "contactTitle": "Contacter la boutique",
+    "contactTbd": "Moyens de contact : TBD",
+    "lines": "Pièces commandées",
+    "quantity": "Quantité : {quantity}",
+    "goodsTotal": "Total des pièces",
+    "delivery": "Livraison (estimation)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "calculée par le transporteur",
+    "deliveryNote": "Vous payez le prix réel de la livraison au transporteur à la réception.",
+    "notAvailable": "Cette commande ne peut pas être affichée ici.",
+    "notAvailableHint": "Sa confirmation ne s’ouvre que dans le navigateur qui a envoyé la demande, ou lorsque vous êtes connecté au compte depuis lequel elle a été envoyée."
+  },
   "delivery": {
     "title": "Livraison en Ukraine",
     "city": {
