@@ -2,7 +2,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 // The stack scripts in scripts/dev/ (pwsh). Stop-WorktreeSupabase.ps1 runs from a copy inside a throwaway
 // worktree folder named "50-…", with fake `docker` / `npx` first on PATH that record every call and keep the
@@ -40,6 +40,22 @@ const CONTAINERS = ["supabase_db_tjs-50", "supabase_kong_tjs-50", "supabase_db_t
 function pwsh(args: string[], options: { cwd?: string; env?: NodeJS.ProcessEnv } = {}) {
   return spawnSync("pwsh", ["-NoProfile", "-NonInteractive", ...args], { encoding: "utf8", ...options });
 }
+
+// Each test below spawns pwsh (and git): about 1 s warm on the CI runner, over vitest's default 5 s when
+// the runner is loaded. One explicit budget for every subprocess test of this file.
+const SUBPROCESS_TEST_TIMEOUT = 30_000;
+// The first pwsh on a fresh runner pays PowerShell's cold start (5-12 s seen in CI: the binaries, then the
+// startup and module-analysis caches it writes on first use, which the lookup of the fake `docker` / `npx`
+// needs). Paid once here, under its own budget, not inside whichever test runs first.
+const PWSH_WARM_UP_TIMEOUT = 60_000;
+
+beforeAll(() => {
+  // A lookup that misses, as `docker` / `npx` do among the commands: it walks every module once.
+  const warm = pwsh(["-Command", "$null = Get-Command tjs-no-such-command -ErrorAction SilentlyContinue; exit 0"]);
+  if (warm.error || warm.status !== 0) {
+    throw new Error(`pwsh warm-up failed (status ${warm.status}): ${warm.error?.message ?? warm.stderr}`);
+  }
+}, PWSH_WARM_UP_TIMEOUT);
 
 // pwsh colours an error message and wraps it over "     | " lines at a width that differs per platform:
 // compare without colours, gutters and whitespace.
@@ -114,14 +130,14 @@ describe("Stop-WorktreeSupabase.ps1", () => {
     expect(left()).toEqual(["supabase_db_tjs-50", "supabase_kong_tjs-50"]);
     expect(calls()).toContain("npx supabase stop --project-id tjs-150 --no-backup --yes");
     expect(calls().join("\n")).not.toMatch(/tjs-50\b/);
-  });
+  }, SUBPROCESS_TEST_TIMEOUT);
 
   it("stops the configured stack with the matching number", () => {
     const result = stop("tjs-150", "150");
 
     expect(result.status, result.stderr).toBe(0);
     expect(left()).toEqual(["supabase_db_tjs-50", "supabase_kong_tjs-50"]);
-  });
+  }, SUBPROCESS_TEST_TIMEOUT);
 
   it("refuses a number that differs from the configured project_id and touches nothing", () => {
     const result = stop("tjs-150", "50");
@@ -131,7 +147,7 @@ describe("Stop-WorktreeSupabase.ps1", () => {
     expect(message(result.stderr)).toContain(squash('project_id = "tjs-150"'));
     expect(calls()).toEqual([]);
     expect(left()).toEqual(CONTAINERS);
-  });
+  }, SUBPROCESS_TEST_TIMEOUT);
 
   it.each([[[]], [["50"]]])("refuses when config.toml was not rewritten (args %j) and touches nothing", (args) => {
     const result = stop("tjs-main", ...args);
@@ -141,7 +157,7 @@ describe("Stop-WorktreeSupabase.ps1", () => {
     expect(message(result.stderr)).toContain(squash("never guessed from the folder name"));
     expect(calls()).toEqual([]);
     expect(left()).toEqual(CONTAINERS);
-  });
+  }, SUBPROCESS_TEST_TIMEOUT);
 });
 
 describe("Get-TjsWorktreeStackIds (supabase:cleanup)", () => {
@@ -188,5 +204,5 @@ describe("Get-TjsWorktreeStackIds (supabase:cleanup)", () => {
 
     expect(result.status, result.stderr).toBe(0);
     expect(result.stdout.trim().split(",")).toEqual(["tjs-120", "tjs-15", "tjs-30"]);
-  });
+  }, SUBPROCESS_TEST_TIMEOUT);
 });
