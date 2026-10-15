@@ -3,7 +3,7 @@ import "server-only";
 import { getLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { cache } from "react";
-import { routing } from "@/i18n/routing";
+import { routing, type Locale } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth/session";
 import { createSessionClient } from "@/lib/supabase/server";
 import { clampQuantity, countPieces, mergeLines, type CartLine } from "./lines";
@@ -71,9 +71,17 @@ function statusOf(product: CartProduct | null): CartItemStatus {
  * product comes from the client. Read once per request.
  */
 export const getCartView = cache(async (): Promise<CartView> => {
-  const [cart, requested] = await Promise.all([getCartLines(), getLocale()]);
+  const requested = await getLocale();
+  return readCartView(hasLocale(routing.locales, requested) ? requested : routing.defaultLocale);
+});
+
+/**
+ * The cart view in a given locale, read fresh: for a Server Action, which has no route locale to read (the
+ * checkout takes it as validated input).
+ */
+export async function readCartView(locale: Locale): Promise<CartView> {
+  const cart = await getCartLines();
   if (!cart.ok) return { ok: false };
-  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   const read = await getCartProducts(
     cart.lines.map((line) => line.productId),
     locale,
@@ -89,7 +97,7 @@ export const getCartView = cache(async (): Promise<CartView> => {
     pieces: countPieces(items.map((item) => ({ ...item.line, quantity: item.quantity }))),
     pendingMerge: cart.pendingMerge,
   };
-});
+}
 
 /** The lines that count towards the subtotal: orderable products only, at their current database price. */
 export function orderableLines(items: readonly CartItem[]): { usdMinor: number; quantity: number }[] {

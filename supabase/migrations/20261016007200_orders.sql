@@ -10,8 +10,8 @@
 --              processed. Nothing reads or writes it through the API.
 --
 -- Access: a signed-in customer reads only their own orders and their lines; a guest reads none through the
--- API (the confirmation page checks the guest's cookie token on the server, guest_access_hash). Only the
--- server writes, through public.create_order_request (service role). Admin access comes with #27.
+-- API (the confirmation page compares the attempt's token in the placing browser's httpOnly cookie with
+-- idempotency_key, on the server). Only the server writes, through public.create_order_request (service role). Admin access comes with #27.
 
 -- D17: an order request is 'new'; the payment states are used only once payments are live (D7)
 create type public.order_status as enum (
@@ -25,10 +25,9 @@ create table public.orders (
   status                     public.order_status not null default 'new',
   -- the signed-in customer who placed it; null for a guest (and after the account is deleted)
   user_id                    uuid references auth.users (id) on delete set null,
-  -- the client's token of one checkout attempt: a repeated submit returns the order it already created
+  -- the client's random token of one checkout attempt: a repeated submit returns the order it already created.
+  -- The placing browser keeps it in an httpOnly cookie to open the confirmation page; never put in a URL
   idempotency_key            uuid not null unique,
-  -- sha256 (hex) of the token in the placing browser's httpOnly cookie: the confirmation page for a guest
-  guest_access_hash          text check (guest_access_hash ~ '^[0-9a-f]{64}$'),
   -- the language the customer used: the notifications (#26) answer in it
   locale                     public.locale not null,
 
@@ -53,6 +52,7 @@ create table public.orders (
   delivery_estimate_source   text check (delivery_estimate_source in ('carrier', 'flat_rate')),
   delivery_estimate_minor    bigint check (delivery_estimate_minor >= 0),
   delivery_estimate_currency text references public.currency_settings (currency),
+  delivery_estimate_decimals smallint check (delivery_estimate_decimals between 0 and 4),
 
   -- the visitor's display currency (D4, D5) and the USD→currency display rate the lines were priced at
   -- (1 for USD; fx_rate_date null then), with the markup of the currency's settings at that moment (D28)
@@ -77,7 +77,8 @@ create table public.orders (
              else delivery_method in ('division', 'address')
            end),
   constraint orders_estimate_amount
-    check ((delivery_estimate_state = 'amount') = (delivery_estimate_minor is not null and delivery_estimate_currency is not null)),
+    check ((delivery_estimate_state = 'amount') = (num_nulls(delivery_estimate_minor, delivery_estimate_currency, delivery_estimate_decimals) = 0)
+           and num_nulls(delivery_estimate_minor, delivery_estimate_currency, delivery_estimate_decimals) in (0, 3)),
   constraint orders_estimate_source
     check (delivery_estimate_state = 'unavailable' or delivery_estimate_source is not null)
 );
@@ -203,16 +204,15 @@ begin
 
   begin
     insert into public.orders (
-      user_id, idempotency_key, guest_access_hash, locale,
+      user_id, idempotency_key, locale,
       first_name, last_name, phone, email, comment,
       country, delivery_carrier, delivery_method, delivery_destination,
       delivery_estimate_state, delivery_estimate_source, delivery_estimate_minor, delivery_estimate_currency,
-      currency, currency_decimals, fx_rate, fx_rate_date, markup_bps,
+      delivery_estimate_decimals, currency, currency_decimals, fx_rate, fx_rate_date, markup_bps,
       items_total_usd_minor, items_total_minor
     ) values (
       (p_order ->> 'user_id')::uuid,
       (p_order ->> 'idempotency_key')::uuid,
-      p_order ->> 'guest_access_hash',
       (p_order ->> 'locale')::public.locale,
       p_order ->> 'first_name',
       p_order ->> 'last_name',
@@ -227,6 +227,7 @@ begin
       p_order ->> 'delivery_estimate_source',
       (p_order ->> 'delivery_estimate_minor')::bigint,
       p_order ->> 'delivery_estimate_currency',
+      (p_order ->> 'delivery_estimate_decimals')::smallint,
       p_order ->> 'currency',
       (p_order ->> 'currency_decimals')::smallint,
       (p_order ->> 'fx_rate')::numeric,

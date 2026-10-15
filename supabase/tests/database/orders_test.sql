@@ -14,12 +14,12 @@ insert into auth.users (id, email) values
 create function pg_temp.order_json(p_key uuid, p_user uuid, p_lines integer) returns jsonb
 language sql as $$
   select jsonb_build_object(
-    'idempotency_key', p_key, 'user_id', p_user, 'guest_access_hash', repeat('a', 64), 'locale', 'en',
+    'idempotency_key', p_key, 'user_id', p_user, 'locale', 'en',
     'first_name', 'Olena', 'last_name', null, 'phone', '+380501234567', 'email', 'olena@example.test',
     'comment', null, 'country', 'DE', 'delivery_carrier', 'nova_post', 'delivery_method', 'division',
     'delivery_destination', jsonb_build_object('divisionId', 1),
     'delivery_estimate_state', 'amount', 'delivery_estimate_source', 'carrier',
-    'delivery_estimate_minor', 1290, 'delivery_estimate_currency', 'EUR',
+    'delivery_estimate_minor', 1290, 'delivery_estimate_currency', 'EUR', 'delivery_estimate_decimals', 2,
     'currency', 'EUR', 'currency_decimals', 2, 'fx_rate', '0.92', 'fx_rate_date', '2026-10-16', 'markup_bps', 300,
     'items_total_usd_minor', 1000 * p_lines, 'items_total_minor', 1030 * p_lines
   );
