@@ -6,15 +6,20 @@ export function CartIcon({ count, formatted }: { count: number; formatted: strin
   return (
     <>
       <ShoppingBagIcon aria-hidden />
-      {count > 0 && (
-        <span
-          aria-hidden
-          data-testid="cart-count"
-          className="absolute top-0.5 right-0 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 font-sans text-[11px] leading-none font-semibold text-foreground tabular-nums"
-        >
-          {formatted}
-        </span>
-      )}
+      {count > 0 && <CountBadge formatted={formatted} testId="cart-count" />}
     </>
+  );
+}
+
+/** A header icon's count bubble (the cart, the favorites), in a `relative` box; decorative. */
+export function CountBadge({ formatted, testId }: { formatted: string; testId: string }) {
+  return (
+    <span
+      aria-hidden
+      data-testid={testId}
+      className="absolute top-0.5 right-0 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 font-sans text-[11px] leading-none font-semibold text-foreground tabular-nums"
+    >
+      {formatted}
+    </span>
   );
 }

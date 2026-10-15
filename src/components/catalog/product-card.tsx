@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
+import { FavoriteToggle } from "@/components/favorites/favorite-toggle";
 import { Price } from "@/components/price";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
@@ -41,42 +42,46 @@ export async function ProductCard({ product, eager = false }: { product: ListedP
   const [first, second] = product.images;
 
   return (
-    <Link
-      href={productHref(product.translation.slug)}
-      prefetch={PRODUCT_PREFETCH}
-      className="group flex w-[164px] flex-col gap-2 sb:w-[200px]"
-      data-testid="product-card"
-    >
-      {/* a fixed box, so images never shift the layout */}
-      <span className="relative block h-[154px] w-full overflow-hidden rounded bg-muted sb:h-[200px]">
-        {first && (
-          <CardImage
-            image={first}
-            priority={eager ? "high" : undefined}
-            className={cn(second && "group-hover:opacity-0 group-focus-visible:opacity-0")}
-          />
-        )}
-        {/* hidden until hover: lazy, behind every visible photo even in the first row, no placeholder */}
-        {second && (
-          <CardImage
-            image={{ ...second, alt: "", blurDataUrl: null }}
-            priority="low"
-            className="opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
-          />
-        )}
-        {product.isNew && (
-          <Badge variant="accent" className="absolute top-2 left-2" data-testid="new-badge">
-            {t("newBadge")}
-          </Badge>
-        )}
-      </span>
-      <span className="font-sans text-[15px] leading-snug transition-colors group-hover:text-accent-text">
-        {product.translation.title}
-      </span>
-      {/* a line of its own: the streamed price and its placeholder are then the same height (#57) */}
-      <span className="font-sans text-[15px] text-accent-text">
-        <Price usdMinor={product.priceUsdMinor} />
-      </span>
-    </Link>
+    // the heart sits over the photo next to the link, never inside it (a button in a link is not allowed)
+    <div className="relative w-[164px] sb:w-[200px]">
+      <Link
+        href={productHref(product.translation.slug)}
+        prefetch={PRODUCT_PREFETCH}
+        className="group flex w-full flex-col gap-2"
+        data-testid="product-card"
+      >
+        {/* a fixed box, so images never shift the layout */}
+        <span className="relative block h-[154px] w-full overflow-hidden rounded bg-muted sb:h-[200px]">
+          {first && (
+            <CardImage
+              image={first}
+              priority={eager ? "high" : undefined}
+              className={cn(second && "group-hover:opacity-0 group-focus-visible:opacity-0")}
+            />
+          )}
+          {/* hidden until hover: lazy, behind every visible photo even in the first row, no placeholder */}
+          {second && (
+            <CardImage
+              image={{ ...second, alt: "", blurDataUrl: null }}
+              priority="low"
+              className="opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+            />
+          )}
+          {product.isNew && (
+            <Badge variant="accent" className="absolute top-2 left-2" data-testid="new-badge">
+              {t("newBadge")}
+            </Badge>
+          )}
+        </span>
+        <span className="font-sans text-[15px] leading-snug transition-colors group-hover:text-accent-text">
+          {product.translation.title}
+        </span>
+        {/* a line of its own: the streamed price and its placeholder are then the same height (#57) */}
+        <span className="font-sans text-[15px] text-accent-text">
+          <Price usdMinor={product.priceUsdMinor} />
+        </span>
+      </Link>
+      <FavoriteToggle productId={product.id} title={product.translation.title} className="absolute top-0 right-0" />
+    </div>
   );
 }

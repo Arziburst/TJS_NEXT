@@ -2,6 +2,8 @@
   "shop": "Shop",
   "aboutUs": "About us",
   "contacts": "Contacts",
+  "favorites": "Favorites",
+  "favoritesCount": "Favorites, {count, plural, =0 {empty} one {# piece} other {# pieces}}",
   "cart": "Cart",
   "cartCount": "Cart, {count, plural, =0 {empty} one {# piece} other {# pieces}}",
   "closeCart": "Close the cart",

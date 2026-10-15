@@ -4,7 +4,7 @@ import { CurrencySwitcherSlot } from "@/components/currency-switcher-slot";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { isRouteEnabled } from "@/config/routes";
 import { cn } from "@/lib/utils";
-import { AccountSlot, CartSlot } from "./header-slots";
+import { AccountSlot, CartSlot, FavoritesSlot } from "./header-slots";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
 import { NAV_LEFT, NAV_RIGHT } from "./nav-items";
@@ -12,6 +12,7 @@ import { NavLink } from "./nav-link";
 
 type HeaderProps = {
   className?: string;
+  favorites?: ReactNode;
   cart?: ReactNode;
   account?: ReactNode;
   languageSwitcher?: ReactNode;
@@ -21,13 +22,14 @@ type HeaderProps = {
 };
 
 /*
- * Below 1024px: menu button, logo, cart. From 1024px: logo, inline nav, language and currency, cart and account
- * side by side on the nav's row (stacked, they made the header taller: #80).
+ * Below 1024px: menu button, logo, favorites and cart. From 1024px: logo, inline nav, language and currency,
+ * favorites, cart and account side by side on the nav's row (stacked, they made the header taller: #80).
  * The switch is CSS only (sb:hidden / hidden sb:flex); both variants are always in the markup.
  */
 export function Header({
   className,
   // the default slots link to their page only once it exists (src/config/routes.ts)
+  favorites = isRouteEnabled("favorites") ? <FavoritesSlot /> : null,
   cart = isRouteEnabled("cart") ? <CartSlot /> : null,
   account = isRouteEnabled("signIn") ? <AccountSlot /> : null,
   languageSwitcher = <LocaleSwitcher hideLabel />,
@@ -66,6 +68,7 @@ export function Header({
           </div>
         </nav>
         <ul className="flex min-w-11 items-center">
+          {favorites && <li data-slot="favorites">{favorites}</li>}
           {cart && <li data-slot="cart">{cart}</li>}
           {account && (
             <li data-slot="account" className="hidden sb:block">

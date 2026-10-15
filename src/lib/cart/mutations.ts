@@ -16,17 +16,21 @@ function hashed(value: string): string {
   return createHash("sha256").update(value).digest("hex").slice(0, 32);
 }
 
+/** A per-visitor limit of a shop action: at most `max` calls in `windowSeconds`. */
+export type VisitorRateLimit = { readonly max: number; readonly windowSeconds: number };
+
 /**
- * Counts one cart action of the caller (the account when signed in, else the client's IP) and answers
- * whether it may go ahead. Fails closed: without the counter the database is unreachable for the cart too.
+ * Counts one action of the caller in `scope` (the account when signed in, else the client's IP) and answers
+ * whether it may go ahead. Fails closed: without the counter the database is unreachable for the action too.
+ * Shared by the cart and the favorites.
  */
-async function allowCartAction(userId: string | null): Promise<boolean> {
+export async function allowVisitorAction(scope: string, limit: VisitorRateLimit, userId: string | null): Promise<boolean> {
   const who = userId ? `user:${hashed(userId)}` : `ip:${hashed(clientIp(await headers()))}`;
   try {
     const { data, error } = await createServiceClient().rpc("consume_rate_limit", {
-      p_key: `cart:${who}`,
-      p_max: CART_RATE_LIMIT.max,
-      p_window_seconds: CART_RATE_LIMIT.windowSeconds,
+      p_key: `${scope}:${who}`,
+      p_max: limit.max,
+      p_window_seconds: limit.windowSeconds,
     });
     return !error && data === true;
   } catch {
@@ -52,9 +56,12 @@ export async function readProductForCart(productId: string): Promise<OrderablePr
   }
 }
 
-// The products among `ids` that the public can see, with their fulfillment: lines naming anything else cannot
-// be written to an account (the cart_items policies refuse them) and are dropped when a guest cart is merged.
-async function visibleProducts(ids: readonly string[]): Promise<Map<string, ProductFulfillment> | null> {
+/**
+ * The products among `ids` that the public can see, with their fulfillment: anything else cannot be written to
+ * an account (the cart_items and favorites policies refuse it) and is dropped when a guest list is merged.
+ * Null when the read fails.
+ */
+export async function visibleProducts(ids: readonly string[]): Promise<Map<string, ProductFulfillment> | null> {
   if (ids.length === 0) return new Map();
   try {
     const { data, error } = await createPublicServerClient()
@@ -85,7 +92,7 @@ export async function changeCart<R, F extends string>(
   change: (lines: CartLine[]) => Promise<CartChange<R, F>>,
 ): Promise<ChangeCartResult<R, F>> {
   const user = await getCurrentUser();
-  if (!(await allowCartAction(user?.id ?? null))) return { ok: false, reason: "rateLimited" };
+  if (!(await allowVisitorAction("cart", CART_RATE_LIMIT, user?.id ?? null))) return { ok: false, reason: "rateLimited" };
   try {
     const guest = await readGuestLines();
     if (!user) {

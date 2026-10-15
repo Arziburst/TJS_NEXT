@@ -7,6 +7,7 @@ import { Price } from "@/components/price";
 import { categoryHref, productHref } from "@/components/catalog/links";
 import { ProductDetails } from "@/components/product/product-details";
 import { ProductSkeleton } from "@/components/product/product-skeleton";
+import { RecentlyViewed } from "@/components/product/recently-viewed";
 import { getMetadataBase } from "@/i18n/metadata";
 import { getPathname, redirect } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
@@ -96,6 +97,7 @@ async function ProductContent({ params }: { params: PageProps<"/[locale]/product
         categoryName={page.categoryName}
         price={<Price usdMinor={page.product.priceUsdMinor} />}
       />
+      <RecentlyViewed currentId={page.product.id} />
     </>
   );
 }

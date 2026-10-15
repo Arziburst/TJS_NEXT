@@ -48,5 +48,26 @@
       "goTo": "Foto {index} van {count} tonen",
       "empty": "Nog geen foto’s"
     }
+  },
+  "favorites": {
+    "title": "Favorieten",
+    "toggle": "Toevoegen aan favorieten: {title}",
+    "remove": "{title} uit favorieten verwijderen",
+    "list": "Je favorieten",
+    "empty": "Je hebt nog geen favorieten.",
+    "emptyHint": "Tik op het hartje van een stuk om het hier te bewaren en later terug te vinden.",
+    "continueShopping": "Verder winkelen",
+    "unavailablePiece": "Een stuk dat niet meer beschikbaar is",
+    "unavailable": "Niet meer beschikbaar",
+    "loadError": "Je favorieten konden niet worden geladen. Laad de pagina opnieuw.",
+    "errors": {
+      "favoritesFull": "Je favorieten zijn vol. Verwijder een stuk om een ander toe te voegen.",
+      "unavailable": "Dit stuk kan niet meer aan je favorieten worden toegevoegd.",
+      "rateLimited": "Te veel wijzigingen in korte tijd. Wacht even en probeer het opnieuw.",
+      "unexpectedError": "Je favorieten konden niet worden gewijzigd. Probeer het opnieuw."
+    }
+  },
+  "recentlyViewed": {
+    "title": "Recent bekeken"
   }
 }

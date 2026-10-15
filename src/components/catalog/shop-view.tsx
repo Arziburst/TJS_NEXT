@@ -1,4 +1,5 @@
-import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -105,7 +106,7 @@ type ShopResultsProps = {
 // Request time: reads the URL state, then the cached listing pages from..page.
 async function ShopResults({ locale, category, categories, pathname, searchParams }: ShopResultsProps) {
   const query = parseShopQuery(await searchParams);
-  const t = await getTranslations("catalog");
+  const [t, messages] = await Promise.all([getTranslations("catalog"), getMessages()]);
 
   const pages: number[] = [];
   for (let p = query.from; p <= query.page; p++) pages.push(p);
@@ -160,13 +161,16 @@ async function ShopResults({ locale, category, categories, pathname, searchParam
         <EmptyState pathname={pathname} query={query} total={total} />
       ) : (
         <>
-          <ul className={GRID} data-testid="product-grid">
-            {items.map((product, index) => (
-              <li key={product.id}>
-                <ProductCard product={product} eager={index < EAGER_CARDS} />
-              </li>
-            ))}
-          </ul>
+          {/* the cards' hearts are client islands: only their texts go to the browser */}
+          <NextIntlClientProvider messages={{ product: { favorites: messages.product.favorites } }}>
+            <ul className={GRID} data-testid="product-grid">
+              {items.map((product, index) => (
+                <li key={product.id}>
+                  <ProductCard product={product} eager={index < EAGER_CARDS} />
+                </li>
+              ))}
+            </ul>
+          </NextIntlClientProvider>
           <Pagination pathname={pathname} query={query} total={total} />
         </>
       )}

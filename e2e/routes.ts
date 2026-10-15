@@ -18,6 +18,6 @@ export async function expectOnlyEnabledRouteLinks(scope: Locator, locale: string
 }
 
 // the routes the header links to; a product page is linked from product cards, not from the shell
-export const shellRouteKeys: readonly RouteKey[] = ["home", "shop", "aboutUs", "cart", "signIn"];
-// the mobile menu repeats the logo, the nav and the account slot; the cart stays in the header bar
+export const shellRouteKeys: readonly RouteKey[] = ["home", "shop", "aboutUs", "favorites", "cart", "signIn"];
+// the mobile menu repeats the logo, the nav and the account slot; the favorites and the cart stay in the header bar
 export const mobileMenuRouteKeys: readonly RouteKey[] = ["home", "shop", "aboutUs", "signIn"];

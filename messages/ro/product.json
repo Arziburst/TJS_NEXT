@@ -48,5 +48,26 @@
       "goTo": "Afișează fotografia {index} din {count}",
       "empty": "Încă nu există fotografii"
     }
+  },
+  "favorites": {
+    "title": "Favorite",
+    "toggle": "Adaugă la favorite: {title}",
+    "remove": "Elimină {title} din favorite",
+    "list": "Favoritele tale",
+    "empty": "Nu ai încă favorite.",
+    "emptyHint": "Atinge inima unei piese pentru a o păstra aici și a o regăsi mai târziu.",
+    "continueShopping": "Continuă cumpărăturile",
+    "unavailablePiece": "O piesă care nu mai este disponibilă",
+    "unavailable": "Nu mai este disponibil",
+    "loadError": "Favoritele nu au putut fi încărcate. Reîncarcă pagina.",
+    "errors": {
+      "favoritesFull": "Favoritele tale sunt pline. Elimină o piesă pentru a adăuga alta.",
+      "unavailable": "Această piesă nu mai poate fi adăugată la favorite.",
+      "rateLimited": "Prea multe modificări într-un timp scurt. Așteaptă puțin și încearcă din nou.",
+      "unexpectedError": "Favoritele nu au putut fi modificate. Încearcă din nou."
+    }
+  },
+  "recentlyViewed": {
+    "title": "Văzute recent"
   }
 }

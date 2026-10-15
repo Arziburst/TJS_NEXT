@@ -48,5 +48,26 @@
       "goTo": "Zobrazit fotografii {index} z {count}",
       "empty": "Zatím žádné fotografie"
     }
+  },
+  "favorites": {
+    "title": "Oblíbené",
+    "toggle": "Přidat do oblíbených: {title}",
+    "remove": "Odebrat {title} z oblíbených",
+    "list": "Vaše oblíbené",
+    "empty": "Zatím nemáte žádné oblíbené.",
+    "emptyHint": "Klepněte na srdce u kusu, abyste si ho tu uložili a později znovu našli.",
+    "continueShopping": "Pokračovat v nákupu",
+    "unavailablePiece": "Kus, který už není dostupný",
+    "unavailable": "Už není dostupné",
+    "loadError": "Oblíbené se nepodařilo načíst. Obnovte prosím stránku.",
+    "errors": {
+      "favoritesFull": "Vaše oblíbené jsou plné. Odeberte jeden kus, abyste mohli přidat jiný.",
+      "unavailable": "Tento kus už nelze přidat do oblíbených.",
+      "rateLimited": "Příliš mnoho změn v krátké době. Chvíli počkejte a zkuste to znovu.",
+      "unexpectedError": "Oblíbené se nepodařilo změnit. Zkuste to prosím znovu."
+    }
+  },
+  "recentlyViewed": {
+    "title": "Naposledy zobrazené"
   }
 }

@@ -13,6 +13,8 @@ export const routes = {
   aboutUs: { path: "/about-us", enabled: false },
   // #20
   cart: { path: "/cart", enabled: true },
+  // #29
+  favorites: { path: "/favorites", enabled: true },
   // #24: the order request; the cart's next step links here once it exists
   orderRequest: { path: "/checkout", enabled: false },
   // #13
