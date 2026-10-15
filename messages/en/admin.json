@@ -126,7 +126,6 @@
     "status": "Status",
     "position": "Position",
     "positionHint": "A number for manual ordering; 0 by default.",
-    "photosReadOnly": "Photos are shown here read only; adding and ordering them comes in a later version.",
     "noPhotos": "No photos yet.",
     "photoAlt": "Photo {index}",
     "delete": "Delete product",
@@ -240,6 +239,41 @@
       "translatedLine": "{count, plural, one {# language translated} other {# languages translated}}, {failed} not translated",
       "summary": "{done, plural, one {# product translated} other {# products translated}}, {failed, plural, =0 {no errors} one {# error} other {# errors}}",
       "reviewedToast": "{count, plural, =0 {No translation was waiting for review} one {# translation marked reviewed} other {# translations marked reviewed}}"
+    }
+  },
+  "images": {
+    "hint": "JPEG, PNG or WebP, up to {maxMb} MB each. The first photo is the main one in the shop. Location and camera data are removed on upload.",
+    "saveFirst": "Save the product first, then add its photos here.",
+    "add": "Add photos",
+    "orderHint": "Drag a photo to move it, or use its arrow buttons.",
+    "orderHintButtons": "Use the arrow buttons of a photo to move it.",
+    "main": "Main photo",
+    "makeMain": "Make main",
+    "moveEarlier": "Move photo {index} earlier",
+    "moveLater": "Move photo {index} later",
+    "altTextsOf": "Alt texts of photo {index}",
+    "altHint": "A short description of the photo for screen readers and search engines. An empty field uses the text shown in it.",
+    "altSave": "Save alt texts",
+    "altSaved": "Alt texts saved",
+    "deleteOf": "Delete photo {index}",
+    "deleteTitle": "Delete this photo?",
+    "deleteDescription": "Photo {index} disappears from the product and the shop at once.",
+    "deleteConfirm": "Delete",
+    "deleted": "Photo deleted",
+    "uploading": "Uploading {name}…",
+    "uploaded": "{name} added",
+    "progress": "Added: {done} of {total}",
+    "uploadErrors": {
+      "tooLarge": "{name}: larger than {maxMb} MB.",
+      "unsupportedType": "{name}: not a JPEG, PNG or WebP photo.",
+      "invalidImage": "{name}: the file is damaged or has too many pixels.",
+      "failed": "{name}: the upload failed. Check the connection and try again."
+    },
+    "errors": {
+      "notAuthorized": "Only an administrator can do this. Sign in again.",
+      "notFound": "This product or photo no longer exists.",
+      "conflict": "The photos were changed in another window; the current ones are shown now.",
+      "unexpectedError": "That did not work. Try again."
     }
   }
 }

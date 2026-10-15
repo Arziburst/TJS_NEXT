@@ -209,6 +209,30 @@ texts, 441 photos on an empty catalogue) before the real run. The shop's catalog
 (`cacheLife("hours")`, `src/lib/catalog/cache.ts`): the products appear within the hour, or at once after a
 redeploy. Locally, restart `next dev` (or rebuild) after an import.
 
+The importer stores the archived originals as they are, EXIF included (one legacy photo carries a GPS
+position); `scripts/images/strip-metadata.mjs` below cleans them after an import.
+
+## Photo metadata cleanup
+
+`scripts/images/strip-metadata.mjs` checks the file of every `product_images` row for metadata (EXIF, XMP,
+IPTC) and a GPS position, and lists the files no row points at. With `--apply` it replaces each such row's
+file with a clean copy made by the admin upload's code (`src/lib/images/encode.ts`: upright, re-encoded, no
+metadata) under a **new** path in the same folder (the image optimizer caches by URL), points the row at it
+and deletes the old file. `--gps-only` limits `--apply` to the photos with a position, `--prefix legacy` the run to one folder of the bucket. Files no row points at
+are only reported. Dry run by default; the target is chosen like the importer's (`.env.local`, a non-loopback
+URL only with `--production`).
+
+```sh
+node scripts/images/strip-metadata.mjs            # report only
+node scripts/images/strip-metadata.mjs --apply    # clean the local stack
+```
+
+On production (the coordinator only), with the variables set as for the import: `--production` for the dry
+run, then `--production --apply`. Storefront pages cached before the run still name the old URLs; the image
+optimizer may keep serving its cached, metadata-free copies of them (not verified on Vercel) until the pages' cache entries expire or the
+next deployment. A later re-run of the legacy importer would upload the original under its legacy path again;
+run this script after it.
+
 ## Auth
 
 Supabase Auth with email/password and Google (D12); the app side is `src/lib/auth/`, `src/proxy.ts` and

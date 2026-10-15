@@ -2,9 +2,10 @@ import { APICallError } from "ai";
 import { MockLanguageModelV4 } from "ai/test";
 import { describe, expect, it, vi } from "vitest";
 import { locales, type Locale } from "@/i18n/routing";
-import { TEXT_LIMITS } from "@/lib/admin/product-form";
+import { IMAGE_ALT_MAX_LENGTH, TEXT_LIMITS } from "@/lib/admin/product-form";
 import {
   FIELD_LIMITS,
+  IMAGE_ALT_LIMIT,
   TRANSLATION_MODEL,
   backoffMs,
   buildPrompt,
@@ -235,6 +236,7 @@ describe("helpers", () => {
     for (const [field, limit] of Object.entries(TEXT_LIMITS)) {
       if (field in FIELD_LIMITS) expect(FIELD_LIMITS[field as keyof typeof FIELD_LIMITS], field).toBe(limit);
     }
+    expect(IMAGE_ALT_LIMIT).toBe(IMAGE_ALT_MAX_LENGTH);
   });
 
   it("uses the default model through the gateway", () => {

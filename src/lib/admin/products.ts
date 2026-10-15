@@ -2,9 +2,9 @@ import "server-only";
 
 import { getAdmin } from "@/lib/auth/session";
 import { PRODUCT_IMAGES_BUCKET } from "@/lib/catalog";
-import { isLocale, usdTextToMinor } from "@/lib/catalog/mappers";
+import { isLocale, pickByLocale, usdTextToMinor } from "@/lib/catalog/mappers";
 import { createServiceClient } from "@/lib/supabase/server";
-import type { Locale } from "@/i18n/routing";
+import { locales, type Locale } from "@/i18n/routing";
 import type { Database } from "@/lib/supabase/database.types";
 import {
   EDITOR_LOCALES,
@@ -25,6 +25,8 @@ type Enums = Database["public"]["Enums"];
 export type AdminResult<T> = { ok: true; data: T } | { ok: false; reason: "notAuthorized" | "notFound" | "unexpectedError" };
 
 export type AdminImage = { id: string; url: string; width: number; height: number };
+/** A photo in the edit form, with its blur placeholder and its own alt texts (locales without one fall back). */
+export type AdminProductImage = AdminImage & { blurDataUrl: string | null; alts: Partial<Record<Locale, string>> };
 
 export type AdminProductListItem = {
   id: string;
@@ -75,7 +77,9 @@ export type AdminProduct = {
   createdAt: string;
   updatedAt: string;
   translations: AdminTranslation[];
-  images: AdminImage[];
+  images: AdminProductImage[];
+  /** Per locale, the alt a photo without its own alt text gets on the storefront (the product's alt text or title). */
+  imageAltDefaults: Partial<Record<Locale, string>>;
 };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -206,8 +210,8 @@ export async function getAdminProduct(id: string): Promise<AdminResult<AdminProd
          price_usd_text:price_usd::text, weight_g_text:weight_g::text, length_mm_text:length_mm::text,
          width_mm_text:width_mm::text, height_mm_text:height_mm::text, position, published_at, created_at, updated_at,
          product_translations(locale, title, slug, description, materials, care, clasp, lead_time_note,
-           meta_title, meta_description, source, reviewed_at, updated_at),
-         product_images(id, storage_path, position, width, height)`,
+           meta_title, meta_description, alt_text, source, reviewed_at, updated_at),
+         product_images(id, storage_path, position, width, height, blur_data_url, product_image_alts(locale, alt))`,
       )
       .eq("id", id)
       .is("deleted_at", null)
@@ -258,12 +262,22 @@ export async function getAdminProduct(id: string): Promise<AdminResult<AdminProd
         createdAt: data.created_at,
         updatedAt: data.updated_at,
         translations,
-        images: data.product_images.map((image) => ({
-          id: image.id,
-          url: imageUrl(client, image.storage_path),
-          width: image.width,
-          height: image.height,
-        })),
+        images: data.product_images.map(
+          (image): AdminProductImage => ({
+            id: image.id,
+            url: imageUrl(client, image.storage_path),
+            width: image.width,
+            height: image.height,
+            blurDataUrl: image.blur_data_url,
+            alts: Object.fromEntries(image.product_image_alts.filter((a) => isLocale(a.locale)).map((a) => [a.locale, a.alt])),
+          }),
+        ),
+        imageAltDefaults: Object.fromEntries(
+          locales.flatMap((locale) => {
+            const t = pickByLocale(data.product_translations, locale);
+            return t ? [[locale, t.alt_text ?? t.title]] : [];
+          }),
+        ),
       },
     };
   } catch {

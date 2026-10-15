@@ -45,7 +45,8 @@ export const FIELD_LIMITS: Record<TranslatableField, number> = {
   metaDescription: 500,
   altText: 500,
 };
-export const IMAGE_ALT_LIMIT = 500;
+// IMAGE_ALT_MAX_LENGTH of the photo alt editor (src/lib/admin/product-form.ts; a test keeps them equal)
+export const IMAGE_ALT_LIMIT = 300;
 
 export type TranslationTexts = Record<TranslatableField, string | null>;
 export type ImageAlt = { imageId: string; alt: string };

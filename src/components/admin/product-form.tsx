@@ -27,7 +27,7 @@ type ProductFormProps = {
   product: AdminProduct | null;
   categories: { id: string; name: string }[];
   saveProduct: (previous: SaveProductState, formData: FormData) => Promise<SaveProductState>;
-  /** Read-only photos (upload comes with #18), rendered by the page. */
+  /** The photos section, rendered by the page (it saves on its own, outside this form's save). */
   photos?: ReactNode;
   /** The delete button of an existing product, rendered by the page. */
   deleteButton?: ReactNode;
@@ -90,9 +90,17 @@ export function ProductForm({ product, categories, saveProduct, photos, deleteBu
   return (
     <form
       onSubmit={onSubmit}
-      // only the product's own fields count (they have a name); the translation panel's controls do not
+      // only the product's own fields count: named and submitted with this form (the translation panel's controls
+      // have no name; the photo alt texts belong to their own form and save on their own)
       onInput={(event) => {
-        if (event.target instanceof Element && event.target.getAttribute("name")) setDirty(true);
+        const field = event.target;
+        if (
+          (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement) &&
+          field.name &&
+          field.form === event.currentTarget
+        ) {
+          setDirty(true);
+        }
       }}
       noValidate
       className="grid gap-6"

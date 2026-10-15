@@ -126,7 +126,6 @@
     "status": "Status",
     "position": "Positie",
     "positionHint": "Een getal voor handmatige volgorde; standaard 0.",
-    "photosReadOnly": "Foto’s worden hier alleen getoond; toevoegen en ordenen komt in een latere versie.",
     "noPhotos": "Nog geen foto’s.",
     "photoAlt": "Foto {index}",
     "delete": "Product verwijderen",
@@ -240,6 +239,41 @@
       "translatedLine": "{count, plural, one {# taal vertaald} other {# talen vertaald}}, {failed} niet vertaald",
       "summary": "{done, plural, one {# product vertaald} other {# producten vertaald}}, {failed, plural, =0 {geen fouten} one {# fout} other {# fouten}}",
       "reviewedToast": "{count, plural, =0 {Geen vertaling wachtte op nakijken} one {# vertaling als nagekeken gemarkeerd} other {# vertalingen als nagekeken gemarkeerd}}"
+    }
+  },
+  "images": {
+    "hint": "JPEG, PNG of WebP, elk tot {maxMb} MB. De eerste foto is de hoofdfoto in de winkel. Locatie- en cameragegevens worden bij het uploaden verwijderd.",
+    "saveFirst": "Sla eerst het product op en voeg daarna hier de foto's toe.",
+    "add": "Foto's toevoegen",
+    "orderHint": "Sleep een foto om hem te verplaatsen, of gebruik de pijlknoppen.",
+    "orderHintButtons": "Gebruik de pijlknoppen van een foto om hem te verplaatsen.",
+    "main": "Hoofdfoto",
+    "makeMain": "Hoofdfoto maken",
+    "moveEarlier": "Foto {index} naar voren verplaatsen",
+    "moveLater": "Foto {index} naar achteren verplaatsen",
+    "altTextsOf": "Alternatieve teksten van foto {index}",
+    "altHint": "Een korte beschrijving van de foto voor schermlezers en zoekmachines. Een leeg veld gebruikt de tekst die erin wordt getoond.",
+    "altSave": "Teksten opslaan",
+    "altSaved": "Alternatieve teksten opgeslagen",
+    "deleteOf": "Foto {index} verwijderen",
+    "deleteTitle": "Deze foto verwijderen?",
+    "deleteDescription": "Foto {index} verdwijnt meteen uit het product en de winkel.",
+    "deleteConfirm": "Verwijderen",
+    "deleted": "Foto verwijderd",
+    "uploading": "{name} uploaden…",
+    "uploaded": "{name} toegevoegd",
+    "progress": "Toegevoegd: {done} van {total}",
+    "uploadErrors": {
+      "tooLarge": "{name}: groter dan {maxMb} MB.",
+      "unsupportedType": "{name}: geen JPEG-, PNG- of WebP-foto.",
+      "invalidImage": "{name}: het bestand is beschadigd of heeft te veel pixels.",
+      "failed": "{name}: uploaden mislukt. Controleer de verbinding en probeer het opnieuw."
+    },
+    "errors": {
+      "notAuthorized": "Alleen een beheerder kan dit doen. Log opnieuw in.",
+      "notFound": "Dit product of deze foto bestaat niet meer.",
+      "conflict": "De foto's zijn in een ander venster gewijzigd; nu worden de huidige getoond.",
+      "unexpectedError": "Dat is niet gelukt. Probeer het opnieuw."
     }
   }
 }
