@@ -3,9 +3,10 @@
 // without metadata by the same code as the admin upload (src/lib/images/encode.ts), stored under a NEW path
 // (the image optimizer caches by URL for 31 days), the row pointed at it, the old file deleted.
 //
-//   node scripts/images/strip-metadata.mjs [--apply] [--gps-only] [--production]
+//   node scripts/images/strip-metadata.mjs [--apply] [--gps-only] [--prefix <folder>] [--production]
 //
-// Dry run by default: it only reports. --gps-only limits --apply to photos with a GPS position. Files no row
+// Dry run by default: it only reports. --gps-only limits --apply to photos with a GPS position; --prefix to the
+// files under one folder of the bucket (e.g. legacy). Files no row
 // points at are reported, never changed. Target: NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY from
 // the environment, else from .env.local; a non-loopback URL is refused unless --production is given.
 //
@@ -52,14 +53,13 @@ export function needsCleaning(metadata, { gpsOnly = false } = {}) {
   return gpsOnly ? metadata.gps : metadata.exif || metadata.xmp || metadata.iptc;
 }
 
-async function allRows(client) {
+/** The photo rows, all or those whose file lies under `prefix` (a folder of the bucket). */
+async function allRows(client, prefix) {
   const rows = [];
   for (let from = 0; ; from += PAGE) {
-    const { data, error } = await client
-      .from("product_images")
-      .select("id, product_id, storage_path, products(legacy_id)")
-      .order("storage_path")
-      .range(from, from + PAGE - 1);
+    let query = client.from("product_images").select("id, product_id, storage_path, products(legacy_id)");
+    if (prefix) query = query.like("storage_path", `${prefix}/%`);
+    const { data, error } = await query.order("storage_path").range(from, from + PAGE - 1);
     if (error) throw new Error(`product_images: ${error.message}`);
     rows.push(...data);
     if (data.length < PAGE) return rows;
@@ -118,13 +118,13 @@ async function cleanRow(client, row, bytes) {
  * Checks every photo row's file (and reports files no row points at); with apply, cleans the rows' files that
  * need it. Returns the findings; `log` gets one line per photo with a GPS position and per cleaned photo.
  * @param {import("@supabase/supabase-js").SupabaseClient} client
- * @param {{ apply?: boolean, gpsOnly?: boolean, log?: (line: string) => void }} [options]
+ * @param {{ apply?: boolean, gpsOnly?: boolean, prefix?: string, log?: (line: string) => void }} [options]
  * @returns {Promise<Report>}
  */
-export async function stripMetadata(client, { apply = false, gpsOnly = false, log = () => {} } = {}) {
+export async function stripMetadata(client, { apply = false, gpsOnly = false, prefix = "", log = () => {} } = {}) {
   /** @type {Report} */
   const report = { checked: 0, withMetadata: [], withGps: [], cleaned: [], failed: [], orphans: [] };
-  const rows = await allRows(client);
+  const rows = await allRows(client, prefix);
   const referenced = new Set(rows.map((r) => r.storage_path));
 
   for (const row of rows) {
@@ -147,6 +147,7 @@ export async function stripMetadata(client, { apply = false, gpsOnly = false, lo
     if (!apply || !needsCleaning(metadata, { gpsOnly })) continue;
     try {
       const newPath = await cleanRow(client, row, bytes);
+      referenced.add(newPath);
       report.cleaned.push({ ...entry, newPath });
       log(`done ${row.storage_path} -> ${newPath}`);
     } catch (error) {
@@ -154,7 +155,7 @@ export async function stripMetadata(client, { apply = false, gpsOnly = false, lo
     }
   }
 
-  for (const path of await allFiles(client)) {
+  for (const path of await allFiles(client, prefix)) {
     if (referenced.has(path)) continue;
     try {
       const metadata = await readMetadata(await download(client, path));
@@ -187,6 +188,7 @@ async function main() {
     options: {
       apply: { type: "boolean", default: false },
       "gps-only": { type: "boolean", default: false },
+      prefix: { type: "string", default: "" },
       production: { type: "boolean", default: false },
     },
   });
@@ -197,7 +199,13 @@ async function main() {
   }
   console.log(`strip-metadata: ${target.host}${target.loopback ? " (local)" : " (production)"}${values.apply ? ", applying" : ", dry run"}`);
   const client = createClient(target.url, target.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
-  const report = await stripMetadata(client, { apply: values.apply, gpsOnly: values["gps-only"], log: (line) => console.log(line) });
+  const prefix = values.prefix.replace(/^\/+|\/+$/g, "");
+  const report = await stripMetadata(client, {
+    apply: values.apply,
+    gpsOnly: values["gps-only"],
+    prefix,
+    log: (line) => console.log(line),
+  });
   console.log(summarize(report, { apply: values.apply }));
   if (report.failed.length > 0) process.exit(1);
 }

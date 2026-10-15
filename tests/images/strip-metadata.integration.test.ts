@@ -80,7 +80,7 @@ describe.skipIf(!stack)("strip-metadata on the local stack", () => {
   });
 
   it("a dry run reports the GPS photo and changes nothing", async () => {
-    const report = await stripMetadata(service);
+    const report = await stripMetadata(service, { prefix: folder });
     expect(report.withGps.map((e) => e.path)).toContain(gpsPath);
     expect(report.withMetadata.map((e) => e.path)).not.toContain(cleanPath);
     expect(report.cleaned).toEqual([]);
@@ -90,10 +90,12 @@ describe.skipIf(!stack)("strip-metadata on the local stack", () => {
   });
 
   it("--apply stores a clean, upright copy under a new path, points the row at it and deletes the old file", async () => {
-    const report = await stripMetadata(service, { apply: true });
+    const report = await stripMetadata(service, { apply: true, prefix: folder });
     const newPath = report.cleaned.find((e) => e.path === gpsPath)?.newPath ?? "";
     expect(newPath).toMatch(new RegExp(`^${folder}/[0-9a-f-]{36}\\.jpg$`));
     expect(report.cleaned.map((e) => e.path)).not.toContain(cleanPath);
+    // the clean copy is the row's file now, not a file without a row
+    expect(report.orphans.map((o) => o.path)).not.toContain(newPath);
 
     const { data: row } = await service
       .from("product_images")
@@ -108,7 +110,7 @@ describe.skipIf(!stack)("strip-metadata on the local stack", () => {
     expect(files?.map((f) => f.name).sort()).toEqual(["clean.png", newPath.split("/").pop()].sort());
 
     // a second run finds nothing more to do here
-    const again = await stripMetadata(service, { apply: true });
+    const again = await stripMetadata(service, { apply: true, prefix: folder });
     expect(again.withGps.map((e) => e.productId)).not.toContain(productId);
   });
 });

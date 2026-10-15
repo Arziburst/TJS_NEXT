@@ -218,7 +218,7 @@ position); `scripts/images/strip-metadata.mjs` below cleans them after an import
 IPTC) and a GPS position, and lists the files no row points at. With `--apply` it replaces each such row's
 file with a clean copy made by the admin upload's code (`src/lib/images/encode.ts`: upright, re-encoded, no
 metadata) under a **new** path in the same folder (the image optimizer caches by URL), points the row at it
-and deletes the old file. `--gps-only` limits `--apply` to the photos with a position. Files no row points at
+and deletes the old file. `--gps-only` limits `--apply` to the photos with a position, `--prefix legacy` the run to one folder of the bucket. Files no row points at
 are only reported. Dry run by default; the target is chosen like the importer's (`.env.local`, a non-loopback
 URL only with `--production`).
 
