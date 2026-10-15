@@ -9,6 +9,10 @@ import { getAlternates } from "@/i18n/metadata";
 import { routing, type Locale } from "@/i18n/routing";
 import { CATEGORY_SLUGS, isCategorySlug } from "@/lib/catalog/categories";
 
+// A page whose entry an admin save just expired renders anew on its next request, never from the build's
+// generic fallback shell (docs/standards.md §3, "No build-time shell after an admin save")
+export const unstable_paramMatching = { category: "blocking" };
+
 export function generateStaticParams() {
   return CATEGORY_SLUGS.map((category) => ({ category }));
 }

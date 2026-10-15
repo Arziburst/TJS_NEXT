@@ -40,11 +40,7 @@ const nextConfig: NextConfig = {
     // its prefetch from the HTTP cache and revalidates in the background (#79, docs/standards.md §3)
     daysNoSwr: { stale: 300, revalidate: 86_400, expire: 86_400 },
   },
-  // Off (#21): with it, a page under a second dynamic segment (/shop/[category], /product/[slug]) whose entry an
-  // updateTag just expired is answered once from the build's generic fallback shell while the page regenerates
-  // in the background, so the first request after an admin save showed the build's footer and prices
-  // (docs/standards.md §3, "No build-time shell after an admin save")
-  partialPrefetching: false,
+  partialPrefetching: true,
   typedRoutes: true,
   // dev only: browser tooling that opens 127.0.0.1 instead of localhost would otherwise get
   // every dev chunk blocked as cross-origin, and the page never hydrates

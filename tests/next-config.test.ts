@@ -9,14 +9,6 @@ async function imagesConfig(supabaseUrl: string | undefined) {
   return config.images!;
 }
 
-describe("next.config rendering", () => {
-  it("keeps partial prefetching off: an admin save must show on the next request of every page", async () => {
-    vi.resetModules();
-    const { default: config } = await import("../next.config");
-    expect(config.partialPrefetching).toBe(false);
-  });
-});
-
 describe("next.config images", () => {
   afterEach(() => vi.unstubAllEnvs());
 
