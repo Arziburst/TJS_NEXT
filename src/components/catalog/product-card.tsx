@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
+import { Price } from "@/components/price";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 import type { ListedProduct } from "@/lib/catalog/cache";
 import type { ProductImage } from "@/lib/catalog/types";
 import { cn } from "@/lib/utils";
 import { PRODUCT_PREFETCH, productHref } from "./links";
-import { Price } from "./price";
 
 const IMAGE_SIZES = "(min-width: 1024px) 200px, 164px";
 

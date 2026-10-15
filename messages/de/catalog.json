@@ -3,7 +3,7 @@
   "filterShopBy": "Einkaufen nach",
   "filterBy": "Filtern nach",
   "showMore": "Mehr anzeigen",
-  "shownCount": "<b>{shown}</b> von <b>{total}</b> Produkten angezeigt",
+  "shownCount": "{total, plural, one {<b>{shown}</b> von <b>#</b> Produkt angezeigt} other {<b>{shown}</b> von <b>#</b> Produkten angezeigt}}",
   "categories": {
     "all": "Alle ansehen",
     "earrings": "Ohrringe",
@@ -34,9 +34,5 @@
     "position": "<b>{page}</b> von {total}",
     "gap": "…",
     "first": "Zurück zur ersten Seite"
-  },
-  "price": {
-    "none": "—",
-    "unavailable": "Preis noch nicht verfügbar"
   }
 }

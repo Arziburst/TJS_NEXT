@@ -3,7 +3,7 @@
   "filterShopBy": "Acheter par",
   "filterBy": "Filtrer par",
   "showMore": "Afficher plus",
-  "shownCount": "<b>{shown}</b> produits affichés sur <b>{total}</b>",
+  "shownCount": "{total, plural, one {Affichage de <b>{shown}</b> sur <b>#</b> produit} other {Affichage de <b>{shown}</b> sur <b>#</b> produits}}",
   "categories": {
     "all": "Tout voir",
     "earrings": "Boucles d’oreilles",
@@ -34,9 +34,5 @@
     "position": "<b>{page}</b> sur {total}",
     "gap": "…",
     "first": "Revenir à la première page"
-  },
-  "price": {
-    "none": "—",
-    "unavailable": "Prix pas encore disponible"
   }
 }

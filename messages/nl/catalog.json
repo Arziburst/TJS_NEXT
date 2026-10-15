@@ -3,7 +3,7 @@
   "filterShopBy": "Winkel op",
   "filterBy": "Filteren op",
   "showMore": "Meer tonen",
-  "shownCount": "<b>{shown}</b> van <b>{total}</b> producten getoond",
+  "shownCount": "{total, plural, one {<b>{shown}</b> van <b>#</b> product getoond} other {<b>{shown}</b> van <b>#</b> producten getoond}}",
   "categories": {
     "all": "Alles bekijken",
     "earrings": "Oorbellen",
@@ -34,9 +34,5 @@
     "position": "<b>{page}</b> van {total}",
     "gap": "…",
     "first": "Terug naar de eerste pagina"
-  },
-  "price": {
-    "none": "—",
-    "unavailable": "Prijs nog niet beschikbaar"
   }
 }

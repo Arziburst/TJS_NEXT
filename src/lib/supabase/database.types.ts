@@ -37,6 +37,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"currency_settings": {
+                  Row: {
+                    "currency": string,"decimals": number,"enabled": boolean,"ending": number,"hysteresis_bps": number,"markup_bps": number,"round_increment": number,"small_ending": number | null,"small_price_below": number | null,"small_round_increment": number | null
+                  }
+                  Insert: {
+                    "currency": string,"decimals": number,"enabled"?: boolean,"ending": number,"hysteresis_bps"?: number,"markup_bps"?: number,"round_increment": number,"small_ending"?: number | null,"small_price_below"?: number | null,"small_round_increment"?: number | null
+                  }
+                  Update: {
+                    "currency"?: string,"decimals"?: number,"enabled"?: boolean,"ending"?: number,"hysteresis_bps"?: number,"markup_bps"?: number,"round_increment"?: number,"small_ending"?: number | null,"small_price_below"?: number | null,"small_round_increment"?: number | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"fx_rates": {
+                  Row: {
+                    "base": string,"fetched_at": string,"id": number,"quote": string,"rate": number,"rate_date": string,"source": string
+                  }
+                  Insert: {
+                    "base": string,"fetched_at"?: string,"id"?: never,"quote": string,"rate": number,"rate_date": string,"source": string
+                  }
+                  Update: {
+                    "base"?: string,"fetched_at"?: string,"id"?: never,"quote"?: string,"rate"?: number,"rate_date"?: string,"source"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"product_image_alts": {
                   Row: {
                     "alt": string,"image_id": string,"locale": string

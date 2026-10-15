@@ -38,23 +38,24 @@ export type ListedProduct = ProductSummary & { isNew: boolean };
 
 export type ListingPage = { items: ListedProduct[]; total: number; page: number; pageSize: number };
 
-/**
- * One page of a listing: all products (`categorySlug` null) or one category's. `categoryId` only adds the
- * category's tag; it is null when the category list could not be read.
- */
+/** One page of a listing: all products (`categorySlug` null) or one category's. */
 export async function getCachedListingPage(
   locale: Locale,
   categorySlug: string | null,
-  categoryId: string | null,
   sort: ProductSort,
   page: number,
   pageSize: number,
 ): Promise<CatalogResult<ListingPage>> {
   "use cache";
   cacheTag(CATALOG_TAG);
-  if (categoryId) cacheTag(categoryTag(categoryId));
-  const result = await getProducts({ locale, categorySlug: categorySlug ?? undefined }, sort, { page, pageSize });
-  lifeFor(result);
+  const [result, categories] = await Promise.all([
+    getProducts({ locale, categorySlug: categorySlug ?? undefined }, sort, { page, pageSize }),
+    categorySlug ? getCachedCategories(locale) : null,
+  ]);
+  const category = categories?.ok ? categories.data.find((c) => c.slug === categorySlug) : undefined;
+  if (category) cacheTag(categoryTag(category.id));
+  // without the category's id the entry would miss its tag: keep it as short-lived as a failure
+  lifeFor(categorySlug && !category ? { ok: false, reason: "unexpectedError" } : result);
   if (!result.ok) return result;
   // the badge is as fresh as the entry (at most hours late), never per request
   const now = Date.now();

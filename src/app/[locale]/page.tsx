@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Suspense } from "react";
 import { getCategoryEntries } from "@/components/catalog/category-entries";
 import { SEE_ALL_IMAGE, STATIC_BLUR } from "@/components/catalog/category-images";
 import { CategoryTiles } from "@/components/catalog/category-tiles";
@@ -19,24 +18,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// cached category names: prerendered when the database is reachable at build time, else streamed
-async function Tiles({ locale }: { locale: Locale }) {
-  return <CategoryTiles categories={await getCategoryEntries(locale)} />;
-}
-
-function TilesFallback() {
-  return <div aria-hidden className="min-h-[640px] md:min-h-[400px] sb:min-h-[520px]" />;
-}
-
 export default async function HomePage() {
   const [t, locale] = await Promise.all([getTranslations("home"), getLocale()]);
+  // static: the category names come from the messages, so the whole page is prerendered
+  const categories = await getCategoryEntries(locale as Locale);
 
   return (
     <main className="page-container flex flex-1 flex-col gap-10 overflow-x-clip py-8 sb:gap-14 sb:py-12">
       <h1 className="sr-only">{t("meta.title")}</h1>
-      <Suspense fallback={<TilesFallback />}>
-        <Tiles locale={locale as Locale} />
-      </Suspense>
+      <CategoryTiles categories={categories} />
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <p className="max-w-3xl font-sans text-sm leading-[180%] uppercase md:text-2xl">
           <span className="text-accent">{t("introBrand")}</span> {t("intro")}

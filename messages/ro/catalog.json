@@ -3,7 +3,7 @@
   "filterShopBy": "Cumpără după",
   "filterBy": "Filtrează după",
   "showMore": "Arată mai multe",
-  "shownCount": "Se afișează <b>{shown}</b> din <b>{total}</b> produse",
+  "shownCount": "{total, plural, one {Se afișează <b>{shown}</b> din <b>#</b> produs} few {Se afișează <b>{shown}</b> din <b>#</b> produse} other {Se afișează <b>{shown}</b> din <b>#</b> de produse}}",
   "categories": {
     "all": "Vezi tot",
     "earrings": "Cercei",
@@ -34,9 +34,5 @@
     "position": "<b>{page}</b> din {total}",
     "gap": "…",
     "first": "Înapoi la prima pagină"
-  },
-  "price": {
-    "none": "—",
-    "unavailable": "Prețul nu este încă disponibil"
   }
 }

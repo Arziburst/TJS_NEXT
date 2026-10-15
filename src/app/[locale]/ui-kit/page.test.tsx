@@ -14,6 +14,8 @@ vi.mock("./demos", () => ({
   TabsDemo: () => null,
 }));
 vi.mock("@/i18n/navigation", () => ({ Link: () => null }));
+// the price demo reads cookies and the database (server-only modules)
+vi.mock("@/components/price", () => ({ Price: () => null }));
 
 const { default: UiKitPage } = await import("./page");
 

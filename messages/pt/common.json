@@ -2,6 +2,10 @@
   "brand": "TJS",
   "noData": "Sem dados",
   "total": "Total",
+  "price": {
+    "unavailable": "Preço indisponível",
+    "none": "—"
+  },
   "pagination": {
     "of": "de"
   },

@@ -55,7 +55,7 @@ export function ShopView(props: ShopViewProps) {
   );
 }
 
-// Params and cached data only (the category list): prerendered per category when the database is reachable.
+// Params and messages only (the category list): prerendered per category, no database read in the shell.
 async function ShopBody({ locale, slug: slugParam, searchParams }: ShopViewProps) {
   const [slug, categories, t] = await Promise.all([slugParam, getCategoryEntries(locale), getTranslations("catalog")]);
   const active = slug ? (categories.find((c) => c.slug === slug) ?? null) : null;
@@ -108,7 +108,7 @@ async function ShopResults({ locale, category, categories, pathname, searchParam
   const pages: number[] = [];
   for (let p = query.from; p <= query.page; p++) pages.push(p);
   const results = await Promise.all(
-    pages.map((page) => getCachedListingPage(locale, category?.slug ?? null, category?.id ?? null, query.sort, page, PAGE_SIZE)),
+    pages.map((page) => getCachedListingPage(locale, category?.slug ?? null, query.sort, page, PAGE_SIZE)),
   );
 
   const filters = (

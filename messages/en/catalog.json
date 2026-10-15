@@ -3,7 +3,7 @@
   "filterShopBy": "Shop by",
   "filterBy": "Filter by",
   "showMore": "Show more",
-  "shownCount": "Showed <b>{shown}</b> of <b>{total}</b> products",
+  "shownCount": "{total, plural, one {Showed <b>{shown}</b> of <b>#</b> product} other {Showed <b>{shown}</b> of <b>#</b> products}}",
   "categories": {
     "all": "See all",
     "earrings": "Earrings",
@@ -34,9 +34,5 @@
     "position": "<b>{page}</b> of {total}",
     "gap": "…",
     "first": "Back to the first page"
-  },
-  "price": {
-    "none": "—",
-    "unavailable": "Price not available yet"
   }
 }

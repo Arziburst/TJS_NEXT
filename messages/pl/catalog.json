@@ -3,7 +3,7 @@
   "filterShopBy": "Kupuj według",
   "filterBy": "Filtruj według",
   "showMore": "Pokaż więcej",
-  "shownCount": "Wyświetlono <b>{shown}</b> z <b>{total}</b> produktów",
+  "shownCount": "{total, plural, one {Wyświetlono <b>{shown}</b> z <b>#</b> produktu} few {Wyświetlono <b>{shown}</b> z <b>#</b> produktów} many {Wyświetlono <b>{shown}</b> z <b>#</b> produktów} other {Wyświetlono <b>{shown}</b> z <b>#</b> produktu}}",
   "categories": {
     "all": "Zobacz wszystko",
     "earrings": "Kolczyki",
@@ -34,9 +34,5 @@
     "position": "<b>{page}</b> z {total}",
     "gap": "…",
     "first": "Wróć do pierwszej strony"
-  },
-  "price": {
-    "none": "—",
-    "unavailable": "Cena jeszcze niedostępna"
   }
 }

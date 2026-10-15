@@ -3,7 +3,7 @@
   "filterShopBy": "Comprar por",
   "filterBy": "Filtrar por",
   "showMore": "Mostrar más",
-  "shownCount": "Mostrando <b>{shown}</b> de <b>{total}</b> productos",
+  "shownCount": "{total, plural, one {Mostrando <b>{shown}</b> de <b>#</b> producto} other {Mostrando <b>{shown}</b> de <b>#</b> productos}}",
   "categories": {
     "all": "Ver todo",
     "earrings": "Pendientes",
@@ -34,9 +34,5 @@
     "position": "<b>{page}</b> de {total}",
     "gap": "…",
     "first": "Volver a la primera página"
-  },
-  "price": {
-    "none": "—",
-    "unavailable": "Precio aún no disponible"
   }
 }

@@ -2,6 +2,10 @@
   "brand": "TJS",
   "noData": "Geen gegevens",
   "total": "Totaal",
+  "price": {
+    "unavailable": "Prijs niet beschikbaar",
+    "none": "—"
+  },
   "pagination": {
     "of": "van"
   },

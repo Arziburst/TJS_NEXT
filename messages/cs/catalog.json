@@ -3,7 +3,7 @@
   "filterShopBy": "Nakupovat podle",
   "filterBy": "Filtrovat podle",
   "showMore": "Zobrazit více",
-  "shownCount": "Zobrazeno <b>{shown}</b> z <b>{total}</b> produktů",
+  "shownCount": "{total, plural, one {Zobrazeno <b>{shown}</b> z <b>#</b> produktu} few {Zobrazeno <b>{shown}</b> z <b>#</b> produktů} many {Zobrazeno <b>{shown}</b> z <b>#</b> produktu} other {Zobrazeno <b>{shown}</b> z <b>#</b> produktů}}",
   "categories": {
     "all": "Zobrazit vše",
     "earrings": "Náušnice",
@@ -34,9 +34,5 @@
     "position": "<b>{page}</b> z {total}",
     "gap": "…",
     "first": "Zpět na první stránku"
-  },
-  "price": {
-    "none": "—",
-    "unavailable": "Cena zatím není k dispozici"
   }
 }

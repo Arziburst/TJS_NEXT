@@ -3,7 +3,7 @@
   "filterShopBy": "Каталог",
   "filterBy": "Фільтр",
   "showMore": "Показати більше",
-  "shownCount": "Показано <b>{shown}</b> з <b>{total}</b> товарів",
+  "shownCount": "{total, plural, one {Показано <b>{shown}</b> з <b>#</b> товару} few {Показано <b>{shown}</b> з <b>#</b> товарів} many {Показано <b>{shown}</b> з <b>#</b> товарів} other {Показано <b>{shown}</b> з <b>#</b> товару}}",
   "categories": {
     "all": "Усі",
     "earrings": "Сережки",
@@ -34,9 +34,5 @@
     "position": "<b>{page}</b> з {total}",
     "gap": "…",
     "first": "Повернутися на першу сторінку"
-  },
-  "price": {
-    "none": "—",
-    "unavailable": "Ціна ще недоступна"
   }
 }
