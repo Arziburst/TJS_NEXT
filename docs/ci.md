@@ -33,8 +33,9 @@ on `ubuntu-24.04` with Node from `.nvmrc`; this is the check branch protection r
   shell tests use; Vercel never sets it, so it stays a 404 in production.
 - The build runs before the stack starts: a `NEXT_PUBLIC_*` value the app inlines from the local stack (fixed
   ports and the CLI's public demo keys) belongs in the job's `env`, not in `.env.local`.
-- `concurrency` groups runs by branch and cancels the older run of the same branch when a new commit arrives
-  (on `main` too: the newest run covers every earlier commit).
+- `concurrency` groups runs per PR (`ci-pull_request-<n>`) and per pushed ref (`ci-push-refs/heads/main`) and
+  cancels the older run of the same group when a new commit arrives (on `main` too: the newest run covers every
+  earlier commit). A fork PR from a branch named `main` never shares a group with the push-to-main runs.
 - Permissions: `contents: read`, `pull-requests: read`. `check:migrations` reads the open PRs with the
   workflow's own `GITHUB_TOKEN`; in CI a `gh` failure is an error, not a warning.
 

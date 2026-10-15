@@ -51,7 +51,7 @@ jobs:
 
           # "<issue number> <project item id>" for each closing issue that is on project #4.
           items=$(gh api graphql \
-            -F owner="$OWNER" -F repo="$REPO" -F number="$PR_NUMBER" \
+            -f owner="$OWNER" -f repo="$REPO" -F number="$PR_NUMBER" \
             -f query='
               query($owner: String!, $repo: String!, $number: Int!) {
                 repository(owner: $owner, name: $repo) {
@@ -74,8 +74,9 @@ jobs:
           fi
 
           while read -r issue item; do
+            # -f: the ids are strings; -F would turn an all-digit option id into a number
             gh api graphql \
-              -F project="$PROJECT_ID" -F item="$item" -F field="$STATUS_FIELD_ID" -F option="$option" \
+              -f project="$PROJECT_ID" -f item="$item" -f field="$STATUS_FIELD_ID" -f option="$option" \
               -f query='
                 mutation($project: ID!, $item: ID!, $field: ID!, $option: String!) {
                   updateProjectV2ItemFieldValue(input: {

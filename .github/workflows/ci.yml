@@ -11,7 +11,9 @@ on:
     branches: [main]
 
 concurrency:
-  group: ci-${{ github.head_ref || github.ref_name }}
+  # One group per PR and one per pushed ref: a fork PR from a branch named main never shares a group
+  # with the push-to-main runs.
+  group: ci-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
