@@ -13,6 +13,7 @@
   "openMenu": "Abrir menú",
   "closeMenu": "Cerrar menú",
   "main": "Navegación principal",
+  "signedInAs": "Has iniciado sesión como",
   "localeNames": {
     "uk": "Українська",
     "en": "English",

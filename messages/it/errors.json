@@ -14,6 +14,9 @@
     "minItems": "Il campo deve contenere almeno {min} elementi",
     "chooseCity": "Devi digitare la città corretta e selezionare la tua città",
     "chooseWarehouse": "Devi scegliere il tuo ufficio postale",
-    "chooseWarehouseNumber": "Devi digitare o scegliere il numero dell’ufficio postale"
+    "chooseWarehouseNumber": "Devi digitare o scegliere il numero dell’ufficio postale",
+    "nameMaxLength": "Il nome deve contenere al massimo {max} caratteri",
+    "passwordMaxLength": "La password deve contenere al massimo {max} caratteri",
+    "passwordsDontMatch": "Le password non coincidono"
   }
 }

@@ -66,6 +66,8 @@ describe("message catalogs", () => {
     });
     const args = {
       min: 2,
+      max: 100,
+      email: "olena@example.test",
       currency: "USD",
       shown: 12,
       total: 40,

@@ -13,6 +13,7 @@
   "openMenu": "Deschide meniul",
   "closeMenu": "Închide meniul",
   "main": "Navigare principală",
+  "signedInAs": "Autentificat ca",
   "localeNames": {
     "uk": "Українська",
     "en": "English",
