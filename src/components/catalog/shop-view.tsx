@@ -34,10 +34,12 @@ function CardSkeleton() {
   );
 }
 
+// a whole page of cards, as tall as the listing it stands for: a shorter one would show the footer, which
+// the results then push out of view (#57)
 function GridSkeleton() {
   return (
     <ul className={GRID}>
-      {Array.from({ length: 8 }, (_, i) => (
+      {Array.from({ length: PAGE_SIZE }, (_, i) => (
         <CardSkeleton key={i} />
       ))}
     </ul>

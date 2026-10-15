@@ -61,7 +61,10 @@ export async function ProductCard({ product, eager = false }: { product: ListedP
       <span className="font-sans text-[15px] leading-snug transition-colors group-hover:text-accent">
         {product.translation.title}
       </span>
-      <Price usdMinor={product.priceUsdMinor} className="font-sans text-[15px] text-accent" />
+      {/* a line of its own: the streamed price and its placeholder are then the same height (#57) */}
+      <span className="font-sans text-[15px] text-accent">
+        <Price usdMinor={product.priceUsdMinor} />
+      </span>
     </Link>
   );
 }
