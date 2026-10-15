@@ -7,9 +7,11 @@ import { MAX_QUERY_LENGTH, findSettlements, findStreets, findWarehouses, type Di
 import { createDictionaryStore } from "./nova-poshta/dictionary-store";
 import { quoteDelivery } from "./nova-poshta/quote";
 import type { QuoteResult, SearchResult, Settlement, Street, Warehouse } from "./nova-poshta/types";
+import { allowDeliveryCall } from "./rate-limit";
 
 // Public entry points of the delivery UI (src/components/delivery): anyone may search the carrier's
-// dictionaries and get an estimate, so no user check; every input is validated here.
+// dictionaries and get an estimate, so no user check; every input is validated here, and each client is held
+// to the per-minute limits of ./rate-limit (counted after validation, so a malformed call costs nothing).
 
 const query = z.string().max(MAX_QUERY_LENGTH * 2);
 const ref = z.string().regex(NP_REF);
@@ -31,6 +33,7 @@ function toSearch<T>(result: DictionaryResult<T>): SearchResult<T> {
 export async function searchSettlementsAction(input: unknown): Promise<SearchResult<Settlement>> {
   const parsed = query.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
+  if (!(await allowDeliveryCall("search"))) return { ok: false, reason: "rateLimited" };
   return toSearch(await findSettlements(parsed.data, deps()));
 }
 
@@ -39,6 +42,7 @@ const warehousesInput = z.object({ settlementRef: ref, filter: z.enum(["all", "b
 export async function searchWarehousesAction(input: unknown): Promise<SearchResult<Warehouse>> {
   const parsed = warehousesInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
+  if (!(await allowDeliveryCall("search"))) return { ok: false, reason: "rateLimited" };
   return toSearch(await findWarehouses(parsed.data, deps()));
 }
 
@@ -47,6 +51,7 @@ const streetsInput = z.object({ settlementRef: ref, query });
 export async function searchStreetsAction(input: unknown): Promise<SearchResult<Street>> {
   const parsed = streetsInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
+  if (!(await allowDeliveryCall("search"))) return { ok: false, reason: "rateLimited" };
   return toSearch(await findStreets(parsed.data, { client: novaPoshtaClient() }));
 }
 
@@ -64,5 +69,6 @@ const quoteInput = z.object({
 export async function quoteAction(input: unknown): Promise<QuoteResult> {
   const parsed = quoteInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
+  if (!(await allowDeliveryCall("quote"))) return { ok: false, reason: "rateLimited" };
   return quoteDelivery(parsed.data, { client: novaPoshtaClient() });
 }

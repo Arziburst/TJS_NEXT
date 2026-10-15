@@ -58,7 +58,7 @@ const streets = (SettlementRef, StreetName) => ({
 const price = (CityRecipient, ServiceType, Weight, CitySender = KYIV.city) => ({
   modelName: "InternetDocument",
   calledMethod: "getDocumentPrice",
-  methodProperties: { CitySender, CityRecipient, Weight, ServiceType, Cost: "1289", CargoType: "Parcel", SeatsAmount: "1" },
+  methodProperties: { CitySender, CityRecipient, Weight, VolumeGeneral: "0.0005", ServiceType, Cost: "1289", CargoType: "Parcel", SeatsAmount: "1" },
 });
 
 const requests = [

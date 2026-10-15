@@ -6,6 +6,7 @@ import {
   NOVA_POSHTA_API_URL,
   WAREHOUSE_TYPE,
   createNovaPoshtaClient,
+  cm3ToM3,
   gramsToKg,
   httpTransport,
   hryvniasToMinor,
@@ -149,10 +150,11 @@ describe("getDocumentPrice", () => {
       cityRecipientRef: LVIV.cityRef,
       serviceType: "WarehousePostomat",
       weightGrams: 500,
+      volumeCm3: 500,
       declaredValueMinor: 128900,
     });
     expect(result).toEqual({ ok: true, data: { costMinor: 10645, declaredValueMinor: 128900 } });
-    expect(sent[0].methodProperties).toMatchObject({ Weight: "0.5", Cost: "1289", CargoType: "Parcel", SeatsAmount: "1" });
+    expect(sent[0].methodProperties).toMatchObject({ Weight: "0.5", VolumeGeneral: "0.0005", Cost: "1289", CargoType: "Parcel", SeatsAmount: "1" });
   });
 
   it("reports an unknown city as an API error", async () => {
@@ -161,6 +163,7 @@ describe("getDocumentPrice", () => {
       cityRecipientRef: "00000000-0000-0000-0000-000000000000",
       serviceType: "WarehouseWarehouse",
       weightGrams: 500,
+      volumeCm3: 500,
       declaredValueMinor: 128900,
     });
     expect(result.ok === false && result.error.kind).toBe("api");
@@ -247,5 +250,14 @@ describe("amount and weight conversions", () => {
     [1, "0.001"],
   ])("%d g are sent as %s kg", (grams, text) => {
     expect(gramsToKg(grams)).toBe(text);
+  });
+
+  it.each([
+    [500, "0.0005"],
+    [1_000_000, "1"],
+    [1_500_000, "1.5"],
+    [1, "0.000001"],
+  ])("%d cm³ are sent as %s m³", (cm3, text) => {
+    expect(cm3ToM3(cm3)).toBe(text);
   });
 });

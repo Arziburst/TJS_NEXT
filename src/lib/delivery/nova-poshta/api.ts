@@ -159,6 +159,8 @@ export type PriceRequest = {
   cityRecipientRef: string;
   serviceType: ServiceType;
   weightGrams: number;
+  // the parcel's volume (VolumeGeneral); the volumetric weight counts when it exceeds the weight
+  volumeCm3: number;
   // the declared value in kopiykas
   declaredValueMinor: number;
 };
@@ -191,6 +193,13 @@ export function minorToHryvnias(minor: number): string {
 export function gramsToKg(grams: number): string {
   const whole = Math.trunc(grams / 1000);
   const fraction = String(grams % 1000).padStart(3, "0").replace(/0+$/, "");
+  return fraction ? `${whole}.${fraction}` : String(whole);
+}
+
+// cubic centimetres as the API's cubic metres: 500 → "0.0005"
+export function cm3ToM3(cm3: number): string {
+  const whole = Math.trunc(cm3 / 1_000_000);
+  const fraction = String(cm3 % 1_000_000).padStart(6, "0").replace(/0+$/, "");
   return fraction ? `${whole}.${fraction}` : String(whole);
 }
 
@@ -312,7 +321,7 @@ export function createNovaPoshtaClient({
       return { ok: true, data: streets };
     },
 
-    async getDocumentPrice({ citySenderRef, cityRecipientRef, serviceType, weightGrams, declaredValueMinor }) {
+    async getDocumentPrice({ citySenderRef, cityRecipientRef, serviceType, weightGrams, volumeCm3, declaredValueMinor }) {
       const result = await call({
         modelName: "InternetDocument",
         calledMethod: "getDocumentPrice",
@@ -320,6 +329,7 @@ export function createNovaPoshtaClient({
           CitySender: citySenderRef,
           CityRecipient: cityRecipientRef,
           Weight: gramsToKg(weightGrams),
+          VolumeGeneral: cm3ToM3(volumeCm3),
           ServiceType: serviceType,
           Cost: minorToHryvnias(declaredValueMinor),
           CargoType: "Parcel",

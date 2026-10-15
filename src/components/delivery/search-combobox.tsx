@@ -50,6 +50,8 @@ export function SearchCombobox<T>({
   disabled,
 }: SearchComboboxProps<T>) {
   const t = useTranslations("checkout.delivery.search");
+  // the shop's one "too many attempts" text (the auth limiter's)
+  const errors = useTranslations("auth.errors");
   const inputId = useId();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -91,7 +93,9 @@ export function SearchCombobox<T>({
   } else if (open && tooShort && minLength > 0 && !value) {
     status = t("typeMore", { min: minLength });
   } else if (current && !current.ok) {
-    status = current.reason === "invalidQuery" ? t("ukrainianOnly") : t("unavailable");
+    if (current.reason === "invalidQuery") status = t("ukrainianOnly");
+    else if (current.reason === "rateLimited") status = errors("rateLimited");
+    else status = t("unavailable");
   } else if (current?.ok && current.items.length === 0) {
     status = t("empty");
   }

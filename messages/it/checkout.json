@@ -54,7 +54,7 @@
       "label": "Consegna con Nova Poshta",
       "calculating": "Calcolo in corso…",
       "estimate": "≈ {price}",
-      "note": "Una stima secondo la tariffa di Nova Poshta: paghi la consegna al ritiro.",
+      "note": "Una stima secondo la tariffa di Nova Poshta per una scatola piccola: paghi il prezzo effettivo all'ufficio postale al ritiro.",
       "unavailable": "Il prezzo non è disponibile al momento: Nova Poshta lo calcola alla consegna.",
       "choose": "Scegli dove consegnare per vedere il prezzo"
     }

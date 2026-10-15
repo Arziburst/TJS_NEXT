@@ -54,7 +54,7 @@
       "label": "Doručení přes Nova Poshta",
       "calculating": "Počítáme…",
       "estimate": "≈ {price}",
-      "note": "Odhad podle tarifu Nova Poshta: doručení zaplatíte při převzetí.",
+      "note": "Odhad podle tarifu Nova Poshta pro malou krabičku: skutečnou cenu zaplatíte při převzetí na poště.",
       "unavailable": "Cena teď není k dispozici: Nova Poshta ji spočítá při převzetí.",
       "choose": "Vyberte místo doručení, abyste viděli cenu"
     }

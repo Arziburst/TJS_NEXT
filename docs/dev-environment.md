@@ -269,8 +269,11 @@ UI pieces for the checkout are `src/components/delivery/`, shown on the dev show
   calls `/api/cron/nova-poshta` daily at 02:30 UTC (`Authorization: Bearer $CRON_SECRET`, else 401): it refreshes
   the lookups used within a week, drops those unused for 30 days and the rows no lookup names.
 - **Parcel parameters** (`src/lib/delivery/nova-poshta/parcel.ts`): sender city Kyiv, the recipient pays,
-  declared value = the order total (D35); the sender's service (branch or courier pickup) and the packaging
-  are TBD constants.
+  declared value = the order total (D35); handed in at a branch, quotes are estimates on a 10 × 10 × 5 cm box
+  that adds 100 g (D37).
+- **Rate limits** (`src/lib/delivery/rate-limit.ts`): the public search actions 60 and the quote 20 per minute per
+  client IP, counted by `public.consume_rate_limit` like the auth actions (fails closed); the e2e tests send
+  their own `x-forwarded-for` per test.
 
 ## Windows traps
 

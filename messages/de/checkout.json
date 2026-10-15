@@ -54,7 +54,7 @@
       "label": "Lieferung mit Nova Poshta",
       "calculating": "Wird berechnet…",
       "estimate": "≈ {price}",
-      "note": "Eine Schätzung nach dem Tarif von Nova Poshta: Sie bezahlen die Lieferung bei Erhalt.",
+      "note": "Eine Schätzung nach dem Tarif von Nova Poshta für eine kleine Schachtel: Den tatsächlichen Preis bezahlen Sie bei Erhalt in der Filiale.",
       "unavailable": "Der Preis ist gerade nicht verfügbar: Nova Poshta berechnet ihn bei Erhalt.",
       "choose": "Wählen Sie den Lieferort, um den Preis zu sehen"
     }

@@ -54,7 +54,7 @@
       "label": "Livrare prin Nova Poshta",
       "calculating": "Se calculează…",
       "estimate": "≈ {price}",
-      "note": "O estimare după tariful Nova Poshta: plătiți livrarea la primire.",
+      "note": "O estimare după tariful Nova Poshta pentru o cutie mică: plătiți prețul real la oficiul poștal la primire.",
       "unavailable": "Prețul nu este disponibil acum: Nova Poshta îl calculează la primire.",
       "choose": "Alegeți unde să livrăm pentru a vedea prețul"
     }

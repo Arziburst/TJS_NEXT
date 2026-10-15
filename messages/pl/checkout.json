@@ -54,7 +54,7 @@
       "label": "Dostawa przez Nova Poshta",
       "calculating": "Obliczanie…",
       "estimate": "≈ {price}",
-      "note": "Szacunek według taryfy Nova Poshta: za dostawę płacisz przy odbiorze.",
+      "note": "Szacunek według taryfy Nova Poshta dla małego pudełka: rzeczywistą cenę płacisz w placówce przy odbiorze.",
       "unavailable": "Cena jest teraz niedostępna: Nova Poshta obliczy ją przy odbiorze.",
       "choose": "Wybierz miejsce dostawy, aby zobaczyć cenę"
     }

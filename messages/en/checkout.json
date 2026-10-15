@@ -54,7 +54,7 @@
       "label": "Delivery by Nova Poshta",
       "calculating": "Calculating…",
       "estimate": "≈ {price}",
-      "note": "An estimate by the Nova Poshta tariff: you pay for the delivery on receipt.",
+      "note": "An estimate by the Nova Poshta tariff for a small box: you pay the actual price at the post office on receipt.",
       "unavailable": "The price is not available right now: Nova Poshta calculates it on receipt.",
       "choose": "Choose where to deliver to see the price"
     }

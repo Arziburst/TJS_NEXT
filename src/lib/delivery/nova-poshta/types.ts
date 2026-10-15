@@ -43,8 +43,11 @@ export type Street = {
 // how the parcel reaches the recipient
 export type RecipientService = "warehouse" | "postomat" | "doors";
 
-// invalid: the request did not validate; invalidQuery: the API refuses the text (Latin letters)
-export type SearchResult<T> = { ok: true; items: T[] } | { ok: false; reason: "invalid" | "invalidQuery" | "unavailable" };
+// invalid: the request did not validate; invalidQuery: the API refuses the text (Latin letters); rateLimited:
+// the client asked too often (src/lib/delivery/rate-limit.ts)
+export type SearchResult<T> =
+  | { ok: true; items: T[] }
+  | { ok: false; reason: "invalid" | "invalidQuery" | "rateLimited" | "unavailable" };
 
 // costMinor: the estimate in UAH kopiykas (the recipient pays on receipt, D35)
-export type QuoteResult = { ok: true; costMinor: number } | { ok: false; reason: "invalid" | "unavailable" };
+export type QuoteResult = { ok: true; costMinor: number } | { ok: false; reason: "invalid" | "rateLimited" | "unavailable" };

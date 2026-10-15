@@ -3,14 +3,15 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { DeliveryMessages } from "@/components/delivery/delivery-messages";
 import { NovaPoshtaDelivery } from "@/components/delivery/nova-poshta-delivery";
+import { parcelFromCart } from "@/lib/delivery/nova-poshta/parcel";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("checkout.delivery");
   return { title: t("title"), robots: { index: false, follow: false } };
 }
 
-// A sample order for the showcase: two pieces of 35 g, 1 289 ₴ in total
-const DEMO_PARCEL = { weightGrams: 70, declaredValueMinor: 128900 };
+// A sample order for the showcase: two pieces of 35 g, 1 289 ₴ in total, packed in the standard box (D37)
+const DEMO_PARCEL = parcelFromCart([{ weightGrams: 35, quantity: 2, unitPriceUahMinor: 64450 }])!;
 
 /*
  * The Nova Poshta delivery pieces for the checkout (#24), shown on their own. A dev showcase like /ui-kit: on only

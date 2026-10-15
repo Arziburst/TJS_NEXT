@@ -14,6 +14,11 @@ function collectErrors(page: Page): string[] {
 }
 
 test.describe("Nova Poshta delivery", () => {
+  // the delivery actions are limited per client IP (src/lib/delivery/rate-limit.ts): each test is its own client
+  test.beforeEach(async ({ page }) => {
+    await page.setExtraHTTPHeaders({ "x-forwarded-for": `e2e-delivery-${crypto.randomUUID()}` });
+  });
+
   test("city, a parcel locker of the city and the quote", async ({ page }) => {
     const errors = collectErrors(page);
     await page.goto("/uk/delivery-demo");
@@ -38,7 +43,7 @@ test.describe("Nova Poshta delivery", () => {
     await page.getByRole("option", { name: /№1001:/ }).click();
 
     await expect(quote.getByRole("status")).toHaveText("≈ 86,45 ₴");
-    await expect(quote).toContainText("доставку ви оплачуєте при отриманні");
+    await expect(quote).toContainText("фактичну вартість ви сплачуєте у відділенні");
 
     // searching a branch by its number
     await page.getByText("Відділення", { exact: true }).click();

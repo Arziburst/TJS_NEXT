@@ -20,6 +20,7 @@ export type QuoteRequest = {
  */
 export function DeliveryQuote({ request }: { request: QuoteRequest | null }) {
   const t = useTranslations("checkout.delivery.quote");
+  const errors = useTranslations("auth.errors");
   const locale = useLocale();
   const [answer, setAnswer] = useState<{ key: string; result: QuoteResult } | null>(null);
 
@@ -47,6 +48,7 @@ export function DeliveryQuote({ request }: { request: QuoteRequest | null }) {
   if (!request) value = t("choose");
   else if (!result) value = t("calculating");
   else if (result.ok) value = t("estimate", { price: formatMoney({ currency: "UAH", amountMinor: result.costMinor, decimals: 2 }, locale) });
+  else if (result.reason === "rateLimited") value = errors("rateLimited");
   else value = t("unavailable");
 
   return (

@@ -54,7 +54,7 @@
       "label": "Bezorging door Nova Poshta",
       "calculating": "Berekenen…",
       "estimate": "≈ {price}",
-      "note": "Een schatting volgens het tarief van Nova Poshta: u betaalt de bezorging bij ontvangst.",
+      "note": "Een schatting volgens het tarief van Nova Poshta voor een kleine doos: u betaalt de werkelijke prijs bij ontvangst op het postkantoor.",
       "unavailable": "De prijs is nu niet beschikbaar: Nova Poshta berekent hem bij ontvangst.",
       "choose": "Kies waar u wilt laten bezorgen om de prijs te zien"
     }

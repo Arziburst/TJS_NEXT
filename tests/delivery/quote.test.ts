@@ -1,8 +1,10 @@
-// The parcel of a cart (D35 and the TBD parameters) and the quote from the recorded tariffs.
+// The parcel of a cart (D35, D37) and the quote from the recorded tariffs.
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createNovaPoshtaClient, type NovaPoshtaRequest } from "@/lib/delivery/nova-poshta/api";
 import {
   NP_MIN_WEIGHT_GRAMS,
+  PACKAGING_BOX_CM,
+  PACKAGING_VOLUME_CM3,
   PACKAGING_WEIGHT_GRAMS,
   PAYER,
   SENDER_CITY_REF,
@@ -25,9 +27,11 @@ describe("parcel parameters", () => {
     expect(PAYER).toBe("Recipient");
   });
 
-  it("keeps the undecided ones at their provisional values (TBD)", () => {
+  it("hands parcels in at a branch and quotes a small box of 10 × 10 × 5 cm and 100 g (D37)", () => {
     expect(SENDER_SERVICE).toBe("Warehouse");
-    expect(PACKAGING_WEIGHT_GRAMS).toBe(0);
+    expect(PACKAGING_WEIGHT_GRAMS).toBe(100);
+    expect(PACKAGING_BOX_CM).toEqual({ length: 10, width: 10, height: 5 });
+    expect(PACKAGING_VOLUME_CM3).toBe(500);
   });
 
   it.each([
@@ -40,18 +44,18 @@ describe("parcel parameters", () => {
 });
 
 describe("parcelFromCart", () => {
-  it("sums weight and declared value over quantities; the declared value is the order total (D35)", () => {
+  it("sums weight over quantities plus the box, and the declared value is the order total (D35, D37)", () => {
     expect(
       parcelFromCart([
         { weightGrams: 35.5, quantity: 2, unitPriceUahMinor: 128900 },
         { weightGrams: 120, quantity: 1, unitPriceUahMinor: 74900 },
       ]),
-    ).toEqual({ weightGrams: 191, declaredValueMinor: 332700 });
+    ).toEqual({ weightGrams: 291, declaredValueMinor: 332700 });
   });
 
-  it("bills at least the API's minimum weight", () => {
+  it("never goes below the API's minimum weight", () => {
     expect(parcelFromCart([{ weightGrams: 0, quantity: 1, unitPriceUahMinor: 50000 }])).toEqual({
-      weightGrams: NP_MIN_WEIGHT_GRAMS,
+      weightGrams: Math.max(NP_MIN_WEIGHT_GRAMS, PACKAGING_WEIGHT_GRAMS),
       declaredValueMinor: 50000,
     });
   });
@@ -81,6 +85,7 @@ describe("quoteDelivery", () => {
       CitySender: KYIV.cityRef,
       CityRecipient: LVIV.cityRef,
       Weight: "1",
+      VolumeGeneral: "0.0005",
       ServiceType: "WarehouseDoors",
       Cost: "1289",
       CargoType: "Parcel",

@@ -54,7 +54,7 @@
       "label": "Livraison par Nova Poshta",
       "calculating": "Calcul en cours…",
       "estimate": "≈ {price}",
-      "note": "Une estimation selon le tarif de Nova Poshta : vous payez la livraison à la réception.",
+      "note": "Une estimation selon le tarif de Nova Poshta pour une petite boîte : vous payez le prix réel au bureau de poste à la réception.",
       "unavailable": "Le prix est indisponible pour le moment : Nova Poshta le calcule à la réception.",
       "choose": "Choisissez le lieu de livraison pour voir le prix"
     }
