@@ -350,11 +350,13 @@ skip_nonce_check = false
 # If enabled, it will allow the user to successfully authenticate when the provider does not return an email address.
 email_optional = false
 
-# Google sign-in: on with GOOGLE_AUTH_ENABLED=true. The switch, client id and secret come from the
-# environment (the shell or the ignored `supabase/.env`), never from this file; the app shows the Google
-# button only when the Auth settings report the provider as enabled.
+# Google sign-in: off until the OAuth client exists. Client id and secret come from the environment
+# (GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET in the shell or the ignored `supabase/.env`), never from this
+# file; to try it locally set `enabled = true` in the worktree copy (docs/dev-environment.md). `enabled`
+# stays a literal: an env() there fails the config parse wherever the variable is unset (CI, other
+# worktrees). The app shows the Google button only when the Auth settings report the provider as enabled.
 [auth.external.google]
-enabled = "env(GOOGLE_AUTH_ENABLED)"
+enabled = false
 client_id = "env(GOOGLE_CLIENT_ID)"
 secret = "env(GOOGLE_CLIENT_SECRET)"
 redirect_uri = ""
