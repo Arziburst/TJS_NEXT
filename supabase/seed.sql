@@ -46,33 +46,55 @@ from (values
 ) as t (slug, locale, name)
 join public.categories c on c.slug = t.slug;
 
--- Synthetic products (not the real catalog, D13 — prices and texts are test values). Product 11 is not
--- available, so it exists only for admins. No images: the files would have to be uploaded to Storage.
-insert into public.products (id, category_id, price_usd, weight_g, available, materials, care, created_at) values
-  ('a0000000-0000-4000-8000-000000000001', 'c0000000-0000-4000-8000-000000000001', 24.90, 6, true,
-   'Brass, gold-tone plating, synthetic coral', 'Keep dry; store separately', now() - interval '1 day'),
-  ('a0000000-0000-4000-8000-000000000002', 'c0000000-0000-4000-8000-000000000001', 18.50, 4, true,
-   'Stainless steel, glass pearl', 'Wipe with a soft cloth', now() - interval '3 days'),
-  ('a0000000-0000-4000-8000-000000000003', 'c0000000-0000-4000-8000-000000000001', 32.00, 9, true,
-   'Brass, gold-tone plating', 'Avoid perfume and water', now() - interval '12 days'),
-  ('a0000000-0000-4000-8000-000000000004', 'c0000000-0000-4000-8000-000000000002', 39.90, 18, true,
-   'Brass, gold-tone plating', 'Keep dry; store flat', now() - interval '2 days'),
-  ('a0000000-0000-4000-8000-000000000005', 'c0000000-0000-4000-8000-000000000002', 45.00, 22, true,
-   'Zinc alloy, crystal', 'Wipe with a soft cloth', now() - interval '20 days'),
-  ('a0000000-0000-4000-8000-000000000006', 'c0000000-0000-4000-8000-000000000003', 21.00, 10, true,
-   'Glass beads, elastic cord', 'Do not overstretch', now() - interval '25 days'),
-  ('a0000000-0000-4000-8000-000000000007', 'c0000000-0000-4000-8000-000000000003', 27.50, 12, true,
-   'Stainless steel', 'Wipe with a soft cloth', now() - interval '30 days'),
-  ('a0000000-0000-4000-8000-000000000008', 'c0000000-0000-4000-8000-000000000004', 54.90, 30, true,
-   'Synthetic coral, silk thread', 'Keep away from water and cosmetics', now() - interval '5 days'),
-  ('a0000000-0000-4000-8000-000000000009', 'c0000000-0000-4000-8000-000000000004', 29.90, 8, true,
-   'Synthetic coral, elastic cord', 'Keep away from water and cosmetics', now() - interval '40 days'),
-  ('a0000000-0000-4000-8000-000000000010', 'c0000000-0000-4000-8000-000000000005', 16.90, 3, true,
-   'Brass, silver-tone plating', 'Remove before washing hands', now() - interval '45 days'),
-  ('a0000000-0000-4000-8000-000000000011', 'c0000000-0000-4000-8000-000000000005', 22.40, 4, false,
-   'Brass, glass stone', 'Remove before washing hands', now() - interval '50 days'),
-  ('a0000000-0000-4000-8000-000000000012', 'c0000000-0000-4000-8000-000000000006', 19.90, 7, true,
-   'Zinc alloy, enamel', 'Store in a pouch', now() - interval '60 days');
+-- Synthetic products (not the real catalog, D13 — SKUs, prices, lead times and texts are test values).
+-- Made-to-order and one-of-a-kind pieces, the latter available, reserved and sold. Hidden from the public:
+-- 11 (draft), 13 (archived), 14 (soft-deleted). No images: the files would have to be uploaded to Storage.
+insert into public.products
+  (id, category_id, sku, status, fulfillment, availability, lead_time_days, price_usd, weight_g, materials, care,
+   created_at, deleted_at)
+values
+  ('a0000000-0000-4000-8000-000000000001', 'c0000000-0000-4000-8000-000000000001', 'TEST-001', 'published',
+   'made_to_order', 'available', null, 24.90, 6, 'Brass, gold-tone plating, synthetic coral',
+   'Keep dry; store separately', now() - interval '1 day', null),
+  ('a0000000-0000-4000-8000-000000000002', 'c0000000-0000-4000-8000-000000000001', 'TEST-002', 'published',
+   'made_to_order', 'available', null, 18.50, 4, 'Stainless steel, glass pearl',
+   'Wipe with a soft cloth', now() - interval '3 days', null),
+  ('a0000000-0000-4000-8000-000000000003', 'c0000000-0000-4000-8000-000000000001', 'TEST-003', 'published',
+   'one_of_a_kind', 'available', null, 32.00, 9, 'Brass, gold-tone plating',
+   'Avoid perfume and water', now() - interval '12 days', null),
+  ('a0000000-0000-4000-8000-000000000004', 'c0000000-0000-4000-8000-000000000002', 'TEST-004', 'published',
+   'made_to_order', 'available', null, 39.90, 18, 'Brass, gold-tone plating',
+   'Keep dry; store flat', now() - interval '2 days', null),
+  ('a0000000-0000-4000-8000-000000000005', 'c0000000-0000-4000-8000-000000000002', 'TEST-005', 'published',
+   'one_of_a_kind', 'reserved', null, 45.00, 22, 'Zinc alloy, crystal',
+   'Wipe with a soft cloth', now() - interval '20 days', null),
+  ('a0000000-0000-4000-8000-000000000006', 'c0000000-0000-4000-8000-000000000003', 'TEST-006', 'published',
+   'made_to_order', 'available', null, 21.00, 10, 'Glass beads, elastic cord',
+   'Do not overstretch', now() - interval '25 days', null),
+  ('a0000000-0000-4000-8000-000000000007', 'c0000000-0000-4000-8000-000000000003', 'TEST-007', 'published',
+   'made_to_order', 'available', 10, 27.50, 12, 'Stainless steel',
+   'Wipe with a soft cloth', now() - interval '30 days', null),
+  ('a0000000-0000-4000-8000-000000000008', 'c0000000-0000-4000-8000-000000000004', 'TEST-008', 'published',
+   'one_of_a_kind', 'sold', null, 54.90, 30, 'Synthetic coral, silk thread',
+   'Keep away from water and cosmetics', now() - interval '5 days', null),
+  ('a0000000-0000-4000-8000-000000000009', 'c0000000-0000-4000-8000-000000000004', 'TEST-009', 'published',
+   'one_of_a_kind', 'available', null, 29.90, 8, 'Synthetic coral, elastic cord',
+   'Keep away from water and cosmetics', now() - interval '40 days', null),
+  ('a0000000-0000-4000-8000-000000000010', 'c0000000-0000-4000-8000-000000000005', 'TEST-010', 'published',
+   'made_to_order', 'available', 14, 16.90, 3, 'Brass, silver-tone plating',
+   'Remove before washing hands', now() - interval '45 days', null),
+  ('a0000000-0000-4000-8000-000000000011', 'c0000000-0000-4000-8000-000000000005', 'TEST-011', 'draft',
+   'made_to_order', 'available', null, 22.40, 4, 'Brass, glass stone',
+   'Remove before washing hands', now() - interval '50 days', null),
+  ('a0000000-0000-4000-8000-000000000012', 'c0000000-0000-4000-8000-000000000006', 'TEST-012', 'published',
+   'made_to_order', 'available', null, 19.90, 7, 'Zinc alloy, enamel',
+   'Store in a pouch', now() - interval '60 days', null),
+  ('a0000000-0000-4000-8000-000000000013', 'c0000000-0000-4000-8000-000000000006', 'TEST-013', 'archived',
+   'one_of_a_kind', 'sold', null, 26.00, 6, 'Brass, enamel',
+   'Store in a pouch', now() - interval '90 days', null),
+  ('a0000000-0000-4000-8000-000000000014', 'c0000000-0000-4000-8000-000000000003', 'TEST-014', 'published',
+   'made_to_order', 'available', null, 23.00, 9, 'Stainless steel',
+   'Wipe with a soft cloth', now() - interval '70 days', now() - interval '1 day');
 
 -- en and uk for every product (entered by hand: human); a few machine translations in other locales,
 -- one of them already reviewed.
@@ -153,4 +175,14 @@ values
   ('a0000000-0000-4000-8000-000000000012', 'en', 'enamel-flower-brooch', 'Enamel flower brooch',
    'A flower-shaped brooch with enamel petals.', null, null, null, 'human', null),
   ('a0000000-0000-4000-8000-000000000012', 'uk', 'emalevana-broshka-kvitka', 'Емалева брошка-квітка',
-   'Брошка у формі квітки з емалевими пелюстками.', null, null, null, 'human', null);
+   'Брошка у формі квітки з емалевими пелюстками.', null, null, null, 'human', null),
+
+  ('a0000000-0000-4000-8000-000000000013', 'en', 'enamel-bird-brooch', 'Enamel bird brooch',
+   'A small bird with enamel wings.', null, null, null, 'human', null),
+  ('a0000000-0000-4000-8000-000000000013', 'uk', 'emalevana-broshka-ptakh', 'Емалева брошка-пташка',
+   'Маленька пташка з емалевими крилами.', null, null, null, 'human', null),
+
+  ('a0000000-0000-4000-8000-000000000014', 'en', 'steel-cuff-bracelet', 'Steel cuff bracelet',
+   'An open cuff in polished steel.', null, null, null, 'human', null),
+  ('a0000000-0000-4000-8000-000000000014', 'uk', 'stalevyi-braslet-manzheta', 'Сталевий браслет-манжета',
+   'Відкритий браслет-манжета з полірованої сталі.', null, null, null, 'human', null);
