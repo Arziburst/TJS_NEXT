@@ -226,8 +226,9 @@ enable_signup = true
 # If enabled, a user will be required to confirm any email change on both the old, and new email
 # addresses. If disabled, only the new email is required to confirm.
 double_confirm_changes = true
-# If enabled, users need to confirm their email address before signing in.
-enable_confirmations = false
+# If enabled, users need to confirm their email address before signing in. On: an account is usable only
+# after the link in the confirmation email (locally the mail catcher, `[local_smtp]`).
+enable_confirmations = true
 # If enabled, users will need to reauthenticate or have logged in recently to change their password.
 secure_password_change = false
 # Controls the minimum amount of time that must pass before sending another signup confirmation or password reset email.
@@ -246,6 +247,17 @@ otp_expiry = 3600
 # pass = "env(SENDGRID_API_KEY)"
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
+
+# The confirmation and recovery links carry a token hash to the app's /<locale>/auth/confirm route, which
+# verifies it on the server (works on any device, unlike the PKCE code of the default links). Production
+# needs the same templates in the dashboard (docs/dev-environment.md).
+[auth.email.template.confirmation]
+subject = "Confirm your email"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your password"
+content_path = "./supabase/templates/recovery.html"
 
 # Uncomment to customize email template
 # [auth.email.template.invite]
@@ -338,12 +350,13 @@ skip_nonce_check = false
 # If enabled, it will allow the user to successfully authenticate when the provider does not return an email address.
 email_optional = false
 
-# Google sign-in: off until the OAuth client exists. Client id and secret come from the environment
-# (the shell or an ignored `supabase/.env`), never from this file.
+# Google sign-in: on with GOOGLE_AUTH_ENABLED=true. The switch, client id and secret come from the
+# environment (the shell or the ignored `supabase/.env`), never from this file; the app shows the Google
+# button only when the Auth settings report the provider as enabled.
 [auth.external.google]
-enabled = false
-client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
-secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+enabled = "env(GOOGLE_AUTH_ENABLED)"
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_CLIENT_SECRET)"
 redirect_uri = ""
 url = ""
 # Required for local sign in with Google.
