@@ -46,6 +46,7 @@
       "phone": "Vul het telefoonnummer met landcode in, bijvoorbeeld +31612345678.",
       "email": "Vul een geldig e-mailadres in.",
       "delivery": "Kies waar de bestelling bezorgd moet worden.",
+      "deliveryAddress": "Klik op ‘Verzending berekenen’ om het bezorgadres te bevestigen.",
       "comment": "De opmerking is te lang.",
       "rateLimited": "Te veel aanvragen. Wacht een paar minuten en probeer het opnieuw.",
       "unavailable": "Helaas zijn deze stuks net door iemand anders besteld: {titles}. Er is niets verstuurd. Verwijder ze uit de winkelwagen en verstuur de aanvraag opnieuw.",
@@ -151,7 +152,8 @@
       "street": "Straat",
       "building": "Huisnummer",
       "flat": "Toevoeging (optioneel)",
-      "submit": "Verzending berekenen"
+      "submit": "Verzending berekenen",
+      "changed": "Het adres is gewijzigd: klik opnieuw op ‘Verzending berekenen’."
     },
     "quote": {
       "label": "Verzending",

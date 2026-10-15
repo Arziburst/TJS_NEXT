@@ -46,6 +46,7 @@
       "phone": "Inserisci il numero di telefono con il prefisso internazionale, ad esempio +393123456789.",
       "email": "Inserisci un indirizzo e-mail valido.",
       "delivery": "Scegli dove consegnare l’ordine.",
+      "deliveryAddress": "Premi «Calcola la spedizione» per confermare l’indirizzo di consegna.",
       "comment": "Il commento è troppo lungo.",
       "rateLimited": "Troppe richieste. Attendi qualche minuto e riprova.",
       "unavailable": "Ci dispiace, questi pezzi sono appena stati ordinati da qualcun altro: {titles}. Non è stato inviato nulla. Rimuovili dal carrello e invia di nuovo la richiesta.",
@@ -151,7 +152,8 @@
       "street": "Via",
       "building": "Numero civico",
       "flat": "Interno (facoltativo)",
-      "submit": "Calcola la spedizione"
+      "submit": "Calcola la spedizione",
+      "changed": "L’indirizzo è cambiato: premi di nuovo «Calcola la spedizione»."
     },
     "quote": {
       "label": "Spedizione",

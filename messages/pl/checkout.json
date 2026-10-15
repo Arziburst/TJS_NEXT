@@ -46,6 +46,7 @@
       "phone": "Podaj numer telefonu z numerem kierunkowym kraju, na przykład +48512345678.",
       "email": "Podaj prawidłowy adres e-mail.",
       "delivery": "Wybierz, gdzie dostarczyć zamówienie.",
+      "deliveryAddress": "Kliknij „Oblicz dostawę”, aby potwierdzić adres dostawy.",
       "comment": "Komentarz jest za długi.",
       "rateLimited": "Zbyt wiele zapytań. Odczekaj kilka minut i spróbuj ponownie.",
       "unavailable": "Niestety te produkty właśnie zamówił ktoś inny: {titles}. Nic nie zostało wysłane. Usuń je z koszyka i wyślij zapytanie ponownie.",
@@ -151,7 +152,8 @@
       "street": "Ulica",
       "building": "Numer domu",
       "flat": "Mieszkanie (opcjonalnie)",
-      "submit": "Oblicz dostawę"
+      "submit": "Oblicz dostawę",
+      "changed": "Adres się zmienił: kliknij ponownie „Oblicz dostawę”."
     },
     "quote": {
       "label": "Dostawa",

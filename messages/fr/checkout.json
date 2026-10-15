@@ -46,6 +46,7 @@
       "phone": "Indiquez le numéro de téléphone avec l’indicatif du pays, par exemple +33612345678.",
       "email": "Indiquez une adresse e-mail valide.",
       "delivery": "Choisissez où livrer la commande.",
+      "deliveryAddress": "Cliquez sur « Calculer la livraison » pour confirmer l’adresse de livraison.",
       "comment": "Le commentaire est trop long.",
       "rateLimited": "Trop de demandes. Veuillez patienter quelques minutes et réessayer.",
       "unavailable": "Désolé, ces pièces viennent d’être commandées par quelqu’un d’autre : {titles}. Rien n’a été envoyé. Retirez-les du panier et envoyez à nouveau la demande.",
@@ -151,7 +152,8 @@
       "street": "Rue",
       "building": "Numéro",
       "flat": "Appartement (facultatif)",
-      "submit": "Calculer la livraison"
+      "submit": "Calculer la livraison",
+      "changed": "L’adresse a changé : cliquez à nouveau sur « Calculer la livraison »."
     },
     "quote": {
       "label": "Livraison",

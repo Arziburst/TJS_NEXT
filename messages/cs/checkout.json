@@ -46,6 +46,7 @@
       "phone": "Zadejte telefonní číslo s předvolbou země, například +420601234567.",
       "email": "Zadejte platnou e-mailovou adresu.",
       "delivery": "Vyberte, kam objednávku doručit.",
+      "deliveryAddress": "Klikněte na „Spočítat doručení“ a potvrďte tak doručovací adresu.",
       "comment": "Komentář je příliš dlouhý.",
       "rateLimited": "Příliš mnoho žádostí. Počkejte několik minut a zkuste to znovu.",
       "unavailable": "Bohužel tyto kusy si právě objednal někdo jiný: {titles}. Nic nebylo odesláno. Odeberte je z košíku a odešlete žádost znovu.",
@@ -151,7 +152,8 @@
       "street": "Ulice",
       "building": "Číslo domu",
       "flat": "Byt (nepovinné)",
-      "submit": "Spočítat doručení"
+      "submit": "Spočítat doručení",
+      "changed": "Adresa se změnila: klikněte znovu na „Spočítat doručení“."
     },
     "quote": {
       "label": "Doručení",

@@ -46,6 +46,7 @@
       "phone": "Introduceți numărul de telefon cu prefixul țării, de exemplu +40712345678.",
       "email": "Introduceți o adresă de e-mail validă.",
       "delivery": "Alegeți unde să fie livrată comanda.",
+      "deliveryAddress": "Apăsați „Calculați livrarea” pentru a confirma adresa de livrare.",
       "comment": "Comentariul este prea lung.",
       "rateLimited": "Prea multe cereri. Așteptați câteva minute și încercați din nou.",
       "unavailable": "Ne pare rău, aceste piese tocmai au fost comandate de altcineva: {titles}. Nu s-a trimis nimic. Eliminați-le din coș și trimiteți din nou cererea.",
@@ -151,7 +152,8 @@
       "street": "Stradă",
       "building": "Număr",
       "flat": "Apartament (opțional)",
-      "submit": "Calculați livrarea"
+      "submit": "Calculați livrarea",
+      "changed": "Adresa s-a schimbat: apăsați din nou „Calculați livrarea”."
     },
     "quote": {
       "label": "Livrare",

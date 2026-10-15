@@ -46,6 +46,7 @@
       "phone": "Geben Sie die Telefonnummer mit Ländervorwahl ein, zum Beispiel +49301234567.",
       "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
       "delivery": "Wählen Sie, wohin die Bestellung geliefert werden soll.",
+      "deliveryAddress": "Klicken Sie auf „Versand berechnen“, um die Lieferadresse zu bestätigen.",
       "comment": "Der Kommentar ist zu lang.",
       "rateLimited": "Zu viele Anfragen. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
       "unavailable": "Leider wurden diese Stücke gerade von jemand anderem bestellt: {titles}. Es wurde nichts gesendet. Entfernen Sie sie aus dem Warenkorb und senden Sie die Anfrage erneut.",
@@ -151,7 +152,8 @@
       "street": "Straße",
       "building": "Hausnummer",
       "flat": "Wohnung (optional)",
-      "submit": "Versand berechnen"
+      "submit": "Versand berechnen",
+      "changed": "Die Adresse hat sich geändert: Klicken Sie erneut auf „Versand berechnen“."
     },
     "quote": {
       "label": "Versand",

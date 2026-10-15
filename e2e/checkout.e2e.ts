@@ -340,6 +340,77 @@ test.describe("order request on the local stack", () => {
     expect(orders.map((o) => o.number)).toEqual([number]);
   });
 
+  test("a courier address abroad edited after its estimate must be calculated again; the order has the edited address", async ({ page, baseURL }) => {
+    const errors = collectErrors(page);
+    await useOwnClientIp(page);
+    const ordered = await createProduct({ fulfillment: "made_to_order", priceUsd: 23 });
+    await guestCart(page, baseURL!, [{ product: ordered, quantity: 1 }]);
+    await open(page, "/en/checkout");
+    const email = uniqueEmail();
+    await fillContact(page, email);
+
+    const ti = en.internationalDelivery;
+    const abroad = page.locator("[data-slot=international-delivery]");
+    await page.getByLabel(ti.country).selectOption("DE");
+    await abroad.getByRole("radio", { name: ti.methods.address }).check();
+    await abroad.getByLabel(ti.address.city).fill("Berlin");
+    await abroad.getByLabel(ti.address.postCode).fill("10115");
+    await abroad.getByLabel(ti.address.street).fill("Invalidenstraße");
+    await abroad.getByLabel(ti.address.building).fill("1");
+
+    // typed but not calculated: no destination yet, and the error says what to do
+    await page.getByRole("button", { name: t.submit }).click();
+    await expect(page.getByText(t.errors.deliveryAddress)).toBeVisible();
+    expect(await ordersOf(email)).toEqual([]);
+
+    await abroad.getByRole("button", { name: ti.address.submit }).click();
+    await expect(abroad.locator("[data-slot=quote-line]")).toHaveAttribute("data-source", "carrier");
+    await expect(page.getByText(t.errors.deliveryAddress)).toHaveCount(0);
+
+    // an edit after calculating drops the estimate and the destination until it is calculated again
+    await abroad.getByLabel(ti.address.street).fill("Chausseestraße");
+    await abroad.getByLabel(ti.address.building).fill("99");
+    await expect(abroad.locator("[data-slot=address-changed]")).toHaveText(ti.address.changed);
+    await expect(abroad.locator("[data-slot=quote-line]")).not.toHaveAttribute("data-source", /.+/);
+    await page.getByRole("button", { name: t.submit }).click();
+    await expect(page.getByText(t.errors.deliveryAddress)).toBeVisible();
+    expect(await ordersOf(email)).toEqual([]);
+
+    await abroad.getByRole("button", { name: ti.address.submit }).click();
+    await expect(abroad.locator("[data-slot=quote-line]")).toHaveAttribute("data-source", "carrier");
+    await expect(abroad.locator("[data-slot=address-changed]")).toHaveCount(0);
+    await page.getByRole("button", { name: t.submit }).click();
+    await expect(page).toHaveURL(/\/en\/checkout\/done\?order=\d+$/);
+
+    const { data, error } = await admin!.from("orders").select("delivery_method, delivery_destination").eq("email", email).single();
+    expect(error).toBeNull();
+    expect(data).toEqual({
+      delivery_method: "address",
+      delivery_destination: { city: "Berlin", postCode: "10115", street: "Chausseestraße", building: "99", flat: null },
+    });
+    expect(errors).toEqual([]);
+  });
+
+  test("the only piece of the request ordered by someone else meanwhile: its name stays on screen", async ({ page, baseURL }) => {
+    const errors = collectErrors(page);
+    await useOwnClientIp(page);
+    const unique = await createProduct({ fulfillment: "one_of_a_kind", priceUsd: 61 });
+    await guestCart(page, baseURL!, [{ product: unique, quantity: 1 }]);
+    await open(page, "/en/checkout");
+    const email = uniqueEmail();
+    await fillContact(page, email);
+    await chooseKyivBranch(page);
+
+    expect((await admin!.from("products").update({ availability: "sold" }).eq("id", unique.id)).error).toBeNull();
+    await page.getByRole("button", { name: t.submit }).click();
+    await expect(page.getByTestId("checkout-error")).toHaveText(t.errors.unavailable.replace("{titles}", unique.title));
+    // still there a moment later: nothing replaces the form with the empty state
+    await page.waitForLoadState("networkidle");
+    await expect(page.getByTestId("checkout-error")).toHaveText(t.errors.unavailable.replace("{titles}", unique.title));
+    expect(await ordersOf(email)).toEqual([]);
+    expect(errors).toEqual([]);
+  });
+
   test("a piece ordered by someone else meanwhile refuses the request with its name; nothing is stored", async ({ page, baseURL }) => {
     const errors = collectErrors(page);
     await useOwnClientIp(page);

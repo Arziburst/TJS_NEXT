@@ -46,6 +46,7 @@
       "phone": "Indica el número de teléfono con el prefijo del país, por ejemplo +34612345678.",
       "email": "Indica una dirección de correo válida.",
       "delivery": "Elige dónde entregar el pedido.",
+      "deliveryAddress": "Pulsa «Calcular el envío» para confirmar la dirección de entrega.",
       "comment": "El comentario es demasiado largo.",
       "rateLimited": "Demasiadas solicitudes. Espera unos minutos e inténtalo de nuevo.",
       "unavailable": "Lo sentimos, otra persona acaba de pedir estas piezas: {titles}. No se ha enviado nada. Quítalas del carrito y vuelve a enviar la solicitud.",
@@ -151,7 +152,8 @@
       "street": "Calle",
       "building": "Número",
       "flat": "Piso (opcional)",
-      "submit": "Calcular el envío"
+      "submit": "Calcular el envío",
+      "changed": "La dirección ha cambiado: pulsa de nuevo «Calcular el envío»."
     },
     "quote": {
       "label": "Envío",

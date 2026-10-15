@@ -98,6 +98,8 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
   const [country, setCountry] = useState<CheckoutCountry | null>(defaultCountry);
   const [novaPoshta, setNovaPoshta] = useState<NovaPoshtaSelection | null>(null);
   const [novaPost, setNovaPost] = useState<NovaPostSelection | null>(null);
+  // a courier address abroad typed or edited but not calculated: the delivery error says to calculate it
+  const [addressPending, setAddressPending] = useState(false);
   const [comment, setComment] = useState("");
   const [errors, setErrors] = useState<Partial<Record<CheckoutField, true>>>({});
   const [formError, setFormError] = useState<FormError>(null);
@@ -149,7 +151,12 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
         // only hidden parts were refused (the page is out of date): the generic error
         return result.fields.length > 0 ? null : { text: tr("errors.unexpected"), refresh: true };
       case "unavailable":
-        return { text: tr("errors.unavailable", { titles: result.titles.join(", ") }), refresh: true };
+        // a refresh drops the refused pieces from the summary; when nothing else is left it would replace the
+        // form (and this message) with the empty state, so the message naming them stays instead
+        return {
+          text: tr("errors.unavailable", { titles: result.titles.join(", ") }),
+          refresh: result.titles.length < expected.length,
+        };
       case "cartChanged":
         return { text: tr("errors.cartChanged"), refresh: true };
       case "emptyCart":
@@ -199,7 +206,7 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
     if (!shown[field]) return null;
     return (
       <p id={`${formId}-${field}-error`} className="font-input text-sm text-accent-text">
-        {tr(`errors.${field}`)}
+        {field === "delivery" && country !== "UA" && addressPending ? tr("errors.deliveryAddress") : tr(`errors.${field}`)}
       </p>
     );
   }
@@ -271,6 +278,7 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
               setCountry(next.code);
               setNovaPoshta(null);
               setNovaPost(null);
+              setAddressPending(false);
             }}
             className="h-11 w-full cursor-pointer rounded-none border-2 border-input bg-transparent px-2.5 font-input text-base text-foreground transition outline-none hover:opacity-70 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-invalid:border-accent sm:text-sm"
             {...errorProps("delivery")}
@@ -296,6 +304,7 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
             goods={goods}
             fixedCountry={country}
             onChange={setNovaPost}
+            onAddressPendingChange={setAddressPending}
           />
         ) : null}
         {fieldError("delivery")}

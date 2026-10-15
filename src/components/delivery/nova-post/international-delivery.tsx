@@ -31,8 +31,13 @@ type InternationalDeliveryProps = {
   // the country is chosen outside (the checkout's own country field): no country select here
   fixedCountry?: DeliveryCountry;
   onChange?: (selection: NovaPostSelection | null) => void;
+  // true while courier address fields are filled or edited but not calculated: no destination is chosen yet
+  onAddressPendingChange?: (pending: boolean) => void;
   className?: string;
 };
+
+// The courier address: nothing typed, typed but not calculated, calculated, or edited after calculating
+type AddressState = "empty" | "draft" | "calculated" | "changed";
 
 type QuoteState = { quote: QuoteView | null; failure: QuoteFailure | null };
 
@@ -48,6 +53,7 @@ export function InternationalDelivery({
   defaultCountry,
   fixedCountry,
   onChange,
+  onAddressPendingChange,
   className,
 }: InternationalDeliveryProps) {
   const t = useTranslations("checkout.internationalDelivery");
@@ -58,6 +64,7 @@ export function InternationalDelivery({
   const [settlement, setSettlement] = useState<Settlement | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
   const [state, setState] = useState<QuoteState>({ quote: null, failure: null });
+  const [address, setAddress] = useState<AddressState>("empty");
   const [isPending, startTransition] = useTransition();
   const request = useRef(0);
 
@@ -86,9 +93,25 @@ export function InternationalDelivery({
     });
   }
 
-  function submitAddress(address: AddressValue) {
-    if (country) onChange?.({ kind: "address", country, address });
-    estimate({ kind: "address", ...address, flat: address.flat || undefined });
+  function changeAddressState(next: AddressState) {
+    setAddress(next);
+    onAddressPendingChange?.(next === "draft" || next === "changed");
+  }
+
+  function submitAddress(value: AddressValue) {
+    changeAddressState("calculated");
+    if (country) onChange?.({ kind: "address", country, address: value });
+    estimate({ kind: "address", ...value, flat: value.flat || undefined });
+  }
+
+  // the chosen address is always the one in the fields: an edit after calculating drops it and its estimate
+  function editAddress() {
+    if (address === "calculated") {
+      reset();
+      changeAddressState("changed");
+    } else if (address === "empty") {
+      changeAddressState("draft");
+    }
   }
 
   return (
@@ -101,6 +124,7 @@ export function InternationalDelivery({
             setCountry(next);
             setSettlement(null);
             setDivision(null);
+            changeAddressState("empty");
             reset();
           }}
         />
@@ -121,6 +145,7 @@ export function InternationalDelivery({
                     onChange={() => {
                       setMethod(option);
                       setDivision(null);
+                      changeAddressState("empty");
                       reset();
                     }}
                     className="size-4 accent-primary"
@@ -163,7 +188,14 @@ export function InternationalDelivery({
               ) : null}
             </>
           ) : (
-            <AddressForm key={country} pending={isPending} onSubmit={submitAddress} />
+            <div className="grid gap-3">
+              <AddressForm key={country} pending={isPending} onSubmit={submitAddress} onEdit={editAddress} />
+              {address === "changed" ? (
+                <p role="status" data-slot="address-changed" className="font-input text-sm">
+                  {t("address.changed")}
+                </p>
+              ) : null}
+            </div>
           )}
 
           <div className="grid gap-3 border-t-2 border-hairline pt-4">

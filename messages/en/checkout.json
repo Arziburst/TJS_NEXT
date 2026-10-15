@@ -46,6 +46,7 @@
       "phone": "Enter the phone number with the country code, for example +380501234567.",
       "email": "Enter a valid email address.",
       "delivery": "Choose where to deliver the order.",
+      "deliveryAddress": "Press “Calculate delivery” to confirm the delivery address.",
       "comment": "The comment is too long.",
       "rateLimited": "Too many requests. Please wait a few minutes and try again.",
       "unavailable": "Sorry, these pieces have just been ordered by someone else: {titles}. Nothing was sent. Remove them from the cart and send the request again.",
@@ -151,7 +152,8 @@
       "street": "Street",
       "building": "House number",
       "flat": "Flat (optional)",
-      "submit": "Calculate delivery"
+      "submit": "Calculate delivery",
+      "changed": "The address has changed: press “Calculate delivery” again."
     },
     "quote": {
       "label": "Delivery",
