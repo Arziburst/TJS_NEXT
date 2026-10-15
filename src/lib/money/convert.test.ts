@@ -7,8 +7,10 @@ import {
   hasMovedBeyond,
   nextDisplayRate,
   rawMinor,
+  USD_DECIMALS,
   type CurrencySettings,
 } from "./convert";
+import { parseDecimal, pow10 } from "./decimal";
 
 // The rows seeded by supabase/migrations/20261016001400_money_display.sql (D4)
 const wholeEndingNine: CurrencySettings = {
@@ -52,19 +54,21 @@ describe("rawMinor", () => {
     { name: "zero", usd: 0, rate: "44.9801", markup: 300, expected: 0 },
     { name: "identity without markup", usd: 2990, rate: "1", markup: 0, expected: 2990 },
     { name: "3 % markup", usd: 1000, rate: "1", markup: 300, expected: 1030 },
-    { name: "UAH $27.80", usd: 2780, rate: "44.9801", markup: 300, expected: 128796 },
+    // D28: always up to the next minor unit, so the markup is never cut by rounding
+    { name: "UAH $27.80 (1 287.960 18 ₴)", usd: 2780, rate: "44.9801", markup: 300, expected: 128797 },
     { name: "EUR $32", usd: 3200, rate: "0.8934319589", markup: 300, expected: 2945 },
     { name: "half a cent rounds up", usd: 1, rate: "0.5", markup: 0, expected: 1 },
-    { name: "just under half a cent rounds down", usd: 1, rate: "0.4999999999", markup: 0, expected: 0 },
-    { name: "a tiny price keeps its cents", usd: 1, rate: "44.9801", markup: 300, expected: 46 },
+    { name: "any fraction of a cent rounds up", usd: 1, rate: "0.0000000001", markup: 0, expected: 1 },
+    { name: "an exact cent stays", usd: 1, rate: "1", markup: 0, expected: 1 },
+    { name: "a tiny price keeps its cents", usd: 1, rate: "44.9801", markup: 300, expected: 47 },
     { name: "the largest safe price", usd: Number.MAX_SAFE_INTEGER, rate: "1", markup: 0, expected: Number.MAX_SAFE_INTEGER },
   ])("$name", ({ usd, rate, markup, expected }) => {
     expect(rawMinor(usd, rate, { decimals: 2, markupBps: markup })).toBe(expected);
   });
 
   it("scales between minor units of different exponents", () => {
-    expect(rawMinor(1234, "1", { decimals: 0, markupBps: 0 })).toBe(12);
-    expect(rawMinor(1250, "1", { decimals: 0, markupBps: 0 })).toBe(13);
+    expect(rawMinor(1234, "1", { decimals: 0, markupBps: 0 })).toBe(13);
+    expect(rawMinor(1200, "1", { decimals: 0, markupBps: 0 })).toBe(12);
     expect(rawMinor(1234, "1", { decimals: 3, markupBps: 0 })).toBe(12340);
   });
 
@@ -157,6 +161,39 @@ describe("convertUsd at the NBU rates of 2026-10-15", () => {
     { currency: "EUR", usd: 100_000_00, expected: 92_029_00 },
   ])("$currency $usd → $expected", ({ currency, usd, expected }) => {
     expect(convertUsd(usd, RATES[currency], SETTINGS[currency])).toBe(expected);
+  });
+});
+
+describe("the markup is a minimum, for every display currency (D28)", () => {
+  const currencies = Object.keys(SETTINGS) as Currency[];
+  // 2806: $28.06 × 1.03 = $28.9018, which a half-up raw price turned into $28.90, under the markup
+  const prices = [1, 99, 100, 2780, 2806, 2900, 2990, 3200, 9699, 9700, 15000, 99_999, 250_000];
+
+  // exact: displayed / 10^decimals ≥ usd / 100 × rate × (1 + markup), compared in integers
+  it.each(currencies)("%s is never below usd × rate × (1 + markup)", (currency) => {
+    const settings = SETTINGS[currency];
+    const rate = parseDecimal(RATES[currency]);
+    if (!rate) throw new Error("bad rate");
+    for (const usd of prices) {
+      const shown = convertUsd(usd, RATES[currency], settings);
+      const lhs = BigInt(shown) * pow10(rate.scale) * BigInt(10_000) * pow10(USD_DECIMALS);
+      const rhs = BigInt(usd) * rate.units * BigInt(10_000 + settings.markupBps) * pow10(settings.decimals);
+      expect(lhs >= rhs, `${currency} ${usd} → ${shown}`).toBe(true);
+    }
+  });
+
+  it("charm rounding never rounds down", () => {
+    for (const currency of currencies) {
+      for (let price = 1; price < 30_000; price += 7) {
+        expect(charmRound(price, SETTINGS[currency])).toBeGreaterThanOrEqual(price);
+      }
+    }
+  });
+
+  it("USD prices carry the markup too: $29.90 shows as $30.90, not $29.90", () => {
+    expect(convertUsd(2990, RATES.USD, SETTINGS.USD)).toBe(3090);
+    expect(convertUsd(2990, RATES.USD, { ...SETTINGS.USD, markupBps: 0 })).toBe(2990);
+    expect(convertUsd(2806, RATES.USD, SETTINGS.USD)).toBe(2990);
   });
 });
 

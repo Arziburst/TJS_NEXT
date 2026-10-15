@@ -70,7 +70,7 @@ export async function Pagination({ pathname, query, total }: PaginationProps) {
                     href={at(item)}
                     aria-label={t("pagination.page", { page: item })}
                     aria-current={item >= query.from && item <= query.page ? "page" : undefined}
-                    className="inline-flex size-11 items-center justify-center font-semibold tabular-nums transition hover:opacity-70 aria-[current=page]:text-accent"
+                    className="inline-flex size-11 items-center justify-center font-semibold tabular-nums transition hover:opacity-70 aria-[current=page]:text-accent-text"
                   >
                     {pad(item)}
                   </Link>

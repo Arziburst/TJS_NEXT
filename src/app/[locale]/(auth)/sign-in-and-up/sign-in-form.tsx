@@ -40,7 +40,7 @@ export function SignInForm({ next }: { next?: string }) {
         error={fieldError(errors?.password)}
       />
       <SubmitButton>{t("submit")}</SubmitButton>
-      <Link href="/forgot-password" className="justify-self-center font-input text-sm underline underline-offset-4 hover:text-accent">
+      <Link href="/forgot-password" className="justify-self-center font-input text-sm underline underline-offset-4 hover:text-accent-text">
         {t("forgotPassword")}
       </Link>
     </form>

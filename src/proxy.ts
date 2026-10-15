@@ -1,5 +1,6 @@
 import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
+import { supportedAcceptLanguage } from "./i18n/accept-language";
 import { routing } from "./i18n/routing";
 import { rewriteUnknownCategory } from "./lib/catalog/unknown-category";
 import { refreshSession } from "./lib/supabase/proxy";
@@ -7,12 +8,22 @@ import { productNotFoundOrRedirect } from "./proxy/product-not-found";
 
 const intl = createMiddleware(routing);
 
+// D27: next-intl negotiates only among the browser languages we serve, so any other one lands on /en
+function withSupportedLanguages(request: NextRequest): NextRequest {
+  const supported = supportedAcceptLanguage(request.headers.get("accept-language"));
+  if (supported) request.headers.set("accept-language", supported);
+  else request.headers.delete("accept-language");
+  return request;
+}
+
 // Session refresh first (it updates the request cookies the next steps forward), then the catalog rewrites
 // and redirects or locale routing; the refreshed cookies are set on whichever response that returns.
 export default async function proxy(request: NextRequest) {
   const applySession = await refreshSession(request);
   return applySession(
-    rewriteUnknownCategory(request) ?? (await productNotFoundOrRedirect(request)) ?? intl(request),
+    rewriteUnknownCategory(request) ??
+      (await productNotFoundOrRedirect(request)) ??
+      intl(withSupportedLanguages(request)),
   );
 }
 
