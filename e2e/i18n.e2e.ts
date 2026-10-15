@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import deCommon from "../messages/de/common.json" with { type: "json" };
+import deErrors from "../messages/de/errors.json" with { type: "json" };
 import de from "../messages/de/home.json" with { type: "json" };
 import deNav from "../messages/de/nav.json" with { type: "json" };
 import enErrors from "../messages/en/errors.json" with { type: "json" };
@@ -7,6 +8,9 @@ import enNav from "../messages/en/nav.json" with { type: "json" };
 import fr from "../messages/fr/home.json" with { type: "json" };
 import uk from "../messages/uk/home.json" with { type: "json" };
 import ukNav from "../messages/uk/nav.json" with { type: "json" };
+import { NAV_LEFT, NAV_RIGHT } from "../src/components/layout/nav-items";
+import { routes } from "../src/config/routes";
+import { allRouteKeys, expectOnlyEnabledRouteLinks } from "./routes";
 
 const locales = ["uk", "en", "de", "fr", "es", "it", "pl", "nl", "cs", "pt", "ro"];
 
@@ -66,6 +70,16 @@ test("the 404 for an unknown locale uses the en messages", async ({ request }) =
   expect(await response.text()).toContain(enErrors.notFound.title);
 });
 
+test("the 404 under a locale is server-rendered in that locale with a localized title", async ({ request }) => {
+  const response = await request.get("/de/does-not-exist");
+  expect(response.status()).toBe(404);
+  const html = await response.text();
+  // in the HTML itself, not filled in by client JavaScript
+  expect(html).toContain('<html lang="de"');
+  expect(html).toContain(`<title>${deErrors.notFound.title} | ${deCommon.brand}</title>`);
+  expect(html).toContain(deErrors.notFound.description);
+});
+
 test("the home page has a canonical and 12 hreflang links", async ({ request }) => {
   const html = await (await request.get("/de")).text();
   const hreflangs = [...html.matchAll(/<link rel="alternate" hrefLang="([^"]+)" href="([^"]+)"/g)].map(
@@ -85,19 +99,27 @@ test("the shell (header, menu, footer) is localized", async ({ page }, testInfo)
   const isMobile = testInfo.project.name === "mobile";
   await page.goto("/de");
   const header = page.locator("header");
+  const navItems = [...NAV_LEFT, ...NAV_RIGHT];
 
-  await expect(header.getByRole("link", { name: deNav.cart }).filter({ visible: true })).toBeVisible();
+  await expectOnlyEnabledRouteLinks(header, "de", allRouteKeys);
+  if (routes.cart.enabled) {
+    await expect(header.getByRole("link", { name: deNav.cart }).filter({ visible: true })).toBeVisible();
+  }
   if (isMobile) {
     await header.getByRole("button", { name: deNav.openMenu }).click();
     const menu = page.getByRole("dialog");
     await expect(menu.getByRole("navigation", { name: deNav.main })).toBeVisible();
     await expect(menu.getByRole("combobox", { name: deNav.language })).toBeVisible();
-    await expect(menu.getByRole("link", { name: deNav.aboutUs })).toHaveAttribute("href", "/de/about-us");
+    for (const item of navItems) {
+      await expect(menu.getByRole("link", { name: deNav[item.labelKey] })).toHaveAttribute("href", `/de${item.href}`);
+    }
     await page.keyboard.press("Escape");
   } else {
     const nav = header.getByRole("navigation", { name: deNav.main });
-    await expect(nav.getByRole("link", { name: deNav.aboutUs })).toHaveAttribute("href", "/de/about-us");
-    await expect(header.getByRole("link", { name: deNav.account })).toBeVisible();
+    for (const item of navItems) {
+      await expect(nav.getByRole("link", { name: deNav[item.labelKey] })).toHaveAttribute("href", `/de${item.href}`);
+    }
+    if (routes.signIn.enabled) await expect(header.getByRole("link", { name: deNav.account })).toBeVisible();
   }
   await expect(page.locator("footer").last()).toContainText(deCommon.footer.rights);
   expect(errors).toEqual([]);
