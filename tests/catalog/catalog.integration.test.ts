@@ -108,11 +108,13 @@ describe.skipIf(!stack)("catalog data layer on the local stack", async () => {
     const result = await getProductBySlug("uk", "serezhky-krapli-z-koralom");
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.data.images.map((i) => [i.width, i.height, i.alt])).toEqual([
+    // the images this test inserted, in gallery order (npm run seed:images may have added others)
+    const inserted = result.data.images.filter((i) => imageIds.includes(i.id));
+    expect(inserted.map((i) => [i.width, i.height, i.alt])).toEqual([
       [800, 1000, "Перше фото"],
       [600, 600, "Сережки-краплі з коралом на бежевому тлі"],
     ]);
-    expect(result.data.images[0]?.url).toMatch(/\/storage\/v1\/object\/public\/product-images\/it\/.+\/1\.jpg$/);
+    expect(inserted[0]?.url).toMatch(/\/storage\/v1\/object\/public\/product-images\/it\/.+\/1\.jpg$/);
     expect(result.data).toMatchObject({
       sku: "TEST-001",
       materials: "Латунь, золотисте покриття, синтетичний корал",

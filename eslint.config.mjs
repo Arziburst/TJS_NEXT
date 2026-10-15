@@ -5,7 +5,9 @@ import nextTs from "eslint-config-next/typescript";
 // a string is user-visible text when it holds a letter (Latin, Latin-1/Extended, Cyrillic)
 const letter = "/[A-Za-z\\u00C0-\\u024F\\u0400-\\u04FF]/";
 // JSX attributes a user reads or hears
-const textAttribute = "/^(alt|title|placeholder|aria-label|aria-description|aria-placeholder|aria-roledescription|aria-valuetext)$/";
+const textAttribute = "/^(alt|title|aria-label|aria-description|aria-placeholder|aria-roledescription|aria-valuetext)$/";
+// placeholder is text on inputs, but next/image's <Image placeholder="blur"> names a loading mode
+const placeholderAttribute = "JSXOpeningElement:not([name.name='Image']) > JSXAttribute[name.name='placeholder']";
 // object keys that carry user text in .ts modules and metadata/config objects (nav items, zod, toasts, metadata)
 const textKey = "/^(alt|title|placeholder|label|description|message|text|caption|tooltip|ariaLabel|aria-label)$/";
 const literalText = (parent, message) => [
@@ -38,6 +40,8 @@ const eslintConfig = defineConfig([
         "error",
         ...literalText(`JSXAttribute[name.name=${textAttribute}]`, textInAttribute),
         ...literalText(`JSXAttribute[name.name=${textAttribute}] > JSXExpressionContainer`, textInAttribute),
+        ...literalText(placeholderAttribute, textInAttribute),
+        ...literalText(`${placeholderAttribute} > JSXExpressionContainer`, textInAttribute),
         ...literalText(`Property[key.name=${textKey}]`, textInModule),
         ...literalText(`Property[key.value=${textKey}]`, textInModule),
         ...literalText("CallExpression[callee.name='toast']", textInModule),

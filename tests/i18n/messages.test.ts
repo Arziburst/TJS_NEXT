@@ -75,6 +75,8 @@ describe("message catalogs", () => {
       shown: 12,
       total: 40,
       index: 1,
+      count: 5,
+      days: 3,
       page: 2,
       category: "Rings",
       url: "https://example.com/a.jpg",

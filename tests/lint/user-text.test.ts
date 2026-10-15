@@ -44,6 +44,16 @@ describe("user-visible text lint", () => {
     );
   });
 
+  it("passes next/image's placeholder loading mode but still checks its alt", async () => {
+    const image = (props: string) =>
+      `import Image from "next/image";\nexport const A = () => <Image src="/a.png" width={1} height={1} ${props} />;\n`;
+    expect(await ruleIds(image('alt="" placeholder="blur"'), "src/components/a.tsx")).toEqual([]);
+    expect(await ruleIds(image("alt=\"\" placeholder={blur ? \"blur\" : \"empty\"}"), "src/components/a.tsx")).toEqual([]);
+    expect(await ruleIds(image('alt="Ring"'), "src/components/a.tsx")).toContain("no-restricted-syntax");
+    const input = 'export const A = () => <input placeholder="Search" />;\n';
+    expect(await ruleIds(input, "src/components/a.tsx")).toContain("no-restricted-syntax");
+  });
+
   it("leaves the dev-only ui-kit page alone", async () => {
     const tsx = 'export default function Page() {\n  return <button aria-label="Close" type="button" />;\n}\n';
     expect(await ruleIds(tsx, "src/app/[locale]/ui-kit/page.tsx")).toEqual([]);

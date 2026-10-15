@@ -38,6 +38,7 @@ reservations; a change of the port base is a coordinator decision.
 | `npm run supabase:start:worktree` | Starts this worktree's stack `tjs-<n>` (n from the folder name) and writes `.env.local`. Safe to re-run. |
 | `npm run supabase:start:worktree -- 207` | The same with an explicit task number (for a folder without a leading number). |
 | `npm run db:reset` | Recreates the database: migrations, then `supabase/seed.sql`. |
+| `npm run seed:images` | Generates 3 photos per seeded product (PNG, 800×800, with a blur placeholder), uploads them to the `product-images` bucket under `seed/<product id>/` and upserts their `product_images` rows. Reads `.env.local` (service-role key), refuses a non-loopback URL; idempotent. Run after `db:reset`; the Playwright setup (`e2e/global-setup.ts`) runs it whenever a local stack is configured. |
 | `npm run test:db` | pgTAP tests in `supabase/tests/` (`supabase test db`). |
 | `npm run db:types` | Regenerates `src/lib/supabase/database.types.ts` from the local schema; commit it with the migration. |
 | `npm run supabase:status` | URLs and keys of the stack this checkout points at. |
@@ -53,6 +54,7 @@ Typical flow in a new worktree:
 npm ci
 npm run supabase:start:worktree   # tjs-<n> up, .env.local written
 npm run db:reset
+npm run seed:images              # product photos (Storage files cannot be seeded by SQL)
 npm run test:db
 npm run dev -- -p 3008            # 3000 + n
 # … work …

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { allRouteKeys, expectOnlyEnabledRouteLinks, mobileMenuRouteKeys } from "./routes";
+import { shellRouteKeys, expectOnlyEnabledRouteLinks, mobileMenuRouteKeys } from "./routes";
 
 function collectErrors(page: Page): string[] {
   const errors: string[] = [];
@@ -18,7 +18,7 @@ test.describe("layout shell", () => {
     const isDesktop = testInfo.project.name === "desktop";
 
     await expect(header.getByRole("link", { name: "TJS" })).toBeVisible();
-    await expectOnlyEnabledRouteLinks(header, "en", allRouteKeys);
+    await expectOnlyEnabledRouteLinks(header, "en", shellRouteKeys);
     await expect(header.getByRole("navigation", { name: "Main" })).toBeVisible({ visible: isDesktop });
     await expect(header.getByRole("button", { name: "Open menu" })).toBeVisible({ visible: !isDesktop });
     await expect(page.locator("footer").first()).toBeVisible();

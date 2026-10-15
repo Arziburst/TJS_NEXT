@@ -11,5 +11,23 @@
     "alt": "Immagine del prodotto",
     "numberedAlt": "Immagine {index} del prodotto",
     "byUrlAlt": "Immagine dall’URL {url}"
+  },
+  "page": {
+    "materials": "Materiali",
+    "care": "Cura",
+    "weight": "Peso",
+    "leadTime": "Realizzato in {days, plural, one {# giorno} other {# giorni}}",
+    "oneOfAKind": "Pezzo unico",
+    "reserved": "Riservato",
+    "sold": "Venduto",
+    "addToCartFailed": "Non è stato possibile aggiungere il prodotto al carrello. Riprova.",
+    "untranslated": "Questo prodotto non è ancora tradotto nella tua lingua; è mostrato in inglese.",
+    "gallery": {
+      "label": "Foto del prodotto",
+      "previous": "Foto precedente",
+      "next": "Foto successiva",
+      "goTo": "Mostra la foto {index} di {count}",
+      "empty": "Ancora nessuna foto"
+    }
   }
 }
