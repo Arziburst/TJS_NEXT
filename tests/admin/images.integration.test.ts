@@ -50,7 +50,7 @@ describe.skipIf(!stack)("admin product photos on the local stack", async () => {
     if (!created.ok) throw new Error("no signed upload URL");
     const response = await fetch(created.signedUrl, {
       method: "PUT",
-      body: bytes,
+      body: new Uint8Array(bytes),
       headers: { "content-type": contentType, "x-upsert": "false" },
     });
     return { uploadId: created.uploadId, response };

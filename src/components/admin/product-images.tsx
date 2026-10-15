@@ -260,7 +260,12 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
         <p className="font-input text-sm">{tForm("noPhotos")}</p>
       ) : (
         <>
-          {ordered.length > 1 && <p className="font-input text-xs">{t("orderHint")}</p>}
+          {ordered.length > 1 && (
+            <>
+              <p className="font-input text-xs sb:hidden">{t("orderHintButtons")}</p>
+              <p className="hidden font-input text-xs sb:block">{t("orderHint")}</p>
+            </>
+          )}
           <ol className="grid gap-3 sb:grid-cols-4" aria-busy={pending}>
             {ordered.map((image, index) => {
               const number = index + 1;
@@ -316,7 +321,6 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
                         size="sm"
                         className="justify-self-start"
                         disabled={busy}
-                        aria-label={t("makeMainOf", { index: number })}
                         onClick={() => reorder(move(ordered, index, 0))}
                       >
                         <StarIcon aria-hidden />

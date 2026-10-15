@@ -99,6 +99,9 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
             saveProduct={saveProduct}
             photos={
               <ProductImages
+                // its actions refresh() the page; the re-sent element lands among the form's children, which React
+                // then checks for keys (dev warning without one)
+                key="photos"
                 productId={product.data.id}
                 images={product.data.images}
                 altDefaults={product.data.imageAltDefaults}
