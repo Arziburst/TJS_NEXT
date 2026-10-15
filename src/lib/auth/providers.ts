@@ -18,7 +18,12 @@ export async function getAuthProviders(): Promise<AuthProviders> {
     return { google: false };
   }
   try {
-    const response = await fetch(`${url}/auth/v1/settings`, { headers: { apikey: anonKey } });
+    // no-store: never the build's fetch cache, which would serve a previous build's settings (docs/standards.md);
+    // inside "use cache" it does not make the scope dynamic, the cacheLife below decides freshness
+    const response = await fetch(`${url}/auth/v1/settings`, {
+      headers: { apikey: anonKey },
+      cache: "no-store",
+    });
     if (!response.ok) throw new Error(`auth settings answered ${response.status}`);
     const settings = (await response.json()) as { external?: Record<string, unknown> };
     cacheLife("minutes");

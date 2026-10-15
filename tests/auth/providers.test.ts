@@ -44,7 +44,11 @@ describe("getAuthProviders", () => {
     fetchMock.mockResolvedValue(Response.json({ external: { google: true } }));
     expect(await getAuthProviders()).toEqual({ google: true });
     expect(cacheLife.mock.calls).toEqual([["minutes"]]);
-    expect(fetchMock).toHaveBeenCalledWith("https://auth.test/auth/v1/settings", { headers: { apikey: "anon" } });
+    // no-store keeps the read out of the build's fetch cache (docs/standards.md)
+    expect(fetchMock).toHaveBeenCalledWith("https://auth.test/auth/v1/settings", {
+      headers: { apikey: "anon" },
+      cache: "no-store",
+    });
   });
 
   it("keeps the settings for minutes when Google is off", async () => {
