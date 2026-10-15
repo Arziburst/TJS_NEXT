@@ -6,14 +6,15 @@ Starts this worktree's own Supabase stack tjs-<n> and writes its .env.local.
 .DESCRIPTION
 n is the leading number of the worktree folder (<n>-<type>-<slug>) or -IssueNumber.
 Ports: base 41000 + (n mod 200) * 10 (shadow +0, API +1, DB +2, Studio +3, mail +4, analytics +7,
-pooler +9), dev server 3000 + n. Refuses to start when a port is in a Windows excluded range or in use.
-Rewrites the worktree's supabase/config.toml (project_id, ports, auth URLs) and marks it skip-worktree
+pooler +9, edge-runtime inspector +8), dev server 3000 + n. Refuses to start when a port is in a Windows
+excluded range or in use.
+Rewrites the worktree's supabase/config.toml (project_id, ports, inspector port, auth URLs) and marks it skip-worktree
 so the rewrite is never committed; runs `supabase start`; writes the stack's values into a managed
 block of .env.local. Safe to re-run.
 
 .EXAMPLE
 npm run supabase:start:worktree
-npm run supabase:start:worktree -- -IssueNumber 207
+npm run supabase:start:worktree -- 207
 #>
 [CmdletBinding()]
 param(
@@ -51,24 +52,35 @@ if ($running.Count -eq 0) {
 }
 
 # 2. config.toml
+function Set-Once([string]$text, [string]$pattern, [string]$replacement, [string]$what) {
+    $count = [regex]::Matches($text, $pattern).Count
+    if ($count -ne 1) { throw "config.toml: expected exactly one $what, found $count." }
+    [regex]::Replace($text, $pattern, $replacement)
+}
+$inspectorPattern = "(?m)^inspector_port = $($mainPorts.inspector)(?=\s*$)"
+$inspectorLine = "inspector_port = $($ports.inspector)"
+
 $content = Get-Content -LiteralPath $configPath -Raw
 $currentId = Get-TjsConfigProjectId -ConfigPath $configPath
 if ($currentId -eq $projectId) {
     if ($content -notmatch "(?m)^port = $($ports.api)\s*$") {
         throw "config.toml says $projectId but not API port $($ports.api). Restore it: git update-index --no-skip-worktree supabase/config.toml; git checkout -- supabase/config.toml"
     }
-    Write-Host "config.toml already points at $projectId."
-} elseif ($currentId -eq 'tjs-main') {
-    function Set-Once([string]$text, [string]$pattern, [string]$replacement, [string]$what) {
-        $count = [regex]::Matches($text, $pattern).Count
-        if ($count -ne 1) { throw "config.toml: expected exactly one $what, found $count." }
-        [regex]::Replace($text, $pattern, $replacement)
+    if ([regex]::IsMatch($content, $inspectorPattern)) {
+        # Rewritten before the inspector port was per stack.
+        $content = Set-Once $content $inspectorPattern $inspectorLine "'inspector_port = $($mainPorts.inspector)'"
+        [IO.File]::WriteAllText($configPath, $content, [Text.UTF8Encoding]::new($false))
+        Write-Host "config.toml already points at $projectId; inspector_port set to $($ports.inspector)."
+    } else {
+        Write-Host "config.toml already points at $projectId."
     }
+} elseif ($currentId -eq 'tjs-main') {
     $content = Set-Once $content '(?m)^project_id = "tjs-main"' "project_id = `"$projectId`"" 'project_id = "tjs-main"'
     foreach ($key in $script:TjsPortOffsets.Keys) {
         $prefix = if ($key -eq 'shadow') { 'shadow_port' } else { 'port' }
         $content = Set-Once $content "(?m)^$prefix = $($mainPorts[$key])(?=\s*$)" "$prefix = $($ports[$key])" "'$prefix = $($mainPorts[$key])'"
     }
+    $content = Set-Once $content $inspectorPattern $inspectorLine "'inspector_port = $($mainPorts.inspector)'"
     $urlPattern = '(?<=//(?:127\.0\.0\.1|localhost):)3000(?=[/"])'
     if ([regex]::Matches($content, $urlPattern).Count -lt 2) { throw 'config.toml: auth site_url / redirect URLs on port 3000 not found.' }
     $content = [regex]::Replace($content, $urlPattern, [string]$ports.dev)

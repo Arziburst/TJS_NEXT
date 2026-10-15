@@ -17,6 +17,10 @@ $script:TjsPortOffsets = [ordered]@{
     analytics = 7
     pooler    = 9
 }
+# [edge_runtime] inspector_port: the CLI default in the committed config.toml (the main stack), base + 8
+# per worktree stack so two stacks never share it. Bound only by `supabase functions serve --inspect`.
+$script:TjsMainInspectorPort = 8083
+$script:TjsInspectorOffset = 8
 
 function Get-TjsRepoRoot {
     (Resolve-Path (Join-Path $PSScriptRoot '..' '..')).Path
@@ -46,6 +50,7 @@ function Get-TjsStackPorts {
     $base = $script:TjsWorktreePortBase + ($IssueNumber % 200) * 10
     $ports = [ordered]@{ base = $base }
     foreach ($k in $script:TjsPortOffsets.Keys) { $ports[$k] = $base + $script:TjsPortOffsets[$k] }
+    $ports['inspector'] = $base + $script:TjsInspectorOffset
     $ports['dev'] = $devPort
     $ports
 }
@@ -53,6 +58,7 @@ function Get-TjsStackPorts {
 function Get-TjsMainPorts {
     $ports = [ordered]@{ base = $script:TjsMainPortBase }
     foreach ($k in $script:TjsPortOffsets.Keys) { $ports[$k] = $script:TjsMainPortBase + $script:TjsPortOffsets[$k] }
+    $ports['inspector'] = $script:TjsMainInspectorPort
     $ports['dev'] = 3000
     $ports
 }
