@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { getAlternates } from "./metadata";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { getAlternates, getMetadataBase } from "./metadata";
 import { locales } from "./routing";
 
 describe("getAlternates", () => {
@@ -31,5 +31,20 @@ describe("getAlternates", () => {
     expect(Object.keys(languages)).toHaveLength(12);
     for (const locale of locales) expect(languages[locale]).toBe(`/${locale}/shop/rings`);
     expect(languages["x-default"]).toBe("/en/shop/rings");
+  });
+});
+
+describe("getMetadataBase", () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it("uses the Vercel production domain when deployed", () => {
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "shop.example.com");
+    expect(getMetadataBase().href).toBe("https://shop.example.com/");
+  });
+
+  it("falls back to the local server", () => {
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "");
+    vi.stubEnv("PORT", "3010");
+    expect(getMetadataBase().href).toBe("http://localhost:3010/");
   });
 });

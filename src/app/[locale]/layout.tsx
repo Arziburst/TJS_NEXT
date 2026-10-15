@@ -3,6 +3,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { locale as rootLocale } from "next/root-params";
+import { getMetadataBase } from "@/i18n/metadata";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -13,6 +14,7 @@ export function generateStaticParams() {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("common");
   return {
+    metadataBase: getMetadataBase(),
     title: { default: t("brand"), template: `%s | ${t("brand")}` },
   };
 }
