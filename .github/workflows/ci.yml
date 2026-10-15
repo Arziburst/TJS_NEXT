@@ -27,6 +27,8 @@ jobs:
       # The e2e step serves the built app (`next start`) on this port instead of `next dev`.
       E2E_SERVER: start
       E2E_PORT: "3000"
+      # The /ui-kit showcase the shell e2e tests use; on for the build and e2e here, unset on Vercel (404).
+      TJS_UI_KIT: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

@@ -29,5 +29,7 @@ export default defineConfig({
         url: baseURL,
         reuseExistingServer: false,
         timeout: 120_000,
+        // the shell tests use the /ui-kit showcase; a production build needs the flag at build time too (CI)
+        env: { TJS_UI_KIT: "true" },
       },
 });
