@@ -33,3 +33,11 @@ Each line: the decision, its source, its date.
 | D22 | Frontend: at best as the legacy look, improved to proper SEO, good mobile and desktop layout and a clear customer flow (the customer always understands what to do next) | owner | 2026-10-15 |
 | D23 | New features (anything the legacy app did not have: stock, variants/sizes, discounts, reviews, wishlists beyond the plan, etc.) are discussed with the owner before they become tasks; technical follow-ups and polish are filed and queued as usual | owner | 2026-10-15 |
 | D24 | The shop is **handmade by one person** (designer and seller in one). Two kinds of products: **made to order** (orderable repeatedly, has a production time set by the admin; legacy "Only order" badge) and **one-of-a-kind ready pieces** made by inspiration (exactly one; becomes "sold" when its order is accepted and stays visible as sold). The admin is built for one person, simple and comfortable on a phone; copy and SEO speak of handmade, author's design | owner | 2026-10-15 |
+| D25 | Display font: keep candidate A (Cormorant Garamond) for now; the choice is deferred — later several variants in separate PRs for the owner to test | owner | 2026-10-15 |
+| D26 | Coral accent used **as text** (prices, active links, contacts) gets a darker shade with contrast ≥ 4.5:1 on the background; fills, underlines and badges keep #FF614A | owner | 2026-10-15 |
+| D27 | Visitors whose browser language is not one of the 11 locales (incl. Russian) go to `/en` | owner | 2026-10-15 |
+| D28 | Price conversion: charm rounding always **up** (the 3 % markup is a minimum) and the markup applies to every display currency incl. USD; both editable in the admin settings | owner | 2026-10-15 |
+| D29 | New features approved (D23): **sizes / variants**, **dimensions and clasp** fields, **filter by material**, **collections and discounts** (strike-through old price) | owner | 2026-10-15 |
+| D30 | Lead time of made-to-order products: a number of days (range, rendered per locale) **and** an optional free-text note (machine-translated like other texts) | owner | 2026-10-15 |
+| D31 | Ukrainian name of the necklace category: «Намиста» (plural, like the other categories) | owner | 2026-10-15 |
+| D32 | Hosting plan (Vercel Hobby is non-commercial): the owner decides closer to launch (#31); Hobby until then | owner | 2026-10-15 |

@@ -29,7 +29,7 @@ export default async function HomePage() {
       <CategoryTiles categories={categories} />
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <p className="max-w-3xl font-sans text-sm leading-[180%] uppercase md:text-2xl">
-          <span className="text-accent">{t("introBrand")}</span> {t("intro")}
+          <span className="text-accent-text">{t("introBrand")}</span> {t("intro")}
         </p>
         <Link href={SHOP_HREF} className="group flex shrink-0 items-end gap-4 self-end">
           <span className="move-underline font-sans text-sm font-semibold tracking-[1.6px] uppercase">{t("seeAll")}</span>

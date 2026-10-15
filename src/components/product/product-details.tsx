@@ -50,7 +50,7 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
             {categoryName && (
               <Link
                 href={categoryHref(product.category.slug)}
-                className="self-start font-sans text-sm tracking-[0.2em] uppercase underline-offset-4 hover:text-accent hover:underline"
+                className="self-start font-sans text-sm tracking-[0.2em] uppercase underline-offset-4 hover:text-accent-text hover:underline"
               >
                 {categoryName}
               </Link>
@@ -58,7 +58,7 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
             <h1 className="text-xl font-bold tracking-[0.2em] uppercase sb:text-2xl">{translation.title}</h1>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-2xl text-accent">{price}</span>
+            <span className="text-2xl text-accent-text">{price}</span>
             {status && <Badge variant="secondary">{t(status)}</Badge>}
           </div>
           {product.fulfillment === "made_to_order" && (

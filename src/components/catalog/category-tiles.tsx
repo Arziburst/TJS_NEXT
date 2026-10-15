@@ -44,13 +44,13 @@ export function CategoryTiles({ categories }: { categories: CategoryEntry[] }) {
             <span
               className={cn(
                 "font-display text-[40px] leading-[54px] uppercase max-[420px]:text-3xl max-[350px]:text-xl",
-                // gradient text on hover: coral into brown
-                "bg-[linear-gradient(96deg,var(--color-tjs-coral)_3.15%,var(--color-tjs-brown)_86.85%)] bg-clip-text transition-colors duration-1000 ease-out group-hover:text-transparent group-focus-visible:text-transparent",
+                // gradient text on hover: coral (the text shade, D26) into brown
+                "bg-[linear-gradient(96deg,var(--color-tjs-coral-text)_3.15%,var(--color-tjs-brown)_86.85%)] bg-clip-text transition-colors duration-1000 ease-out group-hover:text-transparent group-focus-visible:text-transparent",
               )}
             >
               {category.name}
             </span>
-            <span className="self-start font-sans text-sm text-accent">{counter(index)}</span>
+            <span className="self-start font-sans text-sm text-accent-text">{counter(index)}</span>
           </Link>
         </li>
       ))}

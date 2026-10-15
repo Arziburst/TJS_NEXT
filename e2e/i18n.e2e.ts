@@ -47,6 +47,18 @@ test("GET / with Accept-Language de redirects once to /de", async ({ request }) 
   expect(second.status()).toBe(200);
 });
 
+test.describe("a Russian browser", () => {
+  test.use({ locale: "ru-RU", extraHTTPHeaders: { "accept-language": "ru-RU,ru" } });
+
+  // D27: a browser language outside the 11 locales lands on /en, not on /uk
+  test("opening / lands on /en", async ({ page }) => {
+    const response = await page.goto("/");
+    expect(response?.status()).toBe(200);
+    await expect(page).toHaveURL(/\/en$/);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  });
+});
+
 test("/fr renders French with lang=fr", async ({ page }) => {
   const response = await page.goto("/fr");
   expect(response?.status()).toBe(200);
