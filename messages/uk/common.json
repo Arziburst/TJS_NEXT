@@ -2,6 +2,10 @@
   "brand": "TJS",
   "noData": "Немає даних",
   "total": "Усього",
+  "price": {
+    "unavailable": "Ціна недоступна",
+    "none": "—"
+  },
   "pagination": {
     "of": "із"
   },
