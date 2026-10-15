@@ -34,7 +34,8 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # check:migrations compares with the base branch and the merge base: full history on PRs.
-          fetch-depth: ${{ github.event_name == 'pull_request' && 0 || 1 }}
+          # (a string: a number 0 is falsy in an expression and would fall through to 1)
+          fetch-depth: ${{ github.event_name == 'pull_request' && '0' || '1' }}
           persist-credentials: false
 
       - name: Set up Node from .nvmrc
