@@ -2,7 +2,7 @@
 
 import { CircleAlertIcon, LanguagesIcon, LoaderCircleIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import type { ReviewActionResult, TranslateActionResult } from "@/app/[locale]/admin/actions";
 import { Button } from "@/components/ui/button";
@@ -52,9 +52,10 @@ export function TranslatePanel({
   const existing = translations.map((tr) => tr.locale);
   const [source, setSource] = useState<Locale | null>(() => defaultSource(existing));
   const [overwrite, setOverwrite] = useState(false);
-  const [chosen, setChosen] = useState<ReadonlySet<Locale>>(() => new Set(EDITOR_LOCALES.filter((l) => !existing.includes(l))));
+  // every locale is chosen until unticked; one with a text counts only with "replace" (so by default: the missing)
+  const [chosen, setChosen] = useState<ReadonlySet<Locale>>(() => new Set(EDITOR_LOCALES));
   const [result, setResult] = useState<TranslateActionResult | null>(null);
-  const [pending, startTransition] = useTransition();
+  const [pending, setPending] = useState(false);
   const [reviewing, setReviewing] = useState<ReadonlySet<Locale>>(new Set());
 
   const names = (locales: readonly Locale[]) => format.list(locales.map((l) => tLocales(l)));
@@ -74,19 +75,23 @@ export function TranslatePanel({
     });
   }
 
-  function run() {
+  async function run() {
     if (!sourceLocale || targets.length === 0) return;
     setResult(null);
-    startTransition(async () => {
-      const outcome = await translateProduct({ id: productId, sourceLocale, targets, overwrite });
-      setResult(outcome);
-      if (outcome.ok) {
-        // what failed stays chosen for another try; the rest is no longer missing
-        setChosen(new Set(outcome.failed.map((f) => f.locale)));
-        setOverwrite(false);
-        toast.success(t("doneToast", { count: outcome.translated.length }));
-      }
-    });
+    setPending(true);
+    let outcome: TranslateActionResult;
+    try {
+      outcome = await translateProduct({ id: productId, sourceLocale, targets, overwrite });
+    } catch {
+      outcome = { ok: false, reason: "unexpectedError" };
+    }
+    setPending(false);
+    setResult(outcome);
+    if (outcome.ok) {
+      // what failed is still missing, so it stays chosen for another try
+      setOverwrite(false);
+      toast.success(t("doneToast", { count: outcome.translated.length }));
+    }
   }
 
   async function review(locale: Locale, reviewed: boolean) {
@@ -215,7 +220,7 @@ export function TranslatePanel({
         {machine.length === 0 ? (
           <p className="font-input text-sm">{t("review.none")}</p>
         ) : (
-          <ul className="grid gap-1 sb:grid-cols-2">
+          <ul className="grid gap-x-8 gap-y-1 sb:grid-cols-2">
             {machine.map((tr) => {
               const reviewed = tr.reviewedAt !== null;
               return (

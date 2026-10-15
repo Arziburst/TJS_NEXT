@@ -88,8 +88,12 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
             product={product.data}
             categories={categories.data.map((c) => ({ id: c.id, name: c.name }))}
             saveProduct={saveProduct}
-            photos={<ProductPhotos images={product.data.images} />}
-            deleteButton={<DeleteProductButton productId={product.data.id} title={title ?? ""} deleteProduct={deleteProduct} />}
+            // keyed: after a refresh() from a translation action, React re-validates these server-made slots as list
+            // children of the form and warns about a missing key otherwise
+            photos={<ProductPhotos key="photos" images={product.data.images} />}
+            deleteButton={
+              <DeleteProductButton key="delete" productId={product.data.id} title={title ?? ""} deleteProduct={deleteProduct} />
+            }
             translation={{ configured: isTranslationConfigured(), translateProduct, setTranslationReviewed }}
           />
         ) : (
