@@ -27,7 +27,7 @@ export function AddressForm({
   const flatId = useId();
 
   return (
-    <div data-slot="delivery-address-form" className="grid gap-4 sm:grid-cols-[1fr_8rem_8rem] sm:items-end">
+    <div data-slot="delivery-address-form" className="grid gap-4">
       <SearchCombobox
         slot="delivery-street-combobox"
         label={t("street")}
@@ -40,32 +40,34 @@ export function AddressForm({
         minLength={2}
         scope={settlementRef}
       />
-      <div className="grid gap-2">
-        <label htmlFor={houseId} className="font-sans text-sm font-semibold">
-          {t("house")}
-        </label>
-        <Input
-          id={houseId}
-          value={value.house}
-          onChange={(event) => onChange({ ...value, house: event.target.value })}
-          maxLength={NUMBER_MAX_LENGTH}
-          autoComplete="off"
-          required
-          className="text-base sm:text-sm"
-        />
+      <div className="grid grid-cols-2 items-end gap-4 sm:max-w-sm">
+        <div className="grid gap-2">
+          <label htmlFor={houseId} className="font-sans text-sm font-semibold">
+            {t("house")}
+          </label>
+          <Input
+            id={houseId}
+            value={value.house}
+            onChange={(event) => onChange({ ...value, house: event.target.value })}
+            maxLength={NUMBER_MAX_LENGTH}
+            autoComplete="off"
+            required
+            className="text-base sm:text-sm"
+          />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor={flatId} className="font-sans text-sm font-semibold">
+            {t("flat")}
+          </label>
+          <Input
+            id={flatId}
+            value={value.flat}
+            onChange={(event) => onChange({ ...value, flat: event.target.value })}
+            maxLength={NUMBER_MAX_LENGTH}
+            autoComplete="off"
+            className="text-base sm:text-sm"
+          />
       </div>
-      <div className="grid gap-2">
-        <label htmlFor={flatId} className="font-sans text-sm font-semibold">
-          {t("flat")}
-        </label>
-        <Input
-          id={flatId}
-          value={value.flat}
-          onChange={(event) => onChange({ ...value, flat: event.target.value })}
-          maxLength={NUMBER_MAX_LENGTH}
-          autoComplete="off"
-          className="text-base sm:text-sm"
-        />
       </div>
     </div>
   );
