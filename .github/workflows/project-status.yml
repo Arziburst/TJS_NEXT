@@ -1,0 +1,89 @@
+# Board automation. When a PR is marked ready for review its closing issues move to Status "Testing" on
+# the user project #4 (TJS); when it goes back to draft they move to "In Progress". Only issues the PR
+# closes (Closes #n), not the ones it refers to (Refs #n).
+# pull_request_target runs this file from the default branch with secrets, so it must never check out
+# or run PR code: it only calls the GitHub GraphQL API with the PR number. See docs/ci.md.
+
+name: Project status
+
+on:
+  pull_request_target:
+    types: [ready_for_review, converted_to_draft]
+
+permissions: {}
+
+concurrency:
+  group: project-status-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  move:
+    name: Move the closing issues on the board
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+      OWNER: ${{ github.repository_owner }}
+      REPO: ${{ github.event.repository.name }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_ACTION: ${{ github.event.action }}
+      # User project #4 "TJS": node id, the Status field and its options.
+      PROJECT_ID: PVT_kwHOAYw1sM4BnHyc
+      STATUS_FIELD_ID: PVTSSF_lAHOAYw1sM4BnHyczhlt2mY
+      STATUS_TESTING: 4319b5d1
+      STATUS_IN_PROGRESS: 922f7681
+    steps:
+      - name: Move the cards
+        run: |
+          set -euo pipefail
+          if [ -z "$GH_TOKEN" ]; then
+            message="PROJECT_TOKEN is not set; the board cards of PR #$PR_NUMBER were NOT moved."
+            echo "::warning::$message"
+            echo "### :warning: $message" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          case "$PR_ACTION" in
+            ready_for_review) option="$STATUS_TESTING"; label="Testing" ;;
+            converted_to_draft) option="$STATUS_IN_PROGRESS"; label="In Progress" ;;
+            *) echo "Nothing to do for action $PR_ACTION."; exit 0 ;;
+          esac
+
+          # "<issue number> <project item id>" for each closing issue that is on project #4.
+          items=$(gh api graphql \
+            -f owner="$OWNER" -f repo="$REPO" -F number="$PR_NUMBER" \
+            -f query='
+              query($owner: String!, $repo: String!, $number: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $number) {
+                    closingIssuesReferences(first: 20) {
+                      nodes { number projectItems(first: 20) { nodes { id project { id } } } }
+                    }
+                  }
+                }
+              }' \
+            --jq '.data.repository.pullRequest.closingIssuesReferences.nodes[]
+                  | .number as $issue
+                  | .projectItems.nodes[]
+                  | select(.project.id == env.PROJECT_ID)
+                  | "\($issue) \(.id)"')
+
+          if [ -z "$items" ]; then
+            echo "::notice::PR #$PR_NUMBER closes no issue that is on the project; nothing moved."
+            exit 0
+          fi
+
+          while read -r issue item; do
+            # -f: the ids are strings; -F would turn an all-digit option id into a number
+            gh api graphql \
+              -f project="$PROJECT_ID" -f item="$item" -f field="$STATUS_FIELD_ID" -f option="$option" \
+              -f query='
+                mutation($project: ID!, $item: ID!, $field: ID!, $option: String!) {
+                  updateProjectV2ItemFieldValue(input: {
+                    projectId: $project, itemId: $item, fieldId: $field,
+                    value: { singleSelectOptionId: $option }
+                  }) { projectV2Item { id } }
+                }' > /dev/null
+            echo "Issue #$issue -> $label"
+            echo "- Issue #$issue → **$label** (PR #$PR_NUMBER $PR_ACTION)" >> "$GITHUB_STEP_SUMMARY"
+          done <<< "$items"

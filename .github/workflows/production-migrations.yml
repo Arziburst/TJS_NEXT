@@ -1,0 +1,126 @@
+# Production migrations. A push to main that touches supabase/migrations runs the dry run against the
+# production project (link, migration list, db push --dry-run), so main shows whether its migrations
+# would apply cleanly. A manual run from main with confirm = "apply" pushes them. Runs only code already
+# on main; never on pull requests. See docs/ci.md.
+
+name: Production migrations
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - supabase/migrations/**
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "apply" to push the pending migrations to the production project. Anything else runs only the dry run.'
+        required: false
+        default: ""
+
+concurrency:
+  group: production-migrations
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+  SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+  SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+
+jobs:
+  plan:
+    name: Pending migrations (dry run)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      configured: ${{ steps.secrets.outputs.configured }}
+    steps:
+      - name: Refuse a ref other than main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Production migrations run from main only (this run is on $GITHUB_REF)."
+          exit 1
+
+      - name: Check the secrets
+        id: secrets
+        run: |
+          missing=()
+          [ -n "$SUPABASE_PROJECT_REF" ] || missing+=(SUPABASE_PROJECT_REF)
+          [ -n "$SUPABASE_ACCESS_TOKEN" ] || missing+=(SUPABASE_ACCESS_TOKEN)
+          [ -n "$SUPABASE_DB_PASSWORD" ] || missing+=(SUPABASE_DB_PASSWORD)
+          if [ ${#missing[@]} -gt 0 ]; then
+            message="Production migrations SKIPPED: secret(s) ${missing[*]} not set. Nothing was checked against production."
+            echo "::warning::$message"
+            echo "### :warning: $message" >> "$GITHUB_STEP_SUMMARY"
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.secrets.outputs.configured == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node from .nvmrc
+        if: steps.secrets.outputs.configured == 'true'
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies (Supabase CLI)
+        if: steps.secrets.outputs.configured == 'true'
+        run: npm ci
+
+      - name: Link the production project
+        if: steps.secrets.outputs.configured == 'true'
+        run: npx supabase link --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: Migration list (local vs remote)
+        if: steps.secrets.outputs.configured == 'true'
+        run: npx supabase migration list
+
+      - name: db push --dry-run
+        if: steps.secrets.outputs.configured == 'true'
+        run: npx supabase db push --dry-run
+
+  apply:
+    name: Apply to production
+    needs: plan
+    if: github.event_name == 'workflow_dispatch' && inputs.confirm == 'apply' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Refuse without the secrets
+        # An explicit apply never ends green without having applied anything.
+        if: needs.plan.outputs.configured != 'true'
+        run: |
+          echo "::error::apply requested, but the production secrets are not set; nothing was applied."
+          exit 1
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node from .nvmrc
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies (Supabase CLI)
+        run: npm ci
+
+      - name: Link the production project
+        run: npx supabase link --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: db push
+        run: npx supabase db push
+
+      - name: Migration list after the push
+        run: npx supabase migration list

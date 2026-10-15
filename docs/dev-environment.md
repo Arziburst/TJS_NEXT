@@ -21,6 +21,7 @@ Port offsets from the base:
 | +3 | Studio | `[studio] port` |
 | +4 | mail catcher (Mailpit) | `[local_smtp] port` |
 | +7 | analytics (disabled, never bound) | `[analytics] port` |
+| +8 | edge-runtime inspector (bound only by `supabase functions serve --inspect`; `tjs-main` keeps the CLI default 8083) | `[edge_runtime] inspector_port` |
 | +9 | pooler (disabled) | `[db.pooler] port` |
 
 Example: task 8 → stack `tjs-8`, API `http://127.0.0.1:41081`, Postgres `41082`, Studio
@@ -68,7 +69,8 @@ reaches the script without `-IssueNumber` (npm reads it as its own option). Pass
 2. Reads `n` from the folder name (`<n>-<type>-<slug>`, leading number only) or the argument.
 3. Unless `tjs-<n>` already runs, checks that every stack port is free and outside the Windows excluded
    ranges (`netsh interface ipv4 show excludedportrange protocol=tcp`), and refuses otherwise.
-4. Rewrites this worktree's `supabase/config.toml`: `project_id = "tjs-<n>"`, the ports, and the auth
+4. Rewrites this worktree's `supabase/config.toml`: `project_id = "tjs-<n>"`, the ports (with the
+   edge-runtime `inspector_port`), and the auth
    `site_url` / redirect URLs to port `3000 + n`. Then
    `git update-index --skip-worktree supabase/config.toml`, so the rewrite never shows in `git status` and is
    never committed.
@@ -112,7 +114,8 @@ when a line is missing or doubled.
   `supabase_<service>_tjs-<n>`, compares `n` with the folders of `git worktree list` (`-RepoPath`), and
   stops the stale ones, then removes their volumes (the `edge_runtime` volume survives
   `supabase stop --no-backup`) and network. Options (call the script directly, npm would swallow them):
-  `pwsh -NoProfile -File scripts/dev/Remove-StaleSupabaseWorktrees.ps1 -RepoPath . -RetentionDays 7 -WhatIf`.- By hand for one stack: `npx supabase stop --project-id tjs-<n> --no-backup`, then
+  `pwsh -NoProfile -File scripts/dev/Remove-StaleSupabaseWorktrees.ps1 -RepoPath . -RetentionDays 7 -WhatIf`.
+- By hand for one stack: `npx supabase stop --project-id tjs-<n> --no-backup`, then
   `docker volume ls -q --filter name=_tjs-<n>` and `docker volume rm` — check the names first: the filter is a
   substring, so `_tjs-8` also lists `_tjs-80`.
 - Only ever operate on stacks whose id is `tjs-<n>`: other projects run Supabase stacks on the same Docker
@@ -125,7 +128,9 @@ across `main` and every open PR (rules in `docs/standards.md` §7). `npm run che
 (`scripts/ci/check-migration-versions.mjs`) fails on a bad name, a duplicate version, an edited or deleted
 migration that exists on the base branch, a version already used on the base branch or claimed by another
 open PR, and warns on a version older than the latest on the base branch. Open PRs are read with `gh`;
-without `gh` that step is a warning locally and an error in CI. Base: `--base <ref>`, else
+without `gh` that step is a warning locally and an error in CI. The branch's own PR is no conflict: the one
+named by `--pr <n>`, else the PR whose head ref is the current branch or whose head commit HEAD is or contains
+(a verifier's worktree, an integration branch). Base: `--base <ref>`, else
 `$MIGRATIONS_BASE_REF`, else `origin/$GITHUB_BASE_REF`, else `origin/main` (run `git fetch origin main`
 first). The remote migration history stays a manual check.
 
