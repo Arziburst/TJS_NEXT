@@ -1,0 +1,31 @@
+# Decisions (business values)
+
+**This file is now the source of business values for the project.** D1–D20 were copied verbatim from the
+coordinator's draft (`coordinator/DECISIONS.md`) on 2026-10-15 in task #7; from now on decisions are
+added and changed here, by a PR, and the draft is retired. Workers take business values only from this
+file (CORE §1.3); anything missing is a visible `TBD` and a question to the owner.
+
+Each line: the decision, its source, its date.
+
+| # | Decision | Source | Date |
+|---|---|---|---|
+| D1 | Rebuild TJS_frontend_2 + TJS_backend in one Next.js 16 app (App Router, TypeScript, Tailwind v4, shadcn/ui) on Supabase, deployed on Vercel; design kept from the legacy frontend (tokens in `research/frontend.md` §5), may be refined | owner | 2026-10-15 |
+| D2 | Markets at launch: Ukraine + EU + Switzerland; **no UK** (UK VAT registration needed for ≤ £135) | owner | 2026-10-15 |
+| D3 | Locales: uk, en, de, fr, es, it, pl, nl, cs, pt, ro (11); Russian dropped; URLs `/<locale>/…` for every locale incl. `/en`; x-default `/en` | owner (+ research) | 2026-10-15 |
+| D4 | Prices: the admin sets every price in **USD**; the visitor sees it in their currency at the **NBU** rate (refreshed daily) with **3 % markup** and **charm rounding** (1 289 ₴, €29.90, 129 zł, 749 Kč …); a displayed price is re-rounded only when the raw price moved > 1–2 %; markup editable in the admin | owner | 2026-10-15 |
+| D5 | Currency is detected from the visitor's country (Vercel geo) and switchable; stored in a cookie, never in the URL; deterministic default per locale for crawlers and JSON-LD (uk→UAH, en→USD, de/fr/es/it/nl/pt→EUR, pl→PLN, cs→CZK, ro→RON) | owner + research | 2026-10-15 |
+| D6 | Charging: Ukraine in **UAH**, everyone else in **EUR**; other currencies are display-only — checkout shows "≈ 129 zł — charged €29.90"; the charged amount is locked at checkout (rate, source, date, expiry stored on the order) | owner | 2026-10-15 |
+| D7 | Payment provider: **LiqPay** (PrivatBank) — card, Apple Pay, Google Pay; implemented and tested in the **sandbox only**; live payments are switched on (`PAYMENTS_LIVE=true`) only on the owner's explicit command **and** after the coordinator confirms readiness (merchant account and documents, live keys, ПРРО, tests green on production); fiscal receipt (ПРРО) through LiqPay `rro_info` if available, else TBD | owner | 2026-10-15 |
+| D19 | **Storefront mode until payments go live:** today the business runs through Instagram with direct card transfers. The site is a showcase: browse, sign up or stay a guest, place an **order request** without payment (delivery choice and estimate shown); the owner gets it in Telegram, the customer gets a confirmation email with the shop's contact channels (Instagram, email, chat links from the admin settings); payment and further talk happen outside the site. Checkout must work fully with payments off; the payment step appears only when payments are live | owner | 2026-10-15 |
+| D8 | (backlog, after the working picture) EU taxes: **DAP** — the customer pays goods + delivery; checkout shows an estimate of what the carrier collects on delivery (import VAT by country + €3 duty per tariff line from 2026-07-01 + €2 handling fee from 2026-11-01) and the "may be payable" notice at product, cart and before the pay button; IOSS/DDP later | owner + research | 2026-10-15 |
+| D9 | Products: **bijouterie only** (HS 7117) — no hallmark fields; categories from the legacy app: earrings, necklaces, bracelets, corals, rings, brooches; "new" badge for 7 days after creation | owner + legacy | 2026-10-15 |
+| D10 | Delivery: Ukraine — Nova Poshta API 2.0 (branch, postomat, address; live quote); EU + CH — Nova Post international API (branch, locker, PUDO or address; live quote); flat rate per zone as a fallback, marked as estimate | owner + research | 2026-10-15 |
+| D11 | Notifications: Telegram to the owner's group (new order, paid, status change); email to the customer in their locale (confirmation with terms and the withdrawal form, status changes); sending never blocks or loses an order (outbox + retry) | owner | 2026-10-15 |
+| D12 | Accounts: Supabase Auth — Google + email/password; guest checkout allowed; roles customer / admin, admin granted only in the database | owner | 2026-10-15 |
+| D13 | Legacy data: none migrated; the catalog starts empty and is filled in the new admin | owner | 2026-10-15 |
+| D14 | Production Supabase `tjs-prod` in **Frankfurt** (eu-central-1), in the owner's personal org. **No preview database for now** (free plan limit of 2 active projects): Vercel PR previews are off; every task is verified on its local Docker stack (worker + verifier browser walk) and in CI with e2e; a `tjs-preview` project comes with a paid plan or a freed slot | owner | 2026-10-15 |
+| D15 | EU responsible person (GPSR) and GDPR representative: **TBD** — fields in the admin settings, shown on legal pages and product pages; EU sales are enabled by the owner once they exist | owner | 2026-10-15 |
+| D16 | Display font: a free look-alike of "TT Ricordi Allegria" with Cyrillic + Latin Extended, via next/font; two candidates shown to the owner | owner | 2026-10-15 |
+| D17 | Order statuses: legacy canceled / in processing / accepted / closed, plus **new** (an order request in storefront mode) and the payment states pending payment / paid / refunded (used only once payments are live) | owner (summary yes) | 2026-10-15 |
+| D18 | Pay button: "Buy now" (per locale, from the CRD-accepted wording) | research | 2026-10-15 |
+| D20 | Parity of **behaviour, not implementation**: the legacy apps contain many workarounds; every task rebuilds the feature the right way for Next.js + Supabase (known ones: two route trees switched by `isLoggedIn`, responsive switching by `window` width, broken reducers, secrets in the client bundle, admin checks only in the UI, no quantity in orders, unescaped Telegram HTML). Briefs name the legacy behaviour to keep and the workaround not to copy | owner | 2026-10-15 |
