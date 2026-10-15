@@ -56,9 +56,11 @@ export function MobileMenu({ className, languageSwitcher, currencySwitcher, acco
               <span className="font-sans text-base font-semibold tracking-[1.6px] italic">{t("currency")}</span>
               {currencySwitcher}
             </li>
-            <li data-slot="mobile-account" onClick={close}>
-              {account}
-            </li>
+            {account && (
+              <li data-slot="mobile-account" onClick={close}>
+                {account}
+              </li>
+            )}
           </ul>
         </nav>
         {footer}

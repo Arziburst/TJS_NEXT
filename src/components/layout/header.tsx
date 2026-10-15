@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { CurrencySwitcherSlot } from "@/components/currency-switcher-slot";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { isRouteEnabled } from "@/config/routes";
 import { cn } from "@/lib/utils";
 import { AccountSlot, CartSlot } from "./header-slots";
 import { Logo } from "./logo";
@@ -25,8 +26,9 @@ type HeaderProps = {
  */
 export function Header({
   className,
-  cart = <CartSlot />,
-  account = <AccountSlot />,
+  // the default slots link to their page only once it exists (src/config/routes.ts)
+  cart = isRouteEnabled("cart") ? <CartSlot /> : null,
+  account = isRouteEnabled("signIn") ? <AccountSlot /> : null,
   languageSwitcher = <LocaleSwitcher hideLabel />,
   currencySwitcher = <CurrencySwitcherSlot hideLabel />,
   menuFooter,
@@ -62,11 +64,13 @@ export function Header({
             <div data-slot="currency-switcher">{currencySwitcher}</div>
           </div>
         </nav>
-        <ul className="flex items-center sb:flex-col sb:items-end">
-          <li data-slot="cart">{cart}</li>
-          <li data-slot="account" className="hidden sb:block">
-            {account}
-          </li>
+        <ul className="flex min-w-11 items-center sb:flex-col sb:items-end">
+          {cart && <li data-slot="cart">{cart}</li>}
+          {account && (
+            <li data-slot="account" className="hidden sb:block">
+              {account}
+            </li>
+          )}
         </ul>
       </div>
     </header>
