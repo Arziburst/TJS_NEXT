@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import deCommon from "../messages/de/common.json" with { type: "json" };
+import deErrors from "../messages/de/errors.json" with { type: "json" };
 import de from "../messages/de/home.json" with { type: "json" };
 import deNav from "../messages/de/nav.json" with { type: "json" };
 import enErrors from "../messages/en/errors.json" with { type: "json" };
@@ -64,6 +65,16 @@ test("the 404 for an unknown locale uses the en messages", async ({ request }) =
   const response = await request.get("/xx/yy");
   expect(response.status()).toBe(404);
   expect(await response.text()).toContain(enErrors.notFound.title);
+});
+
+test("the 404 under a locale is server-rendered in that locale with a localized title", async ({ request }) => {
+  const response = await request.get("/de/does-not-exist");
+  expect(response.status()).toBe(404);
+  const html = await response.text();
+  // in the HTML itself, not filled in by client JavaScript
+  expect(html).toContain('<html lang="de"');
+  expect(html).toContain(`<title>${deErrors.notFound.title} | ${deCommon.brand}</title>`);
+  expect(html).toContain(deErrors.notFound.description);
 });
 
 test("the home page has a canonical and 12 hreflang links", async ({ request }) => {
