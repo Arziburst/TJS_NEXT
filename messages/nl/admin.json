@@ -192,6 +192,7 @@
     "makeMain": "Hoofdfoto maken",
     "moveEarlier": "Foto {index} naar voren verplaatsen",
     "moveLater": "Foto {index} naar achteren verplaatsen",
+    "moved": "Foto verplaatst naar positie {position} van {count}.",
     "altTextsOf": "Alternatieve teksten van foto {index}",
     "altHint": "Een korte beschrijving van de foto voor schermlezers en zoekmachines. Een leeg veld gebruikt de tekst die erin wordt getoond.",
     "altSave": "Teksten opslaan",

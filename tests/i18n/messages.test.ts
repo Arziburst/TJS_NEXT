@@ -96,6 +96,7 @@ describe("message catalogs", () => {
       maxMb: 15,
       name: "IMG_0042.jpg",
       done: 3,
+      position: 2,
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

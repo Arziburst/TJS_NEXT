@@ -5,6 +5,7 @@ import { PRODUCT_IMAGES_BUCKET } from "@/lib/catalog";
 import { encodeForStorage } from "@/lib/images/encode";
 import type { Locale } from "@/i18n/routing";
 import type { ServerSupabaseClient } from "@/lib/supabase/server";
+import { STAGING_BUCKET } from "./staged-sweep";
 
 /*
  * The admin's photo writes, through the admin's own session (`client`): Storage and the database check the
@@ -17,7 +18,6 @@ import type { ServerSupabaseClient } from "@/lib/supabase/server";
  * public bucket under a new path (the image optimizer caches by URL for 31 days: a path is never reused).
  */
 
-export const STAGING_BUCKET = "product-image-uploads";
 
 export type ImageWriteError = "notFound" | "conflict" | "notAuthorized" | "unexpectedError";
 export type UploadError = "uploadMissing" | "tooLarge" | "unsupportedType" | "invalidImage";
@@ -95,11 +95,15 @@ export async function storeStagedUpload(
   }
 }
 
-/** Deletes a photo's row (its alt texts go with it), then its file. A file that stays behind is only unused. */
+/**
+ * Deletes a photo's row (its alt texts go with it), then its file. The photo is gone from the shop with its
+ * row; a file Storage did not remove is only unused, reported in `fileRemoved` and the server log (and listed
+ * by scripts/images/strip-metadata.mjs among the files no row points at).
+ */
 export async function deleteImage(
   client: ServerSupabaseClient,
   { productId, imageId }: { productId: string; imageId: string },
-): Promise<{ ok: true } | { ok: false; reason: ImageWriteError }> {
+): Promise<{ ok: true; fileRemoved: boolean } | { ok: false; reason: ImageWriteError }> {
   try {
     const { data, error } = await client
       .from("product_images")
@@ -110,8 +114,15 @@ export async function deleteImage(
       .maybeSingle();
     if (error) return { ok: false, reason: "unexpectedError" };
     if (!data) return { ok: false, reason: "notFound" };
-    await client.storage.from(PRODUCT_IMAGES_BUCKET).remove([data.storage_path]);
-    return { ok: true };
+    const removed = await client.storage
+      .from(PRODUCT_IMAGES_BUCKET)
+      .remove([data.storage_path])
+      .catch((error: unknown) => ({ data: null, error }));
+    const fileRemoved = !removed.error && removed.data?.length === 1;
+    if (!fileRemoved) {
+      console.error("product photo: row deleted, file kept", data.storage_path, removed.error ?? "not found in Storage");
+    }
+    return { ok: true, fileRemoved };
   } catch {
     return { ok: false, reason: "unexpectedError" };
   }

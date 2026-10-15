@@ -192,6 +192,7 @@
     "makeMain": "Nastavit jako hlavní",
     "moveEarlier": "Posunout fotku {index} dopředu",
     "moveLater": "Posunout fotku {index} dozadu",
+    "moved": "Fotka přesunuta na pozici {position} z {count}.",
     "altTextsOf": "Alternativní texty fotky {index}",
     "altHint": "Krátký popis fotky pro čtečky obrazovky a vyhledávače. Prázdné pole použije text, který je v něm zobrazen.",
     "altSave": "Uložit texty",

@@ -426,6 +426,32 @@ test.describe("admin on the local stack", () => {
       expect(errors).toEqual([]);
     });
 
+    test("a keyboard move keeps the focus on the moved photo and announces its new position", async ({ page }) => {
+      const errors = collectErrors(page);
+      const [first, second] = await photoRows();
+      const photos = await openPhotos(page);
+      const button = (label: string, index: number) => photos.getByRole("button", { name: label.replace("{index}", String(index)) });
+      const announced = (position: number) =>
+        ukAdmin.images.moved.replace("{position}", String(position)).replace("{count}", "2");
+
+      await button(ukAdmin.images.moveLater, 1).focus();
+      await page.keyboard.press("Enter");
+      await expect.poll(async () => (await photoRows()).map((r) => r.id)).toEqual([second!.id, first!.id]);
+      // the moved photo is second now: its own "later" control keeps the focus (disabled at the end, still focusable)
+      await expect(button(ukAdmin.images.moveLater, 2)).toBeFocused();
+      await expect(photos.getByText(announced(2))).toBeAttached();
+
+      // and back, by keyboard only, once the first move is stored (the controls wait for it)
+      await page.keyboard.press("Shift+Tab");
+      await expect(button(ukAdmin.images.moveEarlier, 2)).toBeFocused();
+      await expect(button(ukAdmin.images.moveEarlier, 2)).toBeEnabled();
+      await page.keyboard.press("Enter");
+      await expect.poll(async () => (await photoRows()).map((r) => r.id)).toEqual([first!.id, second!.id]);
+      await expect(button(ukAdmin.images.moveEarlier, 1)).toBeFocused();
+      await expect(photos.getByText(announced(1))).toBeAttached();
+      expect(errors).toEqual([]);
+    });
+
     test("drag a photo to the front on desktop", async ({ page, isMobile }) => {
       test.skip(isMobile, "dragging is the desktop way; phones use the arrow buttons");
       const errors = collectErrors(page);
@@ -481,6 +507,36 @@ test.describe("admin on the local stack", () => {
       expect(await galleryFiles(page)).toEqual([fileOf(other!)]);
       expect(main).toBeDefined();
       expect(errors).toEqual([]);
+    });
+
+    test("a dropped request fails only its own photo: the batch goes on and the button comes back", async ({ page }, testInfo) => {
+      const errors = collectErrors(page);
+      const files = ["dropped.jpg", "kept.jpg"].map((name) => testInfo.outputPath(name));
+      for (const [i, file] of files.entries()) {
+        await sharp({ create: { width: 24, height: 24, channels: 3, background: { r: 40 * i, g: 90, b: 120 } } }).jpeg().toFile(file);
+      }
+      const before = await photoRows();
+      const photos = await openPhotos(page);
+
+      // the Server Action requests of the batch: create + finish per photo; the first photo's finish is dropped
+      let actions = 0;
+      await page.route(
+        (url) => url.pathname === `/uk/admin/products/${productId}`,
+        async (route) => {
+          if (route.request().method() !== "POST" || !route.request().headers()["next-action"]) return route.continue();
+          actions += 1;
+          if (actions === 2) return route.abort("failed");
+          return route.continue();
+        },
+      );
+      await photos.locator('input[type="file"]').setInputFiles(files);
+      await expect(photos.getByText("Додано: 1 з 2")).toBeVisible({ timeout: 30_000 });
+      await expect(photos.getByText(ukAdmin.images.uploadErrors.failed.replace("{name}", "dropped.jpg"))).toBeVisible();
+      await expect(photos.getByText(ukAdmin.images.uploaded.replace("{name}", "kept.jpg"))).toBeVisible();
+      await expect(photos.getByRole("button", { name: ukAdmin.images.add })).toBeEnabled();
+      await expect.poll(async () => (await photoRows()).length).toBe(before.length + 1);
+      // the dropped request is the only console error
+      expect(errors.filter((e) => !/net::ERR_FAILED|Failed to fetch/.test(e))).toEqual([]);
     });
   });
 });

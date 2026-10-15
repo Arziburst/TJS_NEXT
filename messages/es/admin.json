@@ -192,6 +192,7 @@
     "makeMain": "Hacer principal",
     "moveEarlier": "Mover la foto {index} hacia delante",
     "moveLater": "Mover la foto {index} hacia atrás",
+    "moved": "Foto movida a la posición {position} de {count}.",
     "altTextsOf": "Textos alternativos de la foto {index}",
     "altHint": "Una breve descripción de la foto para lectores de pantalla y buscadores. Un campo vacío usa el texto que se muestra en él.",
     "altSave": "Guardar textos",

@@ -192,6 +192,7 @@
     "makeMain": "Setați ca principală",
     "moveEarlier": "Mutați fotografia {index} mai în față",
     "moveLater": "Mutați fotografia {index} mai în spate",
+    "moved": "Fotografia a fost mutată pe poziția {position} din {count}.",
     "altTextsOf": "Textele alternative ale fotografiei {index}",
     "altHint": "O scurtă descriere a fotografiei pentru cititoarele de ecran și motoarele de căutare. Un câmp gol folosește textul afișat în el.",
     "altSave": "Salvați textele",

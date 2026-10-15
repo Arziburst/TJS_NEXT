@@ -192,6 +192,7 @@
     "makeMain": "Ustaw jako główne",
     "moveEarlier": "Przesuń zdjęcie {index} wcześniej",
     "moveLater": "Przesuń zdjęcie {index} później",
+    "moved": "Zdjęcie przeniesiono na pozycję {position} z {count}.",
     "altTextsOf": "Teksty alternatywne zdjęcia {index}",
     "altHint": "Krótki opis zdjęcia dla czytników ekranu i wyszukiwarek. Puste pole używa wyświetlonego w nim tekstu.",
     "altSave": "Zapisz teksty",
