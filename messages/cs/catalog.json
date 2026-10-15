@@ -3,7 +3,7 @@
   "filterShopBy": "Nakupovat podle",
   "filterBy": "Filtrovat podle",
   "showMore": "Zobrazit více",
-  "shownCount": "Zobrazeno {shown} z {total} produktů",
+  "shownCount": "Zobrazeno <b>{shown}</b> z <b>{total}</b> produktů",
   "categories": {
     "all": "Zobrazit vše",
     "earrings": "Náušnice",
@@ -14,8 +14,29 @@
     "brooches": "Brože"
   },
   "sort": {
+    "newest": "Nejnovější",
     "placeholder": "Vyberte filtr",
     "priceAsc": "Cena (od nejnižší)",
     "priceDesc": "Cena (od nejvyšší)"
+  },
+  "newBadge": "Novinka",
+  "loadError": "Produkty se nepodařilo načíst. Zkuste to prosím později.",
+  "meta": {
+    "title": "Obchod",
+    "description": "Módní a stylové šperky od autorky a designérky: náušnice, náhrdelníky, náramky, korály, prsteny a brože.",
+    "categoryDescription": "{category} od TJS: módní a stylové šperky od autorky a designérky."
+  },
+  "pagination": {
+    "label": "Stránky",
+    "previous": "Předchozí stránka",
+    "next": "Další stránka",
+    "page": "Stránka {page}",
+    "position": "<b>{page}</b> z {total}",
+    "gap": "…",
+    "first": "Zpět na první stránku"
+  },
+  "price": {
+    "none": "—",
+    "unavailable": "Cena zatím není k dispozici"
   }
 }

@@ -70,8 +70,11 @@ describe("message catalogs", () => {
       shown: 12,
       total: 40,
       index: 1,
+      page: 2,
+      category: "Rings",
       url: "https://example.com/a.jpg",
       link: (chunks: string) => `<a>${chunks}</a>`,
+      b: (chunks: string) => `<b>${chunks}</b>`,
     };
 
     for (const key of leaves(messages as unknown as Tree).keys()) {

@@ -3,7 +3,7 @@
   "filterShopBy": "Kupuj według",
   "filterBy": "Filtruj według",
   "showMore": "Pokaż więcej",
-  "shownCount": "Wyświetlono {shown} z {total} produktów",
+  "shownCount": "Wyświetlono <b>{shown}</b> z <b>{total}</b> produktów",
   "categories": {
     "all": "Zobacz wszystko",
     "earrings": "Kolczyki",
@@ -14,8 +14,29 @@
     "brooches": "Broszki"
   },
   "sort": {
+    "newest": "Najnowsze",
     "placeholder": "Wybierz filtr",
     "priceAsc": "Cena (od najniższej)",
     "priceDesc": "Cena (od najwyższej)"
+  },
+  "newBadge": "Nowość",
+  "loadError": "Nie udało się wczytać produktów. Spróbuj ponownie później.",
+  "meta": {
+    "title": "Sklep",
+    "description": "Modna i stylowa biżuteria autorska projektantki: kolczyki, naszyjniki, bransoletki, korale, pierścionki i broszki.",
+    "categoryDescription": "{category} od TJS: modna i stylowa biżuteria autorska projektantki."
+  },
+  "pagination": {
+    "label": "Strony",
+    "previous": "Poprzednia strona",
+    "next": "Następna strona",
+    "page": "Strona {page}",
+    "position": "<b>{page}</b> z {total}",
+    "gap": "…",
+    "first": "Wróć do pierwszej strony"
+  },
+  "price": {
+    "none": "—",
+    "unavailable": "Cena jeszcze niedostępna"
   }
 }

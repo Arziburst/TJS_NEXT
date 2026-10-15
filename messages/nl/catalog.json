@@ -3,7 +3,7 @@
   "filterShopBy": "Winkel op",
   "filterBy": "Filteren op",
   "showMore": "Meer tonen",
-  "shownCount": "{shown} van {total} producten getoond",
+  "shownCount": "<b>{shown}</b> van <b>{total}</b> producten getoond",
   "categories": {
     "all": "Alles bekijken",
     "earrings": "Oorbellen",
@@ -14,8 +14,29 @@
     "brooches": "Broches"
   },
   "sort": {
+    "newest": "Nieuwste",
     "placeholder": "Kies een filter",
     "priceAsc": "Prijs (laag naar hoog)",
     "priceDesc": "Prijs (hoog naar laag)"
+  },
+  "newBadge": "Nieuw",
+  "loadError": "De producten konden niet worden geladen. Probeer het later opnieuw.",
+  "meta": {
+    "title": "Winkel",
+    "description": "Modieuze en stijlvolle sieraden van de ontwerpster: oorbellen, kettingen, armbanden, koralen, ringen en broches.",
+    "categoryDescription": "{category} van TJS: modieuze en stijlvolle sieraden van de ontwerpster."
+  },
+  "pagination": {
+    "label": "Pagina’s",
+    "previous": "Vorige pagina",
+    "next": "Volgende pagina",
+    "page": "Pagina {page}",
+    "position": "<b>{page}</b> van {total}",
+    "gap": "…",
+    "first": "Terug naar de eerste pagina"
+  },
+  "price": {
+    "none": "—",
+    "unavailable": "Prijs nog niet beschikbaar"
   }
 }

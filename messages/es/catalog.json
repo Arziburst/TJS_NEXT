@@ -3,7 +3,7 @@
   "filterShopBy": "Comprar por",
   "filterBy": "Filtrar por",
   "showMore": "Mostrar más",
-  "shownCount": "Mostrando {shown} de {total} productos",
+  "shownCount": "Mostrando <b>{shown}</b> de <b>{total}</b> productos",
   "categories": {
     "all": "Ver todo",
     "earrings": "Pendientes",
@@ -14,8 +14,29 @@
     "brooches": "Broches"
   },
   "sort": {
+    "newest": "Novedades",
     "placeholder": "Seleccionar orden",
     "priceAsc": "Precio (de menor a mayor)",
     "priceDesc": "Precio (de mayor a menor)"
+  },
+  "newBadge": "Nuevo",
+  "loadError": "No se pudieron cargar los productos. Inténtalo de nuevo más tarde.",
+  "meta": {
+    "title": "Tienda",
+    "description": "Bisutería moderna y elegante de la autora y diseñadora: pendientes, collares, pulseras, corales, anillos y broches.",
+    "categoryDescription": "{category} de TJS: bisutería moderna y elegante de la autora y diseñadora."
+  },
+  "pagination": {
+    "label": "Páginas",
+    "previous": "Página anterior",
+    "next": "Página siguiente",
+    "page": "Página {page}",
+    "position": "<b>{page}</b> de {total}",
+    "gap": "…",
+    "first": "Volver a la primera página"
+  },
+  "price": {
+    "none": "—",
+    "unavailable": "Precio aún no disponible"
   }
 }
