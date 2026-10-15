@@ -65,7 +65,8 @@ function FontCandidate({ id, name, className }: { id: "A" | "B"; name: string; c
 }
 
 export default function UiKitPage() {
-  if (process.env.NODE_ENV === "production") notFound();
+  // A showcase, not a shop page: on only where TJS_UI_KIT is "true" (local dev, CI); production leaves it unset.
+  if (process.env.TJS_UI_KIT !== "true") notFound();
 
   return (
     <main className="page-container flex flex-col pb-10">
