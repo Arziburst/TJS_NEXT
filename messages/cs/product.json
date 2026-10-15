@@ -2,6 +2,17 @@
   "sizeGuide": "Tabulka velikostí",
   "addToCart": "Přidat do košíku",
   "addedToCart": "Produkt byl přidán do košíku",
+  "cart": {
+    "added": "Přidáno do košíku",
+    "quantityRaised": "Přidáno: v košíku {count}",
+    "alreadyInCart": "Tento jediný kus už máte v košíku.",
+    "maxQuantity": "Nejvýše {max} od jednoho produktu",
+    "cartFull": "Váš košík je plný. Odeberte jeden kus, abyste mohli přidat jiný.",
+    "unavailable": "Tento kus už nelze objednat.",
+    "rateLimited": "Příliš mnoho změn v krátké době. Chvíli počkejte a zkuste to znovu.",
+    "inCart": "V košíku: {count}",
+    "viewCart": "Zobrazit košík"
+  },
   "card": {
     "onlyOrder": "Na zakázku",
     "firstImageAlt": "První obrázek produktu",

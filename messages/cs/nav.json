@@ -3,6 +3,8 @@
   "aboutUs": "O nás",
   "contacts": "Kontakty",
   "cart": "Košík",
+  "cartCount": "Košík, {count, plural, =0 {prázdný} one {# kus} few {# kusy} many {# kusu} other {# kusů}}",
+  "closeCart": "Zavřít košík",
   "settings": "Nastavení",
   "addProduct": "Přidat produkt",
   "orders": "Objednávky",

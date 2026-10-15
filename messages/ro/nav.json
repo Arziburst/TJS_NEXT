@@ -3,6 +3,8 @@
   "aboutUs": "Despre noi",
   "contacts": "Contacte",
   "cart": "Coș",
+  "cartCount": "Coș, {count, plural, =0 {gol} one {# piesă} few {# piese} other {# de piese}}",
+  "closeCart": "Închide coșul",
   "settings": "Setări",
   "addProduct": "Adaugă produs",
   "orders": "Comenzi",

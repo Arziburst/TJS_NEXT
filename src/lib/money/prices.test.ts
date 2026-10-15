@@ -12,7 +12,7 @@ const headers = vi.fn(async () => new Headers({ "x-vercel-ip-country": "CH" }));
 vi.mock("next/headers", () => ({ cookies: () => cookies(), headers: () => headers() }));
 vi.mock("next-intl/server", () => ({ getLocale: async () => "de" }));
 
-const { formatPrice, getJsonLdPrice } = await import("./prices");
+const { formatPrice, formatPriceTotal, getJsonLdPrice } = await import("./prices");
 
 // The rows of the money migration and the seeded NBU rates of 2026-10-15
 const whole = { decimals: 2, markupBps: 300, roundIncrement: 1000, ending: 900, enabled: true };
@@ -64,5 +64,29 @@ describe("getJsonLdPrice", () => {
   it("is null when the locale's currency has no display rate yet", async () => {
     getMoneyTables.mockResolvedValue({ ...TABLES, displayRates: { ...TABLES.displayRates, PLN: undefined } });
     await expect(getJsonLdPrice(3200, "pl")).resolves.toBeNull();
+  });
+});
+
+describe("formatPriceTotal", () => {
+  it("sums the displayed unit prices times their quantities, never re-rounding the total", async () => {
+    // 33.00 USD → 749 Kč each; three pieces are 2 247 Kč, not the charm price of 99.00 USD
+    await expect(
+      formatPriceTotal([
+        { usdMinor: 3300, quantity: 2 },
+        { usdMinor: 3300, quantity: 1 },
+      ]),
+    ).resolves.toMatchObject({ currency: "CZK", amountMinor: 224700 });
+    const single = await formatPrice(9900);
+    expect(single?.amountMinor).not.toBe(224700);
+  });
+
+  it("is zero for an empty cart, in the visitor's currency", async () => {
+    await expect(formatPriceTotal([])).resolves.toMatchObject({ currency: "CZK", amountMinor: 0 });
+  });
+
+  it("is null without rates or for an invalid quantity", async () => {
+    await expect(formatPriceTotal([{ usdMinor: 3300, quantity: -1 }])).resolves.toBeNull();
+    getMoneyTables.mockResolvedValue(null);
+    await expect(formatPriceTotal([{ usdMinor: 3300, quantity: 1 }])).resolves.toBeNull();
   });
 });

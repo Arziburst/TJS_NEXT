@@ -1,7 +1,38 @@
 {
   "title": "Panier",
   "empty": "Votre panier est vide",
+  "emptyHint": "Parcourez la boutique et ajoutez les pièces qui vous plaisent.",
   "yourOrder": "Votre commande",
   "continueToCheckout": "Passer à la caisse",
-  "total": "Total"
+  "total": "Total",
+  "subtotal": "Sous-total",
+  "pieces": "{count, plural, one {# pièce} other {# pièces}}",
+  "lines": "Pièces dans le panier",
+  "each": "{quantity} ×",
+  "oneOfAKind": "Pièce unique",
+  "madeToOrder": "Fait sur commande",
+  "singlePiece": "Cette pièce n’existe qu’en un seul exemplaire.",
+  "quantityOf": "Quantité de {title}",
+  "decrease": "Un de moins : {title}",
+  "increase": "Un de plus : {title}",
+  "removeLine": "Supprimer {title}",
+  "maxQuantity": "{max} au maximum par produit",
+  "unavailablePiece": "Une pièce qui n’est plus disponible",
+  "status": {
+    "sold": "Vendu",
+    "reserved": "Réservé",
+    "unavailable": "Plus disponible"
+  },
+  "unavailableNote": "Les pièces qui ne peuvent plus être commandées ne sont pas comptées dans le sous-total et ne seront pas commandées. Vous pouvez les supprimer.",
+  "orderRequest": "Continuer vers la demande de commande",
+  "orderRequestTbd": "Demande de commande : TBD",
+  "nothingToOrder": "Le panier ne contient rien qui puisse être commandé.",
+  "continueShopping": "Continuer mes achats",
+  "viewCart": "Voir le panier",
+  "loadError": "Le panier n’a pas pu être chargé. Veuillez recharger la page.",
+  "errors": {
+    "rateLimited": "Trop de modifications en peu de temps. Veuillez patienter un instant et réessayer.",
+    "unavailable": "Cette pièce ne peut plus être commandée.",
+    "unexpectedError": "Le panier n’a pas pu être mis à jour. Veuillez réessayer."
+  }
 }

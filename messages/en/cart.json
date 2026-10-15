@@ -1,7 +1,38 @@
 {
   "title": "Cart",
   "empty": "Your cart is empty",
+  "emptyHint": "Browse the shop and add the pieces you like.",
   "yourOrder": "Your order",
   "continueToCheckout": "Continue to checkout",
-  "total": "Total"
+  "total": "Total",
+  "subtotal": "Subtotal",
+  "pieces": "{count, plural, one {# piece} other {# pieces}}",
+  "lines": "Pieces in the cart",
+  "each": "{quantity} ×",
+  "oneOfAKind": "One of a kind",
+  "madeToOrder": "Made to order",
+  "singlePiece": "This piece exists only once.",
+  "quantityOf": "Quantity of {title}",
+  "decrease": "One less of {title}",
+  "increase": "One more of {title}",
+  "removeLine": "Remove {title}",
+  "maxQuantity": "At most {max} per product",
+  "unavailablePiece": "A piece that is no longer available",
+  "status": {
+    "sold": "Sold",
+    "reserved": "Reserved",
+    "unavailable": "No longer available"
+  },
+  "unavailableNote": "Pieces that can no longer be ordered are not counted in the subtotal and will not be ordered. You can remove them.",
+  "orderRequest": "Continue to the order request",
+  "orderRequestTbd": "Order request: TBD",
+  "nothingToOrder": "There is nothing in the cart that can be ordered.",
+  "continueShopping": "Continue shopping",
+  "viewCart": "View the cart",
+  "loadError": "The cart could not be loaded. Please reload the page.",
+  "errors": {
+    "rateLimited": "Too many changes in a short time. Please wait a moment and try again.",
+    "unavailable": "This piece can no longer be ordered.",
+    "unexpectedError": "The cart could not be updated. Please try again."
+  }
 }

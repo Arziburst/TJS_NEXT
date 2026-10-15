@@ -115,7 +115,9 @@ test("the shell (header, menu, footer) is localized", async ({ page }, testInfo)
 
   await expectOnlyEnabledRouteLinks(header, "de", shellRouteKeys);
   if (routes.cart.enabled) {
-    await expect(header.getByRole("link", { name: deNav.cart }).filter({ visible: true })).toBeVisible();
+    // from 1024px up a link to the cart page; below it the mini-cart sheet's button
+    const role = isMobile ? "button" : "link";
+    await expect(header.getByRole(role, { name: deNav.cart }).filter({ visible: true })).toBeVisible();
   }
   if (isMobile) {
     await header.getByRole("button", { name: deNav.openMenu }).click();
