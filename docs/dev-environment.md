@@ -76,8 +76,11 @@ reaches the script without `-IssueNumber` (npm reads it as its own option). Pass
    never committed.
 5. `supabase start`.
 6. Writes the output of `supabase status -o env` (`API_URL`, `DB_URL`, `PUBLISHABLE_KEY`, `SECRET_KEY`,
-   `ANON_KEY`, `SERVICE_ROLE_KEY`, …) plus `SUPABASE_PROJECT_ID`, `PORT=3000+n` and
-   `NEXT_PUBLIC_SITE_URL=http://localhost:3000+n` into a managed block of `.env.local`. Lines outside the
+   `ANON_KEY`, `SERVICE_ROLE_KEY`, …) plus `SUPABASE_PROJECT_ID`, the app-level names the Supabase clients
+   read (`NEXT_PUBLIC_SUPABASE_URL` = `API_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` = `ANON_KEY`,
+   `SUPABASE_SERVICE_ROLE_KEY` = `SERVICE_ROLE_KEY`, server-only), `PORT=3000+n` and
+   `NEXT_PUBLIC_SITE_URL=http://127.0.0.1:3000+n` (the same host as the auth `site_url`) into a managed
+   block of `.env.local`. Lines outside the
    block are kept. `.env.local` is git-ignored. The keys are the public local demo keys of the CLI, never
    production values.
 

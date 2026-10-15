@@ -31,6 +31,11 @@ jobs:
       E2E_PORT: "3000"
       # The /ui-kit showcase the shell e2e tests use; on for the build and e2e here, unset on Vercel (404).
       TJS_UI_KIT: "true"
+      # The local stack of supabase/config.toml ([api] port) and the CLI's fixed public demo anon key, not
+      # secrets. Next inlines NEXT_PUBLIC_* at build time, before the stack starts; the step after
+      # `supabase start` fails if the stack reports other values.
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:40901
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -79,8 +84,20 @@ jobs:
         run: npm run test:db
 
       - name: Write the stack's values to .env.local
-        # The same values `npm run supabase:start:worktree` writes locally (public CLI demo keys).
-        run: npx supabase status -o env > .env.local
+        # The same names `npm run supabase:start:worktree` writes locally (public CLI demo keys).
+        run: |
+          npx supabase status -o env > "$RUNNER_TEMP/stack.env"
+          . "$RUNNER_TEMP/stack.env"
+          if [ "$API_URL" != "$NEXT_PUBLIC_SUPABASE_URL" ] || [ "$ANON_KEY" != "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
+            echo "::error::The local stack reports another API URL or anon key than the job env the build used ($API_URL). Update NEXT_PUBLIC_SUPABASE_* in ci.yml."
+            exit 1
+          fi
+          {
+            cat "$RUNNER_TEMP/stack.env"
+            echo "NEXT_PUBLIC_SUPABASE_URL=\"$API_URL\""
+            echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=\"$ANON_KEY\""
+            echo "SUPABASE_SERVICE_ROLE_KEY=\"$SERVICE_ROLE_KEY\""
+          } > .env.local
 
       - name: Install the Playwright browser
         run: npx playwright install --with-deps chromium

@@ -19,7 +19,7 @@ on `ubuntu-24.04` with Node from `.nvmrc`; this is the check branch protection r
 | 7 | local Supabase stack | `npx supabase start -x studio,postgres-meta,imgproxy,edge-runtime,logflare,vector,realtime,supavisor` (CLI from devDependencies) |
 | 8 | every migration, then the seed | `npm run db:reset` |
 | 9 | database tests (pgTAP) | `npm run test:db` |
-| 10 | the stack's values for the app | `npx supabase status -o env > .env.local` |
+| 10 | the stack's values for the app | `supabase status -o env` → `.env.local` with the names the app reads (as `supabase:start:worktree` writes them); fails if the stack's API URL or anon key differ from the job env |
 | 11 | e2e against the built app on the stack | `npx playwright install --with-deps chromium`, `npm run test:e2e` with `E2E_SERVER=start` |
 | 12 | evidence | Playwright report (`playwright-report/`) and traces (`test-results/`) as artifacts, 7 days |
 | 13 | cleanup (always) | `npx supabase stop --no-backup` |
@@ -31,8 +31,10 @@ on `ubuntu-24.04` with Node from `.nvmrc`; this is the check branch protection r
 - `E2E_SERVER=start` makes `playwright.config.ts` serve `next start` (the build from step 6) instead of
   `next dev`. `TJS_UI_KIT=true` is set for the whole job so the build contains the `/ui-kit` showcase the
   shell tests use; Vercel never sets it, so it stays a 404 in production.
-- The build runs before the stack starts: a `NEXT_PUBLIC_*` value the app inlines from the local stack (fixed
-  ports and the CLI's public demo keys) belongs in the job's `env`, not in `.env.local`.
+- The build runs before the stack starts, and Next inlines `NEXT_PUBLIC_*` at build time: so
+  `NEXT_PUBLIC_SUPABASE_URL` (`http://127.0.0.1:40901`) and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (the CLI's fixed
+  public demo key) are in the job's `env`. Step 10 checks them against the running stack. A new `NEXT_PUBLIC_*`
+  value from the stack goes into the job `env` the same way; server-only values come from `.env.local`.
 - `concurrency` groups runs per PR (`ci-pull_request-<n>`) and per pushed ref (`ci-push-refs/heads/main`) and
   cancels the older run of the same group when a new commit arrives (on `main` too: the newest run covers every
   earlier commit). A fork PR from a branch named `main` never shares a group with the push-to-main runs.
