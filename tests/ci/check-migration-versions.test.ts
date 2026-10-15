@@ -3,7 +3,8 @@ import { mkdirSync, mkdtempSync, rmSync, unlinkSync, writeFileSync, appendFileSy
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { run } from "../../scripts/ci/check-migration-versions.mjs";
+import { parseArgs, run } from "../../scripts/ci/check-migration-versions.mjs";
+import type { OpenPr } from "../../scripts/ci/migration-versions.mjs";
 
 // End-to-end against a throwaway git repository: base branch "main", work branch "feature".
 
@@ -16,6 +17,10 @@ let repo: string;
 
 function git(...args: string[]) {
   execFileSync("git", args, { cwd: repo, stdio: "pipe" });
+}
+
+function head() {
+  return execFileSync("git", ["rev-parse", "HEAD"], { cwd: repo, encoding: "utf8" }).trim();
 }
 
 function migration(name: string, sql = "select 1;\n") {
@@ -99,13 +104,80 @@ describe("check-migration-versions against a git repository", () => {
       cwd: repo,
       baseRef: "main",
       env,
-      listOpenPrs: ({ currentBranch }) => {
-        expect(currentBranch).toBe("feature");
-        return [{ number: 12, files: ["20261015103000_theirs.sql"] }];
-      },
+      listOpenPrs: () => [{ number: 12, headRefName: "other", files: ["20261015103000_theirs.sql"] }],
     });
     expect(report.warnings).toEqual([expect.stringContaining("is older than the latest on the base branch")]);
     expect(report.errors).toEqual([expect.stringContaining("already claimed by open PR #12")]);
+  });
+
+  describe("this branch's own PR is not a conflict", () => {
+    const MINE = "20261016100000_mine.sql";
+    let prHead: string;
+
+    beforeEach(() => {
+      migration(MINE);
+      git("add", ".");
+      git("commit", "-q", "-m", "feature");
+      prHead = head();
+    });
+
+    function report(prs: OpenPr[], options: { prNumber?: number } = {}) {
+      return run({ cwd: repo, baseRef: "main", env, listOpenPrs: () => prs, ...options });
+    }
+
+    it("by its head ref", () => {
+      expect(report([{ number: 21, headRefName: "feature", headSha: "0".repeat(40), files: [MINE] }]).errors).toEqual(
+        [],
+      );
+    });
+
+    it("by its head commit, on a branch under another name (a verifier's worktree)", () => {
+      git("switch", "-q", "-c", "21-verify");
+      expect(report([{ number: 21, headRefName: "feature", headSha: prHead, files: [MINE] }]).errors).toEqual([]);
+    });
+
+    it("by a head commit that HEAD contains (main merged in on an integration branch)", () => {
+      git("switch", "-q", "main");
+      migration("20261017100000_later_on_main.sql");
+      git("add", ".");
+      git("commit", "-q", "-m", "main moves on");
+      git("switch", "-q", "-c", "integration", prHead);
+      git("merge", "-q", "--no-edit", "main");
+      expect(report([{ number: 21, headRefName: "feature", headSha: prHead, files: [MINE] }]).errors).toEqual([]);
+    });
+
+    it("but another PR with the same version still is, also when its head commit is unknown here", () => {
+      git("switch", "-q", "-c", "21-verify");
+      const other = { number: 22, headRefName: "other", headSha: "f".repeat(40), files: ["20261016100000_theirs.sql"] };
+      const own = { number: 21, headRefName: "feature", headSha: prHead, files: [MINE] };
+      expect(report([own, other]).errors).toEqual([expect.stringContaining("already claimed by open PR #22")]);
+    });
+
+    it("by an explicit --pr, which alone decides", () => {
+      git("switch", "-q", "-c", "21-verify");
+      git("commit", "-q", "--allow-empty", "-m", "verifier note");
+      const own = { number: 21, headRefName: "feature", headSha: "e".repeat(40), files: [MINE] };
+      expect(report([own]).errors).toEqual([expect.stringContaining("already claimed by open PR #21")]);
+      expect(report([own], { prNumber: 21 }).errors).toEqual([]);
+      const sameHead = { number: 23, headRefName: "21-verify", headSha: head(), files: [MINE] };
+      expect(report([own, sameHead], { prNumber: 21 }).errors).toEqual([
+        expect.stringContaining("already claimed by open PR #23"),
+      ]);
+    });
+  });
+});
+
+describe("parseArgs", () => {
+  it("reads --base and --pr", () => {
+    expect(parseArgs([])).toEqual({ baseRef: undefined, prNumber: undefined });
+    expect(parseArgs(["--base", "origin/main", "--pr", "42"])).toEqual({ baseRef: "origin/main", prNumber: 42 });
+  });
+
+  it("rejects a missing or non-numeric value", () => {
+    expect(() => parseArgs(["--pr"])).toThrow("--pr needs a value");
+    expect(() => parseArgs(["--pr", "--base", "main"])).toThrow("--pr needs a value");
+    expect(() => parseArgs(["--pr", "#42"])).toThrow("--pr expects a PR number");
+    expect(() => parseArgs(["--pr", "0"])).toThrow("--pr expects a PR number");
   });
 
   it("reports a gh failure as a warning locally and an error in CI", () => {
