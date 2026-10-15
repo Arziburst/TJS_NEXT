@@ -3,7 +3,7 @@
   "filterShopBy": "Acquista per",
   "filterBy": "Filtra per",
   "showMore": "Mostra altro",
-  "shownCount": "Visualizzati {shown} di {total} prodotti",
+  "shownCount": "{total, plural, one {Visualizzazione di <b>{shown}</b> su <b>#</b> prodotto} other {Visualizzazione di <b>{shown}</b> su <b>#</b> prodotti}}",
   "categories": {
     "all": "Vedi tutto",
     "earrings": "Orecchini",
@@ -14,8 +14,25 @@
     "brooches": "Spille"
   },
   "sort": {
+    "newest": "Novità",
     "placeholder": "Seleziona un filtro",
     "priceAsc": "Prezzo (dal più basso al più alto)",
     "priceDesc": "Prezzo (dal più alto al più basso)"
+  },
+  "newBadge": "Nuovo",
+  "loadError": "Impossibile caricare i prodotti. Riprova più tardi.",
+  "meta": {
+    "title": "Negozio",
+    "description": "Bigiotteria alla moda ed elegante dell’autrice e designer: orecchini, collane, bracciali, coralli, anelli e spille.",
+    "categoryDescription": "{category} di TJS: bigiotteria alla moda ed elegante dell’autrice e designer."
+  },
+  "pagination": {
+    "label": "Pagine",
+    "previous": "Pagina precedente",
+    "next": "Pagina successiva",
+    "page": "Pagina {page}",
+    "position": "<b>{page}</b> di {total}",
+    "gap": "…",
+    "first": "Torna alla prima pagina"
   }
 }

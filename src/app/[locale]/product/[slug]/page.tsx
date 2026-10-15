@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Price } from "@/components/price";
+import { categoryHref, productHref } from "@/components/catalog/links";
 import { ProductDetails } from "@/components/product/product-details";
 import { ProductSkeleton } from "@/components/product/product-skeleton";
 import { getMetadataBase } from "@/i18n/metadata";
@@ -82,7 +83,7 @@ async function ProductContent({ params }: { params: PageProps<"/[locale]/product
   const { locale, slug } = await readParams(params);
   const page = await getProductPage(locale, slug);
   if (page.kind === "notFound") notFound();
-  if (page.kind === "redirect") redirect({ href: `/product/${page.slug}`, locale });
+  if (page.kind === "redirect") redirect({ href: productHref(page.slug), locale });
   if (page.kind !== "ok") throw new Error(`product page: ${page.kind}`);
 
   return (
@@ -114,7 +115,7 @@ async function ProductJsonLd({ locale, page }: { locale: Locale; page: Extract<A
   if (page.categoryName) {
     breadcrumbs.push({
       name: page.categoryName,
-      url: absolute(getPathname({ href: `/shop/${product.category.slug}`, locale })),
+      url: absolute(getPathname({ href: categoryHref(product.category.slug), locale })),
     });
   }
   breadcrumbs.push({ name: translation.title, url });

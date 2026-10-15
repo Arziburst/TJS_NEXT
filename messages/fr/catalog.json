@@ -3,7 +3,7 @@
   "filterShopBy": "Acheter par",
   "filterBy": "Filtrer par",
   "showMore": "Afficher plus",
-  "shownCount": "{shown} produits affichés sur {total}",
+  "shownCount": "{total, plural, one {Affichage de <b>{shown}</b> sur <b>#</b> produit} other {Affichage de <b>{shown}</b> sur <b>#</b> produits}}",
   "categories": {
     "all": "Tout voir",
     "earrings": "Boucles d’oreilles",
@@ -14,8 +14,25 @@
     "brooches": "Broches"
   },
   "sort": {
+    "newest": "Nouveautés",
     "placeholder": "Choisir un tri",
     "priceAsc": "Prix (croissant)",
     "priceDesc": "Prix (décroissant)"
+  },
+  "newBadge": "Nouveau",
+  "loadError": "Impossible de charger les produits. Veuillez réessayer plus tard.",
+  "meta": {
+    "title": "Boutique",
+    "description": "Bijoux tendance et élégants de la créatrice : boucles d’oreilles, colliers, bracelets, coraux, bagues et broches.",
+    "categoryDescription": "{category} de TJS : bijoux tendance et élégants de la créatrice."
+  },
+  "pagination": {
+    "label": "Pages",
+    "previous": "Page précédente",
+    "next": "Page suivante",
+    "page": "Page {page}",
+    "position": "<b>{page}</b> sur {total}",
+    "gap": "…",
+    "first": "Revenir à la première page"
   }
 }

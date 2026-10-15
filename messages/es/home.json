@@ -3,10 +3,7 @@
     "title": "TJS: bisutería de moda y con estilo",
     "description": "TJS es una tienda de bisutería de moda y con estilo, que la diseñadora autora hace realidad."
   },
-  "placeholder": {
-    "text": "Página de inicio provisional. La tienda se construirá en las próximas tareas.",
-    "comingSoon": "Próximamente"
-  },
+  "introBrand": "TJStore",
   "intro": "es una tienda de bisutería de moda y con estilo, que la diseñadora autora hace realidad.",
   "seeAll": "Ver todo",
   "seeAllImageAlt": "Imagen “Ver todo”",

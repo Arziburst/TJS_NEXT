@@ -10,7 +10,7 @@ import uk from "../messages/uk/home.json" with { type: "json" };
 import ukNav from "../messages/uk/nav.json" with { type: "json" };
 import { NAV_LEFT, NAV_RIGHT } from "../src/components/layout/nav-items";
 import { routes } from "../src/config/routes";
-import { allRouteKeys, expectOnlyEnabledRouteLinks } from "./routes";
+import { shellRouteKeys, expectOnlyEnabledRouteLinks } from "./routes";
 
 const locales = ["uk", "en", "de", "fr", "es", "it", "pl", "nl", "cs", "pt", "ro"];
 
@@ -51,7 +51,7 @@ test("/fr renders French with lang=fr", async ({ page }) => {
   const response = await page.goto("/fr");
   expect(response?.status()).toBe(200);
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-  await expect(page.getByText(fr.placeholder.text)).toBeVisible();
+  await expect(page.getByText(fr.intro)).toBeVisible();
   await expect(page).toHaveTitle(fr.meta.title);
 });
 
@@ -101,7 +101,7 @@ test("the shell (header, menu, footer) is localized", async ({ page }, testInfo)
   const header = page.locator("header");
   const navItems = [...NAV_LEFT, ...NAV_RIGHT];
 
-  await expectOnlyEnabledRouteLinks(header, "de", allRouteKeys);
+  await expectOnlyEnabledRouteLinks(header, "de", shellRouteKeys);
   if (routes.cart.enabled) {
     await expect(header.getByRole("link", { name: deNav.cart }).filter({ visible: true })).toBeVisible();
   }
@@ -133,12 +133,12 @@ test("the switcher changes the locale, keeps the path and sets NEXT_LOCALE", asy
   await switchLocale(page, isMobile, enNav, "de");
   await expect(page).toHaveURL(/\/de$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "de");
-  await expect(page.getByText(de.placeholder.text)).toBeVisible();
+  await expect(page.getByText(de.intro)).toBeVisible();
 
   await switchLocale(page, isMobile, deNav, "uk");
   await expect(page).toHaveURL(/\/uk$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "uk");
-  await expect(page.getByText(uk.placeholder.text)).toBeVisible();
+  await expect(page.getByText(uk.intro)).toBeVisible();
 
   const cookie = (await context.cookies()).find((entry) => entry.name === "NEXT_LOCALE");
   expect(cookie?.value).toBe("uk");

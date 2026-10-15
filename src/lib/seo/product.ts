@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { routes } from "@/config/routes";
 import { getPathname } from "@/i18n/navigation";
 import { locales, type Locale } from "@/i18n/routing";
 import type { ProductAvailability, ProductFulfillment, ProductTranslation } from "@/lib/catalog/types";
@@ -6,7 +7,7 @@ import { fallbackLocale } from "@/lib/catalog/mappers";
 import type { TranslationSlug } from "@/lib/catalog/product-path";
 
 export function productPath(locale: Locale, slug: string): string {
-  return getPathname({ href: `/product/${slug}`, locale });
+  return getPathname({ href: `${routes.product.path}/${slug}`, locale });
 }
 
 /**

@@ -3,7 +3,7 @@
   "filterShopBy": "Shop by",
   "filterBy": "Filter by",
   "showMore": "Show more",
-  "shownCount": "Showed {shown} of {total} products",
+  "shownCount": "{total, plural, one {Showed <b>{shown}</b> of <b>#</b> product} other {Showed <b>{shown}</b> of <b>#</b> products}}",
   "categories": {
     "all": "See all",
     "earrings": "Earrings",
@@ -14,8 +14,25 @@
     "brooches": "Brooches"
   },
   "sort": {
+    "newest": "Newest",
     "placeholder": "Select filter",
     "priceAsc": "Price (low to high)",
     "priceDesc": "Price (high to low)"
+  },
+  "newBadge": "New",
+  "loadError": "Could not load the products. Please try again later.",
+  "meta": {
+    "title": "Shop",
+    "description": "Fashionable and stylish jewelry by the author-designer: earrings, necklaces, bracelets, corals, rings and brooches.",
+    "categoryDescription": "{category} from TJS: fashionable and stylish jewelry by the author-designer."
+  },
+  "pagination": {
+    "label": "Pages",
+    "previous": "Previous page",
+    "next": "Next page",
+    "page": "Page {page}",
+    "position": "<b>{page}</b> of {total}",
+    "gap": "…",
+    "first": "Back to the first page"
   }
 }

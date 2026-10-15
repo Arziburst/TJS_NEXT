@@ -4,8 +4,11 @@
 Stops this worktree's stack tjs-<n> and removes its containers, volumes and network.
 
 .DESCRIPTION
-n is the leading number of the worktree folder or -IssueNumber. Only tjs-<n> is touched; tjs-main and
-every other stack are left alone. The data is not kept (--no-backup): the next start is a fresh database.
+The stack is the project_id in this worktree's supabase/config.toml, as npm run supabase:start:worktree
+wrote it; never a guess from the folder name. -IssueNumber is optional and must match that project_id.
+Refuses (and touches nothing) when config.toml was not rewritten (project_id "tjs-main") or the number
+differs. Only that stack is touched; tjs-main and every other stack are left alone. The data is not kept
+(--no-backup): the next start is a fresh database.
 
 .EXAMPLE
 npm run supabase:stop:worktree
@@ -20,8 +23,7 @@ $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/TjsStack.ps1"
 
 $repoRoot = Get-TjsRepoRoot
-$n = Resolve-TjsIssueNumber -IssueNumber $IssueNumber -RepoRoot $repoRoot
-$projectId = "tjs-$n"
+$projectId = Resolve-TjsConfiguredProjectId -IssueNumber $IssueNumber -RepoRoot $repoRoot
 
 Remove-TjsStack -ProjectId $projectId -WorkDir $repoRoot
 

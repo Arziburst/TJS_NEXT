@@ -1,12 +1,13 @@
 import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
+import { rewriteUnknownCategory } from "./lib/catalog/unknown-category";
 import { productNotFoundOrRedirect } from "./proxy/product-not-found";
 
-const handleI18nRouting = createMiddleware(routing);
+const intl = createMiddleware(routing);
 
 export default async function proxy(request: NextRequest) {
-  return (await productNotFoundOrRedirect(request)) ?? handleI18nRouting(request);
+  return rewriteUnknownCategory(request) ?? (await productNotFoundOrRedirect(request)) ?? intl(request);
 }
 
 export const config = {

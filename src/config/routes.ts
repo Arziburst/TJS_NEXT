@@ -6,7 +6,9 @@
 export const routes = {
   home: { path: "/", enabled: true },
   // #15
-  shop: { path: "/shop", enabled: false },
+  shop: { path: "/shop", enabled: true },
+  // #16: /product/<slug>; product cards link here, the shell does not
+  product: { path: "/product", enabled: true },
   // #21
   aboutUs: { path: "/about-us", enabled: false },
   // #20

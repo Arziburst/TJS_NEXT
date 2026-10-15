@@ -163,3 +163,12 @@ test("switching the language on a product page lands on the slug of that languag
   await expect(page.getByRole("heading", { level: 1, name: "Сережки-краплі з коралом" })).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test("a product card in the catalog opens the product page", async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto("/de/shop/earrings");
+  await page.getByTestId("product-card").filter({ hasText: "Korallen-Tropfenohrringe" }).click();
+  await expect(page).toHaveURL(new RegExp(`${DE_EARRINGS}$`));
+  await expect(page.getByRole("heading", { level: 1, name: "Korallen-Tropfenohrringe" })).toBeVisible();
+  expect(errors).toEqual([]);
+});
