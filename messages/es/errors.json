@@ -14,6 +14,9 @@
     "minItems": "El campo debe tener al menos {min} elementos",
     "chooseCity": "Debes escribir la ciudad correcta y elegir tu ciudad",
     "chooseWarehouse": "Debes elegir tu oficina de correos",
-    "chooseWarehouseNumber": "Debes escribir o elegir el número de la oficina de correos"
+    "chooseWarehouseNumber": "Debes escribir o elegir el número de la oficina de correos",
+    "nameMaxLength": "El nombre debe tener como máximo {max} caracteres",
+    "passwordMaxLength": "La contraseña debe tener como máximo {max} caracteres",
+    "passwordsDontMatch": "Las contraseñas no coinciden"
   }
 }

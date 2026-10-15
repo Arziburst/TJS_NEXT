@@ -139,7 +139,7 @@ describe("getCategories", () => {
 });
 
 describe("getProducts", () => {
-  it("queries published, not deleted products with the filters, sort and page", async () => {
+  it("queries published products with the filters, sort and page", async () => {
     responses.products = [{ data: [productRow()], error: null, count: 11 }];
     const result = await getProducts(
       { locale: "de", categorySlug: "earrings", fulfillment: "made_to_order", availability: ["available", "reserved"] },
@@ -148,7 +148,9 @@ describe("getProducts", () => {
     );
     const log = calls.products;
     expect(log).toContainEqual(["eq", "status", "published"]);
-    expect(log).toContainEqual(["is", "deleted_at", null]);
+    // soft-deleted rows are hidden by RLS: the API roles cannot even name deleted_at (column grants)
+    expect(log.some((call) => call.includes("deleted_at"))).toBe(false);
+    expect(String(log.find(([m]) => m === "select")?.[1])).not.toMatch(/(hs_code|deleted_at|created_by|updated_by)/);
     expect(log).toContainEqual(["in", "product_translations.locale", ["de", "en"]]);
     expect(log).toContainEqual(["eq", "category.slug", "earrings"]);
     expect(log).toContainEqual(["eq", "fulfillment", "made_to_order"]);

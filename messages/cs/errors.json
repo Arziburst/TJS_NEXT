@@ -14,6 +14,9 @@
     "minItems": "Pole musí obsahovat alespoň {min} položek",
     "chooseCity": "Musíte zadat správné město a vybrat své město",
     "chooseWarehouse": "Musíte vybrat svou pobočku pošty",
-    "chooseWarehouseNumber": "Musíte zadat nebo vybrat číslo pobočky pošty"
+    "chooseWarehouseNumber": "Musíte zadat nebo vybrat číslo pobočky pošty",
+    "nameMaxLength": "Jméno může mít nejvýše {max} znaků",
+    "passwordMaxLength": "Heslo může mít nejvýše {max} znaků",
+    "passwordsDontMatch": "Hesla se neshodují"
   }
 }

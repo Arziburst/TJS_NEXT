@@ -183,7 +183,7 @@ enable_anonymous_sign_ins = false
 # Allow/disallow testing manual linking of accounts
 enable_manual_linking = false
 # Passwords shorter than this value will be rejected as weak. Minimum 6, recommended 8 or more.
-minimum_password_length = 6
+minimum_password_length = 8
 # Passwords that do not meet the following requirements will be rejected as weak. Supported values
 # are: `letters_digits`, `lower_upper_letters_digits`, `lower_upper_letters_digits_symbols`
 password_requirements = ""
@@ -226,8 +226,9 @@ enable_signup = true
 # If enabled, a user will be required to confirm any email change on both the old, and new email
 # addresses. If disabled, only the new email is required to confirm.
 double_confirm_changes = true
-# If enabled, users need to confirm their email address before signing in.
-enable_confirmations = false
+# If enabled, users need to confirm their email address before signing in. On: an account is usable only
+# after the link in the confirmation email (locally the mail catcher, `[local_smtp]`).
+enable_confirmations = true
 # If enabled, users will need to reauthenticate or have logged in recently to change their password.
 secure_password_change = false
 # Controls the minimum amount of time that must pass before sending another signup confirmation or password reset email.
@@ -246,6 +247,17 @@ otp_expiry = 3600
 # pass = "env(SENDGRID_API_KEY)"
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
+
+# The confirmation and recovery links carry a token hash to the app's /<locale>/auth/confirm route, which
+# verifies it on the server (works on any device, unlike the PKCE code of the default links). Production
+# needs the same templates in the dashboard (docs/dev-environment.md).
+[auth.email.template.confirmation]
+subject = "Confirm your email"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your password"
+content_path = "./supabase/templates/recovery.html"
 
 # Uncomment to customize email template
 # [auth.email.template.invite]
@@ -339,11 +351,14 @@ skip_nonce_check = false
 email_optional = false
 
 # Google sign-in: off until the OAuth client exists. Client id and secret come from the environment
-# (the shell or an ignored `supabase/.env`), never from this file.
+# (GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET in the shell or the ignored `supabase/.env`), never from this
+# file; to try it locally set `enabled = true` in the worktree copy (docs/dev-environment.md). `enabled`
+# stays a literal: an env() there fails the config parse wherever the variable is unset (CI, other
+# worktrees). The app shows the Google button only when the Auth settings report the provider as enabled.
 [auth.external.google]
 enabled = false
-client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
-secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_CLIENT_SECRET)"
 redirect_uri = ""
 url = ""
 # Required for local sign in with Google.

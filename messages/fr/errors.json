@@ -14,6 +14,9 @@
     "minItems": "Le champ doit contenir au moins {min} éléments",
     "chooseCity": "Vous devez saisir la bonne ville et sélectionner votre ville",
     "chooseWarehouse": "Vous devez choisir votre bureau de poste",
-    "chooseWarehouseNumber": "Vous devez saisir ou choisir le numéro du bureau de poste"
+    "chooseWarehouseNumber": "Vous devez saisir ou choisir le numéro du bureau de poste",
+    "nameMaxLength": "Le nom doit comporter au plus {max} caractères",
+    "passwordMaxLength": "Le mot de passe doit comporter au plus {max} caractères",
+    "passwordsDontMatch": "Les mots de passe ne correspondent pas"
   }
 }

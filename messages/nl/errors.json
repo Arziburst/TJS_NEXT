@@ -14,6 +14,9 @@
     "minItems": "Het veld moet minstens {min} items bevatten",
     "chooseCity": "Je moet de juiste stad typen en je stad kiezen",
     "chooseWarehouse": "Je moet je postkantoor kiezen",
-    "chooseWarehouseNumber": "Je moet het nummer van het postkantoor typen of kiezen"
+    "chooseWarehouseNumber": "Je moet het nummer van het postkantoor typen of kiezen",
+    "nameMaxLength": "De naam mag maximaal {max} tekens lang zijn",
+    "passwordMaxLength": "Het wachtwoord mag maximaal {max} tekens lang zijn",
+    "passwordsDontMatch": "De wachtwoorden komen niet overeen"
   }
 }
