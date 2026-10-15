@@ -1,0 +1,21 @@
+{
+  "title": "Obchod",
+  "filterShopBy": "Nakupovat podle",
+  "filterBy": "Filtrovat podle",
+  "showMore": "Zobrazit více",
+  "shownCount": "Zobrazeno {shown} z {total} produktů",
+  "categories": {
+    "all": "Zobrazit vše",
+    "earrings": "Náušnice",
+    "necklaces": "Náhrdelníky",
+    "bracelets": "Náramky",
+    "corals": "Korále",
+    "rings": "Prsteny",
+    "brooches": "Brože"
+  },
+  "sort": {
+    "placeholder": "Vyberte filtr",
+    "priceAsc": "Cena (od nejnižší)",
+    "priceDesc": "Cena (od nejvyšší)"
+  }
+}

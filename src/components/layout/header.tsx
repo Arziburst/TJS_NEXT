@@ -1,6 +1,8 @@
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 import { cn } from "@/lib/utils";
-import { AccountSlot, CartSlot, LanguageSwitcherSlot } from "./header-slots";
+import { AccountSlot, CartSlot } from "./header-slots";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
 import { NAV_LEFT, NAV_RIGHT } from "./nav-items";
@@ -23,9 +25,11 @@ export function Header({
   className,
   cart = <CartSlot />,
   account = <AccountSlot />,
-  languageSwitcher = <LanguageSwitcherSlot />,
+  languageSwitcher = <LocaleSwitcher hideLabel />,
   menuFooter,
 }: HeaderProps) {
+  const t = useTranslations("nav");
+
   return (
     <header className={cn("sticky top-0 z-40 bg-background", className)}>
       <div className="page-container flex items-center justify-between gap-4 py-4 sb:items-start sb:gap-x-[70px] sb:pt-6 sb:pb-3">
@@ -36,7 +40,7 @@ export function Header({
           footer={menuFooter}
         />
         <Logo className="sb:flex sb:h-11 sb:items-center" />
-        <nav aria-label="Main" className="hidden grow items-start gap-x-[70px] sb:flex">
+        <nav aria-label={t("main")} className="hidden grow items-start gap-x-[70px] sb:flex">
           <ul className="flex h-11 w-full items-center justify-between">
             {NAV_LEFT.map((item) => (
               <li key={item.href}>

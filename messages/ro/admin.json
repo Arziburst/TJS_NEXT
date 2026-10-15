@@ -1,0 +1,28 @@
+{
+  "product": {
+    "title": "Introduceți informațiile despre produs.",
+    "titleLabel": "Introduceți titlul",
+    "typeLabel": "Alegeți tipul corect pentru produs",
+    "descriptionLabel": "Introduceți descrierea",
+    "weightLabel": "Introduceți greutatea produsului în grame",
+    "priceLabel": "Introduceți prețul produsului în {currency}",
+    "availableLabel": "Produs disponibil",
+    "available": "Disponibilitate",
+    "unavailable": "Indisponibilitate",
+    "confirmDeletion": "Confirmați ștergerea definitivă!",
+    "confirmDeletionTwice": "Sigur doriți să ștergeți acest produs?",
+    "deletionError": "Eroare la ștergere",
+    "gallery": "Galerie",
+    "addImagesFromGallery": "Adăugați imagini din galerie",
+    "chooseImage": "Alegeți imaginea",
+    "galleryImageAlt": "Imagine din galerie",
+    "continueEditing": "Continuați editarea"
+  },
+  "order": {
+    "notFound": "Comanda nu a fost găsită",
+    "title": "Informații despre comandă.",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "comment": "Comentariu"
+  }
+}

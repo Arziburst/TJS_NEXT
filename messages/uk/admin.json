@@ -1,0 +1,28 @@
+{
+  "product": {
+    "title": "Будь ласка, введіть інформацію про товар.",
+    "titleLabel": "Введіть назву",
+    "typeLabel": "Виберіть правильний тип товару",
+    "descriptionLabel": "Введіть опис",
+    "weightLabel": "Введіть вагу товару в грамах",
+    "priceLabel": "Введіть ціну товару в {currency}",
+    "availableLabel": "Товар у наявності",
+    "available": "Наявність",
+    "unavailable": "Відсутність",
+    "confirmDeletion": "Підтвердіть повне видалення!",
+    "confirmDeletionTwice": "Ви впевнені, що хочете видалити цей товар?",
+    "deletionError": "Помилка видалення",
+    "gallery": "Галерея",
+    "addImagesFromGallery": "Додати зображення з галереї",
+    "chooseImage": "Вибрати зображення",
+    "galleryImageAlt": "Зображення з галереї",
+    "continueEditing": "Продовжити редагування"
+  },
+  "order": {
+    "notFound": "Замовлення не знайдено",
+    "title": "Інформація про замовлення.",
+    "email": "Електронна пошта",
+    "phone": "Телефон",
+    "comment": "Коментар"
+  }
+}

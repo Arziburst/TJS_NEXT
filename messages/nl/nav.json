@@ -1,0 +1,29 @@
+{
+  "shop": "Winkel",
+  "aboutUs": "Over ons",
+  "contacts": "Contact",
+  "cart": "Winkelwagen",
+  "settings": "Instellingen",
+  "addProduct": "Product toevoegen",
+  "orders": "Bestellingen",
+  "logout": "Uitloggen",
+  "signInUp": "Inloggen en registreren",
+  "language": "Taal",
+  "account": "Account",
+  "openMenu": "Menu openen",
+  "closeMenu": "Menu sluiten",
+  "main": "Hoofdnavigatie",
+  "localeNames": {
+    "uk": "Українська",
+    "en": "English",
+    "de": "Deutsch",
+    "fr": "Français",
+    "es": "Español",
+    "it": "Italiano",
+    "pl": "Polski",
+    "nl": "Nederlands",
+    "cs": "Čeština",
+    "pt": "Português",
+    "ro": "Română"
+  }
+}

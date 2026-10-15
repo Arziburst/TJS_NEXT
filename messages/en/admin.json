@@ -1,0 +1,28 @@
+{
+  "product": {
+    "title": "Please enter product information.",
+    "titleLabel": "Enter title",
+    "typeLabel": "Choose the correct type for the product",
+    "descriptionLabel": "Enter description",
+    "weightLabel": "Enter the product weight in grams",
+    "priceLabel": "Enter the product price in {currency}",
+    "availableLabel": "Product available",
+    "available": "Availability",
+    "unavailable": "Non-availability",
+    "confirmDeletion": "Confirm complete deletion!",
+    "confirmDeletionTwice": "Are you sure you want to delete this product?",
+    "deletionError": "Deletion error",
+    "gallery": "Gallery",
+    "addImagesFromGallery": "Add images from the gallery",
+    "chooseImage": "Choose image",
+    "galleryImageAlt": "Image from the gallery",
+    "continueEditing": "Continue editing"
+  },
+  "order": {
+    "notFound": "Order not found",
+    "title": "Information about the order.",
+    "email": "Email",
+    "phone": "Phone",
+    "comment": "Comment"
+  }
+}

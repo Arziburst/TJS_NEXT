@@ -1,0 +1,28 @@
+{
+  "product": {
+    "title": "Introduza as informações do produto.",
+    "titleLabel": "Introduza o título",
+    "typeLabel": "Escolha o tipo correto para o produto",
+    "descriptionLabel": "Introduza a descrição",
+    "weightLabel": "Introduza o peso do produto em gramas",
+    "priceLabel": "Introduza o preço do produto em {currency}",
+    "availableLabel": "Produto disponível",
+    "available": "Disponibilidade",
+    "unavailable": "Indisponibilidade",
+    "confirmDeletion": "Confirme a eliminação definitiva!",
+    "confirmDeletionTwice": "Tem a certeza de que quer eliminar este produto?",
+    "deletionError": "Erro ao eliminar",
+    "gallery": "Galeria",
+    "addImagesFromGallery": "Adicionar imagens da galeria",
+    "chooseImage": "Escolher imagem",
+    "galleryImageAlt": "Imagem da galeria",
+    "continueEditing": "Continuar a editar"
+  },
+  "order": {
+    "notFound": "Encomenda não encontrada",
+    "title": "Informações sobre a encomenda.",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "comment": "Comentário"
+  }
+}

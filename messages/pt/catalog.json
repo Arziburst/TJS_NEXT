@@ -1,0 +1,21 @@
+{
+  "title": "Loja",
+  "filterShopBy": "Comprar por",
+  "filterBy": "Filtrar por",
+  "showMore": "Ver mais",
+  "shownCount": "A mostrar {shown} de {total} produtos",
+  "categories": {
+    "all": "Ver tudo",
+    "earrings": "Brincos",
+    "necklaces": "Colares",
+    "bracelets": "Pulseiras",
+    "corals": "Corais",
+    "rings": "Anéis",
+    "brooches": "Broches"
+  },
+  "sort": {
+    "placeholder": "Selecione o filtro",
+    "priceAsc": "Preço (do mais baixo ao mais alto)",
+    "priceDesc": "Preço (do mais alto ao mais baixo)"
+  }
+}

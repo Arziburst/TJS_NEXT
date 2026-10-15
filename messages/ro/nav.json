@@ -1,0 +1,29 @@
+{
+  "shop": "Magazin",
+  "aboutUs": "Despre noi",
+  "contacts": "Contacte",
+  "cart": "Coș",
+  "settings": "Setări",
+  "addProduct": "Adaugă produs",
+  "orders": "Comenzi",
+  "logout": "Deconectare",
+  "signInUp": "Autentificare și înregistrare",
+  "language": "Limbă",
+  "account": "Cont",
+  "openMenu": "Deschide meniul",
+  "closeMenu": "Închide meniul",
+  "main": "Navigare principală",
+  "localeNames": {
+    "uk": "Українська",
+    "en": "English",
+    "de": "Deutsch",
+    "fr": "Français",
+    "es": "Español",
+    "it": "Italiano",
+    "pl": "Polski",
+    "nl": "Nederlands",
+    "cs": "Čeština",
+    "pt": "Português",
+    "ro": "Română"
+  }
+}

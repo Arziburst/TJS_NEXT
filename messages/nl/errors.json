@@ -1,0 +1,19 @@
+{
+  "notFound": {
+    "title": "Pagina niet gevonden",
+    "description": "De pagina die je zoekt bestaat niet.",
+    "home": "Naar de startpagina"
+  },
+  "form": {
+    "required": "Dit veld is verplicht",
+    "invalidEmail": "Ongeldig e-mailformaat",
+    "invalidPhone": "Ongeldig telefoonnummerformaat. Bijvoorbeeld +380946826242",
+    "nameMinLength": "De naam moet minstens {min} tekens lang zijn",
+    "priceMin": "De prijs moet minstens {min} {currency} zijn.",
+    "passwordMinLength": "Het wachtwoord moet minstens {min} tekens lang zijn",
+    "minItems": "Het veld moet minstens {min} items bevatten",
+    "chooseCity": "Je moet de juiste stad typen en je stad kiezen",
+    "chooseWarehouse": "Je moet je postkantoor kiezen",
+    "chooseWarehouseNumber": "Je moet het nummer van het postkantoor typen of kiezen"
+  }
+}

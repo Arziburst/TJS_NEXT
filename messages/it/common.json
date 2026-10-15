@@ -1,0 +1,48 @@
+{
+  "brand": "TJS",
+  "noData": "Nessun dato",
+  "total": "Totale",
+  "pagination": {
+    "of": "di"
+  },
+  "actions": {
+    "submit": "Invia",
+    "remove": "Rimuovi",
+    "create": "Crea",
+    "edit": "Modifica",
+    "goBack": "Indietro",
+    "close": "Chiudi"
+  },
+  "fields": {
+    "firstName": "Nome",
+    "lastName": "Cognome",
+    "fullName": "Nome e cognome",
+    "email": "Email",
+    "phone": "Telefono",
+    "password": "Password",
+    "passwordAgain": "Ripeti la password",
+    "city": "Città",
+    "someData": "Inserisci dei dati..."
+  },
+  "contact": {
+    "phone": "Telefono",
+    "email": "Email"
+  },
+  "cookieConsent": {
+    "text": "Utilizziamo i cookie per offrirti la migliore esperienza sul nostro sito. Continuando a usare il sito, presumiamo che tu ne sia soddisfatto.",
+    "accept": "Ho capito"
+  },
+  "about": {
+    "title": "Chi siamo",
+    "intro": "Mi chiamo Elena, seguo le novità e le tendenze e ho una vasta esperienza nel mondo della bigiotteria.",
+    "imageAlt": "Immagine principale della pagina \"Chi siamo\"",
+    "missionStart": "amo il mio lavoro e voglio portare gioia e bellezza nel nostro mondo.",
+    "motto": "Il lusso accessibile è il mio motto!",
+    "customOrders": "Creo anche gioielli su misura, tenendo sempre conto dei desideri dei clienti."
+  },
+  "footer": {
+    "contactsTbd": "Contatti: TBD",
+    "rights": "Trend Jewelry Store. Tutti i diritti riservati",
+    "developedBy": "Sviluppato da <link>Arziburst*</link>"
+  }
+}

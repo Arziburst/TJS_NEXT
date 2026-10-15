@@ -1,0 +1,8 @@
+{
+  "orderStatus": {
+    "canceled": "Storniert",
+    "inProcessing": "In Bearbeitung",
+    "accepted": "Angenommen",
+    "closed": "Abgeschlossen"
+  }
+}

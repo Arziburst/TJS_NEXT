@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "./nav-items";
 
@@ -11,7 +11,9 @@ type NavLinkProps = NavItem & {
 };
 
 // The active route stays coral; the coral underline slides on hover and keyboard focus.
-export function NavLink({ href, label, className, onNavigate }: NavLinkProps) {
+export function NavLink({ href, labelKey, className, onNavigate }: NavLinkProps) {
+  const t = useTranslations("nav");
+  // the pathname without the locale prefix
   const pathname = usePathname();
   const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
@@ -26,7 +28,7 @@ export function NavLink({ href, label, className, onNavigate }: NavLinkProps) {
         className,
       )}
     >
-      {label}
+      {t(labelKey)}
     </Link>
   );
 }

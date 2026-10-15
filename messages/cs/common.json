@@ -1,0 +1,48 @@
+{
+  "brand": "TJS",
+  "noData": "Žádná data",
+  "total": "Celkem",
+  "pagination": {
+    "of": "z"
+  },
+  "actions": {
+    "submit": "Odeslat",
+    "remove": "Odstranit",
+    "create": "Vytvořit",
+    "edit": "Upravit",
+    "goBack": "Zpět",
+    "close": "Zavřít"
+  },
+  "fields": {
+    "firstName": "Jméno",
+    "lastName": "Příjmení",
+    "fullName": "Jméno a příjmení",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "password": "Heslo",
+    "passwordAgain": "Heslo znovu",
+    "city": "Město",
+    "someData": "Zadejte nějaké údaje..."
+  },
+  "contact": {
+    "phone": "Telefon",
+    "email": "E-mail"
+  },
+  "cookieConsent": {
+    "text": "Používáme cookies, abychom vám poskytli co nejlepší zážitek na našem webu. Pokračováním v používání webu souhlasíte s jejich použitím.",
+    "accept": "Rozumím"
+  },
+  "about": {
+    "title": "O nás",
+    "intro": "Jmenuji se Elena, sleduji novinky a trendy a mám bohaté zkušenosti s prací s bižuterií.",
+    "imageAlt": "Hlavní obrázek stránky „O nás“",
+    "missionStart": "miluji svou práci a chci přinášet radost a krásu do našeho světa.",
+    "motto": "Dostupný luxus je moje motto!",
+    "customOrders": "Vyrábím také šperky na zakázku a vždy beru v úvahu přání zákazníků."
+  },
+  "footer": {
+    "contactsTbd": "Kontakty: TBD",
+    "rights": "Trend Jewelry Store. Všechna práva vyhrazena",
+    "developedBy": "Vytvořil <link>Arziburst*</link>"
+  }
+}

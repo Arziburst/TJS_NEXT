@@ -1,0 +1,21 @@
+{
+  "title": "Boutique",
+  "filterShopBy": "Acheter par",
+  "filterBy": "Filtrer par",
+  "showMore": "Afficher plus",
+  "shownCount": "{shown} produits affichés sur {total}",
+  "categories": {
+    "all": "Tout voir",
+    "earrings": "Boucles d’oreilles",
+    "necklaces": "Colliers",
+    "bracelets": "Bracelets",
+    "corals": "Coraux",
+    "rings": "Bagues",
+    "brooches": "Broches"
+  },
+  "sort": {
+    "placeholder": "Choisir un tri",
+    "priceAsc": "Prix (croissant)",
+    "priceDesc": "Prix (décroissant)"
+  }
+}

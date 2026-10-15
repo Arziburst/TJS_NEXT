@@ -66,7 +66,7 @@ browser on **desktop 1440** and **mobile 390** with no console errors, screensho
   service-role key, private API key or secret in client code or in a `NEXT_PUBLIC_*` variable.
 - **RLS on every table**, with negative pgTAP tests.
 - **Responsive layout in CSS only** (Tailwind breakpoints, container queries), never by `window` width.
-- **All user-visible text through next-intl** (from task #9 on); no hard-coded strings in components.
+- **All user-visible text through next-intl** (from task #10 on); no hard-coded strings in components.
 - Never disable or loosen TypeScript, ESLint, tests, timeouts or tolerances to get green.
 - No new dependency without a concrete need named in the PR; versions pinned exactly.
 

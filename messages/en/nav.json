@@ -1,0 +1,29 @@
+{
+  "shop": "Shop",
+  "aboutUs": "About us",
+  "contacts": "Contacts",
+  "cart": "Cart",
+  "settings": "Settings",
+  "addProduct": "Add product",
+  "orders": "Orders",
+  "logout": "Logout",
+  "signInUp": "Sign In & Up",
+  "language": "Language",
+  "account": "Account",
+  "openMenu": "Open menu",
+  "closeMenu": "Close menu",
+  "main": "Main",
+  "localeNames": {
+    "uk": "Українська",
+    "en": "English",
+    "de": "Deutsch",
+    "fr": "Français",
+    "es": "Español",
+    "it": "Italiano",
+    "pl": "Polski",
+    "nl": "Nederlands",
+    "cs": "Čeština",
+    "pt": "Português",
+    "ro": "Română"
+  }
+}

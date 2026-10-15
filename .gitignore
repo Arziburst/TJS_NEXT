@@ -39,3 +39,6 @@ supabase/.branches/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Playwright MCP snapshots and screenshots (browser walks)
+.playwright-mcp/

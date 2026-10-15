@@ -1,0 +1,8 @@
+{
+  "orderStatus": {
+    "canceled": "Anulată",
+    "inProcessing": "În curs de procesare",
+    "accepted": "Acceptată",
+    "closed": "Finalizată"
+  }
+}
