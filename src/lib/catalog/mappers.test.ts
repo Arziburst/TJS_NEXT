@@ -37,7 +37,15 @@ describe("mapProduct", () => {
     sku: "S-1",
     fulfillment: "one_of_a_kind",
     availability: "sold",
-    lead_time_days: null,
+    lead_time_min_days: null,
+
+    lead_time_max_days: null,
+
+    length_mm: null,
+
+    width_mm: null,
+
+    height_mm: null,
     price_usd_text: "54.90",
     weight_g: 30,
     created_at: "2026-10-01T00:00:00Z",
@@ -51,6 +59,8 @@ describe("mapProduct", () => {
         description: "A strand",
         materials: "Coral",
         care: "Keep dry",
+        clasp: null,
+        lead_time_note: null,
         alt_text: "Red coral on beige",
         meta_title: null,
         meta_description: null,

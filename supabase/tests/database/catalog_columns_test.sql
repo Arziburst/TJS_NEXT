@@ -30,7 +30,7 @@ grant select on hidden to anon, authenticated;
 -- What the storefront data layer selects (src/lib/catalog/index.ts), without the internal columns.
 create temp table visible (stmt text) on commit drop;
 insert into visible values
-  ($$select id, category_id, sku, status, fulfillment, availability, lead_time_days, price_usd, weight_g, position, published_at, created_at, updated_at
+  ($$select id, category_id, sku, status, fulfillment, availability, lead_time_min_days, lead_time_max_days, price_usd, weight_g, position, published_at, created_at, updated_at
      from public.products where id = 'b3000000-0000-4000-8000-000000000001'$$),
   ($$select id, slug, position from public.categories where id = 'c3000000-0000-4000-8000-000000000001'$$),
   ($$select product_id, locale, slug, title, description, materials, care, alt_text, meta_title, meta_description, source, reviewed_at

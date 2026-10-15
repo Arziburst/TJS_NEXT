@@ -26,8 +26,16 @@
   "page": {
     "materials": "Materiały",
     "care": "Pielęgnacja",
+    "clasp": "Zapięcie",
     "weight": "Waga",
+    "dimensions": "Wymiary",
+    "dimension": {
+      "length": "długość {value}",
+      "width": "szerokość {value}",
+      "height": "wysokość {value}"
+    },
     "leadTime": "Wykonanie w {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}",
+    "leadTimeRange": "Wykonanie w {min}–{max, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}",
     "oneOfAKind": "Jedyny egzemplarz",
     "reserved": "Zarezerwowane",
     "sold": "Sprzedane",

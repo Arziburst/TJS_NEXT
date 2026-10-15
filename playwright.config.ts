@@ -7,7 +7,7 @@ const baseURL = externalBaseURL ?? `http://localhost:${port}`;
 // E2E_SERVER=start serves the production build (`npm run build` first), as CI does; default `next dev`.
 const serverScript = process.env.E2E_SERVER === "start" ? "start" : "dev";
 // e2e files that write products of their own to the catalog (see the projects below)
-const CATALOG_WRITERS = "**/cart.e2e.ts";
+const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts"];
 
 export default defineConfig({
   testDir: "./e2e",
