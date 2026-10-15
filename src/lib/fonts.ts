@@ -23,7 +23,6 @@ export const inter = Inter({
 // not preloaded while two candidates exist: only the selected face is ever requested
 export const displayCandidateA = Cormorant_Garamond({
   subsets: ["latin", "latin-ext", "cyrillic"],
-  weight: ["400", "500", "600"],
   variable: "--font-display-face",
   display: "swap",
   preload: false,

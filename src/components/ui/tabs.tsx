@@ -58,7 +58,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex flex-1 items-center justify-center gap-1.5 border-b-2 border-transparent px-3 py-1.5 font-sans text-sm font-semibold whitespace-nowrap text-foreground transition outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-active:border-accent data-active:text-accent data-active:hover:opacity-100 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative inline-flex flex-1 items-center justify-center gap-1.5 border-b-2 border-transparent px-3 py-1.5 font-sans text-sm font-semibold whitespace-nowrap text-foreground transition outline-none group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start hover:opacity-70 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-active:border-accent data-active:text-accent data-active:hover:opacity-100 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -71,7 +71,7 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
     <TabsPrimitive.Panel
       data-slot="tabs-content"
       className={cn(
-        "flex-1 text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        "flex-1 text-sm outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-ring",
         className
       )}
       {...props}

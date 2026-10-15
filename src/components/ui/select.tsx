@@ -44,7 +44,7 @@ function SelectTrigger({
       data-size={size}
       data-variant={variant}
       className={cn(
-        "flex w-fit items-center justify-between gap-1.5 rounded-none bg-transparent text-sm whitespace-nowrap text-foreground transition outline-none select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-accent data-placeholder:text-foreground/60 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "flex w-fit items-center justify-between gap-1.5 rounded-none bg-transparent text-sm whitespace-nowrap text-foreground transition outline-none select-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-accent data-placeholder:text-foreground/60 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         "data-[variant=outline]:border-2 data-[variant=outline]:border-input data-[variant=outline]:p-2.5 data-[variant=outline]:font-input data-[variant=outline]:hover:opacity-70 data-[variant=outline]:data-[size=default]:h-11 data-[variant=outline]:data-[size=sm]:h-9",
         "data-[variant=ghost]:font-sans data-[variant=ghost]:font-semibold data-[variant=ghost]:hover:text-accent data-[variant=ghost]:aria-expanded:text-accent",
         className
