@@ -35,7 +35,31 @@ async function expectTbdEstimate(page: Page, t: Texts) {
   await expect(page.locator("[data-slot=customs-notice]")).toHaveText(t.customsNotice);
 }
 
-test("PL: town, point type filter, parcel locker, then the flat-rate estimate with the customs notice", async ({ page }) => {
+// Nova Post's price for the D37 estimate box (the fixture server's calculation), in the visitor's currency
+async function expectCarrierEstimate(
+  page: Page,
+  t: Texts,
+  locale: string,
+  { currency, text, date }: { currency: string; text: RegExp; date: string | null },
+) {
+  const line = page.locator("[data-slot=quote-line]");
+  await expect(line).toHaveAttribute("data-source", "carrier");
+  await expect(line.locator("[data-slot=estimate-mark]")).toHaveText(t.quote.estimate);
+  await expect(line.locator("[data-slot=price]")).toHaveAttribute("data-currency", currency);
+  await expect(line.locator("[data-slot=price]")).toHaveText(text);
+  await expect(line).toContainText(t.quote.carrierNote);
+  if (date) {
+    const shown = new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: "Europe/Kyiv" }).format(new Date(date));
+    await expect(line).toContainText(t.quote.deliveryDate.replace("{date}", shown));
+  } else {
+    await expect(line).not.toContainText(t.quote.deliveryDate.replace("{date}", ""));
+  }
+  await expect(page.locator("[data-slot=customs-notice]")).toHaveText(t.customsNotice);
+}
+
+// The fixture calculations: PL 397.50 UAH (21 Oct), DE 11.75 EUR (22 Oct), FR 612.75 UAH (no date); converted
+// at the seeded rates with the D28 markup and charm rounding up
+test("PL: town, point type filter, parcel locker, then Nova Post's estimate with the customs notice", async ({ page }) => {
   const errors = collectErrors(page);
   const t = pl.internationalDelivery;
   await page.goto("/pl/delivery-demo/nova-post");
@@ -51,12 +75,12 @@ test("PL: town, point type filter, parcel locker, then the flat-rate estimate wi
   await page.getByRole("button", { name: t.divisionTypes.Postomat, exact: true }).click();
   await expect(points).toHaveCount(1);
   await points.first().check();
-  await expectTbdEstimate(page, t);
+  await expectCarrierEstimate(page, t, "pl", { currency: "PLN", text: /^≈ 39\szł$/, date: "2026-10-21T09:00:00Z" });
   await page.waitForLoadState("networkidle");
   expect(errors).toEqual([]);
 });
 
-test("DE: a courier delivery to an address gets the flat-rate estimate", async ({ page }) => {
+test("DE: a courier delivery to an address gets Nova Post's estimate", async ({ page }) => {
   const errors = collectErrors(page);
   const t = de.internationalDelivery;
   await page.goto("/de/delivery-demo/nova-post");
@@ -67,12 +91,12 @@ test("DE: a courier delivery to an address gets the flat-rate estimate", async (
   await page.getByLabel(t.address.street).fill("Invalidenstraße");
   await page.getByLabel(t.address.building).fill("1");
   await page.getByRole("button", { name: t.address.submit }).click();
-  await expectTbdEstimate(page, t);
+  await expectCarrierEstimate(page, t, "de", { currency: "EUR", text: /^≈ 12,90\s€$/, date: "2026-10-22T09:00:00Z" });
   await page.waitForLoadState("networkidle");
   expect(errors).toEqual([]);
 });
 
-test("FR: a branch in Paris gets the flat-rate estimate", async ({ page }) => {
+test("FR: a branch in Paris gets Nova Post's estimate, without a date when the route has none", async ({ page }) => {
   const errors = collectErrors(page);
   const t = fr.internationalDelivery;
   await page.goto("/fr/delivery-demo/nova-post");
@@ -80,12 +104,13 @@ test("FR: a branch in Paris gets the flat-rate estimate", async ({ page }) => {
   await page.getByRole("combobox", { name: t.settlement }).fill("Par");
   await page.getByRole("option", { name: /Paris/ }).click();
   await page.getByRole("group", { name: t.division }).getByRole("radio", { name: /PARIS 1/ }).check();
-  await expectTbdEstimate(page, t);
+  await expectCarrierEstimate(page, t, "fr", { currency: "EUR", text: /^≈ 12,90\s€$/, date: null });
   await page.waitForLoadState("networkidle");
   expect(errors).toEqual([]);
 });
 
-test("CH: courier only, to the address, with the customs notice", async ({ page }) => {
+// The fixture server cannot quote CH (422), so the zone C flat rate stands in: TBD
+test("CH: courier only, to the address; no quote from Nova Post falls back to the zone rate", async ({ page }) => {
   const errors = collectErrors(page);
   const t = de.internationalDelivery;
   await page.goto("/de/delivery-demo/nova-post");

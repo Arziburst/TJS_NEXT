@@ -9,6 +9,8 @@ import { localStack } from "../catalog/local-stack";
 vi.mock("server-only", () => ({}));
 
 const stack = localStack();
+// a one-line cart (test values): even with a parcel to quote, no key means the zone flat rate
+const GOODS = { weightGrams: 30, totalUahMinor: 129_900 };
 
 describe.skipIf(!stack)("Nova Post fallback on the local stack", async () => {
   if (!stack) return;
@@ -45,9 +47,25 @@ describe.skipIf(!stack)("Nova Post fallback on the local stack", async () => {
     const destination = { kind: "address", city: "City", postCode: "10115", street: "Street", building: "1" } as const;
     const estimate = await estimateDelivery(
       { country, destination, currency },
-      { client: getNovaPostClient(), parcel: parcelForOrder(), zoneRates: readZoneRates, tables },
+      { client: getNovaPostClient(), parcel: parcelForOrder(GOODS), zoneRates: readZoneRates, tables },
     );
     expect(estimate).toEqual({ source: "flatRate", zone, price: { state: "tbd" }, reason: "notConfigured" });
+  });
+
+  it("refuses the 21st quote of one client within a minute (the stack's consume_rate_limit)", async () => {
+    const { allowDeliveryRequest } = await import("@/lib/delivery/nova-post/rate-limit");
+    const burst = async () => {
+      // a fresh client per burst, so earlier runs do not count
+      const ip = `test-client-${crypto.randomUUID()}`;
+      const answers: boolean[] = [];
+      for (let i = 0; i < 21; i++) answers.push(await allowDeliveryRequest("quote", ip));
+      return answers;
+    };
+    const expected = [...Array<boolean>(20).fill(true), false];
+    let answers = await burst();
+    // the minute window can turn over inside a burst, restarting the count: one more burst then
+    if (answers.join() !== expected.join()) answers = await burst();
+    expect(answers).toEqual(expected);
   });
 
   it("converts a flat rate once one is set, like a product price", async () => {
@@ -58,7 +76,7 @@ describe.skipIf(!stack)("Nova Post fallback on the local stack", async () => {
     const destination = { kind: "address", city: "Wien", postCode: "1010", street: "Graben", building: "1" } as const;
     const estimate = await estimateDelivery(
       { country: "AT", destination, currency: "EUR" },
-      { client: getNovaPostClient(), parcel: parcelForOrder(), zoneRates: readZoneRates, tables },
+      { client: getNovaPostClient(), parcel: parcelForOrder(GOODS), zoneRates: readZoneRates, tables },
     );
     expect(estimate).toEqual({
       source: "flatRate",

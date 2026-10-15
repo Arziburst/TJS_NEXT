@@ -60,8 +60,10 @@
       "unavailable": "No disponible en este momento",
       "deliveryDate": "Entrega prevista: {date}",
       "estimateNote": "Tarifa fija de la zona de destino; el coste final puede variar.",
-      "tbdNote": "La tarifa de envío de esta zona aún no se ha fijado."
+      "tbdNote": "La tarifa de envío de esta zona aún no se ha fijado.",
+      "carrierNote": "Precio de Nova Post para una caja pequeña (10 × 10 × 5 cm); el embalaje varía, por lo que el precio real puede ser distinto."
     },
-    "customsNotice": "Es posible que el destinatario deba pagar el IVA de importación y los aranceles en la entrega."
+    "customsNotice": "Es posible que el destinatario deba pagar el IVA de importación y los aranceles en la entrega.",
+    "tooManyRequests": "Demasiadas solicitudes. Inténtalo de nuevo dentro de un minuto."
   }
 }

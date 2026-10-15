@@ -15,8 +15,8 @@ export type ShownPrice = { state: "amount"; money: Money } | { state: "tbd" } | 
 export type FallbackReason =
   // NOVA_POST_API_KEY is not set
   | "notConfigured"
-  // the parcel rules (packaging, declared value) are TBD
-  | "parcelTbd"
+  // no goods of any value to build the parcel from (parcelForOrder)
+  | "noParcel"
   // the API failed or refused to quote
   | "carrierFailed"
   // the API quoted in a currency the shop does not show
@@ -69,12 +69,12 @@ async function flatRate(
 
 /**
  * The delivery estimate for a destination abroad, in the visitor's display currency: Nova Post's live
- * calculation when the API is configured and a parcel is known, else the zone's flat rate marked as an
- * estimate. Never throws.
+ * calculation for the estimate box (D37) when the API is configured and a parcel is known, else the zone's
+ * flat rate. Both are estimates and shown as such. Never throws.
  */
 export async function estimateDelivery(input: EstimateInput, deps: EstimateDeps): Promise<DeliveryEstimate> {
   if (!deps.client) return flatRate(input, deps, "notConfigured");
-  if (!deps.parcel) return flatRate(input, deps, "parcelTbd");
+  if (!deps.parcel) return flatRate(input, deps, "noParcel");
 
   const result = await deps.client.calculate({ country: input.country, destination: input.destination, parcel: deps.parcel });
   if (!result.ok) {

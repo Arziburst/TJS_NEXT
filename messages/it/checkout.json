@@ -60,8 +60,10 @@
       "unavailable": "Al momento non disponibile",
       "deliveryDate": "Consegna prevista: {date}",
       "estimateNote": "Tariffa forfettaria per la zona di destinazione; il costo finale può variare.",
-      "tbdNote": "La tariffa di spedizione per questa zona non è ancora stata fissata."
+      "tbdNote": "La tariffa di spedizione per questa zona non è ancora stata fissata.",
+      "carrierNote": "Prezzo Nova Post per una scatola piccola (10 × 10 × 5 cm); l’imballaggio varia, quindi il prezzo effettivo può differire."
     },
-    "customsNotice": "Alla consegna il destinatario potrebbe dover pagare l’IVA all’importazione e i dazi doganali."
+    "customsNotice": "Alla consegna il destinatario potrebbe dover pagare l’IVA all’importazione e i dazi doganali.",
+    "tooManyRequests": "Troppe richieste. Riprova tra un minuto."
   }
 }

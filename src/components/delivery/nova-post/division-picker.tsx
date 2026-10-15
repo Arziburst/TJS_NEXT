@@ -15,7 +15,9 @@ type DivisionPickerProps = {
   className?: string;
 };
 
-type Loaded = { settlementId: number; divisions: Division[] } | { settlementId: number; failed: true };
+type Loaded =
+  | { settlementId: number; divisions: Division[] }
+  | { settlementId: number; failed: "error" | "rateLimited" };
 
 const FILTERS = ["all", ...DIVISION_CATEGORIES] as const;
 type Filter = (typeof FILTERS)[number];
@@ -34,7 +36,11 @@ export function DivisionPicker({ country, settlementId, value, onChange, classNa
     startTransition(async () => {
       const result = await listNovaPostDivisions({ country, settlementId, categories: [...DIVISION_CATEGORIES], locale });
       if (!current) return;
-      setLoaded(result.ok ? { settlementId, divisions: result.divisions } : { settlementId, failed: true });
+      setLoaded(
+        result.ok
+          ? { settlementId, divisions: result.divisions }
+          : { settlementId, failed: result.reason === "rateLimited" ? "rateLimited" : "error" },
+      );
     });
     return () => {
       current = false;
@@ -69,7 +75,7 @@ export function DivisionPicker({ country, settlementId, value, onChange, classNa
         <p className="font-input text-sm text-foreground/70">{t("loading")}</p>
       ) : "failed" in ready ? (
         <p role="alert" className="font-input text-sm">
-          {t("loadError")}
+          {ready.failed === "rateLimited" ? t("tooManyRequests") : t("loadError")}
         </p>
       ) : shown.length === 0 ? (
         <p className="font-input text-sm">{t("noDivisions")}</p>

@@ -1,7 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 // The gate needs none of the server modules the delivery step reads
+vi.mock("server-only", () => ({}));
 vi.mock("@/lib/delivery/nova-post/config", () => ({ getNovaPostClient: () => null }));
+vi.mock("@/lib/catalog", () => ({ getProducts: async () => ({ ok: false, reason: "unexpectedError" }) }));
+vi.mock("@/lib/money/cache", () => ({ getMoneyTables: async () => null }));
 vi.mock("@/components/delivery/nova-post/international-delivery", () => ({ InternationalDelivery: () => null }));
 
 const { default: NovaPostDeliveryDemoPage } = await import("./page");

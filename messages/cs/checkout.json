@@ -60,8 +60,10 @@
       "unavailable": "Momentálně nedostupné",
       "deliveryDate": "Předpokládané doručení: {date}",
       "estimateNote": "Paušální sazba pro cílovou zónu; konečná cena se může lišit.",
-      "tbdNote": "Sazba doručení pro tuto zónu zatím nebyla stanovena."
+      "tbdNote": "Sazba doručení pro tuto zónu zatím nebyla stanovena.",
+      "carrierNote": "Cena Nova Post za malou krabičku (10 × 10 × 5 cm); balení se liší, skutečná cena se proto může lišit."
     },
-    "customsNotice": "Při doručení může příjemce platit dovozní DPH a clo."
+    "customsNotice": "Při doručení může příjemce platit dovozní DPH a clo.",
+    "tooManyRequests": "Příliš mnoho požadavků. Zkuste to prosím za minutu."
   }
 }

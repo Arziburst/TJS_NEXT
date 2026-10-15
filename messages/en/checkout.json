@@ -60,8 +60,10 @@
       "unavailable": "Not available at the moment",
       "deliveryDate": "Expected delivery: {date}",
       "estimateNote": "A flat rate for the destination zone; the final cost may differ.",
-      "tbdNote": "The delivery rate for this zone has not been set yet."
+      "tbdNote": "The delivery rate for this zone has not been set yet.",
+      "carrierNote": "Nova Post's price for a small box (10 × 10 × 5 cm); packaging varies, so the actual price may differ."
     },
-    "customsNotice": "Import VAT and customs duty may be payable by the recipient on delivery."
+    "customsNotice": "Import VAT and customs duty may be payable by the recipient on delivery.",
+    "tooManyRequests": "Too many requests. Please try again in a minute."
   }
 }

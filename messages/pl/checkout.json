@@ -60,8 +60,10 @@
       "unavailable": "Obecnie niedostępne",
       "deliveryDate": "Przewidywana dostawa: {date}",
       "estimateNote": "Stała stawka dla strefy docelowej; ostateczny koszt może się różnić.",
-      "tbdNote": "Stawka dostawy dla tej strefy nie została jeszcze ustalona."
+      "tbdNote": "Stawka dostawy dla tej strefy nie została jeszcze ustalona.",
+      "carrierNote": "Cena Nova Post za małe pudełko (10 × 10 × 5 cm); opakowanie bywa różne, więc rzeczywista cena może się różnić."
     },
-    "customsNotice": "Przy odbiorze odbiorca może być zobowiązany do zapłaty importowego VAT i cła."
+    "customsNotice": "Przy odbiorze odbiorca może być zobowiązany do zapłaty importowego VAT i cła.",
+    "tooManyRequests": "Zbyt wiele zapytań. Spróbuj ponownie za minutę."
   }
 }

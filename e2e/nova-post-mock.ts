@@ -68,9 +68,18 @@ const server = createServer((request, response) => {
     let raw = "";
     request.on("data", (chunk) => (raw += chunk));
     request.on("end", () => {
-      const country = (JSON.parse(raw || "{}") as { recipient?: { countryCode?: string } }).recipient?.countryCode ?? "";
-      const name = CALCULATIONS[country];
-      if (name) send(200, fixture(name));
+      const body = JSON.parse(raw || "{}") as {
+        recipient?: { countryCode?: string };
+        invoice?: { incoterm?: string };
+        parcels?: Array<{ length?: number; width?: number; height?: number; actualWeight?: number; insuranceCost?: number }>;
+      };
+      const [parcel] = body.parcels ?? [];
+      // the app must ask for the D37 estimate box: 10 × 10 × 5 cm, at least the 100 g it adds, insured, DAP
+      const estimateBox =
+        parcel?.length === 100 && parcel.width === 100 && parcel.height === 50 &&
+        (parcel.actualWeight ?? 0) >= 100 && (parcel.insuranceCost ?? 0) > 0 && body.invoice?.incoterm === "DAP";
+      const name = CALCULATIONS[body.recipient?.countryCode ?? ""];
+      if (name && estimateBox) send(200, fixture(name));
       else send(422, fixture("error-422"));
     });
     return;

@@ -62,10 +62,10 @@ describe("the delivery estimate abroad", () => {
     });
   });
 
-  it("does not ask the API while the parcel rules are TBD", async () => {
+  it("does not ask the API without a parcel", async () => {
     const client = fakeClient(async () => ({ ok: false, error: { kind: "timeout" } }));
     const estimate = await estimateDelivery({ country: "PL", destination: toLocker, currency: "EUR" }, deps({ client }));
-    expect(estimate).toMatchObject({ source: "flatRate", reason: "parcelTbd" });
+    expect(estimate).toMatchObject({ source: "flatRate", reason: "noParcel" });
     expect(client.calculate).not.toHaveBeenCalled();
   });
 

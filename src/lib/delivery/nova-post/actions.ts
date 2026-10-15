@@ -1,25 +1,23 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import { z } from "zod";
-import { locales, type Locale } from "@/i18n/routing";
+import { locales } from "@/i18n/routing";
+import { clientIp } from "@/lib/auth/rate-limit";
 import { BUSINESS_TIME_ZONE } from "@/lib/money/business-date";
-import { getMoneyTables } from "@/lib/money/cache";
-import { CURRENCY_COOKIE, currencies, resolveCurrency, type Currency } from "@/lib/money/currencies";
 import { decimalString, formatMoney } from "@/lib/money/format";
-import type { MoneyTables } from "@/lib/money/store";
+import { getCurrencyChoiceFor } from "@/lib/money/prices";
 import { getNovaPostClient } from "./config";
 import { DELIVERY_COUNTRIES, hasDivisions } from "./countries";
 import { parcelForOrder } from "./parcel";
 import { estimateDelivery, type ShownPrice } from "./quote";
+import { allowDeliveryRequest, type DeliveryRequest } from "./rate-limit";
 import { DIVISION_CATEGORIES, type Division, type Settlement } from "./types";
 import { readZoneRates } from "./zone-rates";
 
 // Public entry points of the checkout's delivery step: any visitor, signed in or not, may call them, so
-// there is no user or role to check; every input is validated and the API key never leaves the server.
-
-// Vercel sets the visitor's country on every request (the same header src/lib/money/prices.ts reads)
-const COUNTRY_HEADER = "x-vercel-ip-country";
+// there is no user or role to check; every input is validated, every client has a budget per minute
+// (./rate-limit) and the API key never leaves the server.
 
 const countrySchema = z.enum(DELIVERY_COUNTRIES);
 const localeSchema = z.enum(locales);
@@ -50,17 +48,36 @@ const destinationSchema = z.discriminatedUnion("kind", [
   }),
 ]);
 
+/*
+ * The goods of the order the estimate is for (weight and UAH total, from the server-side cart through the
+ * page; ./parcel goodsOf). They only shape an estimate the customer sees (D37: the actual price is paid at the
+ * post office), so a tampered value misleads nobody but the sender; the bounds keep the API request sane.
+ */
+const goodsSchema = z
+  .object({
+    weightGrams: z.number().int().min(0).max(30_000),
+    totalUahMinor: z.number().int().min(0).max(100_000_000),
+  })
+  .nullable();
+
 const estimateInput = z
-  .object({ country: countrySchema, destination: destinationSchema, locale: localeSchema })
+  .object({ country: countrySchema, destination: destinationSchema, goods: goodsSchema, locale: localeSchema })
   .refine((input) => input.destination.kind === "address" || hasDivisions(input.country), { path: ["destination"] });
 
-export type LookupFailure = { ok: false; reason: "invalid" | "unavailable" };
+type Refusal = { ok: false; reason: "invalid" | "rateLimited" };
+
+async function allowed(request: DeliveryRequest): Promise<boolean> {
+  return allowDeliveryRequest(request, clientIp(await headers()));
+}
+
+export type LookupFailure = { ok: false; reason: "unavailable" } | Refusal;
 
 export type SettlementsResult = { ok: true; settlements: Settlement[] } | LookupFailure;
 
 export async function searchNovaPostSettlements(input: unknown): Promise<SettlementsResult> {
   const parsed = settlementsInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
+  if (!(await allowed("search"))) return { ok: false, reason: "rateLimited" };
   const client = getNovaPostClient();
   if (!client) return { ok: false, reason: "unavailable" };
   const { country, text, locale } = parsed.data;
@@ -77,6 +94,7 @@ export type DivisionsResult = { ok: true; divisions: Division[] } | LookupFailur
 export async function listNovaPostDivisions(input: unknown): Promise<DivisionsResult> {
   const parsed = divisionsInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
+  if (!(await allowed("search"))) return { ok: false, reason: "rateLimited" };
   const client = getNovaPostClient();
   if (!client) return { ok: false, reason: "unavailable" };
   const { country, settlementId, categories, locale } = parsed.data;
@@ -96,7 +114,7 @@ export type QuoteView = {
   deliveryDate: string | null;
 };
 
-export type EstimateResult = { ok: true; quote: QuoteView } | { ok: false; reason: "invalid" };
+export type EstimateResult = { ok: true; quote: QuoteView } | Refusal;
 
 function priceView(price: ShownPrice, locale: string): QuoteView["price"] {
   if (price.state !== "amount") return price;
@@ -115,31 +133,15 @@ function dateView(isoDate: string | null, locale: string): string | null {
   return new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: BUSINESS_TIME_ZONE }).format(date);
 }
 
-/*
- * The visitor's display currency by D5 (switcher cookie, Vercel geo, locale default), as the header shows it.
- * getCurrencyChoice() cannot run here: it reads the route's locale, which a Server Action does not have, so
- * the action takes the locale as validated input.
- */
-async function displayCurrency(locale: Locale, tables: MoneyTables | null): Promise<Currency> {
-  const [cookieStore, headerList] = await Promise.all([cookies(), headers()]);
-  const enabled = tables ? currencies.filter((currency) => tables.settings[currency]?.enabled) : [...currencies];
-  return resolveCurrency({
-    cookie: cookieStore.get(CURRENCY_COOKIE)?.value,
-    country: headerList.get(COUNTRY_HEADER),
-    locale,
-    enabled,
-  });
-}
-
 export async function estimateNovaPostDelivery(input: unknown): Promise<EstimateResult> {
   const parsed = estimateInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
-  const { country, destination, locale } = parsed.data;
-  const tables = await getMoneyTables();
-  const current = await displayCurrency(locale, tables);
+  if (!(await allowed("quote"))) return { ok: false, reason: "rateLimited" };
+  const { country, destination, goods, locale } = parsed.data;
+  const { current, tables } = await getCurrencyChoiceFor(locale);
   const estimate = await estimateDelivery(
     { country, destination, currency: current },
-    { client: getNovaPostClient(), parcel: parcelForOrder(), zoneRates: readZoneRates, tables },
+    { client: getNovaPostClient(), parcel: parcelForOrder(goods), zoneRates: readZoneRates, tables },
   );
   return {
     ok: true,

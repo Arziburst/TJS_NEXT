@@ -28,7 +28,7 @@ export function SettlementCombobox({ country, value, onChange, className }: Sett
   const id = useId();
   const [results, setResults] = useState<Settlement[]>([]);
   const [searchText, setSearchText] = useState("");
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<"error" | "rateLimited" | false>(false);
   const [isPending, startTransition] = useTransition();
   const latest = useRef(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -52,7 +52,7 @@ export function SettlementCombobox({ country, value, onChange, className }: Sett
       startTransition(async () => {
         const result = await searchNovaPostSettlements({ country, text, locale });
         if (request !== latest.current) return;
-        setFailed(!result.ok);
+        setFailed(result.ok ? false : result.reason === "rateLimited" ? "rateLimited" : "error");
         setResults(result.ok ? result.settlements : []);
       });
     }, SEARCH_DELAY_MS);
@@ -60,7 +60,7 @@ export function SettlementCombobox({ country, value, onChange, className }: Sett
 
   function status(): string | null {
     if (isPending) return t("searching");
-    if (failed) return t("loadError");
+    if (failed) return failed === "rateLimited" ? t("tooManyRequests") : t("loadError");
     if (trimmed.length < MIN_SEARCH_LENGTH) return value ? null : t("settlementHint");
     if (results.length === 0) return t("nothingFound");
     return null;

@@ -60,8 +60,10 @@
       "unavailable": "Derzeit nicht verfügbar",
       "deliveryDate": "Voraussichtliche Zustellung: {date}",
       "estimateNote": "Pauschale für die Zielzone; die endgültigen Kosten können abweichen.",
-      "tbdNote": "Der Versandtarif für diese Zone steht noch nicht fest."
+      "tbdNote": "Der Versandtarif für diese Zone steht noch nicht fest.",
+      "carrierNote": "Preis von Nova Post für eine kleine Schachtel (10 × 10 × 5 cm); die Verpackung variiert, daher kann der tatsächliche Preis abweichen."
     },
-    "customsNotice": "Bei der Zustellung können für den Empfänger Einfuhrumsatzsteuer und Zoll anfallen."
+    "customsNotice": "Bei der Zustellung können für den Empfänger Einfuhrumsatzsteuer und Zoll anfallen.",
+    "tooManyRequests": "Zu viele Anfragen. Bitte versuchen Sie es in einer Minute erneut."
   }
 }

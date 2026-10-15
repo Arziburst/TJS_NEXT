@@ -4,13 +4,14 @@ import { useLocale, useTranslations } from "next-intl";
 import { useId, useRef, useState, useTransition } from "react";
 import { estimateNovaPostDelivery, type QuoteView } from "@/lib/delivery/nova-post/actions";
 import { hasDivisions, type DeliveryCountry } from "@/lib/delivery/nova-post/countries";
+import type { OrderGoods } from "@/lib/delivery/nova-post/parcel";
 import type { Destination, Division, Settlement } from "@/lib/delivery/nova-post/types";
 import { cn } from "@/lib/utils";
 import { AddressForm, type AddressValue } from "./address-form";
 import { CountrySelect, type CountryOption } from "./country-select";
 import { CustomsNotice } from "./customs-notice";
 import { DivisionPicker } from "./division-picker";
-import { QuoteLine } from "./quote-line";
+import { QuoteLine, type QuoteFailure } from "./quote-line";
 import { SettlementCombobox } from "./settlement-combobox";
 
 type Method = "division" | "address";
@@ -19,18 +20,20 @@ type InternationalDeliveryProps = {
   countries: CountryOption[];
   // true when the Nova Post API is configured: branches, lockers and pick-up points can then be searched
   live: boolean;
+  // the order's goods (goodsOf on the server-side cart); null leaves the estimate to the zone flat rate
+  goods: OrderGoods | null;
   defaultCountry?: DeliveryCountry;
   className?: string;
 };
 
-type QuoteState = { quote: QuoteView | null; failed: boolean };
+type QuoteState = { quote: QuoteView | null; failure: QuoteFailure | null };
 
 /*
  * The delivery step abroad for the checkout (#24): country → town → branch, locker or pick-up point, or a
  * courier address → the estimate in the visitor's currency with the customs notice. Without the API only
  * the address is asked, and the zone's flat rate is the estimate.
  */
-export function InternationalDelivery({ countries, live, defaultCountry, className }: InternationalDeliveryProps) {
+export function InternationalDelivery({ countries, live, goods, defaultCountry, className }: InternationalDeliveryProps) {
   const t = useTranslations("checkout.internationalDelivery");
   const locale = useLocale();
   const methodName = useId();
@@ -38,7 +41,7 @@ export function InternationalDelivery({ countries, live, defaultCountry, classNa
   const [method, setMethod] = useState<Method>("division");
   const [settlement, setSettlement] = useState<Settlement | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
-  const [state, setState] = useState<QuoteState>({ quote: null, failed: false });
+  const [state, setState] = useState<QuoteState>({ quote: null, failure: null });
   const [isPending, startTransition] = useTransition();
   const request = useRef(0);
 
@@ -48,16 +51,20 @@ export function InternationalDelivery({ countries, live, defaultCountry, classNa
 
   function reset() {
     request.current++;
-    setState({ quote: null, failed: false });
+    setState({ quote: null, failure: null });
   }
 
   function estimate(destination: Destination) {
     if (!country) return;
     const current = ++request.current;
     startTransition(async () => {
-      const result = await estimateNovaPostDelivery({ country, destination, locale });
+      const result = await estimateNovaPostDelivery({ country, destination, goods, locale });
       if (current !== request.current) return;
-      setState(result.ok ? { quote: result.quote, failed: false } : { quote: null, failed: true });
+      setState(
+        result.ok
+          ? { quote: result.quote, failure: null }
+          : { quote: null, failure: result.reason === "rateLimited" ? "rateLimited" : "error" },
+      );
     });
   }
 
@@ -134,7 +141,7 @@ export function InternationalDelivery({ countries, live, defaultCountry, classNa
           )}
 
           <div className="grid gap-3 border-t-2 border-hairline pt-4">
-            <QuoteLine quote={state.quote} pending={isPending} failed={state.failed} />
+            <QuoteLine quote={state.quote} pending={isPending} failure={state.failure} />
             <CustomsNotice />
           </div>
         </>

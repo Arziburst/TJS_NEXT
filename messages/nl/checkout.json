@@ -60,8 +60,10 @@
       "unavailable": "Momenteel niet beschikbaar",
       "deliveryDate": "Verwachte bezorging: {date}",
       "estimateNote": "Vast tarief voor de bestemmingszone; de uiteindelijke kosten kunnen afwijken.",
-      "tbdNote": "Het verzendtarief voor deze zone is nog niet vastgesteld."
+      "tbdNote": "Het verzendtarief voor deze zone is nog niet vastgesteld.",
+      "carrierNote": "Prijs van Nova Post voor een kleine doos (10 × 10 × 5 cm); de verpakking verschilt, dus de werkelijke prijs kan afwijken."
     },
-    "customsNotice": "Bij bezorging moet de ontvanger mogelijk invoer-btw en douanerechten betalen."
+    "customsNotice": "Bij bezorging moet de ontvanger mogelijk invoer-btw en douanerechten betalen.",
+    "tooManyRequests": "Te veel verzoeken. Probeer het over een minuut opnieuw."
   }
 }

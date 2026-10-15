@@ -60,8 +60,10 @@
       "unavailable": "Indisponible pour le moment",
       "deliveryDate": "Livraison prévue : {date}",
       "estimateNote": "Tarif forfaitaire de la zone de destination ; le coût final peut différer.",
-      "tbdNote": "Le tarif de livraison de cette zone n’est pas encore fixé."
+      "tbdNote": "Le tarif de livraison de cette zone n’est pas encore fixé.",
+      "carrierNote": "Prix Nova Post pour une petite boîte (10 × 10 × 5 cm) ; l’emballage varie, le prix réel peut donc différer."
     },
-    "customsNotice": "La TVA à l’importation et les droits de douane peuvent être à la charge du destinataire à la livraison."
+    "customsNotice": "La TVA à l’importation et les droits de douane peuvent être à la charge du destinataire à la livraison.",
+    "tooManyRequests": "Trop de demandes. Veuillez réessayer dans une minute."
   }
 }

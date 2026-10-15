@@ -10,9 +10,10 @@ vi.mock("./cache", () => ({ getMoneyTables: () => getMoneyTables() }));
 const cookies = vi.fn(async () => ({ get: (name: string) => (name === "TJS_CURRENCY" ? { value: "CZK" } : undefined) }));
 const headers = vi.fn(async () => new Headers({ "x-vercel-ip-country": "CH" }));
 vi.mock("next/headers", () => ({ cookies: () => cookies(), headers: () => headers() }));
-vi.mock("next-intl/server", () => ({ getLocale: async () => "de" }));
+const getLocale = vi.fn(async () => "de");
+vi.mock("next-intl/server", () => ({ getLocale: () => getLocale() }));
 
-const { formatPrice, getJsonLdPrice } = await import("./prices");
+const { formatPrice, getCurrencyChoiceFor, getJsonLdPrice } = await import("./prices");
 
 // The rows of the money migration and the seeded NBU rates of 2026-10-15
 const whole = { decimals: 2, markupBps: 300, roundIncrement: 1000, ending: 900, enabled: true };
@@ -33,6 +34,7 @@ const TABLES: MoneyTables = {
 
 beforeEach(() => {
   getMoneyTables.mockResolvedValue(TABLES);
+  getLocale.mockClear();
   cookies.mockClear();
   headers.mockClear();
 });
@@ -64,5 +66,22 @@ describe("getJsonLdPrice", () => {
   it("is null when the locale's currency has no display rate yet", async () => {
     getMoneyTables.mockResolvedValue({ ...TABLES, displayRates: { ...TABLES.displayRates, PLN: undefined } });
     await expect(getJsonLdPrice(3200, "pl")).resolves.toBeNull();
+  });
+});
+
+describe("getCurrencyChoiceFor (callers without a route locale, e.g. Server Actions)", () => {
+  it("resolves the visitor's currency for the given locale without reading the route locale", async () => {
+    const choice = await getCurrencyChoiceFor("pl");
+    expect(choice.current).toBe("CZK");
+    expect(choice.tables).toBe(TABLES);
+    expect(getLocale).not.toHaveBeenCalled();
+  });
+
+  it("falls back to the geo country, then to the given locale's default (D5)", async () => {
+    cookies.mockResolvedValueOnce({ get: () => undefined });
+    await expect(getCurrencyChoiceFor("pl")).resolves.toMatchObject({ current: "CHF" });
+    cookies.mockResolvedValueOnce({ get: () => undefined });
+    headers.mockResolvedValueOnce(new Headers());
+    await expect(getCurrencyChoiceFor("pl")).resolves.toMatchObject({ current: "PLN" });
   });
 });

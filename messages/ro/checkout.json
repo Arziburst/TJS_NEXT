@@ -60,8 +60,10 @@
       "unavailable": "Momentan indisponibil",
       "deliveryDate": "Livrare estimată: {date}",
       "estimateNote": "Tarif fix pentru zona de destinație; costul final poate diferi.",
-      "tbdNote": "Tariful de livrare pentru această zonă nu a fost încă stabilit."
+      "tbdNote": "Tariful de livrare pentru această zonă nu a fost încă stabilit.",
+      "carrierNote": "Prețul Nova Post pentru o cutie mică (10 × 10 × 5 cm); ambalajul variază, deci prețul real poate diferi."
     },
-    "customsNotice": "La livrare, destinatarul poate avea de plătit TVA la import și taxe vamale."
+    "customsNotice": "La livrare, destinatarul poate avea de plătit TVA la import și taxe vamale.",
+    "tooManyRequests": "Prea multe solicitări. Încercați din nou peste un minut."
   }
 }

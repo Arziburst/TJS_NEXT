@@ -60,8 +60,10 @@
       "unavailable": "Indisponível de momento",
       "deliveryDate": "Entrega prevista: {date}",
       "estimateNote": "Tarifa fixa da zona de destino; o custo final pode variar.",
-      "tbdNote": "A tarifa de entrega desta zona ainda não foi definida."
+      "tbdNote": "A tarifa de entrega desta zona ainda não foi definida.",
+      "carrierNote": "Preço da Nova Post para uma caixa pequena (10 × 10 × 5 cm); a embalagem varia, por isso o preço real pode ser diferente."
     },
-    "customsNotice": "O destinatário poderá ter de pagar o IVA de importação e os direitos aduaneiros na entrega."
+    "customsNotice": "O destinatário poderá ter de pagar o IVA de importação e os direitos aduaneiros na entrega.",
+    "tooManyRequests": "Demasiados pedidos. Tente novamente dentro de um minuto."
   }
 }
