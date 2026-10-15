@@ -7,7 +7,9 @@ import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import enCart from "../messages/en/cart.json" with { type: "json" };
 import en from "../messages/en/checkout.json" with { type: "json" };
+import enNotifications from "../messages/en/notifications.json" with { type: "json" };
 import type { Database } from "../src/lib/supabase/database.types";
+import { sentFor } from "./notifications";
 
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 
@@ -210,6 +212,32 @@ test.describe("order request on the local stack", () => {
     expect(piece?.availability).toBe("reserved");
     const { count } = await admin!.from("outbox_events").select("id", { count: "exact", head: true }).eq("order_id", order!.id).eq("event", "order_created");
     expect(count).toBe(1);
+
+    // right after the answer the owner's Telegram group and the customer's inbox get the order (the stand-ins of
+    // playwright.config.ts), each once, and the outbox marks both channels sent
+    await expect
+      .poll(async () => {
+        const { telegram, email: emails } = await sentFor(number);
+        return [telegram.length, emails.length];
+      })
+      .toEqual([1, 1]);
+    const sent = await sentFor(number);
+    expect(sent.telegram[0]).toMatchObject({ chatId: "-1001234567890", parseMode: "HTML" });
+    expect(sent.telegram[0].text).toContain(`<b>${enNotifications.telegram.newOrder.replace("{number}", String(number))}</b>`);
+    expect(sent.telegram[0].text).toContain(ordered.title);
+    expect(sent.telegram[0].text).toContain("Gift wrapping, please");
+    expect(sent.telegram[0].text).toContain(`/admin/orders/${number}"`);
+    expect(sent.email[0]).toMatchObject({
+      to: [email],
+      subject: enNotifications.email.confirmation.subject.replace("{number}", String(number)),
+    });
+    expect(sent.email[0].html).toContain('<html lang="en"');
+    expect(sent.email[0].text).toContain(enNotifications.email.confirmation.thanks.replace("{name}", "Olena"));
+    expect(sent.email[0].text).toContain(unique.title);
+    expect(sent.email[0].text).toContain(enNotifications.email.contactTbd);
+    await expect
+      .poll(async () => (await admin!.from("outbox_events").select("telegram_status, email_status, processed_at").eq("order_id", order!.id).single()).data)
+      .toMatchObject({ telegram_status: "sent", email_status: "sent", processed_at: expect.any(String) });
 
     // another visitor with the same URL sees no order data
     const stranger = await browser.newContext();

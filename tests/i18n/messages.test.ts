@@ -98,6 +98,13 @@ describe("message catalogs", () => {
       // a file name (admin.images) and a person's first name (checkout.done) alike
       name: "IMG_0042.jpg",
       done: 3,
+      // the notifications (#26): an order number, its status, money and the shop's host
+      number: 10042,
+      status: "Accepted",
+      total: "29,90 €",
+      amount: "80 ₴",
+      flat: "12",
+      site: "shop.example.test",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

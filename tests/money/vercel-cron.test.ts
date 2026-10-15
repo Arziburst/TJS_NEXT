@@ -17,8 +17,25 @@ describe("vercel.json crons", () => {
     expect(config.crons).toContainEqual({ path: "/api/cron/nova-poshta", schedule: "30 2 * * *" });
   });
 
+  it("passes over the notifications outbox daily at 06:00 UTC", () => {
+    // the morning in Kyiv (08:00 or 09:00): retries that came due overnight reach the owner and the customers then
+    expect(config.crons).toContainEqual({ path: "/api/cron/notifications", schedule: "0 6 * * *" });
+  });
+
   it("has no other cron", () => {
-    expect(config.crons.map((cron) => cron.path).sort()).toEqual(["/api/cron/fx-rates", "/api/cron/nova-poshta"]);
+    expect(config.crons.map((cron) => cron.path).sort()).toEqual([
+      "/api/cron/fx-rates",
+      "/api/cron/notifications",
+      "/api/cron/nova-poshta",
+    ]);
+  });
+
+  it("runs each cron at most once a day (Vercel Hobby, D32)", () => {
+    for (const { schedule } of config.crons) {
+      const [minute, hour] = schedule.split(" ");
+      expect(minute, schedule).toMatch(/^\d+$/);
+      expect(hour, schedule).toMatch(/^\d+$/);
+    }
   });
 
   it("points at an existing route handler", () => {
