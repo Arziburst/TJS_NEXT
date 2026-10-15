@@ -340,6 +340,59 @@ searched and every estimate is the zone flat rate of `nova_post_zone_rates` (TBD
   point searches count as `search`, quotes as `quote`; over the budget the shop's "too many attempts" text
   (`auth.errors.rateLimited`) is shown.
 
+## Notifications (Telegram and email)
+
+Every order request writes an `order_created` row to `public.outbox_events` in its own transaction (#24). The
+processor (`src/lib/notifications/`, #26) sends it to two channels and keeps each one's outcome in the row:
+
+- **Telegram** to the owner's group, in Ukrainian, `parse_mode` HTML with every order value escaped, with a link
+  to the admin's order page (`/uk/admin/orders/<number>`, reserved for #27).
+- **Email** to the customer through Resend, in the order's locale: the number, the lines and total, the delivery
+  estimate with the on-receipt note (D37, D38) and the shop's contact channels (the TBD line until the admin
+  settings of #21 provide them). Templates: `src/emails/` (confirmation, and the status change for #27);
+  rendered examples: `tests/notifications/__snapshots__/`.
+
+**When it runs.** Right after a placed order (`after()` in the checkout action) and daily at `0 6 * * *` UTC
+(`GET /api/cron/notifications`, `CRON_SECRET`). A run claims up to 5 × 10 due events (`claim_outbox_events`:
+`FOR UPDATE SKIP LOCKED`, a 5-minute lease, a claim token), so two runs never send one message twice; a run that
+dies leaves its events due again when the lease ends. A failed send is retried after 1, 2, 4 … minutes (at most
+6 hours) by the next run, and marked `failed` at the 8th attempt; with the daily cron on Hobby, a retry waits for
+the next order or the next morning. The order itself is never changed by a send.
+
+**Outcomes** (`telegram_status`, `email_status`, `last_error` on the outbox row; the admin's view comes with #27):
+`pending` → `sent`, or `skipped_unconfigured` (sending is off or the channel's settings are missing; not retried,
+the reason in `last_error`), or `failed` (the last attempt failed too). To see them locally:
+
+```sql
+select o.number, e.telegram_status, e.email_status, e.attempts, e.next_attempt_at, e.last_error
+from public.outbox_events e join public.orders o on o.id = e.order_id order by e.created_at desc;
+```
+
+**Settings** (server only; `.env.example`). Nothing is sent unless `NOTIFICATIONS_SEND` is exactly `true`: tests,
+local runs and CI without it mark every event `skipped_unconfigured`, even with keys in `.env.local`.
+
+| Name | |
+|---|---|
+| `NOTIFICATIONS_SEND` | `true` only where messages may go out (the production deployment) |
+| `TELEGRAM_BOT_TOKEN` | the bot's token (SECRET); the bot is a member of the owner's group — **TBD, the owner provides it** |
+| `TELEGRAM_CHAT_ID` | the group's chat id (negative for groups) — **TBD**; moves to the admin settings with #21 |
+| `RESEND_API_KEY` | the Resend API key (SECRET) — **TBD** |
+| `EMAIL_FROM` | the sender, e.g. `Shop <orders@<domain>>`, on a domain verified in Resend — **TBD, the owner decides** |
+| `EMAIL_REPLY_TO` | optional: where the customer's replies go |
+| `TELEGRAM_API_BASE_URL`, `RESEND_API_URL` | local and e2e only: the stand-in below; unset in production |
+
+**Stand-in.** `e2e/notifications-mock.ts` answers `POST /bot<token>/sendMessage` and `POST /emails` and lists what
+it got at `GET /sent?number=<order number>`. Playwright starts it on `E2E_PORT + 2000` (CI: 5000) and points the
+app at it with `NOTIFICATIONS_SEND=true` and test keys (`playwright.config.ts`). For a dev walk, from Git Bash:
+
+```sh
+NOTIFICATIONS_MOCK_PORT=5026 node e2e/notifications-mock.ts &
+NOTIFICATIONS_SEND=true TELEGRAM_BOT_TOKEN=e2e-bot-token TELEGRAM_CHAT_ID=-100123 \
+  TELEGRAM_API_BASE_URL=http://127.0.0.1:5026 RESEND_API_KEY=e2e-resend-key RESEND_API_URL=http://127.0.0.1:5026 \
+  EMAIL_FROM="TJS dev <orders@example.test>" npx next dev -p 3026
+curl "http://127.0.0.1:5026/sent?number=10001"
+```
+
 ## Vercel
 
 The shop runs on the Vercel project `tjs-next` in the team `arzibursts-projects`, production
@@ -365,6 +418,7 @@ production deployment in the dashboard; the database is not rolled back with it.
 | `CRON_SECRET` | the cron routes; Vercel Cron sends it as `Authorization: Bearer …` |
 | `NOVA_POSHTA_API_KEY` | server only: the Nova Poshta client (optional, see Nova Poshta above) |
 | `NOVA_POST_API_KEY` | server only: Nova Post international delivery (#23); unset → zone flat rates only. `NOVA_POST_API_URL` stays unset in production |
+| `NOTIFICATIONS_SEND`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO` | server only: the order notifications (#26, see Notifications above); the values are TBD from the owner, and until they are set every message is `skipped_unconfigured` |
 
 Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
 `VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`
@@ -373,8 +427,9 @@ and `/delivery-demo` showcases stay a 404; the fixture transport refuses under `
 **Cron.** `vercel.json` `crons` calls `GET /api/cron/fx-rates` daily at `15 14 * * *` (UTC) on the
 production deployment only, with `CRON_SECRET`; without the secret the route answers 401. On Hobby, Vercel
 fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv.
-`GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), with the same
-secret. Runs and their logs: the project's *Cron Jobs* settings and the function logs.
+`GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), and
+`GET /api/cron/notifications` sends the due retries of the notifications outbox daily at `0 6 * * *` (UTC), with the
+same secret. Hobby allows each cron once a day (`tests/money/vercel-cron.test.ts` checks every schedule). Runs and their logs: the project's *Cron Jobs* settings and the function logs.
 
 **Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`
 renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the document of every page only when
