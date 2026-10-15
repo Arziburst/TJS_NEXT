@@ -47,6 +47,13 @@ test.describe("product page HTML (no JavaScript)", () => {
     const [product, breadcrumbs] = jsonLd(html)["@graph"];
     expect(product).toMatchObject({ "@type": "Product", name: "Korallen-Tropfenohrringe", sku: "TEST-001" });
     expect(product.image).toHaveLength(3);
+    // one currency per URL: de → EUR (D5), the same for every visitor; made-to-order work (TEST-001)
+    expect(product.offers).toMatchObject({
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      availability: "https://schema.org/MadeToOrder",
+    });
+    expect((product.offers as { price: string }).price).toMatch(/^\d+(\.\d{1,2})?$/);
     expect(breadcrumbs).toMatchObject({ "@type": "BreadcrumbList" });
     expect((breadcrumbs.itemListElement as unknown[]).length).toBe(3);
   });
@@ -113,6 +120,8 @@ test("shows the product and adds it to the cart", async ({ page }, testInfo) => 
     await expect(heading).toBeInViewport();
   }
 
+  // the visitor's currency: uk without a cookie or geo → UAH
+  await expect(page.locator("main [data-slot=price]")).toHaveAttribute("data-currency", "UAH");
   await expect(page.getByText(uk.page.materials, { exact: true })).toBeVisible();
   await expect(page.getByText(uk.page.care, { exact: true })).toBeVisible();
   await expect(page.getByText(uk.page.weight, { exact: true })).toBeVisible();

@@ -3,13 +3,14 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { getJsonLdPrice, Price } from "@/components/product/price-placeholder";
+import { Price } from "@/components/price";
 import { ProductDetails } from "@/components/product/product-details";
 import { ProductSkeleton } from "@/components/product/product-skeleton";
 import { getMetadataBase } from "@/i18n/metadata";
 import { getPathname, redirect } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { getProductPage, getProductSlugs } from "@/lib/catalog/product";
+import { getJsonLdPrice } from "@/lib/money/prices";
 import { productAlternates, productJsonLd, productPath, serializeJsonLd } from "@/lib/seo/product";
 
 /*

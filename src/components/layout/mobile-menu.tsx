@@ -12,12 +12,13 @@ import { NavLink } from "./nav-link";
 type MobileMenuProps = {
   className?: string;
   languageSwitcher: ReactNode;
+  currencySwitcher: ReactNode;
   account: ReactNode;
   footer: ReactNode;
 };
 
 // Full-width sheet from the left; hidden from 1024px up by the caller's CSS, never by window width.
-export function MobileMenu({ className, languageSwitcher, account, footer }: MobileMenuProps) {
+export function MobileMenu({ className, languageSwitcher, currencySwitcher, account, footer }: MobileMenuProps) {
   const t = useTranslations("nav");
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
@@ -50,6 +51,10 @@ export function MobileMenu({ className, languageSwitcher, account, footer }: Mob
             <li className="flex flex-col items-center gap-2" data-slot="mobile-language-switcher">
               <span className="font-sans text-base font-semibold tracking-[1.6px] italic">{t("language")}</span>
               {languageSwitcher}
+            </li>
+            <li className="flex flex-col items-center gap-2" data-slot="mobile-currency-switcher">
+              <span className="font-sans text-base font-semibold tracking-[1.6px] italic">{t("currency")}</span>
+              {currencySwitcher}
             </li>
             {account && (
               <li data-slot="mobile-account" onClick={close}>
