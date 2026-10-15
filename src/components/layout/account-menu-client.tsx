@@ -1,17 +1,25 @@
 "use client";
 
 import { Menu } from "@base-ui/react/menu";
-import { LogOutIcon } from "lucide-react";
+import { LayoutDashboardIcon, LogOutIcon, PlusIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
+import { ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "@/components/admin/paths";
+import { Link } from "@/i18n/navigation";
 import { signOut } from "@/lib/auth/actions";
 import { cn } from "@/lib/utils";
 
 type AccountMenuClientProps = {
   // what the menu shows: the profile name, else the email
   displayName: string;
+  // an admin's entries with their labels, given by the server only for an admin (the role comes from the
+  // database; the admin pages check it again), so no other visitor receives them
+  adminLinks?: { admin: string; addProduct: string };
   className?: string;
 };
+
+const itemClass =
+  "flex cursor-pointer items-center gap-2 px-3 py-2.5 outline-none select-none data-highlighted:bg-primary data-highlighted:text-primary-foreground";
 
 // Legacy avatar: the first two letters of the name.
 function initials(displayName: string): string {
@@ -19,7 +27,7 @@ function initials(displayName: string): string {
 }
 
 /** The signed-in user's menu in the header's account slot: who is signed in, and sign-out. */
-export function AccountMenuClient({ displayName, className }: AccountMenuClientProps) {
+export function AccountMenuClient({ displayName, adminLinks, className }: AccountMenuClientProps) {
   const t = useTranslations("nav");
   const locale = useLocale();
   const [signingOut, startSignOut] = useTransition();
@@ -63,11 +71,20 @@ export function AccountMenuClient({ displayName, className }: AccountMenuClientP
               </Menu.GroupLabel>
             </Menu.Group>
             <Menu.Separator className="my-1 h-0.5 bg-hairline" />
-            <Menu.Item
-              disabled={signingOut}
-              onClick={handleSignOut}
-              className="flex cursor-pointer items-center gap-2 px-3 py-2.5 outline-none select-none data-highlighted:bg-primary data-highlighted:text-primary-foreground"
-            >
+            {adminLinks && (
+              <>
+                <Menu.LinkItem render={<Link href={ADMIN_PRODUCTS_HREF} />} className={itemClass}>
+                  <LayoutDashboardIcon aria-hidden className="size-4" />
+                  {adminLinks.admin}
+                </Menu.LinkItem>
+                <Menu.LinkItem render={<Link href={NEW_PRODUCT_HREF} />} className={itemClass}>
+                  <PlusIcon aria-hidden className="size-4" />
+                  {adminLinks.addProduct}
+                </Menu.LinkItem>
+                <Menu.Separator className="my-1 h-0.5 bg-hairline" />
+              </>
+            )}
+            <Menu.Item disabled={signingOut} onClick={handleSignOut} className={itemClass}>
               <LogOutIcon aria-hidden className="size-4" />
               {t("logout")}
             </Menu.Item>

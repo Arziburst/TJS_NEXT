@@ -15,6 +15,8 @@ export const routes = {
   cart: { path: "/cart", enabled: false },
   // #13
   signIn: { path: "/sign-in-and-up", enabled: true },
+  // #17: admins only (noindex); the account menu links here for an admin, the shell does not
+  admin: { path: "/admin", enabled: true },
 } as const satisfies Record<string, { path: string; enabled: boolean }>;
 
 export type RouteKey = keyof typeof routes;
