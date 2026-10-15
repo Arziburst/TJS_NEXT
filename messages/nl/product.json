@@ -1,0 +1,15 @@
+{
+  "sizeGuide": "Maattabel",
+  "addToCart": "In winkelwagen",
+  "addedToCart": "Het product is aan de winkelwagen toegevoegd",
+  "card": {
+    "onlyOrder": "Op bestelling gemaakt",
+    "firstImageAlt": "Eerste afbeelding van het product",
+    "secondImageAlt": "Tweede afbeelding van het product"
+  },
+  "images": {
+    "alt": "Afbeelding van het product",
+    "numberedAlt": "Afbeelding {index} van het product",
+    "byUrlAlt": "Afbeelding via URL {url}"
+  }
+}

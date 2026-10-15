@@ -1,0 +1,28 @@
+{
+  "product": {
+    "title": "Zadejte prosím informace o produktu.",
+    "titleLabel": "Zadejte název",
+    "typeLabel": "Vyberte správný typ produktu",
+    "descriptionLabel": "Zadejte popis",
+    "weightLabel": "Zadejte hmotnost produktu v gramech",
+    "priceLabel": "Zadejte cenu produktu v {currency}",
+    "availableLabel": "Produkt je dostupný",
+    "available": "Dostupnost",
+    "unavailable": "Nedostupnost",
+    "confirmDeletion": "Potvrďte úplné smazání!",
+    "confirmDeletionTwice": "Opravdu chcete tento produkt smazat?",
+    "deletionError": "Chyba při mazání",
+    "gallery": "Galerie",
+    "addImagesFromGallery": "Přidat obrázky z galerie",
+    "chooseImage": "Vyberte obrázek",
+    "galleryImageAlt": "Obrázek z galerie",
+    "continueEditing": "Pokračovat v úpravách"
+  },
+  "order": {
+    "notFound": "Objednávka nebyla nalezena",
+    "title": "Informace o objednávce.",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "comment": "Poznámka"
+  }
+}

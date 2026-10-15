@@ -1,0 +1,15 @@
+{
+  "sizeGuide": "Size guide",
+  "addToCart": "Add to cart",
+  "addedToCart": "The product was added to the cart",
+  "card": {
+    "onlyOrder": "Made to order",
+    "firstImageAlt": "First image of the product",
+    "secondImageAlt": "Second image of the product"
+  },
+  "images": {
+    "alt": "Image of the product",
+    "numberedAlt": "Image {index} of the product",
+    "byUrlAlt": "Image by URL {url}"
+  }
+}

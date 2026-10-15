@@ -1,0 +1,48 @@
+{
+  "brand": "TJS",
+  "noData": "Sin datos",
+  "total": "Total",
+  "pagination": {
+    "of": "de"
+  },
+  "actions": {
+    "submit": "Enviar",
+    "remove": "Eliminar",
+    "create": "Crear",
+    "edit": "Editar",
+    "goBack": "Volver",
+    "close": "Cerrar"
+  },
+  "fields": {
+    "firstName": "Nombre",
+    "lastName": "Apellidos",
+    "fullName": "Nombre y apellidos",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "password": "Contraseña",
+    "passwordAgain": "Repetir contraseña",
+    "city": "Ciudad",
+    "someData": "Introduce algún dato..."
+  },
+  "contact": {
+    "phone": "Teléfono",
+    "email": "Correo electrónico"
+  },
+  "cookieConsent": {
+    "text": "Usamos cookies para ofrecerte la mejor experiencia en nuestro sitio web. Si continúas navegando, entenderemos que estás de acuerdo.",
+    "accept": "Entendido"
+  },
+  "about": {
+    "title": "Sobre nosotros",
+    "intro": "Me llamo Elena, sigo las novedades y las tendencias, y tengo una amplia experiencia trabajando con bisutería.",
+    "imageAlt": "Imagen principal de la página “Sobre nosotros”",
+    "missionStart": "amo mi trabajo y quiero aportar alegría y belleza a nuestro mundo.",
+    "motto": "¡El lujo asequible es mi lema!",
+    "customOrders": "También creo joyas personalizadas y siempre tengo en cuenta los deseos de mis clientes."
+  },
+  "footer": {
+    "contactsTbd": "Contactos: TBD",
+    "rights": "Trend Jewelry Store. Todos los derechos reservados",
+    "developedBy": "Desarrollado por <link>Arziburst*</link>"
+  }
+}

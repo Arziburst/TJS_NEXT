@@ -1,0 +1,17 @@
+{
+  "title": "Coș",
+  "contactDetails": "Date de contact",
+  "shippingDetails": "Date de livrare",
+  "yourOrder": "Comanda ta",
+  "placeOrder": "Plasează comanda",
+  "fields": {
+    "choosePostOffice": "Alege oficiul poștal",
+    "comment": "Informații care ne pot ajuta să onorăm comanda"
+  },
+  "payment": {
+    "failed": "Plata a eșuat!",
+    "success": "Comandă finalizată cu succes",
+    "grandTotal": "Total general",
+    "continueShopping": "Continuă cumpărăturile"
+  }
+}

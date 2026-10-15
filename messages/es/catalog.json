@@ -1,0 +1,21 @@
+{
+  "title": "Tienda",
+  "filterShopBy": "Comprar por",
+  "filterBy": "Filtrar por",
+  "showMore": "Mostrar más",
+  "shownCount": "Mostrando {shown} de {total} productos",
+  "categories": {
+    "all": "Ver todo",
+    "earrings": "Pendientes",
+    "necklaces": "Collares",
+    "bracelets": "Pulseras",
+    "corals": "Corales",
+    "rings": "Anillos",
+    "brooches": "Broches"
+  },
+  "sort": {
+    "placeholder": "Seleccionar orden",
+    "priceAsc": "Precio (de menor a mayor)",
+    "priceDesc": "Precio (de mayor a menor)"
+  }
+}

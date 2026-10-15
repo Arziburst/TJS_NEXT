@@ -1,0 +1,17 @@
+{
+  "title": "Cart",
+  "contactDetails": "Contact details",
+  "shippingDetails": "Shipping details",
+  "yourOrder": "Your order",
+  "placeOrder": "Make order",
+  "fields": {
+    "choosePostOffice": "Choose post office",
+    "comment": "Information that can help fulfill an order"
+  },
+  "payment": {
+    "failed": "The payment failed!",
+    "success": "Order success",
+    "grandTotal": "Grand total",
+    "continueShopping": "Continue shopping"
+  }
+}

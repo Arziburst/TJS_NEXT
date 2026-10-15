@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "TJS: bijuteria da moda e com estilo",
+    "description": "A TJS é uma loja de bijuteria da moda e com estilo, que a designer autora dá vida."
+  },
+  "placeholder": {
+    "text": "Página inicial provisória. A loja será construída nas próximas tarefas.",
+    "comingSoon": "Brevemente"
+  },
+  "intro": "é uma loja de bijuteria da moda e com estilo, que a designer autora dá vida.",
+  "seeAll": "Ver tudo",
+  "seeAllImageAlt": "Imagem «Ver tudo»",
+  "categoryImageAlt": "Imagem da categoria"
+}

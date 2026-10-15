@@ -1,0 +1,17 @@
+{
+  "title": "Koszyk",
+  "contactDetails": "Dane kontaktowe",
+  "shippingDetails": "Dane do wysyłki",
+  "yourOrder": "Twoje zamówienie",
+  "placeOrder": "Złóż zamówienie",
+  "fields": {
+    "choosePostOffice": "Wybierz urząd pocztowy",
+    "comment": "Informacje, które mogą pomóc w realizacji zamówienia"
+  },
+  "payment": {
+    "failed": "Płatność nie powiodła się!",
+    "success": "Zamówienie złożone",
+    "grandTotal": "Suma całkowita",
+    "continueShopping": "Kontynuuj zakupy"
+  }
+}

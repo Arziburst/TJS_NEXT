@@ -1,0 +1,15 @@
+{
+  "sizeGuide": "Größentabelle",
+  "addToCart": "In den Warenkorb",
+  "addedToCart": "Das Produkt wurde dem Warenkorb hinzugefügt",
+  "card": {
+    "onlyOrder": "Auf Bestellung gefertigt",
+    "firstImageAlt": "Erstes Bild des Produkts",
+    "secondImageAlt": "Zweites Bild des Produkts"
+  },
+  "images": {
+    "alt": "Bild des Produkts",
+    "numberedAlt": "Bild {index} des Produkts",
+    "byUrlAlt": "Bild von URL {url}"
+  }
+}

@@ -10,5 +10,7 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["src/**/*.test.{ts,tsx}", "tests/**/*.test.{ts,tsx}"],
+    // next-intl's ESM imports `next/server` without an extension, which only a bundler resolves
+    server: { deps: { inline: ["next-intl"] } },
   },
 });

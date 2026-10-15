@@ -1,0 +1,17 @@
+{
+  "title": "Carrinho",
+  "contactDetails": "Dados de contacto",
+  "shippingDetails": "Dados de envio",
+  "yourOrder": "A sua encomenda",
+  "placeOrder": "Finalizar encomenda",
+  "fields": {
+    "choosePostOffice": "Escolha a estação dos correios",
+    "comment": "Informações que possam ajudar a processar a encomenda"
+  },
+  "payment": {
+    "failed": "O pagamento falhou!",
+    "success": "Encomenda concluída com sucesso",
+    "grandTotal": "Total geral",
+    "continueShopping": "Continuar a comprar"
+  }
+}

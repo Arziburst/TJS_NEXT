@@ -1,0 +1,21 @@
+{
+  "title": "Winkel",
+  "filterShopBy": "Winkel op",
+  "filterBy": "Filteren op",
+  "showMore": "Meer tonen",
+  "shownCount": "{shown} van {total} producten getoond",
+  "categories": {
+    "all": "Alles bekijken",
+    "earrings": "Oorbellen",
+    "necklaces": "Kettingen",
+    "bracelets": "Armbanden",
+    "corals": "Koralen",
+    "rings": "Ringen",
+    "brooches": "Broches"
+  },
+  "sort": {
+    "placeholder": "Kies een filter",
+    "priceAsc": "Prijs (laag naar hoog)",
+    "priceDesc": "Prijs (hoog naar laag)"
+  }
+}

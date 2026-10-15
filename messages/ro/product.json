@@ -1,0 +1,15 @@
+{
+  "sizeGuide": "Ghid de mărimi",
+  "addToCart": "Adaugă în coș",
+  "addedToCart": "Produsul a fost adăugat în coș",
+  "card": {
+    "onlyOrder": "Se face la comandă",
+    "firstImageAlt": "Prima imagine a produsului",
+    "secondImageAlt": "A doua imagine a produsului"
+  },
+  "images": {
+    "alt": "Imaginea produsului",
+    "numberedAlt": "Imaginea {index} a produsului",
+    "byUrlAlt": "Imagine după URL {url}"
+  }
+}
