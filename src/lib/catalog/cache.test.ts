@@ -1,0 +1,202 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("server-only", () => ({}));
+
+// The "use cache" directive is a plain string outside Next's compiler: the wrappers run as ordinary functions
+// and these spies record the lifetime each one gives its entry.
+const cacheLife = vi.fn();
+const cacheTag = vi.fn();
+vi.mock("next/cache", () => ({ cacheLife, cacheTag }));
+
+type Response = { data: unknown; error: { message: string } | null };
+
+// A supabase-js stand-in: each table answers the next queued response when awaited, an Error rejects the
+// request as a network failure would, and an empty queue answers like an unreachable database.
+const responses: Record<string, (Response | Error)[]> = {};
+
+function builder(table: string) {
+  const proxy: object = new Proxy(
+    {},
+    {
+      get(_target, prop) {
+        if (prop === "then") {
+          const response = responses[table]?.shift() ?? new TypeError("fetch failed");
+          return (resolve: (r: Response) => void, reject: (e: Error) => void) =>
+            response instanceof Error ? reject(response) : resolve(response);
+        }
+        return () => proxy;
+      },
+    },
+  );
+  return proxy;
+}
+
+vi.mock("@/lib/supabase/server", () => ({
+  createPublicServerClient: () => ({
+    from: (table: string) => builder(table),
+    storage: {
+      from: (bucket: string) => ({
+        getPublicUrl: (path: string) => ({ data: { publicUrl: `https://storage.test/${bucket}/${path}` } }),
+      }),
+    },
+  }),
+}));
+
+const { FAILED_READ_LIFE } = await import("./failed-read");
+const { getCachedCategories, getCachedListingPage } = await import("./cache");
+const { getProductPage } = await import("./product");
+
+const failure: Response = { data: null, error: { message: "boom" } };
+
+const categoryRows: Response = {
+  data: [{ id: "c1", slug: "earrings", position: 1, category_translations: [{ locale: "de", name: "Ohrringe", source: "human" }] }],
+  error: null,
+};
+
+const translation = (locale: string, slug: string, title: string) => ({
+  locale,
+  slug,
+  title,
+  description: null,
+  materials: null,
+  care: null,
+  alt_text: null,
+  meta_title: null,
+  meta_description: null,
+  source: "human",
+  reviewed_at: null,
+});
+
+const productRow = {
+  id: "p1",
+  sku: "TEST-001",
+  fulfillment: "made_to_order",
+  availability: "available",
+  lead_time_days: 14,
+  price_usd_text: "24.90",
+  weight_g: 6,
+  created_at: "2026-10-14T00:00:00Z",
+  published_at: "2026-10-14T00:00:00Z",
+  category: { id: "c1", slug: "earrings" },
+  product_translations: [
+    translation("en", "coral-drop-earrings", "Coral drop earrings"),
+    translation("de", "korallen-ohrringe", "Korallen-Ohrringe"),
+  ],
+  product_images: [],
+};
+
+const slugMatches: Response = {
+  data: [
+    {
+      product_id: "p1",
+      locale: "de",
+      slug: "korallen-ohrringe",
+      product: {
+        product_translations: [
+          { locale: "en", slug: "coral-drop-earrings" },
+          { locale: "de", slug: "korallen-ohrringe" },
+        ],
+      },
+    },
+  ],
+  error: null,
+};
+
+/** The product page's reads up to its product: the slug lookup, then getProductBySlug's two queries. */
+function productReads() {
+  responses.product_translations = [slugMatches, { data: [{ product_id: "p1", locale: "de" }], error: null }];
+  responses.products = [{ data: productRow, error: null }];
+}
+
+/** Next 16.4.1: an entry with a zero revalidate or an expire under 5 minutes is never prerendered. */
+function isExcludedFromPrerender(life: { revalidate?: number; expire?: number }) {
+  return life.revalidate === 0 || (life.expire ?? Infinity) < 300;
+}
+
+beforeEach(() => {
+  for (const key of Object.keys(responses)) delete responses[key];
+  cacheLife.mockClear();
+  cacheTag.mockClear();
+});
+
+describe("the lifetime of a failed read", () => {
+  it("is zero: never served again and never prerendered", () => {
+    expect(FAILED_READ_LIFE).toEqual({ stale: 0, revalidate: 0, expire: 0 });
+    expect(isExcludedFromPrerender(FAILED_READ_LIFE)).toBe(true);
+  });
+});
+
+describe("getCachedCategories", () => {
+  it.each([
+    ["a database error", failure],
+    ["a network failure", new TypeError("fetch failed")],
+  ])("caches %s with zero lifetime", async (_what, response) => {
+    responses.categories = [response];
+    expect(await getCachedCategories("de")).toEqual({ ok: false, reason: "unexpectedError" });
+    expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
+  });
+
+  it("keeps the categories for hours", async () => {
+    responses.categories = [categoryRows];
+    expect(await getCachedCategories("de")).toMatchObject({ ok: true, data: [{ slug: "earrings", name: "Ohrringe" }] });
+    expect(cacheLife.mock.calls).toEqual([["hours"]]);
+  });
+});
+
+describe("getCachedListingPage", () => {
+  it("caches a failed product read with zero lifetime", async () => {
+    responses.products = [failure];
+    expect(await getCachedListingPage("de", null, "newest", 1, 24)).toEqual({ ok: false, reason: "unexpectedError" });
+    expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
+  });
+
+  it("caches a category listing with zero lifetime when the categories cannot be read", async () => {
+    // the products are there, but without the category's id the entry would miss its revalidation tag
+    responses.products = [{ data: [], error: null }];
+    responses.categories = [failure];
+    expect(await getCachedListingPage("de", "earrings", "newest", 1, 24)).toMatchObject({ ok: true });
+    expect(cacheLife).toHaveBeenLastCalledWith(FAILED_READ_LIFE);
+    expect(cacheLife).not.toHaveBeenCalledWith("hours");
+  });
+
+  it("keeps a complete listing for hours, tagged with its category", async () => {
+    responses.products = [{ data: [], error: null }];
+    responses.categories = [categoryRows];
+    expect(await getCachedListingPage("de", "earrings", "newest", 1, 24)).toMatchObject({ ok: true });
+    expect(cacheLife).toHaveBeenLastCalledWith("hours");
+    expect(cacheTag).toHaveBeenCalledWith("category:c1");
+  });
+});
+
+describe("getProductPage", () => {
+  it.each([
+    ["a database error", failure],
+    ["a network failure", new TypeError("fetch failed")],
+  ])("caches %s of the slug lookup with zero lifetime", async (_what, response) => {
+    responses.product_translations = [response];
+    expect(await getProductPage("de", "korallen-ohrringe")).toEqual({ kind: "unexpectedError" });
+    expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
+  });
+
+  it("caches a failed product read with zero lifetime", async () => {
+    responses.product_translations = [slugMatches, failure];
+    responses.categories = [categoryRows];
+    expect(await getProductPage("de", "korallen-ohrringe")).toEqual({ kind: "unexpectedError" });
+    expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
+  });
+
+  it("caches a page without its category (no breadcrumb) with zero lifetime", async () => {
+    productReads();
+    responses.categories = [failure];
+    expect(await getProductPage("de", "korallen-ohrringe")).toMatchObject({ kind: "ok", categoryName: null });
+    expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
+  });
+
+  it("keeps a complete page for days, tagged with its product", async () => {
+    productReads();
+    responses.categories = [categoryRows];
+    expect(await getProductPage("de", "korallen-ohrringe")).toMatchObject({ kind: "ok", categoryName: "Ohrringe" });
+    expect(cacheLife.mock.calls).toEqual([["days"]]);
+    expect(cacheTag).toHaveBeenCalledWith("product:p1");
+  });
+});

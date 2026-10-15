@@ -71,6 +71,21 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   never reach network idle. Put database reads inside the page's own cached entry (request-time data in
   its Suspense boundary, e.g. the shop listing), and keep shell texts static (category names come from
   the messages).
+- **A failed read is never cached as data (Next 16.4.1, found in #59).** A `"use cache"` data function
+  either throws on a failed read or gives its entry `cacheLife(FAILED_READ_LIFE)`
+  (`src/lib/catalog/failed-read.ts`: zero stale, revalidate and expire). That covers an *incomplete* read
+  too: a product page whose category could not be read (no breadcrumb), a listing without its category's
+  tag. Any `cacheLife` profile, `minutes` included, puts the entry into the build's prerender, so the
+  incomplete page would be served as static HTML; a zero `revalidate` makes the entry a dynamic hole that
+  the next request reads again. A known answer is data and keeps its lifetime (an unknown slug `minutes`,
+  a malformed one `max`). Unit tests: `src/lib/catalog/cache.test.ts` (a failing client per wrapper).
+- **Never rely on Next's implicit build-time fetch cache for Supabase reads (found in #59).** During
+  `next build` every `fetch` without a `cache` option is stored in `.next/cache/fetch-cache` for a year and
+  served to the *next* build (which Vercel also restores between deploys): a build then prerenders the
+  previous build's rows, and after a `db reset` mixes old ids with new ones. `createPublicServerClient`
+  (`src/lib/supabase/server.ts`) therefore fetches with `cache: "no-store"`; inside `"use cache"` that does
+  not make the scope dynamic, so the entry's `cacheLife`/`cacheTag` alone decide freshness. A new
+  server-side Supabase client used for cached reads does the same.
 - **Route registry (`src/config/routes.ts`).** Every shop route is listed once with its locale-less
   `path` and an `enabled` flag; the shell (header nav, mobile menu, cart and account slots) links only to
   enabled routes, because the client router prefetches every link and a link to a page that does not

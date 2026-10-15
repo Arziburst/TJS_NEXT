@@ -3,6 +3,7 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import type { Locale } from "@/i18n/routing";
 import { isNewProduct } from "./categories";
+import { FAILED_READ_LIFE } from "./failed-read";
 import { getCategories, getProducts } from "./index";
 import type { CatalogResult, Category, ProductSort, ProductSummary } from "./types";
 
@@ -18,11 +19,11 @@ export function categoryTag(categoryId: string): string {
   return `category:${categoryId}`;
 }
 
-// A failure is cached for a minute only: a retry comes soon, and being short-lived it is never baked into a
-// prerender (a build without the database still succeeds and renders the data at request time).
+// A failure is cached with zero lifetime: the next request reads again, and it is never baked into a prerender
+// (a build without the database still succeeds and renders the data at request time).
 function lifeFor(result: CatalogResult<unknown>) {
   if (result.ok) cacheLife("hours");
-  else cacheLife("seconds");
+  else cacheLife(FAILED_READ_LIFE);
 }
 
 export async function getCachedCategories(locale: Locale): Promise<CatalogResult<Category[]>> {
@@ -54,7 +55,7 @@ export async function getCachedListingPage(
   ]);
   const category = categories?.ok ? categories.data.find((c) => c.slug === categorySlug) : undefined;
   if (category) cacheTag(categoryTag(category.id));
-  // without the category's id the entry would miss its tag: keep it as short-lived as a failure
+  // without the category's id the entry would miss its tag: an incomplete read, kept no longer than a failure
   lifeFor(categorySlug && !category ? { ok: false, reason: "unexpectedError" } : result);
   if (!result.ok) return result;
   // the badge is as fresh as the entry (at most hours late), never per request
