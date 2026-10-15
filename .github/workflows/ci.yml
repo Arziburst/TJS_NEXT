@@ -21,29 +21,6 @@ permissions:
   pull-requests: read
 
 jobs:
-  # TEMPORARY (#55): proof that tests/dev/worktree-stack.test.ts is stable. Ten fresh runners (ten pwsh
-  # cold starts), the file ten times in a row on each. Removed before the PR leaves draft.
-  stack-test-repeat:
-    name: stack-test-repeat (${{ matrix.runner }})
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        runner: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - name: The file 10 times in a row
-        run: for i in $(seq 1 10); do echo "== run $i"; npx vitest run tests/dev/worktree-stack.test.ts || exit 1; done
-
   ci:
     name: ci
     runs-on: ubuntu-24.04
