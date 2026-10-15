@@ -3,10 +3,7 @@
     "title": "TJS: bigiotteria alla moda e di stile",
     "description": "TJS è un negozio di bigiotteria alla moda e di stile, che la designer-autrice porta in vita."
   },
-  "placeholder": {
-    "text": "Home page segnaposto. La vetrina verrà realizzata nelle prossime attività.",
-    "comingSoon": "Prossimamente"
-  },
+  "introBrand": "TJStore",
   "intro": "è un negozio di bigiotteria alla moda e di stile, che la designer-autrice porta in vita.",
   "seeAll": "Vedi tutto",
   "seeAllImageAlt": "Immagine \"Vedi tutto\"",

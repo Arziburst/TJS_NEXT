@@ -3,7 +3,7 @@
   "filterShopBy": "Comprar por",
   "filterBy": "Filtrar por",
   "showMore": "Ver mais",
-  "shownCount": "A mostrar {shown} de {total} produtos",
+  "shownCount": "{total, plural, one {A mostrar <b>{shown}</b> de <b>#</b> produto} other {A mostrar <b>{shown}</b> de <b>#</b> produtos}}",
   "categories": {
     "all": "Ver tudo",
     "earrings": "Brincos",
@@ -14,8 +14,25 @@
     "brooches": "Broches"
   },
   "sort": {
+    "newest": "Novidades",
     "placeholder": "Selecione o filtro",
     "priceAsc": "Preço (do mais baixo ao mais alto)",
     "priceDesc": "Preço (do mais alto ao mais baixo)"
+  },
+  "newBadge": "Novo",
+  "loadError": "Não foi possível carregar os produtos. Tente novamente mais tarde.",
+  "meta": {
+    "title": "Loja",
+    "description": "Bijuteria moderna e elegante da autora e designer: brincos, colares, pulseiras, corais, anéis e broches.",
+    "categoryDescription": "{category} da TJS: bijuteria moderna e elegante da autora e designer."
+  },
+  "pagination": {
+    "label": "Páginas",
+    "previous": "Página anterior",
+    "next": "Página seguinte",
+    "page": "Página {page}",
+    "position": "<b>{page}</b> de {total}",
+    "gap": "…",
+    "first": "Voltar à primeira página"
   }
 }

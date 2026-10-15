@@ -18,10 +18,15 @@ function leaves(tree: Tree, prefix = ""): Map<string, string> {
   return result;
 }
 
+// The distinct arguments (`{name}` and the head of `{name, plural, …}`) and tags of a message. A set, not a
+// list: a plural repeats them once per branch, and the number of branches differs by locale (uk: one, few,
+// many, other). A branch body (`one {…}`) is not an argument.
 function placeholders(text: string): string[] {
-  const args = [...text.matchAll(/\{(\w+)\}/g)].map((match) => `{${match[1]}}`);
+  const args = [...text.matchAll(/(?<!\b(?:zero|one|two|few|many|other)\s*|=\d+\s*)\{(\w+)(?:\}|,\s*\w+)/g)].map(
+    (match) => `{${match[1]}}`,
+  );
   const tags = [...text.matchAll(/<(\w+)>/g)].map((match) => `<${match[1]}>`);
-  return [...args, ...tags].sort();
+  return [...new Set([...args, ...tags])].sort();
 }
 
 describe("message catalogs", () => {
@@ -70,8 +75,11 @@ describe("message catalogs", () => {
       shown: 12,
       total: 40,
       index: 1,
+      page: 2,
+      category: "Rings",
       url: "https://example.com/a.jpg",
       link: (chunks: string) => `<a>${chunks}</a>`,
+      b: (chunks: string) => `<b>${chunks}</b>`,
     };
 
     for (const key of leaves(messages as unknown as Tree).keys()) {
