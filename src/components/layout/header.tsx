@@ -42,7 +42,8 @@ export function Header({
     <header className={cn("sticky top-0 z-40 bg-background", className)}>
       <div className="page-container flex items-center justify-between gap-4 py-4 sb:items-start sb:gap-x-[70px] sb:pt-6 sb:pb-3">
         <MobileMenu
-          className="sb:hidden"
+          // as wide as the favorites and cart on the right, so the logo stays centred
+          className="w-22 sb:hidden"
           languageSwitcher={languageSwitcher}
           currencySwitcher={currencySwitcher}
           account={account}
