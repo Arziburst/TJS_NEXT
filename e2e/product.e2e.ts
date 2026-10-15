@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import deCommon from "../messages/de/common.json" with { type: "json" };
 import deErrors from "../messages/de/errors.json" with { type: "json" };
+import deNav from "../messages/de/nav.json" with { type: "json" };
 import fr from "../messages/fr/product.json" with { type: "json" };
 import uk from "../messages/uk/product.json" with { type: "json" };
 
@@ -138,4 +139,20 @@ test("a sold one-of-a-kind piece says so and cannot be added", async ({ page }) 
   await page.goto("/uk/product/namysto-z-chervonoho-koralu");
   await expect(page.getByText(uk.page.sold, { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: uk.addToCart })).toHaveCount(0);
+});
+
+test("switching the language on a product page lands on the slug of that language", async ({ page }, testInfo) => {
+  const errors = collectErrors(page);
+  await page.goto(DE_EARRINGS);
+  await expect(page.getByRole("heading", { level: 1, name: "Korallen-Tropfenohrringe" })).toBeVisible();
+  // desktop: the switcher in the header nav; below 1024px: inside the mobile menu
+  if (testInfo.project.name === "mobile") {
+    await page.locator("header").getByRole("button", { name: deNav.openMenu }).filter({ visible: true }).click();
+    await page.getByRole("dialog").getByLabel(deNav.language).selectOption("uk");
+  } else {
+    await page.locator("header").getByLabel(deNav.language).filter({ visible: true }).selectOption("uk");
+  }
+  await expect(page).toHaveURL(/\/uk\/product\/serezhky-krapli-z-koralom$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Сережки-краплі з коралом" })).toBeVisible();
+  expect(errors).toEqual([]);
 });
