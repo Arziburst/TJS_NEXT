@@ -163,9 +163,10 @@ begin
 end;
 $$;
 
-revoke all on function public.admin_save_product(uuid, jsonb, jsonb) from public;
-revoke all on function public.admin_set_product_status(uuid, public.product_status) from public;
-revoke all on function public.admin_delete_product(uuid) from public;
+-- Supabase default privileges grant EXECUTE on new public functions to anon directly: revoke it explicitly.
+revoke all on function public.admin_save_product(uuid, jsonb, jsonb) from public, anon;
+revoke all on function public.admin_set_product_status(uuid, public.product_status) from public, anon;
+revoke all on function public.admin_delete_product(uuid) from public, anon;
 grant execute on function public.admin_save_product(uuid, jsonb, jsonb) to authenticated;
 grant execute on function public.admin_set_product_status(uuid, public.product_status) to authenticated;
 grant execute on function public.admin_delete_product(uuid) to authenticated;

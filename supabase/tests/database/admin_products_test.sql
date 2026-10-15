@@ -3,7 +3,7 @@
 -- change nothing), keep a product and its translations in one transaction and attribute the writes.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(49);
+select plan(55);
 
 -- Fixtures (as the database owner) -------------------------------------------------------------------
 insert into auth.users (id, email) values
@@ -55,6 +55,14 @@ select has_column('public', 'products', 'width_mm', 'products have a width');
 select has_column('public', 'products', 'height_mm', 'products have a height');
 select has_column('public', 'product_translations', 'clasp', 'translations have a clasp');
 select has_column('public', 'product_translations', 'lead_time_note', 'translations have a lead time note');
+
+-- Privileges: anon may not even execute the admin functions (Supabase's default privileges would grant it).
+select ok(not has_function_privilege('anon', 'public.admin_save_product(uuid, jsonb, jsonb)', 'execute'), 'anon cannot execute admin_save_product');
+select ok(not has_function_privilege('anon', 'public.admin_set_product_status(uuid, public.product_status)', 'execute'), 'anon cannot execute admin_set_product_status');
+select ok(not has_function_privilege('anon', 'public.admin_delete_product(uuid)', 'execute'), 'anon cannot execute admin_delete_product');
+select ok(has_function_privilege('authenticated', 'public.admin_save_product(uuid, jsonb, jsonb)', 'execute'), 'authenticated executes admin_save_product (the function checks the admin)');
+select ok(has_function_privilege('authenticated', 'public.admin_set_product_status(uuid, public.product_status)', 'execute'), 'authenticated executes admin_set_product_status (the function checks the admin)');
+select ok(has_function_privilege('authenticated', 'public.admin_delete_product(uuid)', 'execute'), 'authenticated executes admin_delete_product (the function checks the admin)');
 
 -- Rules (as the owner) ---------------------------------------------------------------------------------
 select throws_ok(
