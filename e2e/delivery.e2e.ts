@@ -43,7 +43,8 @@ test.describe("Nova Poshta delivery", () => {
     await page.getByRole("option", { name: /№1001:/ }).click();
 
     await expect(quote.getByRole("status")).toHaveText("≈ 86,45 ₴");
-    await expect(quote).toContainText("фактичну вартість ви сплачуєте у відділенні");
+    // a parcel locker has no counter: paid on receipt
+    await expect(quote).toContainText("фактичну вартість ви сплачуєте при отриманні");
 
     // searching a branch by its number
     await page.getByText("Відділення", { exact: true }).click();
@@ -52,6 +53,7 @@ test.describe("Nova Poshta delivery", () => {
     await warehouse.fill("1");
     await page.getByRole("option", { name: /^Відділення №1: вул. Пирогівський шлях, 135/ }).click();
     await expect(quote.getByRole("status")).toHaveText("≈ 76,45 ₴");
+    await expect(quote).toContainText("фактичну вартість ви сплачуєте у відділенні при отриманні");
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBe(0);
@@ -72,7 +74,11 @@ test.describe("Nova Poshta delivery", () => {
     await page.getByRole("textbox", { name: "Будинок" }).fill("16А");
     await page.getByRole("textbox", { name: "Квартира (необов'язково)" }).fill("2");
 
-    await expect(page.locator('[data-slot="delivery-quote"]').getByRole("status")).toHaveText("≈ 156,45 ₴");
+    const quote = page.locator('[data-slot="delivery-quote"]');
+    await expect(quote.getByRole("status")).toHaveText("≈ 156,45 ₴");
+    // a courier is paid on receipt, not at a branch
+    await expect(quote).toContainText("фактичну вартість ви сплачуєте при отриманні");
+    await expect(quote).not.toContainText("відділенні");
     expect(errors).toEqual([]);
   });
 

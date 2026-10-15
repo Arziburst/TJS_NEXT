@@ -55,6 +55,7 @@
       "calculating": "Počítáme…",
       "estimate": "≈ {price}",
       "note": "Odhad podle tarifu Nova Poshta pro malou krabičku: skutečnou cenu zaplatíte při převzetí na poště.",
+      "noteOnReceipt": "Odhad podle tarifu Nova Poshta pro malou krabičku: skutečnou cenu zaplatíte při převzetí.",
       "unavailable": "Cena teď není k dispozici: Nova Poshta ji spočítá při převzetí.",
       "choose": "Vyberte místo doručení, abyste viděli cenu"
     }

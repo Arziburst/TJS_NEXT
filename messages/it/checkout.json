@@ -55,6 +55,7 @@
       "calculating": "Calcolo in corso…",
       "estimate": "≈ {price}",
       "note": "Una stima secondo la tariffa di Nova Poshta per una scatola piccola: paghi il prezzo effettivo all'ufficio postale al ritiro.",
+      "noteOnReceipt": "Una stima secondo la tariffa di Nova Poshta per una scatola piccola: paghi il prezzo effettivo alla consegna.",
       "unavailable": "Il prezzo non è disponibile al momento: Nova Poshta lo calcola alla consegna.",
       "choose": "Scegli dove consegnare per vedere il prezzo"
     }

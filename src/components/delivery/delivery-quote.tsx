@@ -59,7 +59,12 @@ export function DeliveryQuote({ request }: { request: QuoteRequest | null }) {
           {value}
         </output>
       </div>
-      {result?.ok ? <p className="font-input text-xs text-foreground/70">{t("note")}</p> : null}
+      {result?.ok ? (
+        <p className="font-input text-xs text-foreground/70">
+          {/* only a branch has a post office counter; a courier or a parcel locker is paid on receipt */}
+          {request?.recipient === "warehouse" ? t("note") : t("noteOnReceipt")}
+        </p>
+      ) : null}
     </div>
   );
 }

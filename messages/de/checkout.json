@@ -55,6 +55,7 @@
       "calculating": "Wird berechnet…",
       "estimate": "≈ {price}",
       "note": "Eine Schätzung nach dem Tarif von Nova Poshta für eine kleine Schachtel: Den tatsächlichen Preis bezahlen Sie bei Erhalt in der Filiale.",
+      "noteOnReceipt": "Eine Schätzung nach dem Tarif von Nova Poshta für eine kleine Schachtel: Den tatsächlichen Preis bezahlen Sie bei Erhalt.",
       "unavailable": "Der Preis ist gerade nicht verfügbar: Nova Poshta berechnet ihn bei Erhalt.",
       "choose": "Wählen Sie den Lieferort, um den Preis zu sehen"
     }

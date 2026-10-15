@@ -55,6 +55,7 @@
       "calculating": "A calcular…",
       "estimate": "≈ {price}",
       "note": "Uma estimativa pela tarifa da Nova Poshta para uma caixa pequena: paga o preço real nos correios ao receber.",
+      "noteOnReceipt": "Uma estimativa pela tarifa da Nova Poshta para uma caixa pequena: paga o preço real ao receber.",
       "unavailable": "O preço não está disponível agora: a Nova Poshta calcula-o na entrega.",
       "choose": "Escolha onde entregar para ver o preço"
     }

@@ -55,6 +55,7 @@
       "calculating": "Calculating…",
       "estimate": "≈ {price}",
       "note": "An estimate by the Nova Poshta tariff for a small box: you pay the actual price at the post office on receipt.",
+      "noteOnReceipt": "An estimate by the Nova Poshta tariff for a small box: you pay the actual price on receipt.",
       "unavailable": "The price is not available right now: Nova Poshta calculates it on receipt.",
       "choose": "Choose where to deliver to see the price"
     }
