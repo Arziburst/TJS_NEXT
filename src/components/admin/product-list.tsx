@@ -10,7 +10,7 @@ import type { Category } from "@/lib/catalog/types";
 import { editProductHref } from "./paths";
 import { StatusToggle } from "./status-toggle";
 
-const STATUS_VARIANT = { published: "success", draft: "secondary", archived: "outline" } as const;
+const STATUS_VARIANT = { published: "default", draft: "secondary", archived: "outline" } as const;
 
 /** The admin's product list: one card per product, the title links to its form, one tap (un)publishes it. */
 export async function ProductList({ items, categories }: { items: AdminProductListItem[]; categories: Category[] }) {

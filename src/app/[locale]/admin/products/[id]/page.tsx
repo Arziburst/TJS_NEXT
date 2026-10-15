@@ -13,6 +13,7 @@ import { ProductPhotos } from "@/components/admin/product-photos";
 import { productHref } from "@/components/catalog/links";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
 import { routing, type Locale } from "@/i18n/routing";
 import { getAdminProduct, type AdminProduct } from "@/lib/admin/products";
 import { getAdmin, requireAdmin } from "@/lib/auth/session";
@@ -76,7 +77,7 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
               href={productHref(shopSlug)}
               // not prefetched: the admin rarely leaves for the shop, and a product page prefetch keeps a request open
               prefetch={false}
-              className={buttonVariants({ variant: "outline", size: "sm", className: "min-h-11 justify-self-start" })}>
+              className={cn(buttonVariants({ variant: "outline", size: "sm", className: "min-h-11 justify-self-start" }))}>
               <ExternalLinkIcon aria-hidden />
               {t("viewInShop")}
             </Link>

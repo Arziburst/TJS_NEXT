@@ -10,6 +10,7 @@ import { ProductList } from "@/components/admin/product-list";
 import { inputClass, labelClass, selectClass } from "@/components/admin/styles";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
 import { routing } from "@/i18n/routing";
 import { STATUSES, type ProductStatus } from "@/lib/admin/product-form";
 import { listAdminProducts } from "@/lib/admin/products";
@@ -70,7 +71,7 @@ async function AdminProducts({ params, searchParams }: PageProps<"/[locale]/admi
           </div>
           {/* on a phone the bottom bar has it */}
           <div className="hidden sb:block">
-            <Link href={NEW_PRODUCT_HREF} className={buttonVariants()}>
+            <Link href={NEW_PRODUCT_HREF} className={cn(buttonVariants())}>
               <PlusIcon aria-hidden />
               {t("add")}
             </Link>
@@ -122,11 +123,11 @@ async function AdminProducts({ params, searchParams }: PageProps<"/[locale]/admi
               </div>
             </div>
             <div className="flex gap-3">
-              <button type="submit" className={buttonVariants({ className: "flex-1 sb:flex-none" })}>
+              <button type="submit" className={cn(buttonVariants({ className: "flex-1 sb:flex-none" }))}>
                 {t("apply")}
               </button>
               {filtered && (
-                <Link href={ADMIN_PRODUCTS_HREF} className={buttonVariants({ variant: "outline", className: "flex-1 sb:flex-none" })}>
+                <Link href={ADMIN_PRODUCTS_HREF} className={cn(buttonVariants({ variant: "outline", className: "flex-1 sb:flex-none" }))}>
                   {t("reset")}
                 </Link>
               )}
