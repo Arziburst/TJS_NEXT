@@ -1,7 +1,38 @@
 {
   "title": "Carrito",
   "empty": "Tu carrito está vacío",
+  "emptyHint": "Explora la tienda y añade las piezas que te gusten.",
   "yourOrder": "Tu pedido",
   "continueToCheckout": "Continuar al pago",
-  "total": "Total"
+  "total": "Total",
+  "subtotal": "Subtotal",
+  "pieces": "{count, plural, one {# pieza} other {# piezas}}",
+  "lines": "Piezas en el carrito",
+  "each": "{quantity} ×",
+  "oneOfAKind": "Pieza única",
+  "madeToOrder": "Hecho por encargo",
+  "singlePiece": "Esta pieza existe una sola vez.",
+  "quantityOf": "Cantidad de {title}",
+  "decrease": "Uno menos de {title}",
+  "increase": "Uno más de {title}",
+  "removeLine": "Eliminar {title}",
+  "maxQuantity": "Como máximo {max} por producto",
+  "unavailablePiece": "Una pieza que ya no está disponible",
+  "status": {
+    "sold": "Vendido",
+    "reserved": "Reservado",
+    "unavailable": "Ya no disponible"
+  },
+  "unavailableNote": "Las piezas que ya no se pueden pedir no cuentan en el subtotal y no se pedirán. Puedes eliminarlas.",
+  "orderRequest": "Continuar a la solicitud de pedido",
+  "orderRequestTbd": "Solicitud de pedido: TBD",
+  "nothingToOrder": "No hay nada en el carrito que se pueda pedir.",
+  "continueShopping": "Seguir comprando",
+  "viewCart": "Ver el carrito",
+  "loadError": "No se pudo cargar el carrito. Vuelve a cargar la página.",
+  "errors": {
+    "rateLimited": "Demasiados cambios en poco tiempo. Espera un momento y vuelve a intentarlo.",
+    "unavailable": "Esta pieza ya no se puede pedir.",
+    "unexpectedError": "No se pudo actualizar el carrito. Inténtalo de nuevo."
+  }
 }

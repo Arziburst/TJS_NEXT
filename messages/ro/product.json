@@ -2,6 +2,17 @@
   "sizeGuide": "Ghid de mărimi",
   "addToCart": "Adaugă în coș",
   "addedToCart": "Produsul a fost adăugat în coș",
+  "cart": {
+    "added": "Adăugat în coș",
+    "quantityRaised": "Adăugat: {count} în coșul tău",
+    "alreadyInCart": "Această piesă unică este deja în coșul tău.",
+    "maxQuantity": "Cel mult {max} per produs",
+    "cartFull": "Coșul tău este plin. Elimină o piesă pentru a adăuga alta.",
+    "unavailable": "Această piesă nu mai poate fi comandată.",
+    "rateLimited": "Prea multe modificări într-un timp scurt. Așteaptă puțin și încearcă din nou.",
+    "inCart": "În coșul tău: {count}",
+    "viewCart": "Vezi coșul"
+  },
   "card": {
     "onlyOrder": "Se face la comandă",
     "firstImageAlt": "Prima imagine a produsului",

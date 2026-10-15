@@ -1,7 +1,38 @@
 {
   "title": "Košík",
   "empty": "Váš košík je prázdný",
+  "emptyHint": "Projděte si obchod a přidejte kusy, které se vám líbí.",
   "yourOrder": "Vaše objednávka",
   "continueToCheckout": "Pokračovat k pokladně",
-  "total": "Celkem"
+  "total": "Celkem",
+  "subtotal": "Mezisoučet",
+  "pieces": "{count, plural, one {# kus} few {# kusy} many {# kusu} other {# kusů}}",
+  "lines": "Kusy v košíku",
+  "each": "{quantity} ×",
+  "oneOfAKind": "Jediný kus",
+  "madeToOrder": "Na zakázku",
+  "singlePiece": "Tento kus existuje jen jednou.",
+  "quantityOf": "Množství: {title}",
+  "decrease": "O jeden méně: {title}",
+  "increase": "O jeden více: {title}",
+  "removeLine": "Odstranit {title}",
+  "maxQuantity": "Nejvýše {max} od jednoho produktu",
+  "unavailablePiece": "Kus, který už není dostupný",
+  "status": {
+    "sold": "Prodáno",
+    "reserved": "Rezervováno",
+    "unavailable": "Už není dostupné"
+  },
+  "unavailableNote": "Kusy, které už nelze objednat, se nezapočítávají do mezisoučtu a nebudou objednány. Můžete je odstranit.",
+  "orderRequest": "Pokračovat k žádosti o objednávku",
+  "orderRequestTbd": "Žádost o objednávku: TBD",
+  "nothingToOrder": "V košíku není nic, co by šlo objednat.",
+  "continueShopping": "Pokračovat v nákupu",
+  "viewCart": "Zobrazit košík",
+  "loadError": "Košík se nepodařilo načíst. Obnovte prosím stránku.",
+  "errors": {
+    "rateLimited": "Příliš mnoho změn v krátké době. Chvíli počkejte a zkuste to znovu.",
+    "unavailable": "Tento kus už nelze objednat.",
+    "unexpectedError": "Košík se nepodařilo aktualizovat. Zkuste to prosím znovu."
+  }
 }

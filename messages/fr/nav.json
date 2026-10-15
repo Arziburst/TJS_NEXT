@@ -3,6 +3,8 @@
   "aboutUs": "À propos de nous",
   "contacts": "Contact",
   "cart": "Panier",
+  "cartCount": "Panier, {count, plural, =0 {vide} one {# pièce} other {# pièces}}",
+  "closeCart": "Fermer le panier",
   "settings": "Paramètres",
   "addProduct": "Ajouter un produit",
   "orders": "Commandes",

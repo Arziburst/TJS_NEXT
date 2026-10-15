@@ -6,7 +6,8 @@ const externalBaseURL = process.env.E2E_BASE_URL || undefined;
 const baseURL = externalBaseURL ?? `http://localhost:${port}`;
 // E2E_SERVER=start serves the production build (`npm run build` first), as CI does; default `next dev`.
 const serverScript = process.env.E2E_SERVER === "start" ? "start" : "dev";
-const ADMIN_TESTS = "admin.e2e.ts";
+// e2e files that write products of their own to the catalog (see the projects below)
+const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts"];
 
 export default defineConfig({
   testDir: "./e2e",
@@ -28,25 +29,25 @@ export default defineConfig({
       name: "desktop",
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
       dependencies: ["catalog-fixtures"],
-      testIgnore: ADMIN_TESTS,
+      testIgnore: CATALOG_WRITERS,
     },
     {
       name: "mobile",
       use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
       dependencies: ["catalog-fixtures"],
-      testIgnore: ADMIN_TESTS,
+      testIgnore: CATALOG_WRITERS,
     },
-    // the admin tests publish products, which changes the listings the storefront tests count: they run after
-    // them (a failed storefront test skips them; the failure is reported either way)
+    // tests that publish, sell or unpublish products of their own run after the listings were checked, so the
+    // catalog tests always count exactly the seed and the catalog fixtures
     {
-      name: "admin-desktop",
-      testMatch: ADMIN_TESTS,
+      name: "desktop-catalog-writers",
+      testMatch: CATALOG_WRITERS,
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
       dependencies: ["desktop", "mobile"],
     },
     {
-      name: "admin-mobile",
-      testMatch: ADMIN_TESTS,
+      name: "mobile-catalog-writers",
+      testMatch: CATALOG_WRITERS,
       use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
       dependencies: ["desktop", "mobile"],
     },

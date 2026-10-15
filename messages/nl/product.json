@@ -2,6 +2,17 @@
   "sizeGuide": "Maattabel",
   "addToCart": "In winkelwagen",
   "addedToCart": "Het product is aan de winkelwagen toegevoegd",
+  "cart": {
+    "added": "Aan de winkelwagen toegevoegd",
+    "quantityRaised": "Toegevoegd: {count} in je winkelwagen",
+    "alreadyInCart": "Dit unieke exemplaar zit al in je winkelwagen.",
+    "maxQuantity": "Hoogstens {max} per product",
+    "cartFull": "Je winkelwagen is vol. Verwijder een stuk om een ander toe te voegen.",
+    "unavailable": "Dit stuk kan niet meer worden besteld.",
+    "rateLimited": "Te veel wijzigingen in korte tijd. Wacht even en probeer het opnieuw.",
+    "inCart": "In je winkelwagen: {count}",
+    "viewCart": "Winkelwagen bekijken"
+  },
   "card": {
     "onlyOrder": "Op bestelling gemaakt",
     "firstImageAlt": "Eerste afbeelding van het product",

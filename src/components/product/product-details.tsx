@@ -1,12 +1,11 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
-import { addToCart } from "@/app/[locale]/product/[slug]/actions";
+import { AddToCartSlot } from "@/components/cart/add-to-cart-slot";
 import { categoryHref } from "@/components/catalog/links";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 import type { Product } from "@/lib/catalog/types";
-import { AddToCartButton } from "./add-to-cart-button";
 import { GoBackButton } from "./go-back-button";
 import { ProductGallery } from "./product-gallery";
 
@@ -125,7 +124,7 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
               </>
             )}
           </dl>
-          {canOrder && <AddToCartButton productId={product.id} addToCart={addToCart} className="sb:self-start" />}
+          {canOrder && <AddToCartSlot productId={product.id} fulfillment={product.fulfillment} />}
         </div>
       </div>
     </NextIntlClientProvider>

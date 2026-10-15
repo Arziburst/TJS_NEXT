@@ -3,6 +3,8 @@
   "aboutUs": "O nas",
   "contacts": "Kontakt",
   "cart": "Koszyk",
+  "cartCount": "Koszyk, {count, plural, =0 {pusty} one {# sztuka} few {# sztuki} many {# sztuk} other {# sztuki}}",
+  "closeCart": "Zamknij koszyk",
   "settings": "Ustawienia",
   "addProduct": "Dodaj produkt",
   "orders": "Zamówienia",

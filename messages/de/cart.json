@@ -1,7 +1,38 @@
 {
   "title": "Warenkorb",
   "empty": "Ihr Warenkorb ist leer",
+  "emptyHint": "Stöbern Sie im Shop und legen Sie die Stücke, die Ihnen gefallen, in den Warenkorb.",
   "yourOrder": "Ihre Bestellung",
   "continueToCheckout": "Weiter zur Kasse",
-  "total": "Gesamt"
+  "total": "Gesamt",
+  "subtotal": "Zwischensumme",
+  "pieces": "{count, plural, one {# Stück} other {# Stück}}",
+  "lines": "Stücke im Warenkorb",
+  "each": "{quantity} ×",
+  "oneOfAKind": "Unikat",
+  "madeToOrder": "Auf Bestellung gefertigt",
+  "singlePiece": "Dieses Stück gibt es nur einmal.",
+  "quantityOf": "Menge von {title}",
+  "decrease": "Eins weniger von {title}",
+  "increase": "Eins mehr von {title}",
+  "removeLine": "{title} entfernen",
+  "maxQuantity": "Höchstens {max} pro Produkt",
+  "unavailablePiece": "Ein Stück, das nicht mehr verfügbar ist",
+  "status": {
+    "sold": "Verkauft",
+    "reserved": "Reserviert",
+    "unavailable": "Nicht mehr verfügbar"
+  },
+  "unavailableNote": "Stücke, die nicht mehr bestellt werden können, zählen nicht zur Zwischensumme und werden nicht bestellt. Sie können sie entfernen.",
+  "orderRequest": "Weiter zur Bestellanfrage",
+  "orderRequestTbd": "Bestellanfrage: TBD",
+  "nothingToOrder": "Im Warenkorb ist nichts, was bestellt werden kann.",
+  "continueShopping": "Weiter einkaufen",
+  "viewCart": "Warenkorb ansehen",
+  "loadError": "Der Warenkorb konnte nicht geladen werden. Bitte laden Sie die Seite neu.",
+  "errors": {
+    "rateLimited": "Zu viele Änderungen in kurzer Zeit. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+    "unavailable": "Dieses Stück kann nicht mehr bestellt werden.",
+    "unexpectedError": "Der Warenkorb konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
+  }
 }

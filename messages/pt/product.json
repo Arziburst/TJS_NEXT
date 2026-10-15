@@ -2,6 +2,17 @@
   "sizeGuide": "Guia de tamanhos",
   "addToCart": "Adicionar ao carrinho",
   "addedToCart": "O produto foi adicionado ao carrinho",
+  "cart": {
+    "added": "Adicionado ao carrinho",
+    "quantityRaised": "Adicionado: {count} no seu carrinho",
+    "alreadyInCart": "Esta peça única já está no seu carrinho.",
+    "maxQuantity": "No máximo {max} por produto",
+    "cartFull": "O seu carrinho está cheio. Remova uma peça para adicionar outra.",
+    "unavailable": "Esta peça já não pode ser encomendada.",
+    "rateLimited": "Demasiadas alterações em pouco tempo. Aguarde um momento e tente novamente.",
+    "inCart": "No seu carrinho: {count}",
+    "viewCart": "Ver o carrinho"
+  },
   "card": {
     "onlyOrder": "Por encomenda",
     "firstImageAlt": "Primeira imagem do produto",

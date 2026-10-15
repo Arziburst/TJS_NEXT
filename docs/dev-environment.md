@@ -256,8 +256,47 @@ Supabase Auth with email/password and Google (D12); the app side is `src/lib/aut
   A product is published only with its uk translation (checked in those functions, not by a table constraint).
   To try it locally, create a user (sign up, or the Auth admin API of the stack), make it admin with the SQL above
   through `MSYS_NO_PATHCONV=1 docker exec -i supabase_db_tjs-<n> psql -U postgres`, and sign in on
-  `127.0.0.1:3000+n`. `e2e/admin.e2e.ts` creates its own admin and customer; it runs in the `admin-desktop` and
-  `admin-mobile` projects after the storefront tests, because it publishes products the listings count.
+  `127.0.0.1:3000+n`. `e2e/admin.e2e.ts` creates its own admin and customer; it runs in the
+  `desktop-catalog-writers` and `mobile-catalog-writers` projects after the storefront tests, because it publishes
+  products the listings count.
+
+## Vercel
+
+The shop runs on the Vercel project `tjs-next` in the team `arzibursts-projects`, production
+`https://tjs-next.vercel.app`, Hobby plan until the owner decides (D32). Project settings and environment
+variables are changed only in the dashboard, by the owner or the coordinator; the repository holds
+`vercel.json` (deploys and cron).
+
+**Deploys.** Only `main` deploys: every push to `main` (a squash merge) builds a production deployment from
+the Vercel Git integration. `git.deploymentEnabled` in `vercel.json` (`"**": false`, `"main": true`) turns off
+the deployments of every other branch, so task branches, `assets/<task>` and Dependabot branches build no
+preview: there is no preview database (D14), and a preview without one only renders errors. Verification
+happens on the local stacks and in CI (`docs/ci.md`). A rollback is an instant rollback to an earlier
+production deployment in the dashboard; the database is not rolled back with it.
+
+**Production environment variables** (names only; the values live in the Vercel project, never in a file):
+
+| Name | Read by |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | every Supabase client; build time (inlined) and the image optimizer's allowed host |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | the browser and server Supabase clients (public by design, RLS guards the data) |
+| `SUPABASE_SERVICE_ROLE_KEY` | server only: the auth rate limits, admin reads, the rates job |
+| `NEXT_PUBLIC_SITE_URL` | the shop's public origin for canonical and hreflang URLs; unset → `VERCEL_PROJECT_PRODUCTION_URL` |
+| `CRON_SECRET` | the cron route; Vercel Cron sends it as `Authorization: Bearer …` |
+
+Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
+`VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` is never set on Vercel (the `/ui-kit` showcase stays a 404).
+
+**Cron.** `vercel.json` `crons` calls `GET /api/cron/fx-rates` daily at `15 14 * * *` (UTC) on the
+production deployment only, with `CRON_SECRET`; without the secret the route answers 401. On Hobby, Vercel
+fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv. Runs and their
+logs: the project's *Cron Jobs* settings and the function logs.
+
+**Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`
+renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the document of every page only when
+`VERCEL_ENV` is `production`: local builds, CI and `next dev` load neither script. Both are cookieless; the
+shop sends no custom events, so no personal data leaves through them. Visits and Web Vitals: the project's
+*Analytics* and *Speed Insights* tabs.
 
 ## Windows traps
 

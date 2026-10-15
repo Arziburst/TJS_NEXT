@@ -5,7 +5,26 @@ export type Database = {
   
   "public": {
           Tables: {
-            "categories": {
+            "cart_items": {
+                  Row: {
+                    "created_at": string,"id": string,"product_id": string,"quantity": number,"updated_at": string,"user_id": string,"variant_id": string | null
+                  }
+                  Insert: {
+                    "created_at"?: string,"id"?: string,"product_id": string,"quantity": number,"updated_at"?: string,"user_id"?: string,"variant_id"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"product_id"?: string,"quantity"?: number,"updated_at"?: string,"user_id"?: string,"variant_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "cart_items_product_id_fkey"
+      columns: ["product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"categories": {
                   Row: {
                     "created_at": string,"created_by": string | null,"id": string,"position": number,"slug": string,"updated_at": string,"updated_by": string | null
                   }
