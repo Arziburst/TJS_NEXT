@@ -1,5 +1,3 @@
-import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../src/lib/supabase/database.types";
@@ -10,10 +8,16 @@ import fr from "../messages/fr/checkout.json" with { type: "json" };
 import pl from "../messages/pl/checkout.json" with { type: "json" };
 
 // The delivery step abroad on its dev-only demo page (/<locale>/delivery-demo/nova-post, behind TJS_UI_KIT).
-// Playwright points the app at the Nova Post fixture server (e2e/nova-post-mock.ts): towns and points come
-// from the fixtures; the estimate is the zone flat rate, TBD until the owner sets it (the parcel rules are TBD,
-// so no live calculation is asked).
+// Playwright points the app at the Nova Post fixture server (e2e/nova-post-mock.ts): towns, points and the
+// calculations come from the fixtures (the server quotes only the D37 box paid by the recipient, D38); where it
+// cannot quote, the zone flat rate stands in, TBD until the owner sets it. The bundle scan is
+// tests/delivery/client-bundle.integration.test.ts.
 test.skip(!!process.env.E2E_BASE_URL, "needs the Nova Post fixture server that Playwright starts with the app");
+
+// the delivery actions are limited per client IP (src/lib/delivery/rate-limit.ts): each test is its own client
+test.beforeEach(async ({ page }) => {
+  await page.setExtraHTTPHeaders({ "x-forwarded-for": `e2e-nova-post-${crypto.randomUUID()}` });
+});
 
 function collectErrors(page: Page): string[] {
   const errors: string[] = [];
@@ -184,31 +188,3 @@ test("the demo page is not indexed", async ({ request }) => {
   expect(html).toMatch(/<meta name="robots" content="noindex, nofollow"/);
 });
 
-// The client bundle never carries the Nova Post client, its endpoints or its key (only after `next build`)
-test("the client bundle holds nothing of the Nova Post client", async ({ page }, testInfo) => {
-  test.skip(process.env.E2E_SERVER !== "start", "the client bundle exists only after next build");
-  test.skip(testInfo.project.name !== "desktop", "one scan is enough");
-  // the demo page's own chunks are in it
-  await page.goto("/en/delivery-demo/nova-post");
-  const loaded = await page.evaluate(() =>
-    performance.getEntriesByType("resource").map((entry) => entry.name).filter((name) => name.includes("/_next/static/")),
-  );
-  expect(loaded.length).toBeGreaterThan(0);
-
-  const markers = ["api.novapost.com", "api-stage.novapost", "clients/authorization", "shipments/calculations", "NOVA_POST_API", "e2e-fixture-key"];
-  const files: string[] = [];
-  const walk = (dir: string) => {
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      const path = join(dir, entry.name);
-      if (entry.isDirectory()) walk(path);
-      else if (/\.(js|css|json|txt|html)$/.test(entry.name)) files.push(path);
-    }
-  };
-  walk(join(".next", "static"));
-  expect(files.length).toBeGreaterThan(0);
-  const found = files.flatMap((file) => {
-    const text = readFileSync(file, "utf8");
-    return markers.filter((marker) => text.includes(marker)).map((marker) => `${file}: ${marker}`);
-  });
-  expect(found).toEqual([]);
-});

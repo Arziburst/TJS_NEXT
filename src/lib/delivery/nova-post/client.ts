@@ -269,9 +269,9 @@ export function createNovaPostClient(options: NovaPostClientOptions): NovaPostCl
                   flat: destination.flat ?? "",
                 },
               };
-        // DAP (D8): the shop pays the carrier for delivery, the recipient pays import VAT and duty on delivery
+        // the recipient pays the delivery on receipt (D38) and, under DAP (D8), the import VAT and duty
         const body = {
-          payerType: "Sender",
+          payerType: "Recipient",
           invoice: {
             incoterm: "DAP",
             currency: parcel.declaredCurrency,

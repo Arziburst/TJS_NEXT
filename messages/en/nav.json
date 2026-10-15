@@ -3,6 +3,8 @@
   "aboutUs": "About us",
   "contacts": "Contacts",
   "cart": "Cart",
+  "cartCount": "Cart, {count, plural, =0 {empty} one {# piece} other {# pieces}}",
+  "closeCart": "Close the cart",
   "settings": "Settings",
   "addProduct": "Add product",
   "orders": "Orders",

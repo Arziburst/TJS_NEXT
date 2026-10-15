@@ -24,6 +24,8 @@ type SettlementComboboxProps = {
 // The town of a Nova Post network country, searched by name on the server as the customer types
 export function SettlementCombobox({ country, value, onChange, className }: SettlementComboboxProps) {
   const t = useTranslations("checkout.internationalDelivery");
+  // the shop's one "too many attempts" text, shared with the auth forms and the Nova Poshta pieces
+  const tAuth = useTranslations("auth.errors");
   const locale = useLocale();
   const id = useId();
   const [results, setResults] = useState<Settlement[]>([]);
@@ -60,7 +62,7 @@ export function SettlementCombobox({ country, value, onChange, className }: Sett
 
   function status(): string | null {
     if (isPending) return t("searching");
-    if (failed) return failed === "rateLimited" ? t("tooManyRequests") : t("loadError");
+    if (failed) return failed === "rateLimited" ? tAuth("rateLimited") : t("loadError");
     if (trimmed.length < MIN_SEARCH_LENGTH) return value ? null : t("settlementHint");
     if (results.length === 0) return t("nothingFound");
     return null;

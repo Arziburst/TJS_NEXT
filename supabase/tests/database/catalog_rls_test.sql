@@ -205,11 +205,11 @@ select throws_ok(
   '23514', null, 'a made-to-order product cannot be sold out'
 );
 select throws_ok(
-  $$update public.products set lead_time_days = 7 where id = 'b2000000-0000-4000-8000-000000000001'$$,
+  $$update public.products set lead_time_min_days = 7, lead_time_max_days = 7 where id = 'b2000000-0000-4000-8000-000000000001'$$,
   '23514', null, 'a one-of-a-kind piece has no lead time'
 );
 select throws_ok(
-  $$update public.products set lead_time_days = 0 where id = 'b2000000-0000-4000-8000-000000000002'$$,
+  $$update public.products set lead_time_min_days = 0, lead_time_max_days = 0 where id = 'b2000000-0000-4000-8000-000000000002'$$,
   '23514', null, 'a lead time is positive'
 );
 select throws_ok(

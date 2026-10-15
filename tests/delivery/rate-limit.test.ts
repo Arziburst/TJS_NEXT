@@ -1,91 +1,50 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+// The per-client limits of the public delivery actions (src/lib/delivery/rate-limit.ts).
+import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
 
 const rpc = vi.fn();
-vi.mock("@/lib/supabase/server", () => ({
-  createServiceClient: () => ({ rpc }),
-  // the zone table and the catalog are not read when a request is refused
-  createPublicServerClient: () => {
-    throw new Error("not expected");
-  },
-}));
-vi.mock("next/headers", () => ({
-  headers: async () => new Headers({ "x-real-ip": "203.0.113.9" }),
-  cookies: async () => ({ get: () => undefined }),
-}));
-const calculate = vi.fn();
-const searchSettlements = vi.fn();
-const listDivisions = vi.fn();
-vi.mock("@/lib/delivery/nova-post/config", () => ({
-  getNovaPostClient: () => ({ calculate, searchSettlements, listDivisions }),
-}));
+vi.mock("@/lib/supabase/server", () => ({ createServiceClient: () => ({ rpc }) }));
+const requestHeaders = vi.fn(async () => new Headers({ "x-forwarded-for": "203.0.113.7" }));
+vi.mock("next/headers", () => ({ headers: () => requestHeaders() }));
 
-const { allowDeliveryRequest, DELIVERY_RATE_LIMITS, deliveryRateLimitKey } = await import("@/lib/delivery/nova-post/rate-limit");
-const { estimateNovaPostDelivery, listNovaPostDivisions, searchNovaPostSettlements } = await import(
-  "@/lib/delivery/nova-post/actions"
-);
+const { DELIVERY_RATE_LIMITS, allowDeliveryCall, deliveryRateLimitKey } = await import("@/lib/delivery/rate-limit");
 
-const refuse = () => rpc.mockResolvedValue({ data: false, error: null });
-
-beforeEach(() => {
-  rpc.mockReset();
-  calculate.mockReset();
-  searchSettlements.mockReset();
-  listDivisions.mockReset();
+describe("deliveryRateLimitKey", () => {
+  it("keys per action and client IP, hashed like the auth keys", () => {
+    const key = deliveryRateLimitKey("search", "203.0.113.7");
+    expect(key).toMatch(/^delivery-search:ip:[0-9a-f]{32}$/);
+    expect(key).not.toContain("203.0.113.7");
+    expect(deliveryRateLimitKey("quote", "203.0.113.7")).toBe(key.replace("delivery-search:", "delivery-quote:"));
+  });
 });
 
-describe("the delivery request budget", () => {
-  it("is 60 searches and 20 quotes per minute per client", () => {
+describe("allowDeliveryCall", () => {
+  it("counts searches at 60 and quotes at 20 per minute per client", async () => {
     expect(DELIVERY_RATE_LIMITS).toEqual({ search: { max: 60, windowSeconds: 60 }, quote: { max: 20, windowSeconds: 60 } });
-  });
-
-  it("counts per request kind and hashed IP (no raw IP stored)", async () => {
-    rpc.mockResolvedValue({ data: true, error: null });
-    expect(await allowDeliveryRequest("quote", "203.0.113.9")).toBe(true);
-    expect(rpc).toHaveBeenCalledWith("consume_rate_limit", {
-      p_key: deliveryRateLimitKey("quote", "203.0.113.9"),
-      p_max: 20,
+    rpc.mockReset().mockResolvedValue({ data: true, error: null });
+    expect(await allowDeliveryCall("search")).toBe(true);
+    expect(rpc).toHaveBeenLastCalledWith("consume_rate_limit", {
+      p_key: deliveryRateLimitKey("search", "203.0.113.7"),
+      p_max: 60,
       p_window_seconds: 60,
     });
-    expect(deliveryRateLimitKey("quote", "203.0.113.9")).toMatch(/^nova-post-quote:ip:[0-9a-f]{32}$/);
-    expect(deliveryRateLimitKey("search", "203.0.113.9")).toMatch(/^nova-post-search:ip:/);
+    expect(await allowDeliveryCall("quote")).toBe(true);
+    expect(rpc).toHaveBeenLastCalledWith("consume_rate_limit", expect.objectContaining({ p_max: 20, p_window_seconds: 60 }));
   });
 
-  it("fails closed when the counter errors or cannot be reached", async () => {
-    rpc.mockResolvedValue({ data: null, error: { message: "boom" } });
-    expect(await allowDeliveryRequest("search", "203.0.113.9")).toBe(false);
-    rpc.mockRejectedValue(new Error("network"));
-    expect(await allowDeliveryRequest("search", "203.0.113.9")).toBe(false);
-  });
-});
-
-describe("the delivery actions refuse a client over its budget", () => {
-  it("before asking Nova Post for towns or points", async () => {
-    refuse();
-    expect(await searchNovaPostSettlements({ country: "PL", text: "Wroc", locale: "pl" })).toEqual({
-      ok: false,
-      reason: "rateLimited",
-    });
-    expect(await listNovaPostDivisions({ country: "PL", settlementId: 26061, categories: ["PUDO"], locale: "pl" })).toEqual({
-      ok: false,
-      reason: "rateLimited",
-    });
-    expect(searchSettlements).not.toHaveBeenCalled();
-    expect(listDivisions).not.toHaveBeenCalled();
-    expect(rpc).toHaveBeenCalledWith("consume_rate_limit", expect.objectContaining({ p_max: 60 }));
+  it("refuses a client over its budget", async () => {
+    rpc.mockReset().mockResolvedValue({ data: false, error: null });
+    expect(await allowDeliveryCall("quote")).toBe(false);
   });
 
-  it("before quoting", async () => {
-    refuse();
-    const input = { country: "PL", destination: { kind: "division", divisionId: 1 }, goods: null, locale: "pl" };
-    expect(await estimateNovaPostDelivery(input)).toEqual({ ok: false, reason: "rateLimited" });
-    expect(calculate).not.toHaveBeenCalled();
-    expect(rpc).toHaveBeenCalledWith("consume_rate_limit", expect.objectContaining({ p_max: 20 }));
-  });
-
-  it("but an invalid input is refused without spending the budget", async () => {
-    expect(await searchNovaPostSettlements({ country: "GB", text: "London", locale: "en" })).toEqual({ ok: false, reason: "invalid" });
-    expect(rpc).not.toHaveBeenCalled();
+  it("fails closed when the counter errors, cannot be reached or there is no request", async () => {
+    rpc.mockReset().mockResolvedValue({ data: null, error: { message: "boom" } });
+    expect(await allowDeliveryCall("search")).toBe(false);
+    rpc.mockReset().mockRejectedValue(new Error("network"));
+    expect(await allowDeliveryCall("search")).toBe(false);
+    requestHeaders.mockRejectedValueOnce(new Error("headers() outside a request"));
+    rpc.mockReset().mockResolvedValue({ data: true, error: null });
+    expect(await allowDeliveryCall("search")).toBe(false);
   });
 });

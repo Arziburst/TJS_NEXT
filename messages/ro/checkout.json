@@ -14,6 +14,52 @@
     "grandTotal": "Total general",
     "continueShopping": "Continuă cumpărăturile"
   },
+  "delivery": {
+    "title": "Livrare în Ucraina",
+    "city": {
+      "label": "Oraș",
+      "placeholder": "Începeți să tastați numele orașului"
+    },
+    "search": {
+      "searching": "Se caută…",
+      "typeMore": "Tastați cel puțin {min} litere",
+      "empty": "Nu s-a găsit nimic",
+      "ukrainianOnly": "Tastați numele în ucraineană",
+      "unavailable": "Căutarea nu este disponibilă acum. Încercați din nou mai târziu.",
+      "clear": "Ștergeți",
+      "open": "Afișați lista"
+    },
+    "method": {
+      "label": "Cum primiți coletul",
+      "warehouse": "La o filială sau la un locker",
+      "address": "Prin curier la adresă",
+      "addressUnavailable": "Nova Poshta nu livrează la adresă în această localitate"
+    },
+    "warehouse": {
+      "label": "Filială sau locker",
+      "placeholder": "Număr sau stradă",
+      "filter": "Afișați",
+      "all": "Toate",
+      "branch": "Filiale",
+      "postomat": "Lockere",
+      "maxWeight": "până la {kg} kg"
+    },
+    "address": {
+      "street": "Stradă",
+      "streetPlaceholder": "Începeți să tastați numele străzii",
+      "house": "Număr",
+      "flat": "Apartament (opțional)"
+    },
+    "quote": {
+      "label": "Livrare prin Nova Poshta",
+      "calculating": "Se calculează…",
+      "estimate": "≈ {price}",
+      "note": "O estimare după tariful Nova Poshta pentru o cutie mică: plătiți prețul real la oficiul poștal la primire.",
+      "noteOnReceipt": "O estimare după tariful Nova Poshta pentru o cutie mică: plătiți prețul real la primire.",
+      "unavailable": "Prețul nu este disponibil acum: Nova Poshta îl calculează la primire.",
+      "choose": "Alegeți unde să livrăm pentru a vedea prețul"
+    }
+  },
   "internationalDelivery": {
     "country": "Țara",
     "countryPlaceholder": "Alegeți țara",
@@ -59,11 +105,10 @@
       "tbd": "TBD",
       "unavailable": "Momentan indisponibil",
       "deliveryDate": "Livrare estimată: {date}",
-      "estimateNote": "Tarif fix pentru zona de destinație; costul final poate diferi.",
+      "estimateNote": "Tarif fix pentru zona de destinație: plătiți prețul real la primire.",
       "tbdNote": "Tariful de livrare pentru această zonă nu a fost încă stabilit.",
-      "carrierNote": "Prețul Nova Post pentru o cutie mică (10 × 10 × 5 cm); ambalajul variază, deci prețul real poate diferi."
+      "carrierNote": "O estimare după tariful Nova Post pentru o cutie mică (10 × 10 × 5 cm): plătiți prețul real la primire."
     },
-    "customsNotice": "La livrare, destinatarul poate avea de plătit TVA la import și taxe vamale.",
-    "tooManyRequests": "Prea multe solicitări. Încercați din nou peste un minut."
+    "customsNotice": "La livrare, destinatarul poate avea de plătit TVA la import și taxe vamale."
   }
 }

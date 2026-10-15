@@ -1,7 +1,38 @@
 {
   "title": "Koszyk",
   "empty": "Twój koszyk jest pusty",
+  "emptyHint": "Przejrzyj sklep i dodaj sztuki, które Ci się podobają.",
   "yourOrder": "Twoje zamówienie",
   "continueToCheckout": "Przejdź do kasy",
-  "total": "Razem"
+  "total": "Razem",
+  "subtotal": "Suma częściowa",
+  "pieces": "{count, plural, one {# sztuka} few {# sztuki} many {# sztuk} other {# sztuki}}",
+  "lines": "Sztuki w koszyku",
+  "each": "{quantity} ×",
+  "oneOfAKind": "Jedyny egzemplarz",
+  "madeToOrder": "Na zamówienie",
+  "singlePiece": "Ta sztuka istnieje tylko w jednym egzemplarzu.",
+  "quantityOf": "Ilość: {title}",
+  "decrease": "O jeden mniej: {title}",
+  "increase": "O jeden więcej: {title}",
+  "removeLine": "Usuń {title}",
+  "maxQuantity": "Najwyżej {max} na produkt",
+  "unavailablePiece": "Sztuka, która nie jest już dostępna",
+  "status": {
+    "sold": "Sprzedane",
+    "reserved": "Zarezerwowane",
+    "unavailable": "Już niedostępne"
+  },
+  "unavailableNote": "Sztuki, których nie można już zamówić, nie są wliczane do sumy i nie zostaną zamówione. Możesz je usunąć.",
+  "orderRequest": "Przejdź do zapytania o zamówienie",
+  "orderRequestTbd": "Zapytanie o zamówienie: TBD",
+  "nothingToOrder": "W koszyku nie ma nic, co można zamówić.",
+  "continueShopping": "Kontynuuj zakupy",
+  "viewCart": "Zobacz koszyk",
+  "loadError": "Nie udało się wczytać koszyka. Odśwież stronę.",
+  "errors": {
+    "rateLimited": "Zbyt wiele zmian w krótkim czasie. Poczekaj chwilę i spróbuj ponownie.",
+    "unavailable": "Tej sztuki nie można już zamówić.",
+    "unexpectedError": "Nie udało się zaktualizować koszyka. Spróbuj ponownie."
+  }
 }

@@ -14,6 +14,52 @@
     "grandTotal": "Suma całkowita",
     "continueShopping": "Kontynuuj zakupy"
   },
+  "delivery": {
+    "title": "Dostawa na Ukrainie",
+    "city": {
+      "label": "Miasto",
+      "placeholder": "Zacznij wpisywać nazwę miasta"
+    },
+    "search": {
+      "searching": "Wyszukiwanie…",
+      "typeMore": "Wpisz co najmniej {min} litery",
+      "empty": "Nic nie znaleziono",
+      "ukrainianOnly": "Wpisz nazwę po ukraińsku",
+      "unavailable": "Wyszukiwanie jest teraz niedostępne. Spróbuj ponownie później.",
+      "clear": "Wyczyść",
+      "open": "Pokaż listę"
+    },
+    "method": {
+      "label": "Jak odebrać przesyłkę",
+      "warehouse": "W oddziale lub paczkomacie",
+      "address": "Kurierem pod adres",
+      "addressUnavailable": "Nova Poshta nie dostarcza pod adres w tej miejscowości"
+    },
+    "warehouse": {
+      "label": "Oddział lub paczkomat",
+      "placeholder": "Numer lub ulica",
+      "filter": "Pokaż",
+      "all": "Wszystkie",
+      "branch": "Oddziały",
+      "postomat": "Paczkomaty",
+      "maxWeight": "do {kg} kg"
+    },
+    "address": {
+      "street": "Ulica",
+      "streetPlaceholder": "Zacznij wpisywać nazwę ulicy",
+      "house": "Numer domu",
+      "flat": "Mieszkanie (opcjonalnie)"
+    },
+    "quote": {
+      "label": "Dostawa przez Nova Poshta",
+      "calculating": "Obliczanie…",
+      "estimate": "≈ {price}",
+      "note": "Szacunek według taryfy Nova Poshta dla małego pudełka: rzeczywistą cenę płacisz w placówce przy odbiorze.",
+      "noteOnReceipt": "Szacunek według taryfy Nova Poshta dla małego pudełka: rzeczywistą cenę płacisz przy odbiorze.",
+      "unavailable": "Cena jest teraz niedostępna: Nova Poshta obliczy ją przy odbiorze.",
+      "choose": "Wybierz miejsce dostawy, aby zobaczyć cenę"
+    }
+  },
   "internationalDelivery": {
     "country": "Kraj",
     "countryPlaceholder": "Wybierz kraj",
@@ -59,11 +105,10 @@
       "tbd": "TBD",
       "unavailable": "Obecnie niedostępne",
       "deliveryDate": "Przewidywana dostawa: {date}",
-      "estimateNote": "Stała stawka dla strefy docelowej; ostateczny koszt może się różnić.",
+      "estimateNote": "Stała stawka dla strefy docelowej: rzeczywistą cenę płacisz przy odbiorze.",
       "tbdNote": "Stawka dostawy dla tej strefy nie została jeszcze ustalona.",
-      "carrierNote": "Cena Nova Post za małe pudełko (10 × 10 × 5 cm); opakowanie bywa różne, więc rzeczywista cena może się różnić."
+      "carrierNote": "Szacunek według taryfy Nova Post dla małego pudełka (10 × 10 × 5 cm): rzeczywistą cenę płacisz przy odbiorze."
     },
-    "customsNotice": "Przy odbiorze odbiorca może być zobowiązany do zapłaty importowego VAT i cła.",
-    "tooManyRequests": "Zbyt wiele zapytań. Spróbuj ponownie za minutę."
+    "customsNotice": "Przy odbiorze odbiorca może być zobowiązany do zapłaty importowego VAT i cła."
   }
 }

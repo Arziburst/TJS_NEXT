@@ -1,9 +1,8 @@
 "use server";
 
-import { headers } from "next/headers";
 import { z } from "zod";
 import { locales } from "@/i18n/routing";
-import { clientIp } from "@/lib/auth/rate-limit";
+import { allowDeliveryCall } from "@/lib/delivery/rate-limit";
 import { BUSINESS_TIME_ZONE } from "@/lib/money/business-date";
 import { decimalString, formatMoney } from "@/lib/money/format";
 import { getCurrencyChoiceFor } from "@/lib/money/prices";
@@ -11,13 +10,12 @@ import { getNovaPostClient } from "./config";
 import { DELIVERY_COUNTRIES, hasDivisions } from "./countries";
 import { parcelForOrder } from "./parcel";
 import { estimateDelivery, type ShownPrice } from "./quote";
-import { allowDeliveryRequest, type DeliveryRequest } from "./rate-limit";
 import { DIVISION_CATEGORIES, type Division, type Settlement } from "./types";
 import { readZoneRates } from "./zone-rates";
 
 // Public entry points of the checkout's delivery step: any visitor, signed in or not, may call them, so
 // there is no user or role to check; every input is validated, every client has a budget per minute
-// (./rate-limit) and the API key never leaves the server.
+// (shared with the Nova Poshta actions, src/lib/delivery/rate-limit.ts) and the API key never leaves the server.
 
 const countrySchema = z.enum(DELIVERY_COUNTRIES);
 const localeSchema = z.enum(locales);
@@ -66,10 +64,6 @@ const estimateInput = z
 
 type Refusal = { ok: false; reason: "invalid" | "rateLimited" };
 
-async function allowed(request: DeliveryRequest): Promise<boolean> {
-  return allowDeliveryRequest(request, clientIp(await headers()));
-}
-
 export type LookupFailure = { ok: false; reason: "unavailable" } | Refusal;
 
 export type SettlementsResult = { ok: true; settlements: Settlement[] } | LookupFailure;
@@ -77,7 +71,7 @@ export type SettlementsResult = { ok: true; settlements: Settlement[] } | Lookup
 export async function searchNovaPostSettlements(input: unknown): Promise<SettlementsResult> {
   const parsed = settlementsInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
-  if (!(await allowed("search"))) return { ok: false, reason: "rateLimited" };
+  if (!(await allowDeliveryCall("search"))) return { ok: false, reason: "rateLimited" };
   const client = getNovaPostClient();
   if (!client) return { ok: false, reason: "unavailable" };
   const { country, text, locale } = parsed.data;
@@ -94,7 +88,7 @@ export type DivisionsResult = { ok: true; divisions: Division[] } | LookupFailur
 export async function listNovaPostDivisions(input: unknown): Promise<DivisionsResult> {
   const parsed = divisionsInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
-  if (!(await allowed("search"))) return { ok: false, reason: "rateLimited" };
+  if (!(await allowDeliveryCall("search"))) return { ok: false, reason: "rateLimited" };
   const client = getNovaPostClient();
   if (!client) return { ok: false, reason: "unavailable" };
   const { country, settlementId, categories, locale } = parsed.data;
@@ -136,7 +130,7 @@ function dateView(isoDate: string | null, locale: string): string | null {
 export async function estimateNovaPostDelivery(input: unknown): Promise<EstimateResult> {
   const parsed = estimateInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
-  if (!(await allowed("quote"))) return { ok: false, reason: "rateLimited" };
+  if (!(await allowDeliveryCall("quote"))) return { ok: false, reason: "rateLimited" };
   const { country, destination, goods, locale } = parsed.data;
   const { current, tables } = await getCurrencyChoiceFor(locale);
   const estimate = await estimateDelivery(

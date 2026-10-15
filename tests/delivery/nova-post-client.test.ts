@@ -192,7 +192,7 @@ describe("Nova Post calculation", () => {
     expect(call.init.method).toBe("POST");
     expect(call.url.pathname).toBe("/v.1.0/shipments/calculations");
     expect(body(call)).toEqual({
-      payerType: "Sender",
+      payerType: "Recipient",
       invoice: { incoterm: "DAP", currency: "EUR", cost: 45.9, payerFeesCustoms: "Recipient" },
       // 123 g counts as 130 g: the API rounds a remainder of 10 g down
       parcels: [{ cargoCategory: "parcel", insuranceCost: 2200, rowNumber: 1, length: 200, width: 150, height: 50, actualWeight: 130 }],

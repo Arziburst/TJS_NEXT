@@ -14,6 +14,52 @@
     "grandTotal": "Totale complessivo",
     "continueShopping": "Continua lo shopping"
   },
+  "delivery": {
+    "title": "Consegna in Ucraina",
+    "city": {
+      "label": "Città",
+      "placeholder": "Inizia a digitare il nome della città"
+    },
+    "search": {
+      "searching": "Ricerca…",
+      "typeMore": "Digita almeno {min} lettere",
+      "empty": "Nessun risultato",
+      "ukrainianOnly": "Digita il nome in ucraino",
+      "unavailable": "La ricerca non è disponibile al momento. Riprova più tardi.",
+      "clear": "Cancella",
+      "open": "Mostra l'elenco"
+    },
+    "method": {
+      "label": "Come ricevere il pacco",
+      "warehouse": "In una filiale o in un armadietto",
+      "address": "Con corriere all'indirizzo",
+      "addressUnavailable": "Nova Poshta non consegna a domicilio in questa località"
+    },
+    "warehouse": {
+      "label": "Filiale o armadietto",
+      "placeholder": "Numero o via",
+      "filter": "Mostra",
+      "all": "Tutti",
+      "branch": "Filiali",
+      "postomat": "Armadietti",
+      "maxWeight": "fino a {kg} kg"
+    },
+    "address": {
+      "street": "Via",
+      "streetPlaceholder": "Inizia a digitare il nome della via",
+      "house": "Numero civico",
+      "flat": "Appartamento (facoltativo)"
+    },
+    "quote": {
+      "label": "Consegna con Nova Poshta",
+      "calculating": "Calcolo in corso…",
+      "estimate": "≈ {price}",
+      "note": "Una stima secondo la tariffa di Nova Poshta per una scatola piccola: paghi il prezzo effettivo all'ufficio postale al ritiro.",
+      "noteOnReceipt": "Una stima secondo la tariffa di Nova Poshta per una scatola piccola: paghi il prezzo effettivo alla consegna.",
+      "unavailable": "Il prezzo non è disponibile al momento: Nova Poshta lo calcola alla consegna.",
+      "choose": "Scegli dove consegnare per vedere il prezzo"
+    }
+  },
   "internationalDelivery": {
     "country": "Paese",
     "countryPlaceholder": "Scegli un paese",
@@ -59,11 +105,10 @@
       "tbd": "TBD",
       "unavailable": "Al momento non disponibile",
       "deliveryDate": "Consegna prevista: {date}",
-      "estimateNote": "Tariffa forfettaria per la zona di destinazione; il costo finale può variare.",
+      "estimateNote": "Tariffa forfettaria per la zona di destinazione: paghi il prezzo effettivo alla consegna.",
       "tbdNote": "La tariffa di spedizione per questa zona non è ancora stata fissata.",
-      "carrierNote": "Prezzo Nova Post per una scatola piccola (10 × 10 × 5 cm); l’imballaggio varia, quindi il prezzo effettivo può differire."
+      "carrierNote": "Una stima secondo la tariffa di Nova Post per una scatola piccola (10 × 10 × 5 cm): paghi il prezzo effettivo alla consegna."
     },
-    "customsNotice": "Alla consegna il destinatario potrebbe dover pagare l’IVA all’importazione e i dazi doganali.",
-    "tooManyRequests": "Troppe richieste. Riprova tra un minuto."
+    "customsNotice": "Alla consegna il destinatario potrebbe dover pagare l’IVA all’importazione e i dazi doganali."
   }
 }

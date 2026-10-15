@@ -25,6 +25,8 @@ type Filter = (typeof FILTERS)[number];
 // The branch, parcel locker or pick-up point in the chosen town, filtered by its type
 export function DivisionPicker({ country, settlementId, value, onChange, className }: DivisionPickerProps) {
   const t = useTranslations("checkout.internationalDelivery");
+  // the shop's one "too many attempts" text, shared with the auth forms and the Nova Poshta pieces
+  const tAuth = useTranslations("auth.errors");
   const locale = useLocale();
   const id = useId();
   const [loaded, setLoaded] = useState<Loaded | null>(null);
@@ -75,7 +77,7 @@ export function DivisionPicker({ country, settlementId, value, onChange, classNa
         <p className="font-input text-sm text-foreground/70">{t("loading")}</p>
       ) : "failed" in ready ? (
         <p role="alert" className="font-input text-sm">
-          {ready.failed === "rateLimited" ? t("tooManyRequests") : t("loadError")}
+          {ready.failed === "rateLimited" ? tAuth("rateLimited") : t("loadError")}
         </p>
       ) : shown.length === 0 ? (
         <p className="font-input text-sm">{t("noDivisions")}</p>

@@ -33,7 +33,12 @@ async function DeliveryDemo() {
   await connection();
   const [locale, messages] = await Promise.all([getLocale() as Promise<Locale>, getMessages()]);
   return (
-    <NextIntlClientProvider messages={{ checkout: { internationalDelivery: messages.checkout.internationalDelivery } }}>
+    <NextIntlClientProvider
+      messages={{
+        checkout: { internationalDelivery: messages.checkout.internationalDelivery },
+        auth: { errors: { rateLimited: messages.auth.errors.rateLimited } },
+      }}
+    >
       <InternationalDelivery
         countries={countryOptions(locale)}
         live={getNovaPostClient() !== null}

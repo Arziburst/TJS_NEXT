@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 const iconLink =
   "inline-flex size-11 items-center justify-center transition-opacity hover:opacity-70 focus-visible:opacity-70 [&_svg]:size-5";
 
-// Default contents of the cart and account slots; the cart and account tasks replace them.
+// Default contents of the cart and account slots, and the placeholders of the streamed ones.
 export function CartSlot({ className }: { className?: string }) {
   const t = useTranslations("nav");
   return (

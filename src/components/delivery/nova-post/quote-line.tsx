@@ -20,11 +20,13 @@ type QuoteLineProps = {
  */
 export function QuoteLine({ quote, pending = false, failure = null, className }: QuoteLineProps) {
   const t = useTranslations("checkout.internationalDelivery");
+  // the shop's one "too many attempts" text, shared with the auth forms and the Nova Poshta pieces
+  const tAuth = useTranslations("auth.errors");
   const shown = !pending && !failure ? quote : null;
 
   function value() {
     if (pending) return <span className="text-foreground/70">{t("quote.calculating")}</span>;
-    if (failure) return <span>{failure === "rateLimited" ? t("tooManyRequests") : t("quote.error")}</span>;
+    if (failure) return <span>{failure === "rateLimited" ? tAuth("rateLimited") : t("quote.error")}</span>;
     if (!quote) return <span aria-hidden>{t("quote.none")}</span>;
     const { price } = quote;
     if (price.state === "tbd") return <span data-slot="price-tbd">{t("quote.tbd")}</span>;

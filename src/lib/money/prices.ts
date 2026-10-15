@@ -64,7 +64,31 @@ export async function formatPrice(usdMinor: number): Promise<FormattedPrice | nu
   return money && { ...money, text: formatMoney(money, locale) };
 }
 
-export type JsonLdPrice = { price: string; priceCurrency: Currency };
+export type PriceLine = { usdMinor: number; quantity: number };
+
+// The total of `lines` in the visitor's currency: each unit price as displayed (converted and charm-rounded)
+// times its quantity, summed, so the total always equals what the visitor adds up from the shown prices.
+// Null when no rate is available. Request-time data: render its callers inside <Suspense>.
+export async function formatPriceTotal(lines: readonly PriceLine[]): Promise<FormattedPrice | null> {
+  const { choice, locale, tables } = await visitorContext();
+  if (!tables) return null;
+  let amountMinor = 0;
+  let decimals: number | null = null;
+  for (const { usdMinor, quantity } of lines) {
+    if (!Number.isSafeInteger(quantity) || quantity < 0) return null;
+    const unit = priceIn(usdMinor, choice.current, tables);
+    if (!unit) return null;
+    decimals = unit.decimals;
+    amountMinor += unit.amountMinor * quantity;
+    if (!Number.isSafeInteger(amountMinor)) return null;
+  }
+  decimals ??= tables.settings[choice.current]?.decimals ?? null;
+  if (decimals === null) return null;
+  const money: Money = { currency: choice.current, amountMinor, decimals };
+  return { ...money, text: formatMoney(money, locale) };
+}
+
+export type JsonLdPrice ={ price: string; priceCurrency: Currency };
 
 // schema.org Offer price in the locale's default currency (D5), the same for every visitor and crawler
 export async function getJsonLdPrice(usdMinor: number, locale: Locale): Promise<JsonLdPrice | null> {

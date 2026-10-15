@@ -52,22 +52,6 @@ describe.skipIf(!stack)("Nova Post fallback on the local stack", async () => {
     expect(estimate).toEqual({ source: "flatRate", zone, price: { state: "tbd" }, reason: "notConfigured" });
   });
 
-  it("refuses the 21st quote of one client within a minute (the stack's consume_rate_limit)", async () => {
-    const { allowDeliveryRequest } = await import("@/lib/delivery/nova-post/rate-limit");
-    const burst = async () => {
-      // a fresh client per burst, so earlier runs do not count
-      const ip = `test-client-${crypto.randomUUID()}`;
-      const answers: boolean[] = [];
-      for (let i = 0; i < 21; i++) answers.push(await allowDeliveryRequest("quote", ip));
-      return answers;
-    };
-    const expected = [...Array<boolean>(20).fill(true), false];
-    let answers = await burst();
-    // the minute window can turn over inside a burst, restarting the count: one more burst then
-    if (answers.join() !== expected.join()) answers = await burst();
-    expect(answers).toEqual(expected);
-  });
-
   it("converts a flat rate once one is set, like a product price", async () => {
     // a test amount, removed after the suite; the real amounts are the owner's
     const { error } = await service.from("nova_post_zone_rates").update({ amount_minor: 1500, currency: "USD" }).eq("zone", "B");

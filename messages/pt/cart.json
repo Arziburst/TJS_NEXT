@@ -1,7 +1,38 @@
 {
   "title": "Carrinho",
   "empty": "O seu carrinho está vazio",
+  "emptyHint": "Explore a loja e adicione as peças de que gosta.",
   "yourOrder": "A sua encomenda",
   "continueToCheckout": "Continuar para o pagamento",
-  "total": "Total"
+  "total": "Total",
+  "subtotal": "Subtotal",
+  "pieces": "{count, plural, one {# peça} other {# peças}}",
+  "lines": "Peças no carrinho",
+  "each": "{quantity} ×",
+  "oneOfAKind": "Peça única",
+  "madeToOrder": "Por encomenda",
+  "singlePiece": "Esta peça existe apenas uma vez.",
+  "quantityOf": "Quantidade de {title}",
+  "decrease": "Menos um de {title}",
+  "increase": "Mais um de {title}",
+  "removeLine": "Remover {title}",
+  "maxQuantity": "No máximo {max} por produto",
+  "unavailablePiece": "Uma peça que já não está disponível",
+  "status": {
+    "sold": "Vendido",
+    "reserved": "Reservado",
+    "unavailable": "Já não disponível"
+  },
+  "unavailableNote": "As peças que já não podem ser encomendadas não contam para o subtotal e não serão encomendadas. Pode removê-las.",
+  "orderRequest": "Continuar para o pedido de encomenda",
+  "orderRequestTbd": "Pedido de encomenda: TBD",
+  "nothingToOrder": "Não há nada no carrinho que possa ser encomendado.",
+  "continueShopping": "Continuar a comprar",
+  "viewCart": "Ver o carrinho",
+  "loadError": "Não foi possível carregar o carrinho. Recarregue a página.",
+  "errors": {
+    "rateLimited": "Demasiadas alterações em pouco tempo. Aguarde um momento e tente novamente.",
+    "unavailable": "Esta peça já não pode ser encomendada.",
+    "unexpectedError": "Não foi possível atualizar o carrinho. Tente novamente."
+  }
 }
