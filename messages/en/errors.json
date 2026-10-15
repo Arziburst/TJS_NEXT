@@ -14,6 +14,9 @@
     "minItems": "The field must have at least {min} items",
     "chooseCity": "You have to type the right city and choose your city",
     "chooseWarehouse": "You have to choose your post office",
-    "chooseWarehouseNumber": "You have to type or choose the number of the post office"
+    "chooseWarehouseNumber": "You have to type or choose the number of the post office",
+    "nameMaxLength": "Name must be at most {max} characters long",
+    "passwordMaxLength": "Password must be at most {max} characters long",
+    "passwordsDontMatch": "Passwords do not match"
   }
 }

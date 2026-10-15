@@ -14,6 +14,7 @@
   "openMenu": "Otwórz menu",
   "closeMenu": "Zamknij menu",
   "main": "Nawigacja główna",
+  "signedInAs": "Zalogowano jako",
   "localeNames": {
     "uk": "Українська",
     "en": "English",

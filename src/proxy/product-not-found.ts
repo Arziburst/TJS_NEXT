@@ -40,7 +40,8 @@ type RestRow = {
   product: { product_translations: { locale: string; slug: string }[] };
 };
 
-// Anonymous read through the Data API: RLS hides drafts, archived and deleted products. Null on any failure.
+// Anonymous read through the Data API: RLS hides drafts, archived and deleted products (anon may not even name
+// deleted_at: column grants). Null on any failure.
 async function lookUp(slug: string): Promise<SlugMatch[] | null> {
   const now = Date.now();
   const cached = lookups.get(slug);
@@ -53,7 +54,6 @@ async function lookUp(slug: string): Promise<SlugMatch[] | null> {
     select: "product_id,locale,slug,product:products!inner(product_translations(locale,slug))",
     slug: `eq.${slug}`,
     "product.status": "eq.published",
-    "product.deleted_at": "is.null",
   });
   try {
     const response = await fetch(`${url}/rest/v1/product_translations?${query}`, {

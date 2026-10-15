@@ -150,21 +150,26 @@ select lives_ok(
             '11111111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111')$$,
   'an admin inserts a product claiming another author'
 );
+-- The attribution columns are not readable through the API roles (admins included), so the owner reads them.
+reset role;
 select is(
   (select array[created_by, updated_by] from public.products where id = 'b1000000-0000-4000-8000-000000000099'),
   array['22222222-2222-4222-8222-222222222222', '22222222-2222-4222-8222-222222222222']::uuid[],
   'created_by and updated_by name the admin, not the claimed author'
 );
+set local role authenticated;
 select lives_ok(
   $$update public.products set updated_by = '11111111-1111-4111-8111-111111111111', created_by = null
     where id = 'b1000000-0000-4000-8000-000000000099'$$,
   'an admin updates a product claiming another editor'
 );
+reset role;
 select is(
   (select array[created_by, updated_by] from public.products where id = 'b1000000-0000-4000-8000-000000000099'),
   array['22222222-2222-4222-8222-222222222222', '22222222-2222-4222-8222-222222222222']::uuid[],
   'created_by is kept and updated_by names the admin'
 );
+set local role authenticated;
 select is(
   (select status::text from public.products where id = 'b1000000-0000-4000-8000-000000000099'),
   'draft',

@@ -14,6 +14,9 @@
     "minItems": "Das Feld muss mindestens {min} Einträge enthalten",
     "chooseCity": "Sie müssen die richtige Stadt eingeben und Ihre Stadt auswählen",
     "chooseWarehouse": "Sie müssen Ihre Postfiliale auswählen",
-    "chooseWarehouseNumber": "Sie müssen die Nummer der Postfiliale eingeben oder auswählen"
+    "chooseWarehouseNumber": "Sie müssen die Nummer der Postfiliale eingeben oder auswählen",
+    "nameMaxLength": "Der Name darf höchstens {max} Zeichen lang sein",
+    "passwordMaxLength": "Das Passwort darf höchstens {max} Zeichen lang sein",
+    "passwordsDontMatch": "Die Passwörter stimmen nicht überein"
   }
 }

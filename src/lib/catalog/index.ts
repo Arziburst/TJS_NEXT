@@ -31,8 +31,9 @@ const FULFILLMENTS = ["made_to_order", "one_of_a_kind"] as const;
 const AVAILABILITIES = ["available", "reserved", "sold"] as const;
 const SORTS: readonly ProductSort[] = ["newest", "price_asc", "price_desc"];
 
-// The storefront reads through the anonymous client, so RLS hides drafts, archived and deleted
-// products; the explicit status / deleted_at filters keep the storefront view the same for any client.
+// The storefront reads through the anonymous client: RLS hides drafts, archived and soft-deleted products,
+// and the column grants hide the internal columns (hs_code, deleted_at, created_by, updated_by), so
+// they are neither selected nor filtered on here. The explicit status filter keeps it a storefront view for any client.
 const PRODUCT_COLUMNS = `
   id, sku, fulfillment, availability, lead_time_days, price_usd_text:price_usd::text, weight_g,
   created_at, published_at,
@@ -106,7 +107,6 @@ export async function getProducts(
         .from("products")
         .select(PRODUCT_COLUMNS, { count: "exact", head })
         .eq("status", "published")
-        .is("deleted_at", null)
         .in("product_translations.locale", localesFor(locale));
       if (filters.categorySlug !== undefined) query = query.eq("category.slug", filters.categorySlug);
       if (filters.fulfillment !== undefined) query = query.eq("fulfillment", filters.fulfillment);
@@ -164,7 +164,6 @@ export async function getProductBySlug(locale: Locale, slug: string): Promise<Ca
       .select(PRODUCT_COLUMNS)
       .eq("id", match.product_id)
       .eq("status", "published")
-      .is("deleted_at", null)
       .in("product_translations.locale", localesFor(locale))
       .order("position", { referencedTable: "product_images" })
       .maybeSingle();

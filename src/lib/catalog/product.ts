@@ -21,7 +21,8 @@ export function productCacheTag(productId: string): string {
 
 /**
  * Every published product that has a translation with `slug` (in any locale), with all its translations'
- * slugs. Read as `anon`, so RLS hides drafts, archived and deleted products, like the explicit filters.
+ * slugs. Read as `anon`, so RLS hides drafts, archived and deleted products; the API roles cannot name deleted_at
+ * (column grants), so only the status is filtered here.
  */
 export async function findSlugMatches(slug: string): Promise<CatalogResult<SlugMatch[]>> {
   if (!PRODUCT_SLUG_PATTERN.test(slug)) return { ok: false, reason: "invalid" };
@@ -30,8 +31,7 @@ export async function findSlugMatches(slug: string): Promise<CatalogResult<SlugM
       .from("product_translations")
       .select("product_id, locale, slug, product:products!inner(product_translations(locale, slug))")
       .eq("slug", slug)
-      .eq("product.status", "published")
-      .is("product.deleted_at", null);
+      .eq("product.status", "published");
     if (error) return { ok: false, reason: "unexpectedError" };
     return {
       ok: true,
@@ -59,7 +59,6 @@ export async function getProductSlugs(locale: Locale): Promise<CatalogResult<str
       .from("products")
       .select("id, product_translations!inner(locale, slug)")
       .eq("status", "published")
-      .is("deleted_at", null)
       .in("product_translations.locale", localesFor(locale))
       .order("id")
       .retry(false)

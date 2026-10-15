@@ -14,6 +14,9 @@
     "minItems": "Câmpul trebuie să conțină cel puțin {min} elemente",
     "chooseCity": "Trebuie să scrii corect orașul și să îți alegi orașul",
     "chooseWarehouse": "Trebuie să alegi oficiul poștal",
-    "chooseWarehouseNumber": "Trebuie să scrii sau să alegi numărul oficiului poștal"
+    "chooseWarehouseNumber": "Trebuie să scrii sau să alegi numărul oficiului poștal",
+    "nameMaxLength": "Numele poate avea cel mult {max} caractere",
+    "passwordMaxLength": "Parola poate avea cel mult {max} caractere",
+    "passwordsDontMatch": "Parolele nu coincid"
   }
 }

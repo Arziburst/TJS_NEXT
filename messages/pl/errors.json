@@ -14,6 +14,9 @@
     "minItems": "Pole musi zawierać co najmniej {min} elementów",
     "chooseCity": "Musisz wpisać poprawną nazwę miasta i wybrać swoje miasto",
     "chooseWarehouse": "Musisz wybrać swój urząd pocztowy",
-    "chooseWarehouseNumber": "Musisz wpisać lub wybrać numer urzędu pocztowego"
+    "chooseWarehouseNumber": "Musisz wpisać lub wybrać numer urzędu pocztowego",
+    "nameMaxLength": "Imię może mieć co najwyżej {max} znaków",
+    "passwordMaxLength": "Hasło może mieć co najwyżej {max} znaków",
+    "passwordsDontMatch": "Hasła nie są takie same"
   }
 }
