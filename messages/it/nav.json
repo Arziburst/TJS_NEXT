@@ -2,6 +2,8 @@
   "shop": "Negozio",
   "aboutUs": "Chi siamo",
   "contacts": "Contatti",
+  "favorites": "Preferiti",
+  "favoritesCount": "Preferiti, {count, plural, =0 {vuoto} one {# pezzo} other {# pezzi}}",
   "cart": "Carrello",
   "cartCount": "Carrello, {count, plural, =0 {vuoto} one {# pezzo} other {# pezzi}}",
   "closeCart": "Chiudi il carrello",

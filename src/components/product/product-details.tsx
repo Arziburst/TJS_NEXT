@@ -3,6 +3,7 @@ import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { AddToCartSlot } from "@/components/cart/add-to-cart-slot";
 import { categoryHref } from "@/components/catalog/links";
+import { FavoriteToggle } from "@/components/favorites/favorite-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 import type { Product } from "@/lib/catalog/types";
@@ -67,6 +68,7 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-2xl text-accent-text">{price}</span>
             {status && <Badge variant="secondary">{t(status)}</Badge>}
+            <FavoriteToggle productId={product.id} title={translation.title} variant="page" className="ml-auto" />
           </div>
           {product.fulfillment === "made_to_order" && (
             <div className="grid gap-1 text-sm">

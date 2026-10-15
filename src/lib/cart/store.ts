@@ -9,6 +9,15 @@ export const GUEST_CART_COOKIE = "TJS_CART";
 // technical: a guest's cart outlives a browsing session, as the legacy localStorage cart did
 const GUEST_CART_MAX_AGE_SECONDS = 60 * 60 * 24 * 180;
 
+/** A guest's first-party, httpOnly cookie that only the server writes (the cart, the favorites). */
+export const GUEST_COOKIE_OPTIONS = {
+  path: "/",
+  maxAge: GUEST_CART_MAX_AGE_SECONDS,
+  sameSite: "lax",
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+} as const;
+
 export async function readGuestLines(): Promise<CartLine[]> {
   return parseGuestCart((await cookies()).get(GUEST_CART_COOKIE)?.value);
 }
@@ -20,13 +29,7 @@ export async function writeGuestLines(lines: readonly CartLine[]): Promise<void>
     if (store.has(GUEST_CART_COOKIE)) store.delete(GUEST_CART_COOKIE);
     return;
   }
-  store.set(GUEST_CART_COOKIE, serializeGuestCart(lines), {
-    path: "/",
-    maxAge: GUEST_CART_MAX_AGE_SECONDS,
-    sameSite: "lax",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-  });
+  store.set(GUEST_CART_COOKIE, serializeGuestCart(lines), GUEST_COOKIE_OPTIONS);
 }
 
 /** The signed-in shopper's lines, oldest first; `client` is their session client, so RLS returns only theirs. */

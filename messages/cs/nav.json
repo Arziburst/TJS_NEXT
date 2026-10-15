@@ -2,6 +2,8 @@
   "shop": "Obchod",
   "aboutUs": "O nás",
   "contacts": "Kontakty",
+  "favorites": "Oblíbené",
+  "favoritesCount": "Oblíbené, {count, plural, =0 {prázdné} one {# kus} few {# kusy} many {# kusu} other {# kusů}}",
   "cart": "Košík",
   "cartCount": "Košík, {count, plural, =0 {prázdný} one {# kus} few {# kusy} many {# kusu} other {# kusů}}",
   "closeCart": "Zavřít košík",

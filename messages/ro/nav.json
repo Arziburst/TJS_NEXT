@@ -2,6 +2,8 @@
   "shop": "Magazin",
   "aboutUs": "Despre noi",
   "contacts": "Contacte",
+  "favorites": "Favorite",
+  "favoritesCount": "Favorite, {count, plural, =0 {gol} one {# piesă} few {# piese} other {# de piese}}",
   "cart": "Coș",
   "cartCount": "Coș, {count, plural, =0 {gol} one {# piesă} few {# piese} other {# de piese}}",
   "closeCart": "Închide coșul",

@@ -2,6 +2,8 @@
   "shop": "Магазин",
   "aboutUs": "Про нас",
   "contacts": "Контакти",
+  "favorites": "Обране",
+  "favoritesCount": "Обране, {count, plural, =0 {порожньо} one {# виріб} few {# вироби} many {# виробів} other {# виробу}}",
   "cart": "Кошик",
   "cartCount": "Кошик, {count, plural, =0 {порожній} one {# виріб} few {# вироби} many {# виробів} other {# виробу}}",
   "closeCart": "Закрити кошик",

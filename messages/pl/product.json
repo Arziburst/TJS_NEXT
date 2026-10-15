@@ -48,5 +48,26 @@
       "goTo": "Pokaż zdjęcie {index} z {count}",
       "empty": "Brak zdjęć"
     }
+  },
+  "favorites": {
+    "title": "Ulubione",
+    "toggle": "Dodaj do ulubionych: {title}",
+    "remove": "Usuń {title} z ulubionych",
+    "list": "Twoje ulubione",
+    "empty": "Nie masz jeszcze ulubionych.",
+    "emptyHint": "Dotknij serca przy sztuce, aby zachować ją tutaj i znaleźć później.",
+    "continueShopping": "Kontynuuj zakupy",
+    "unavailablePiece": "Sztuka, która nie jest już dostępna",
+    "unavailable": "Już niedostępne",
+    "loadError": "Nie udało się wczytać ulubionych. Odśwież stronę.",
+    "errors": {
+      "favoritesFull": "Lista ulubionych jest pełna. Usuń jedną sztukę, aby dodać inną.",
+      "unavailable": "Tej sztuki nie można już dodać do ulubionych.",
+      "rateLimited": "Zbyt wiele zmian w krótkim czasie. Poczekaj chwilę i spróbuj ponownie.",
+      "unexpectedError": "Nie udało się zmienić ulubionych. Spróbuj ponownie."
+    }
+  },
+  "recentlyViewed": {
+    "title": "Ostatnio oglądane"
   }
 }

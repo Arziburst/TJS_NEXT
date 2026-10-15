@@ -48,5 +48,26 @@
       "goTo": "Show photo {index} of {count}",
       "empty": "No photos yet"
     }
+  },
+  "favorites": {
+    "title": "Favorites",
+    "toggle": "Add to favorites: {title}",
+    "remove": "Remove {title} from favorites",
+    "list": "Your favorites",
+    "empty": "You have no favorites yet.",
+    "emptyHint": "Tap the heart on a piece to keep it here and find it again later.",
+    "continueShopping": "Continue shopping",
+    "unavailablePiece": "A piece that is no longer available",
+    "unavailable": "No longer available",
+    "loadError": "Your favorites could not be loaded. Please reload the page.",
+    "errors": {
+      "favoritesFull": "Your favorites are full. Remove a piece to add another one.",
+      "unavailable": "This piece can no longer be added to your favorites.",
+      "rateLimited": "Too many changes in a short time. Please wait a moment and try again.",
+      "unexpectedError": "Your favorites could not be changed. Please try again."
+    }
+  },
+  "recentlyViewed": {
+    "title": "Recently viewed"
   }
 }

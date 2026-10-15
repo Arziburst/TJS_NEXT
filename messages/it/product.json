@@ -48,5 +48,26 @@
       "goTo": "Mostra la foto {index} di {count}",
       "empty": "Ancora nessuna foto"
     }
+  },
+  "favorites": {
+    "title": "Preferiti",
+    "toggle": "Aggiungi ai preferiti: {title}",
+    "remove": "Rimuovi {title} dai preferiti",
+    "list": "I tuoi preferiti",
+    "empty": "Non hai ancora preferiti.",
+    "emptyHint": "Tocca il cuore di un pezzo per tenerlo qui e ritrovarlo più tardi.",
+    "continueShopping": "Continua lo shopping",
+    "unavailablePiece": "Un pezzo non più disponibile",
+    "unavailable": "Non più disponibile",
+    "loadError": "Impossibile caricare i preferiti. Ricarica la pagina.",
+    "errors": {
+      "favoritesFull": "I tuoi preferiti sono pieni. Rimuovi un pezzo per aggiungerne un altro.",
+      "unavailable": "Questo pezzo non può più essere aggiunto ai preferiti.",
+      "rateLimited": "Troppe modifiche in poco tempo. Attendi un momento e riprova.",
+      "unexpectedError": "Impossibile modificare i preferiti. Riprova."
+    }
+  },
+  "recentlyViewed": {
+    "title": "Visti di recente"
   }
 }

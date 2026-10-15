@@ -2,6 +2,8 @@
   "shop": "Winkel",
   "aboutUs": "Over ons",
   "contacts": "Contact",
+  "favorites": "Favorieten",
+  "favoritesCount": "Favorieten, {count, plural, =0 {leeg} one {# stuk} other {# stuks}}",
   "cart": "Winkelwagen",
   "cartCount": "Winkelwagen, {count, plural, =0 {leeg} one {# stuk} other {# stuks}}",
   "closeCart": "Winkelwagen sluiten",
