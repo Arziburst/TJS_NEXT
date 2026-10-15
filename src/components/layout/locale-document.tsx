@@ -5,6 +5,7 @@ import type { Locale } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { SiteShell } from "./site-shell";
+import { VercelInsights } from "./vercel-insights";
 
 // The <html> document of every localized page: the [locale] layout and the global 404 share it.
 export async function LocaleDocument({ locale, children }: { locale: Locale; children: ReactNode }) {
@@ -19,6 +20,7 @@ export async function LocaleDocument({ locale, children }: { locale: Locale; chi
         >
           <SiteShell>{children}</SiteShell>
         </NextIntlClientProvider>
+        <VercelInsights />
       </body>
     </html>
   );

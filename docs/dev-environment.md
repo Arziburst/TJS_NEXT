@@ -150,6 +150,65 @@ named by `--pr <n>`, else the PR whose head ref is the current branch or whose h
 `$MIGRATIONS_BASE_REF`, else `origin/$GITHUB_BASE_REF`, else `origin/main` (run `git fetch origin main`
 first). The remote migration history stays a manual check.
 
+## Legacy catalogue import
+
+`scripts/import/legacy-catalogue.mjs` moves the legacy catalogue (D33) into a Supabase project from a
+read-only export folder that lives outside every repository: `products.json` (mongoexport EJSON),
+`images.json`, `cloudinary-resources.json` and `cloudinary/image/<public_id>.<ext>` (the archived originals).
+It never connects to MongoDB or Cloudinary. Next to the export, a state folder `<export>-import/` (`--state`
+to change it) holds what the runs share:
+
+| File | What |
+|---|---|
+| `translations.json` | uk and en machine translations of every legacy title and description, produced once and reused; each entry carries the hash of its legacy text, so a changed export fails as stale instead of importing an old translation. A uk entry marked `"source": "human"` is the owner's own Ukrainian legacy text, kept verbatim (22 products). The Russian originals stay only in the export. |
+| `rate.json` | the NBU USD rate the prices were converted at, pinned by the first real run (written by the importer) |
+| `report-local.md`, `report-production.md` | the report of the last run on that target: the rate and its date, counts per category and kind, the price range, the weight-0 products, the questions for the owner, every product with its legacy id, category, kind, UAH and USD price |
+
+What a run does, per product: `products` row keyed by `legacy_id` (a hidden column, migration
+`20261016006900`): category from the legacy `type`, `available: false` → made to order without a lead time,
+`available: true` → one of a kind, available (D34), USD = UAH / rate half up to the cent, the weight as given (a
+missing one is the legacy default 0), `created_at` = `published_at` = the legacy `created`, published. Then the
+uk and en texts (`source = machine`, `reviewed_at` null, so the review flow applies; a uk text marked human in
+`translations.json` gets `source = human` and `reviewed_at` = the import time; slugs transliterated / from the English title, numbered
+`-2`, `-3` … for repeated titles, oldest first, existing slugs never changed), and every photo in its order to
+`product-images/legacy/<product id>/<n>-<file>` with width, height, an 8 px blur placeholder and the title as
+alt text per locale. Customers, orders, views and unused media stay in the archive.
+
+It is idempotent: a second run changes nothing (`plan: products created 0, …`). A row that differs from the
+export (edited in the admin since) is kept and listed; `--overwrite` resets it to the export. An interrupted run
+is finished by running it again.
+
+```sh
+# local: the worktree's stack (.env.local); a non-loopback URL is refused
+node scripts/import/legacy-catalogue.mjs C:/Users/arzib/tjs-backups/legacy-20261015 --dry-run   # prints the plan
+node scripts/import/legacy-catalogue.mjs C:/Users/arzib/tjs-backups/legacy-20261015
+```
+
+Call it with `node`, not through an npm script: npm would take `--dry-run` as its own flag (PowerShell drops
+the `--` that keeps it away from npm) and the run would write for real.
+
+Options: `--dry-run` (reads the target, prints the plan, writes nothing), `--production` (allows a non-loopback
+URL), `--overwrite`, `--rate-date YYYY-MM-DD` (converts at that day's NBU rate instead of the pinned one; a real
+run re-pins it, and only `--overwrite` reprices products already imported), `--state <dir>`.
+
+**Production run (the coordinator only; a worker never writes production).** After the owner has accepted the
+local import and the migration is applied to `tjs-prod`, from a checkout of `main`:
+
+```powershell
+$env:NEXT_PUBLIC_SUPABASE_URL = "https://<project ref>.supabase.co"
+$env:SUPABASE_SERVICE_ROLE_KEY = "<service-role key of tjs-prod>"   # from the dashboard; never stored in a file
+node scripts/import/legacy-catalogue.mjs C:/Users/arzib/tjs-backups/legacy-20261015 --production --dry-run
+node scripts/import/legacy-catalogue.mjs C:/Users/arzib/tjs-backups/legacy-20261015 --production
+Remove-Item Env:SUPABASE_SERVICE_ROLE_KEY, Env:NEXT_PUBLIC_SUPABASE_URL
+```
+
+The variables of the environment win over `.env.local`, which is read only when no URL is set. The run uses the
+rate pinned in `rate.json`, so production gets exactly the prices the owner reviewed, and writes
+`report-production.md`. Check the dry run's target line (`PRODUCTION`) and its plan (167 products, 334
+texts, 441 photos on an empty catalogue) before the real run. The shop's catalogue reads are cached
+(`cacheLife("hours")`, `src/lib/catalog/cache.ts`): the products appear within the hour, or at once after a
+redeploy. Locally, restart `next dev` (or rebuild) after an import.
+
 ## Auth
 
 Supabase Auth with email/password and Google (D12); the app side is `src/lib/auth/`, `src/proxy.ts` and
@@ -208,8 +267,51 @@ searched and every estimate is the zone flat rate of `nova_post_zone_rates` (TBD
   Towns with points in the fixtures: Wrocław (PL), Berlin (DE), Paris (FR).
 - **Sandbox.** `NOVA_POST_API_URL=https://api-stage.novapost.com/v.1.0` with a sandbox key
   (`POST /test-api-keys` for a phone registered in the Nova Post client portal). Never commit a key.
-- **Live calculation.** Even with a key the price is not asked yet: the parcel (packaging, weight, declared and
-  insured value) is the owner's decision and `parcelForOrder()` returns none, so the flat rate stands in.
+- **Live calculation.** With a key, the price is asked for the D37 estimate box (10 × 10 × 5 cm, the goods'
+  weight + 100 g), declared and insured at the order total in UAH (`parcelForOrder`, D35); without goods of any
+  value the flat rate stands in. Every price is shown as an estimate.
+- **Rate limits.** The public actions count per client IP in `public.consume_rate_limit` (service role, like the
+  auth limits): 60 town/point searches and 20 quotes per minute (`src/lib/delivery/nova-post/rate-limit.ts`);
+  over the budget they answer "too many requests", and an unreachable counter refuses.
+
+## Vercel
+
+The shop runs on the Vercel project `tjs-next` in the team `arzibursts-projects`, production
+`https://tjs-next.vercel.app`, Hobby plan until the owner decides (D32). Project settings and environment
+variables are changed only in the dashboard, by the owner or the coordinator; the repository holds
+`vercel.json` (deploys and cron).
+
+**Deploys.** Only `main` deploys: every push to `main` (a squash merge) builds a production deployment from
+the Vercel Git integration. `git.deploymentEnabled` in `vercel.json` (`"**": false`, `"main": true`) turns off
+the deployments of every other branch, so task branches, `assets/<task>` and Dependabot branches build no
+preview: there is no preview database (D14), and a preview without one only renders errors. Verification
+happens on the local stacks and in CI (`docs/ci.md`). A rollback is an instant rollback to an earlier
+production deployment in the dashboard; the database is not rolled back with it.
+
+**Production environment variables** (names only; the values live in the Vercel project, never in a file):
+
+| Name | Read by |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | every Supabase client; build time (inlined) and the image optimizer's allowed host |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | the browser and server Supabase clients (public by design, RLS guards the data) |
+| `SUPABASE_SERVICE_ROLE_KEY` | server only: the auth rate limits, admin reads, the rates job |
+| `NEXT_PUBLIC_SITE_URL` | the shop's public origin for canonical and hreflang URLs; unset → `VERCEL_PROJECT_PRODUCTION_URL` |
+| `CRON_SECRET` | the cron route; Vercel Cron sends it as `Authorization: Bearer …` |
+| `NOVA_POST_API_KEY` | server only: Nova Post international delivery (#23); unset → zone flat rates only. `NOVA_POST_API_URL` stays unset in production |
+
+Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
+`VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` is never set on Vercel (the `/ui-kit` showcase stays a 404).
+
+**Cron.** `vercel.json` `crons` calls `GET /api/cron/fx-rates` daily at `15 14 * * *` (UTC) on the
+production deployment only, with `CRON_SECRET`; without the secret the route answers 401. On Hobby, Vercel
+fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv. Runs and their
+logs: the project's *Cron Jobs* settings and the function logs.
+
+**Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`
+renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the document of every page only when
+`VERCEL_ENV` is `production`: local builds, CI and `next dev` load neither script. Both are cookieless; the
+shop sends no custom events, so no personal data leaves through them. Visits and Web Vitals: the project's
+*Analytics* and *Speed Insights* tabs.
 
 ## Windows traps
 
