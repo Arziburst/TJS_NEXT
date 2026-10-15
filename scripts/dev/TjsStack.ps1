@@ -84,6 +84,29 @@ function Get-TjsConfigProjectId {
     throw "No top-level project_id in $ConfigPath."
 }
 
+function ConvertFrom-TjsStatusEnv {
+    # The KEY="value" lines of `supabase status -o env`, as an ordered map; the values the app needs must be there.
+    param([Parameter(Mandatory)][AllowEmptyCollection()][string[]]$Lines)
+    $values = [ordered]@{}
+    foreach ($line in $Lines) {
+        if ($line -match '^([A-Z][A-Z0-9_]*)="?(.*?)"?\s*$') { $values[$Matches[1]] = $Matches[2] }
+    }
+    foreach ($required in 'API_URL', 'ANON_KEY', 'SERVICE_ROLE_KEY') {
+        if (-not $values.Contains($required)) { throw "supabase status -o env returned no ${required}:`n$($Lines -join "`n")" }
+    }
+    $values
+}
+
+function Get-TjsAppEnvLines {
+    # .env lines for a stack: every status value, then the names the app's Supabase clients read
+    # (.env.example); the service-role key is server-only. Used by supabase:start:worktree and CI.
+    param([Parameter(Mandatory)][System.Collections.Specialized.OrderedDictionary]$Values)
+    foreach ($k in $Values.Keys) { "$k=`"$($Values[$k])`"" }
+    "NEXT_PUBLIC_SUPABASE_URL=`"$($Values['API_URL'])`""
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY=`"$($Values['ANON_KEY'])`""
+    "SUPABASE_SERVICE_ROLE_KEY=`"$($Values['SERVICE_ROLE_KEY'])`""
+}
+
 function Get-TjsExcludedPortRanges {
     # Hyper-V / WinNAT reserve port ranges that nothing else may bind; they move after a reboot.
     if (-not $IsWindows) { return @() }

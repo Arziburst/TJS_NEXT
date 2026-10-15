@@ -19,7 +19,7 @@ on `ubuntu-24.04` with Node from `.nvmrc`; this is the check branch protection r
 | 7 | local Supabase stack | `npx supabase start -x studio,postgres-meta,imgproxy,edge-runtime,logflare,vector,realtime,supavisor` (CLI from devDependencies) |
 | 8 | every migration, then the seed | `npm run db:reset` |
 | 9 | database tests (pgTAP) | `npm run test:db` |
-| 10 | the stack's values for the app | `supabase status -o env` → `.env.local` with the names the app reads (as `supabase:start:worktree` writes them); fails if the stack's API URL or anon key differ from the job env |
+| 10 | the stack's values for the app | `pwsh -File scripts/ci/Write-StackEnv.ps1`: `.env.local` with the names the app reads, by the same mapping as `supabase:start:worktree` (`Get-TjsAppEnvLines`); fails if the stack's API URL or anon key differ from the job env |
 | 11 | e2e against the built app on the stack | `npx playwright install --with-deps chromium`, `npm run test:e2e` with `E2E_SERVER=start` |
 | 12 | evidence | Playwright report (`playwright-report/`) and traces (`test-results/`) as artifacts, 7 days |
 | 13 | cleanup (always) | `npx supabase stop --no-backup` |

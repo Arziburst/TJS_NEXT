@@ -84,20 +84,8 @@ jobs:
         run: npm run test:db
 
       - name: Write the stack's values to .env.local
-        # The same names `npm run supabase:start:worktree` writes locally (public CLI demo keys).
-        run: |
-          npx supabase status -o env > "$RUNNER_TEMP/stack.env"
-          . "$RUNNER_TEMP/stack.env"
-          if [ "$API_URL" != "$NEXT_PUBLIC_SUPABASE_URL" ] || [ "$ANON_KEY" != "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
-            echo "::error::The local stack reports another API URL or anon key than the job env the build used ($API_URL). Update NEXT_PUBLIC_SUPABASE_* in ci.yml."
-            exit 1
-          fi
-          {
-            cat "$RUNNER_TEMP/stack.env"
-            echo "NEXT_PUBLIC_SUPABASE_URL=\"$API_URL\""
-            echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=\"$ANON_KEY\""
-            echo "SUPABASE_SERVICE_ROLE_KEY=\"$SERVICE_ROLE_KEY\""
-          } > .env.local
+        # The names the app reads, by the same mapping as `npm run supabase:start:worktree` (public CLI demo keys).
+        run: pwsh -NoProfile -File scripts/ci/Write-StackEnv.ps1
 
       - name: Install the Playwright browser
         run: npx playwright install --with-deps chromium
