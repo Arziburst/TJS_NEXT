@@ -14,6 +14,65 @@
     "grandTotal": "Total general",
     "continueShopping": "Seguir comprando"
   },
+  "request": {
+    "title": "Solicitud de pedido",
+    "intro": "En la web no se paga nada: envía la solicitud y la tienda se pondrá en contacto contigo para confirmar el pedido y acordar el pago.",
+    "loadError": "No se pudo cargar el pedido. Inténtalo de nuevo más tarde.",
+    "empty": "No hay nada en el carrito que se pueda pedir.",
+    "backToCart": "Volver al carrito",
+    "contact": {
+      "firstName": "Nombre",
+      "lastName": "Apellidos (opcional)",
+      "phone": "Teléfono",
+      "phoneHint": "Con el prefijo del país, por ejemplo +34 612 34 56 78",
+      "email": "Correo electrónico"
+    },
+    "commentHint": "Opcional",
+    "summary": {
+      "lines": "Piezas del pedido",
+      "quantity": "Cantidad: {quantity}",
+      "goodsTotal": "Total de las piezas",
+      "pieces": "{count, plural, one {# pieza} other {# piezas}}",
+      "deliveryNote": "El envío no está incluido: lo pagas al transportista al recibirlo (consulta la estimación en los datos de envío).",
+      "unavailableNote": "Las piezas que ya no se pueden pedir se quedan en el carrito y no forman parte de esta solicitud.",
+      "editCart": "Modificar el carrito"
+    },
+    "submit": "Enviar la solicitud de pedido",
+    "sending": "Enviando…",
+    "errors": {
+      "title": "Revisa el formulario",
+      "firstName": "Indica tu nombre.",
+      "lastName": "Los apellidos son demasiado largos.",
+      "phone": "Indica el número de teléfono con el prefijo del país, por ejemplo +34612345678.",
+      "email": "Indica una dirección de correo válida.",
+      "delivery": "Elige dónde entregar el pedido.",
+      "deliveryAddress": "Pulsa «Calcular el envío» para confirmar la dirección de entrega.",
+      "comment": "El comentario es demasiado largo.",
+      "rateLimited": "Demasiadas solicitudes. Espera unos minutos e inténtalo de nuevo.",
+      "unavailable": "Lo sentimos, otra persona acaba de pedir estas piezas: {titles}. No se ha enviado nada. Quítalas del carrito y vuelve a enviar la solicitud.",
+      "cartChanged": "Tu carrito ha cambiado mientras tanto. Revisa el pedido y vuelve a enviarlo.",
+      "emptyCart": "No hay nada en el carrito que se pueda pedir.",
+      "pricesUnavailable": "Ahora no se pueden calcular los precios. Inténtalo de nuevo más tarde.",
+      "unexpected": "No se pudo enviar la solicitud. Inténtalo de nuevo."
+    }
+  },
+  "done": {
+    "title": "Solicitud de pedido enviada",
+    "thanks": "¡Gracias, {name}! Hemos recibido tu solicitud de pedido.",
+    "number": "Número de pedido",
+    "next": "La tienda se pondrá en contacto contigo para confirmar el pedido y acordar el pago y el envío. En la web no se cobra nada.",
+    "contactTitle": "Contactar con la tienda",
+    "contactTbd": "Canales de contacto: TBD",
+    "lines": "Piezas pedidas",
+    "quantity": "Cantidad: {quantity}",
+    "goodsTotal": "Total de las piezas",
+    "delivery": "Envío (estimación)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "lo calcula el transportista",
+    "deliveryNote": "El precio real del envío lo pagas al transportista al recibirlo.",
+    "notAvailable": "Este pedido no se puede mostrar aquí.",
+    "notAvailableHint": "Su confirmación solo se abre en el navegador que envió la solicitud o cuando has iniciado sesión en la cuenta desde la que se envió."
+  },
   "delivery": {
     "title": "Envío en Ucrania",
     "city": {
@@ -93,7 +152,8 @@
       "street": "Calle",
       "building": "Número",
       "flat": "Piso (opcional)",
-      "submit": "Calcular el envío"
+      "submit": "Calcular el envío",
+      "changed": "La dirección ha cambiado: pulsa de nuevo «Calcular el envío»."
     },
     "quote": {
       "label": "Envío",

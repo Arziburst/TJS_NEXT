@@ -13,7 +13,13 @@ const novaPostMockKey = "e2e-fixture-key";
 const aiGatewayMockPort = Number(process.env.AI_GATEWAY_MOCK_PORT || port + 1500);
 const aiGatewayMockKey = "e2e-gateway-key";
 // e2e files that write products of their own to the catalog (see the projects below)
-const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts", "**/favorites.e2e.ts", "**/translation.e2e.ts"];
+const CATALOG_WRITERS = [
+  "**/cart.e2e.ts",
+  "**/admin.e2e.ts",
+  "**/favorites.e2e.ts",
+  "**/checkout.e2e.ts",
+  "**/translation.e2e.ts",
+];
 
 export default defineConfig({
   testDir: "./e2e",
