@@ -8,6 +8,9 @@ import enNav from "../messages/en/nav.json" with { type: "json" };
 import fr from "../messages/fr/home.json" with { type: "json" };
 import uk from "../messages/uk/home.json" with { type: "json" };
 import ukNav from "../messages/uk/nav.json" with { type: "json" };
+import { NAV_LEFT, NAV_RIGHT } from "../src/components/layout/nav-items";
+import { routes } from "../src/config/routes";
+import { allRouteKeys, expectOnlyEnabledRouteLinks } from "./routes";
 
 const locales = ["uk", "en", "de", "fr", "es", "it", "pl", "nl", "cs", "pt", "ro"];
 
@@ -96,19 +99,27 @@ test("the shell (header, menu, footer) is localized", async ({ page }, testInfo)
   const isMobile = testInfo.project.name === "mobile";
   await page.goto("/de");
   const header = page.locator("header");
+  const navItems = [...NAV_LEFT, ...NAV_RIGHT];
 
-  await expect(header.getByRole("link", { name: deNav.cart }).filter({ visible: true })).toBeVisible();
+  await expectOnlyEnabledRouteLinks(header, "de", allRouteKeys);
+  if (routes.cart.enabled) {
+    await expect(header.getByRole("link", { name: deNav.cart }).filter({ visible: true })).toBeVisible();
+  }
   if (isMobile) {
     await header.getByRole("button", { name: deNav.openMenu }).click();
     const menu = page.getByRole("dialog");
     await expect(menu.getByRole("navigation", { name: deNav.main })).toBeVisible();
     await expect(menu.getByRole("combobox", { name: deNav.language })).toBeVisible();
-    await expect(menu.getByRole("link", { name: deNav.aboutUs })).toHaveAttribute("href", "/de/about-us");
+    for (const item of navItems) {
+      await expect(menu.getByRole("link", { name: deNav[item.labelKey] })).toHaveAttribute("href", `/de${item.href}`);
+    }
     await page.keyboard.press("Escape");
   } else {
     const nav = header.getByRole("navigation", { name: deNav.main });
-    await expect(nav.getByRole("link", { name: deNav.aboutUs })).toHaveAttribute("href", "/de/about-us");
-    await expect(header.getByRole("link", { name: deNav.account })).toBeVisible();
+    for (const item of navItems) {
+      await expect(nav.getByRole("link", { name: deNav[item.labelKey] })).toHaveAttribute("href", `/de${item.href}`);
+    }
+    if (routes.signIn.enabled) await expect(header.getByRole("link", { name: deNav.account })).toBeVisible();
   }
   await expect(page.locator("footer").last()).toContainText(deCommon.footer.rights);
   expect(errors).toEqual([]);
