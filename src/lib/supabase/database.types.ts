@@ -5,16 +5,139 @@ export type Database = {
   
   "public": {
           Tables: {
-            [_ in never]: never
+            "categories": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"id": string,"position": number,"slug": string,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"position"?: number,"slug": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"position"?: number,"slug"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"category_translations": {
+                  Row: {
+                    "category_id": string,"locale": string,"name": string,"source": Database["public"]['Enums']["translation_source"]
+                  }
+                  Insert: {
+                    "category_id": string,"locale": string,"name": string,"source"?: Database["public"]['Enums']["translation_source"]
+                  }
+                  Update: {
+                    "category_id"?: string,"locale"?: string,"name"?: string,"source"?: Database["public"]['Enums']["translation_source"]
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "category_translations_category_id_fkey"
+      columns: ["category_id"]
+isOneToOne: false
+      referencedRelation: "categories"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"product_image_alts": {
+                  Row: {
+                    "alt": string,"image_id": string,"locale": string
+                  }
+                  Insert: {
+                    "alt": string,"image_id": string,"locale": string
+                  }
+                  Update: {
+                    "alt"?: string,"image_id"?: string,"locale"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "product_image_alts_image_id_fkey"
+      columns: ["image_id"]
+isOneToOne: false
+      referencedRelation: "product_images"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"product_images": {
+                  Row: {
+                    "blur_data_url": string | null,"created_at": string,"created_by": string | null,"height": number,"id": string,"position": number,"product_id": string,"storage_path": string,"updated_at": string,"updated_by": string | null,"width": number
+                  }
+                  Insert: {
+                    "blur_data_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"height": number,"id"?: string,"position"?: number,"product_id": string,"storage_path": string,"updated_at"?: string,"updated_by"?: string | null,"width": number
+                  }
+                  Update: {
+                    "blur_data_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"height"?: number,"id"?: string,"position"?: number,"product_id"?: string,"storage_path"?: string,"updated_at"?: string,"updated_by"?: string | null,"width"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "product_images_product_id_fkey"
+      columns: ["product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"product_translations": {
+                  Row: {
+                    "alt_text": string | null,"care": string | null,"created_at": string,"created_by": string | null,"description": string | null,"locale": string,"materials": string | null,"meta_description": string | null,"meta_title": string | null,"product_id": string,"reviewed_at": string | null,"search_vector": unknown,"slug": string,"source": Database["public"]['Enums']["translation_source"],"title": string,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "alt_text"?: string | null,"care"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"locale": string,"materials"?: string | null,"meta_description"?: string | null,"meta_title"?: string | null,"product_id": string,"reviewed_at"?: string | null,"search_vector"?: never,"slug": string,"source"?: Database["public"]['Enums']["translation_source"],"title": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "alt_text"?: string | null,"care"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"locale"?: string,"materials"?: string | null,"meta_description"?: string | null,"meta_title"?: string | null,"product_id"?: string,"reviewed_at"?: string | null,"search_vector"?: never,"slug"?: string,"source"?: Database["public"]['Enums']["translation_source"],"title"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "product_translations_product_id_fkey"
+      columns: ["product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"products": {
+                  Row: {
+                    "availability": Database["public"]['Enums']["product_availability"],"category_id": string,"created_at": string,"created_by": string | null,"deleted_at": string | null,"fulfillment": Database["public"]['Enums']["product_fulfillment"],"hs_code": string,"id": string,"lead_time_days": number | null,"position": number,"price_usd": number,"published_at": string | null,"sku": string | null,"status": Database["public"]['Enums']["product_status"],"updated_at": string,"updated_by": string | null,"weight_g": number
+                  }
+                  Insert: {
+                    "availability"?: Database["public"]['Enums']["product_availability"],"category_id": string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"hs_code"?: string,"id"?: string,"lead_time_days"?: number | null,"position"?: number,"price_usd": number,"published_at"?: string | null,"sku"?: string | null,"status"?: Database["public"]['Enums']["product_status"],"updated_at"?: string,"updated_by"?: string | null,"weight_g"?: number
+                  }
+                  Update: {
+                    "availability"?: Database["public"]['Enums']["product_availability"],"category_id"?: string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"hs_code"?: string,"id"?: string,"lead_time_days"?: number | null,"position"?: number,"price_usd"?: number,"published_at"?: string | null,"sku"?: string | null,"status"?: Database["public"]['Enums']["product_status"],"updated_at"?: string,"updated_by"?: string | null,"weight_g"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "products_category_id_fkey"
+      columns: ["category_id"]
+isOneToOne: false
+      referencedRelation: "categories"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"profiles": {
+                  Row: {
+                    "created_at": string,"id": string,"role": Database["public"]['Enums']["user_role"]
+                  }
+                  Insert: {
+                    "created_at"?: string,"id": string,"role"?: Database["public"]['Enums']["user_role"]
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"role"?: Database["public"]['Enums']["user_role"]
+                  }
+                  Relationships: [
+                    
+                  ]
+                }
           }
           Views: {
             [_ in never]: never
           }
           Functions: {
-            [_ in never]: never
+            "is_admin":
+{ Args: Record<PropertyKey, never>; Returns: boolean
+                           }
           }
           Enums: {
-            [_ in never]: never
+            "product_availability": "available"|"reserved"|"sold","product_fulfillment": "made_to_order"|"one_of_a_kind","product_status": "draft"|"published"|"archived","translation_source": "human"|"machine","user_role": "customer"|"admin"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -130,7 +253,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            
+            "product_availability": ["available", "reserved", "sold"],"product_fulfillment": ["made_to_order", "one_of_a_kind"],"product_status": ["draft", "published", "archived"],"translation_source": ["human", "machine"],"user_role": ["customer", "admin"]
           }
         }
 } as const
