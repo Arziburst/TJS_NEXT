@@ -1,10 +1,10 @@
 "use client";
 
-import { PackageIcon, PlusIcon, StoreIcon } from "lucide-react";
+import { PackageIcon, PlusIcon, SettingsIcon, StoreIcon } from "lucide-react";
 import { routes } from "@/config/routes";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "./paths";
+import { ADMIN_PRODUCTS_HREF, ADMIN_SETTINGS_HREF, NEW_PRODUCT_HREF } from "./paths";
 
 const ENTRIES = {
   // the list and every product's edit page
@@ -15,6 +15,12 @@ const ENTRIES = {
       path === ADMIN_PRODUCTS_HREF || (path.startsWith(`${ADMIN_PRODUCTS_HREF}/products/`) && path !== NEW_PRODUCT_HREF),
   },
   add: { href: NEW_PRODUCT_HREF, icon: PlusIcon, isActive: (path: string) => path === NEW_PRODUCT_HREF },
+  // the settings and the About page editor
+  settings: {
+    href: ADMIN_SETTINGS_HREF,
+    icon: SettingsIcon,
+    isActive: (path: string) => path === ADMIN_SETTINGS_HREF || path.startsWith(`${ADMIN_SETTINGS_HREF}/`),
+  },
   shop: { href: routes.shop.path, icon: StoreIcon, isActive: () => false },
 } as const;
 

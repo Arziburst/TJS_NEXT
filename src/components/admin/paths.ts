@@ -7,3 +7,6 @@ export const NEW_PRODUCT_HREF = `${routes.admin.path}/products/new`;
 export function editProductHref(id: string): string {
   return `${routes.admin.path}/products/${id}`;
 }
+
+export const ADMIN_SETTINGS_HREF = `${routes.admin.path}/settings`;
+export const ADMIN_ABOUT_HREF = `${routes.admin.path}/settings/about`;

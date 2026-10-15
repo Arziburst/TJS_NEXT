@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 type FooterProps = {
   className?: string;
-  // the shop's contact channels come from the admin settings (D19)
+  // the shop's contact channels from the admin settings (D19, FooterContacts); the TBD line without them
   contacts?: ReactNode;
 };
 
@@ -14,11 +14,11 @@ export function Footer({ className, contacts }: FooterProps) {
 
   return (
     <footer className={cn("page-container mt-6", className)}>
-      <div className="grid gap-[18px] border-t-2 border-foreground/10 pt-6 pb-3.5 text-center font-sans text-xs text-accent-text sb:grid-cols-3 sb:items-center sb:gap-2.5 sb:pb-6 sb:text-left sb:text-foreground">
+      <div className="grid gap-[18px] border-t-2 border-foreground/10 pt-6 pb-3.5 text-center font-sans text-xs text-accent-text sb:grid-cols-[1fr_auto_1fr] sb:items-center sb:gap-2.5 sb:pb-6 sb:text-left sb:text-foreground">
         <p className="text-xs font-bold tracking-[2.4px] uppercase sb:hidden">{t("brand")}</p>
         <address
           data-slot="footer-contacts"
-          className="flex flex-wrap items-end justify-evenly gap-4 font-medium tracking-[1.2px] text-accent-text not-italic sb:order-2 sb:items-center sb:justify-center sb:text-[10px] xl:gap-8"
+          className="flex flex-wrap items-end justify-evenly gap-4 font-medium tracking-[1.2px] text-accent-text not-italic sb:order-2 sb:items-center sb:justify-center sb:gap-x-3 sb:text-[10px] xl:gap-x-6"
         >
           {contacts ?? t("footer.contactsTbd")}
         </address>

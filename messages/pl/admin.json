@@ -30,7 +30,8 @@
     "nav": "Panel",
     "products": "Produkty",
     "newProduct": "Dodaj",
-    "viewShop": "Sklep"
+    "viewShop": "Sklep",
+    "settings": "Ustawienia"
   },
   "status": {
     "draft": "Szkic",
@@ -181,6 +182,108 @@
       "leadTimeOrder": "Nie może być mniejsze niż „Od”",
       "titleRequired": "Wpisz nazwę w tym języku albo wyczyść jego pozostałe teksty",
       "requiredToPublish": "Do publikacji potrzebna jest nazwa po ukraińsku"
+    }
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "intro": "Jak klienci się z Tobą kontaktują, jak przeliczane są ceny i Twoja historia. Zapisana zmiana pojawia się na stronie przy następnym wczytaniu.",
+    "save": "Zapisz",
+    "saving": "Zapisywanie…",
+    "saved": "Zapisano. Strona już to pokazuje.",
+    "loadError": "Nie udało się wczytać ustawień. Odśwież stronę.",
+    "errorSummary": "{count, plural, one {# pole wymaga uwagi} few {# pola wymagają uwagi} many {# pól wymaga uwagi} other {# pola wymaga uwagi}}",
+    "errors": {
+      "notAuthorized": "Może to zrobić tylko administrator. Zaloguj się ponownie.",
+      "unexpectedError": "Nie udało się zapisać ustawień. Spróbuj ponownie."
+    },
+    "contacts": {
+      "title": "Kontakty",
+      "hint": "Widoczne w stopce każdej strony, w potwierdzeniu zamówienia i w e-mailach do klientów. Zostaw pole puste, aby ukryć ten kanał.",
+      "shopName": "Nazwa sklepu",
+      "shopNameHint": "Używana w potwierdzeniu zamówienia i w e-mailach.",
+      "instagram": "Instagram",
+      "instagramHint": "Nazwa Twojego konta (@name) lub link do profilu.",
+      "email": "E-mail",
+      "emailHint": "Na przykład shop@example.com.",
+      "phone": "Telefon",
+      "phoneHint": "Z numerem kierunkowym kraju, na przykład +38 (066) 123 45 67. Wyświetlany tak, jak go wpiszesz.",
+      "telegram": "Czat Telegram",
+      "telegramHint": "Twoja nazwa użytkownika (@name) lub link t.me.",
+      "viber": "Czat Viber",
+      "viberHint": "Twój numer telefonu z numerem kierunkowym kraju lub link z zaproszeniem Viber.",
+      "whatsapp": "Czat WhatsApp",
+      "whatsappHint": "Twój numer telefonu z numerem kierunkowym kraju lub link wa.me.",
+      "notifications": "Powiadomienia",
+      "telegramChatId": "ID czatu Telegram dla nowych zamówień",
+      "telegramChatIdHint": "Czat, w którym bot sklepu ogłasza nowe zamówienia: liczba (ID grupy zaczyna się od -100). Nigdy nie jest wyświetlany na stronie.",
+      "tooLong": "Najwyżej {max} znaków",
+      "invalid": {
+        "shopName": "Wpisz nazwę",
+        "instagram": "Wpisz nazwę konta, np. @name, lub link do profilu instagram.com",
+        "email": "Wpisz adres e-mail, np. shop@example.com",
+        "phone": "Wpisz numer telefonu z numerem kierunkowym: cyfry, spacje, nawiasy i myślniki",
+        "telegram": "Wpisz nazwę użytkownika, np. @name (co najmniej 5 znaków), lub link t.me",
+        "viber": "Wpisz numer telefonu z numerem kierunkowym lub link z zaproszeniem Viber",
+        "whatsapp": "Wpisz numer telefonu z numerem kierunkowym lub link wa.me",
+        "telegramChatId": "Wpisz ID czatu jako liczbę, na przykład -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Ceny w innych walutach",
+      "hint": "Każdą cenę ustalasz w USD. Odwiedzający widzą ją przeliczoną po kursie NBU z narzutem i zaokrągloną w górę do ładnej ceny.",
+      "markup": "Narzut, %",
+      "markupHint": "Doliczany do kursu NBU w każdej walucie, także w USD. 3 oznacza 3 %.",
+      "rulesTitle": "Zaokrąglanie",
+      "rulesHint": "Cena jest zaokrąglana w górę do następnego kroku plus końcówka: krok 10 i końcówka 9 dają 1 289, 1 299 itd. Ceny poniżej opcjonalnego progu używają małego kroku: krok 1 i końcówka 0.90 dają 29.90.",
+      "step": "Krok",
+      "ending": "Końcówka",
+      "smallBelow": "Małe ceny poniżej",
+      "smallStep": "Mały krok",
+      "smallEnding": "Mała końcówka",
+      "example": "Przykładowa cena, USD",
+      "exampleHint": "Każda waluta poniżej pokazuje, jak wygląda ta cena z powyższymi wartościami.",
+      "shownAs": "Wyświetlana jako",
+      "noRate": "Brak kursu",
+      "errors": {
+        "required": "To pole jest wymagane",
+        "invalidNumber": "Wpisz liczbę, na przykład 9.90",
+        "outOfRange": "Ta wartość jest poza zakresem",
+        "endingTooLarge": "Musi być mniejsza niż krok",
+        "smallTierIncomplete": "Wypełnij wszystkie trzy pola małych cen albo żadne"
+      }
+    },
+    "about": {
+      "cardHint": "Twoja historia w każdym języku.",
+      "edit": "Edytuj stronę „O nas”",
+      "back": "Ustawienia",
+      "title": "Strona „O nas”",
+      "hint": "Napisz swoją historię po ukraińsku (wymagane do publikacji) i w dowolnym innym języku. Język bez własnego tekstu pokazuje tekst angielski, a w jego braku ukraiński; taka strona jest ukryta przed wyszukiwarkami.",
+      "state": "Strona",
+      "text": "Tekst",
+      "editorHint": "Tylko nagłówki, akapity, listy i linki; wszystko inne jest usuwane przy zapisie.",
+      "metaDescription": "Opis dla wyszukiwarek",
+      "metaDescriptionHint": "Do 500 znaków. Jeśli puste, używany jest początek tekstu.",
+      "filled": "Napisano",
+      "empty": "Puste",
+      "requiredToPublish": "Wymagane do publikacji",
+      "hasErrors": "Zawiera błędy",
+      "view": "Zobacz stronę",
+      "toolbar": {
+        "label": "Formatowanie",
+        "heading": "Nagłówek",
+        "subheading": "Podtytuł",
+        "paragraph": "Akapit",
+        "bulletList": "Lista punktowana",
+        "numberedList": "Lista numerowana",
+        "link": "Link",
+        "unlink": "Usuń link",
+        "linkPrompt": "Adres linku: https://…, mailto:… lub tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Przed publikacją napisz tekst po ukraińsku",
+        "tooLong": "Ten tekst jest za długi",
+        "textRequired": "Napisz tekst w tym języku albo wyczyść jego opis"
+      }
     }
   }
 }

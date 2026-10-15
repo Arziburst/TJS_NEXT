@@ -30,7 +30,11 @@
   },
   "contact": {
     "phone": "Telefon",
-    "email": "E-mail"
+    "email": "E-mail",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp"
   },
   "cookieConsent": {
     "text": "Používáme cookies, abychom vám poskytli co nejlepší zážitek na našem webu. Pokračováním v používání webu souhlasíte s jejich použitím.",
@@ -42,7 +46,9 @@
     "imageAlt": "Hlavní obrázek stránky „O nás“",
     "missionStart": "miluji svou práci a chci přinášet radost a krásu do našeho světa.",
     "motto": "Dostupný luxus je moje motto!",
-    "customOrders": "Vyrábím také šperky na zakázku a vždy beru v úvahu přání zákazníků."
+    "customOrders": "Vyrábím také šperky na zakázku a vždy beru v úvahu přání zákazníků.",
+    "tbd": "O nás: TBD",
+    "fallbackNote": "Tato stránka zatím není dostupná ve vašem jazyce."
   },
   "footer": {
     "contactsTbd": "Kontakty: TBD",

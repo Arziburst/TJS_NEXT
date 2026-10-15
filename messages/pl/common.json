@@ -30,7 +30,11 @@
   },
   "contact": {
     "phone": "Telefon",
-    "email": "E-mail"
+    "email": "E-mail",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp"
   },
   "cookieConsent": {
     "text": "Używamy plików cookie, aby zapewnić Ci jak najlepsze wrażenia podczas korzystania z naszej strony. Kontynuując korzystanie z witryny, zakładamy, że to Ci odpowiada.",
@@ -42,7 +46,9 @@
     "imageAlt": "Główne zdjęcie strony \"O nas\"",
     "missionStart": "kocham swoją pracę i chcę wnosić radość i piękno do naszego świata.",
     "motto": "Przystępny luksus to moje motto!",
-    "customOrders": "Tworzę też biżuterię na zamówienie i zawsze uwzględniam życzenia klientów."
+    "customOrders": "Tworzę też biżuterię na zamówienie i zawsze uwzględniam życzenia klientów.",
+    "tbd": "O nas: TBD",
+    "fallbackNote": "Ta strona nie jest jeszcze dostępna w Twoim języku."
   },
   "footer": {
     "contactsTbd": "Kontakt: TBD",

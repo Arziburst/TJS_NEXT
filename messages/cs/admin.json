@@ -30,7 +30,8 @@
     "nav": "Správa",
     "products": "Produkty",
     "newProduct": "Přidat",
-    "viewShop": "Obchod"
+    "viewShop": "Obchod",
+    "settings": "Nastavení"
   },
   "status": {
     "draft": "Koncept",
@@ -181,6 +182,108 @@
       "leadTimeOrder": "Nesmí být menší než „Od“",
       "titleRequired": "Zadejte název v tomto jazyce, nebo vymažte jeho ostatní texty",
       "requiredToPublish": "Ke zveřejnění je nutný ukrajinský název"
+    }
+  },
+  "settings": {
+    "title": "Nastavení",
+    "intro": "Jak vás zákazníci kontaktují, jak se přepočítávají ceny a váš příběh. Uložená změna se na webu objeví při dalším načtení stránky.",
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "saved": "Uloženo. Web to už zobrazuje.",
+    "loadError": "Nastavení se nepodařilo načíst. Obnovte stránku.",
+    "errorSummary": "{count, plural, one {# pole vyžaduje pozornost} few {# pole vyžadují pozornost} many {# pole vyžaduje pozornost} other {# polí vyžaduje pozornost}}",
+    "errors": {
+      "notAuthorized": "To může udělat jen administrátor. Přihlaste se znovu.",
+      "unexpectedError": "Nastavení se nepodařilo uložit. Zkuste to znovu."
+    },
+    "contacts": {
+      "title": "Kontakty",
+      "hint": "Zobrazují se v patičce každé stránky, v potvrzení objednávky a v e-mailech zákazníkům. Nechte pole prázdné, abyste kanál skryli.",
+      "shopName": "Název obchodu",
+      "shopNameHint": "Používá se v potvrzení objednávky a v e-mailech.",
+      "instagram": "Instagram",
+      "instagramHint": "Název vašeho účtu (@name) nebo odkaz na profil.",
+      "email": "E-mail",
+      "emailHint": "Například shop@example.com.",
+      "phone": "Telefon",
+      "phoneHint": "S předvolbou země, například +38 (066) 123 45 67. Zobrazí se tak, jak ho napíšete.",
+      "telegram": "Chat v Telegramu",
+      "telegramHint": "Vaše uživatelské jméno (@name) nebo odkaz t.me.",
+      "viber": "Chat ve Viberu",
+      "viberHint": "Vaše telefonní číslo s předvolbou země nebo pozvánka do Viberu.",
+      "whatsapp": "Chat ve WhatsAppu",
+      "whatsappHint": "Vaše telefonní číslo s předvolbou země nebo odkaz wa.me.",
+      "notifications": "Oznámení",
+      "telegramChatId": "ID chatu v Telegramu pro nové objednávky",
+      "telegramChatIdHint": "Chat, kam bot obchodu hlásí nové objednávky: číslo (ID skupiny začíná -100). Na webu se nikdy nezobrazuje.",
+      "tooLong": "Nejvýše {max} znaků",
+      "invalid": {
+        "shopName": "Zadejte název",
+        "instagram": "Zadejte název účtu jako @name nebo odkaz na profil instagram.com",
+        "email": "Zadejte e-mail jako shop@example.com",
+        "phone": "Zadejte telefon s předvolbou země: číslice, mezery, závorky a pomlčky",
+        "telegram": "Zadejte uživatelské jméno jako @name (alespoň 5 znaků) nebo odkaz t.me",
+        "viber": "Zadejte telefon s předvolbou země nebo pozvánku do Viberu",
+        "whatsapp": "Zadejte telefon s předvolbou země nebo odkaz wa.me",
+        "telegramChatId": "Zadejte ID chatu jako číslo, například -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Ceny v jiných měnách",
+      "hint": "Každou cenu zadáváte v USD. Návštěvníci ji vidí přepočtenou kurzem NBU s přirážkou a zaokrouhlenou nahoru na hezkou cenu.",
+      "markup": "Přirážka, %",
+      "markupHint": "Připočítává se ke kurzu NBU v každé měně včetně USD. 3 znamená 3 %.",
+      "rulesTitle": "Zaokrouhlování",
+      "rulesHint": "Cena se zaokrouhlí nahoru na další krok plus koncovku: krok 10 a koncovka 9 dávají 1 289, 1 299 atd. Ceny pod volitelnou hranicí používají malý krok: krok 1 a koncovka 0.90 dávají 29.90.",
+      "step": "Krok",
+      "ending": "Koncovka",
+      "smallBelow": "Malé ceny pod",
+      "smallStep": "Malý krok",
+      "smallEnding": "Malá koncovka",
+      "example": "Ukázková cena, USD",
+      "exampleHint": "Každá měna níže ukazuje, jak tato cena vypadá s hodnotami výše.",
+      "shownAs": "Zobrazí se jako",
+      "noRate": "Zatím bez kurzu",
+      "errors": {
+        "required": "Toto pole je povinné",
+        "invalidNumber": "Zadejte číslo, například 9.90",
+        "outOfRange": "Hodnota je mimo rozsah",
+        "endingTooLarge": "Musí být menší než krok",
+        "smallTierIncomplete": "Vyplňte všechna tři pole malých cen, nebo žádné"
+      }
+    },
+    "about": {
+      "cardHint": "Váš příběh v každém jazyce.",
+      "edit": "Upravit stránku „O nás“",
+      "back": "Nastavení",
+      "title": "Stránka „O nás“",
+      "hint": "Napište svůj příběh ukrajinsky (povinné pro zveřejnění) a v libovolném dalším jazyce. Jazyk bez vlastního textu zobrazí anglický, jinak ukrajinský; taková stránka je skrytá před vyhledávači.",
+      "state": "Stránka",
+      "text": "Text",
+      "editorHint": "Jen nadpisy, odstavce, seznamy a odkazy; vše ostatní se při uložení odstraní.",
+      "metaDescription": "Popis pro vyhledávače",
+      "metaDescriptionHint": "Až 500 znaků. Když zůstane prázdný, použije se začátek textu.",
+      "filled": "Napsáno",
+      "empty": "Prázdné",
+      "requiredToPublish": "Povinné pro zveřejnění",
+      "hasErrors": "Obsahuje chyby",
+      "view": "Zobrazit stránku",
+      "toolbar": {
+        "label": "Formátování",
+        "heading": "Nadpis",
+        "subheading": "Podnadpis",
+        "paragraph": "Odstavec",
+        "bulletList": "Odrážkový seznam",
+        "numberedList": "Číslovaný seznam",
+        "link": "Odkaz",
+        "unlink": "Odebrat odkaz",
+        "linkPrompt": "Adresa odkazu: https://…, mailto:… nebo tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Před zveřejněním napište ukrajinský text",
+        "tooLong": "Tento text je příliš dlouhý",
+        "textRequired": "Napište text v tomto jazyce, nebo smažte jeho popis"
+      }
     }
   }
 }

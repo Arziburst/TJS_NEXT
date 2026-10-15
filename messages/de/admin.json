@@ -30,7 +30,8 @@
     "nav": "Verwaltung",
     "products": "Produkte",
     "newProduct": "Neu",
-    "viewShop": "Shop"
+    "viewShop": "Shop",
+    "settings": "Einstellungen"
   },
   "status": {
     "draft": "Entwurf",
@@ -181,6 +182,108 @@
       "leadTimeOrder": "Darf nicht kleiner als „Von“ sein",
       "titleRequired": "Geben Sie einen Titel in dieser Sprache ein oder leeren Sie ihre anderen Texte",
       "requiredToPublish": "Zum Veröffentlichen ist ein ukrainischer Titel nötig"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "intro": "Wie Kunden Sie erreichen, wie Preise umgerechnet werden und Ihre Geschichte. Eine gespeicherte Änderung erscheint beim nächsten Seitenaufruf auf der Website.",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Gespeichert. Die Website zeigt es jetzt.",
+    "loadError": "Die Einstellungen konnten nicht geladen werden. Bitte laden Sie die Seite neu.",
+    "errorSummary": "{count, plural, one {# Feld braucht Ihre Aufmerksamkeit} other {# Felder brauchen Ihre Aufmerksamkeit}}",
+    "errors": {
+      "notAuthorized": "Das kann nur der Admin. Bitte melden Sie sich erneut an.",
+      "unexpectedError": "Die Einstellungen konnten nicht gespeichert werden. Bitte versuchen Sie es erneut."
+    },
+    "contacts": {
+      "title": "Kontakte",
+      "hint": "Erscheinen in der Fußzeile jeder Seite, in der Bestellbestätigung und in E-Mails an Kunden. Lassen Sie ein Feld leer, um diesen Kanal auszublenden.",
+      "shopName": "Name des Shops",
+      "shopNameHint": "Wird in der Bestellbestätigung und in E-Mails verwendet.",
+      "instagram": "Instagram",
+      "instagramHint": "Ihr Kontoname (@name) oder der Link zu Ihrem Profil.",
+      "email": "E-Mail",
+      "emailHint": "Zum Beispiel shop@example.com.",
+      "phone": "Telefon",
+      "phoneHint": "Mit Ländervorwahl, zum Beispiel +38 (066) 123 45 67. Wird so angezeigt, wie Sie es schreiben.",
+      "telegram": "Telegram-Chat",
+      "telegramHint": "Ihr Benutzername (@name) oder ein t.me-Link.",
+      "viber": "Viber-Chat",
+      "viberHint": "Ihre Telefonnummer mit Ländervorwahl oder ein Viber-Einladungslink.",
+      "whatsapp": "WhatsApp-Chat",
+      "whatsappHint": "Ihre Telefonnummer mit Ländervorwahl oder ein wa.me-Link.",
+      "notifications": "Benachrichtigungen",
+      "telegramChatId": "Telegram-Chat-ID für neue Bestellungen",
+      "telegramChatIdHint": "Der Chat, in dem der Bot des Shops neue Bestellungen meldet: eine Zahl (die ID einer Gruppe beginnt mit -100). Wird nie auf der Website angezeigt.",
+      "tooLong": "Höchstens {max} Zeichen",
+      "invalid": {
+        "shopName": "Geben Sie einen Namen ein",
+        "instagram": "Geben Sie einen Kontonamen wie @name oder einen instagram.com-Profillink ein",
+        "email": "Geben Sie eine E-Mail-Adresse wie shop@example.com ein",
+        "phone": "Geben Sie eine Telefonnummer mit Ländervorwahl ein: Ziffern, Leerzeichen, Klammern und Bindestriche",
+        "telegram": "Geben Sie einen Benutzernamen wie @name (mindestens 5 Zeichen) oder einen t.me-Link ein",
+        "viber": "Geben Sie eine Telefonnummer mit Ländervorwahl oder einen Viber-Einladungslink ein",
+        "whatsapp": "Geben Sie eine Telefonnummer mit Ländervorwahl oder einen wa.me-Link ein",
+        "telegramChatId": "Geben Sie die Chat-ID als Zahl ein, zum Beispiel -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Preise in anderen Währungen",
+      "hint": "Sie legen jeden Preis in USD fest. Besucher sehen ihn zum NBU-Kurs plus Aufschlag umgerechnet und auf einen glatten Preis aufgerundet.",
+      "markup": "Aufschlag, %",
+      "markupHint": "Wird in jeder Währung, auch in USD, auf den NBU-Kurs aufgeschlagen. 3 bedeutet 3 %.",
+      "rulesTitle": "Rundung",
+      "rulesHint": "Ein Preis wird auf die nächste Stufe plus Endung aufgerundet: Stufe 10 und Endung 9 ergeben 1 289, 1 299 und so weiter. Preise unter der optionalen Schwelle nutzen stattdessen die kleine Stufe: Stufe 1 und Endung 0.90 ergeben 29.90.",
+      "step": "Stufe",
+      "ending": "Endung",
+      "smallBelow": "Kleine Preise unter",
+      "smallStep": "Kleine Stufe",
+      "smallEnding": "Kleine Endung",
+      "example": "Beispielpreis, USD",
+      "exampleHint": "Jede Währung unten zeigt, wie dieser Preis mit den obigen Werten aussieht.",
+      "shownAs": "Angezeigt als",
+      "noRate": "Noch kein Kurs",
+      "errors": {
+        "required": "Dieses Feld ist erforderlich",
+        "invalidNumber": "Geben Sie eine Zahl ein, zum Beispiel 9.90",
+        "outOfRange": "Dieser Wert liegt außerhalb des zulässigen Bereichs",
+        "endingTooLarge": "Muss kleiner als die Stufe sein",
+        "smallTierIncomplete": "Füllen Sie alle drei Felder für kleine Preise aus oder keines"
+      }
+    },
+    "about": {
+      "cardHint": "Ihre Geschichte in jeder Sprache.",
+      "edit": "Seite „Über uns“ bearbeiten",
+      "back": "Einstellungen",
+      "title": "Seite „Über uns“",
+      "hint": "Schreiben Sie Ihre Geschichte auf Ukrainisch (für die Veröffentlichung erforderlich) und in beliebigen weiteren Sprachen. Eine Sprache ohne eigenen Text zeigt den englischen, sonst den ukrainischen; eine solche Seite wird vor Suchmaschinen verborgen.",
+      "state": "Seite",
+      "text": "Text",
+      "editorHint": "Nur Überschriften, Absätze, Listen und Links; alles andere wird beim Speichern entfernt.",
+      "metaDescription": "Beschreibung für Suchmaschinen",
+      "metaDescriptionHint": "Bis zu 500 Zeichen. Bleibt es leer, wird der Anfang des Textes verwendet.",
+      "filled": "Geschrieben",
+      "empty": "Leer",
+      "requiredToPublish": "Für die Veröffentlichung erforderlich",
+      "hasErrors": "Enthält Fehler",
+      "view": "Seite ansehen",
+      "toolbar": {
+        "label": "Formatierung",
+        "heading": "Überschrift",
+        "subheading": "Unterüberschrift",
+        "paragraph": "Absatz",
+        "bulletList": "Aufzählung",
+        "numberedList": "Nummerierte Liste",
+        "link": "Link",
+        "unlink": "Link entfernen",
+        "linkPrompt": "Linkadresse: https://…, mailto:… oder tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Schreiben Sie vor der Veröffentlichung den ukrainischen Text",
+        "tooLong": "Dieser Text ist zu lang",
+        "textRequired": "Schreiben Sie den Text für diese Sprache oder löschen Sie ihre Beschreibung"
+      }
     }
   }
 }

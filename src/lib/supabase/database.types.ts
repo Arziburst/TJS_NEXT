@@ -5,7 +5,33 @@ export type Database = {
   
   "public": {
           Tables: {
-            "cart_items": {
+            "about_page": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"id": number,"published": boolean,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: number,"published"?: boolean,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: number,"published"?: boolean,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"about_translations": {
+                  Row: {
+                    "body_html": string,"created_at": string,"created_by": string | null,"locale": string,"meta_description": string | null,"reviewed_at": string | null,"source": Database["public"]['Enums']["translation_source"],"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "body_html": string,"created_at"?: string,"created_by"?: string | null,"locale": string,"meta_description"?: string | null,"reviewed_at"?: string | null,"source"?: Database["public"]['Enums']["translation_source"],"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "body_html"?: string,"created_at"?: string,"created_by"?: string | null,"locale"?: string,"meta_description"?: string | null,"reviewed_at"?: string | null,"source"?: Database["public"]['Enums']["translation_source"],"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"cart_items": {
                   Row: {
                     "created_at": string,"id": string,"product_id": string,"quantity": number,"updated_at": string,"user_id": string,"variant_id": string | null
                   }
@@ -248,6 +274,19 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"shop_settings": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"email": string | null,"id": number,"instagram_handle": string | null,"phone": string | null,"shop_name": string | null,"telegram_chat_id": string | null,"telegram_url": string | null,"updated_at": string,"updated_by": string | null,"viber_url": string | null,"whatsapp_url": string | null
+                  }
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"email"?: string | null,"id"?: number,"instagram_handle"?: string | null,"phone"?: string | null,"shop_name"?: string | null,"telegram_chat_id"?: string | null,"telegram_url"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"viber_url"?: string | null,"whatsapp_url"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"email"?: string | null,"id"?: number,"instagram_handle"?: string | null,"phone"?: string | null,"shop_name"?: string | null,"telegram_chat_id"?: string | null,"telegram_url"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"viber_url"?: string | null,"whatsapp_url"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 }
           }
           Views: {
@@ -256,6 +295,12 @@ isOneToOne: false
           Functions: {
             "admin_delete_product":
 { Args: { "p_id": string }; Returns: boolean
+                           },
+"admin_save_about":
+{ Args: { "p_published": boolean,"p_translations": Json }; Returns: undefined
+                           },
+"admin_save_price_settings":
+{ Args: { "p_markup_bps": number,"p_rules": Json }; Returns: undefined
                            },
 "admin_save_product":
 { Args: { "p_id": string,"p_product": Json,"p_translations": Json }; Returns: string

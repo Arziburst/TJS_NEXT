@@ -11,6 +11,8 @@ const novaPostMockPort = Number(process.env.NOVA_POST_MOCK_PORT || port + 1000);
 const novaPostMockKey = "e2e-fixture-key";
 // e2e files that write products of their own to the catalog (see the projects below)
 const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts", "**/favorites.e2e.ts"];
+// e2e files that change the shop-wide settings (every footer, every price): alone, after everything else
+const SETTINGS_WRITERS = ["**/settings.e2e.ts"];
 
 export default defineConfig({
   testDir: "./e2e",
@@ -32,13 +34,13 @@ export default defineConfig({
       name: "desktop",
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
       dependencies: ["catalog-fixtures"],
-      testIgnore: CATALOG_WRITERS,
+      testIgnore: [...CATALOG_WRITERS, ...SETTINGS_WRITERS],
     },
     {
       name: "mobile",
       use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
       dependencies: ["catalog-fixtures"],
-      testIgnore: CATALOG_WRITERS,
+      testIgnore: [...CATALOG_WRITERS, ...SETTINGS_WRITERS],
     },
     // tests that publish, sell or unpublish products of their own run after the listings were checked, so the
     // catalog tests always count exactly the seed and the catalog fixtures
@@ -53,6 +55,13 @@ export default defineConfig({
       testMatch: CATALOG_WRITERS,
       use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
       dependencies: ["desktop", "mobile"],
+    },
+    // one project at desktop size; the tests check the footer at 390 in a context of their own
+    {
+      name: "settings-writers",
+      testMatch: SETTINGS_WRITERS,
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
+      dependencies: ["desktop-catalog-writers", "mobile-catalog-writers"],
     },
   ],
   webServer: externalBaseURL
