@@ -1,4 +1,5 @@
-import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Locator, type Page } from "@playwright/test";
+import de from "../messages/de/product.json" with { type: "json" };
 
 // Seeded products (supabase/seed.sql) with photos from npm run seed:images (e2e/global-setup.ts).
 const SHOP = "/de/shop";
@@ -66,39 +67,67 @@ test.describe("photos through the image optimizer (no JavaScript)", () => {
   });
 });
 
-/** The page's cumulative layout shift so far (shifts after input excluded, as CLS does). */
-async function layoutShift(page: Page): Promise<number> {
+type ShiftWindow = Window & { photoShift?: number };
+
+/** Two frames: whatever was inserted before has been laid out and its layout shift reported. */
+function afterTwoFrames(page: Page): Promise<void> {
   return page.evaluate(
-    () =>
-      new Promise<number>((resolve) => {
-        new PerformanceObserver((list) => {
-          const shifts = list.getEntries() as (PerformanceEntry & { value: number; hadRecentInput: boolean })[];
-          resolve(shifts.filter((shift) => !shift.hadRecentInput).reduce((sum, shift) => sum + shift.value, 0));
-        }).observe({ type: "layout-shift", buffered: true });
-        // no entry at all: the observer never calls back
-        setTimeout(() => resolve(0), 500);
-      }),
+    () => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))),
   );
 }
 
-/** Waits until every photo in view has loaded, then checks it came from the optimizer at a fitting width. */
-async function expectPhotosLoaded(page: Page) {
+/**
+ * Counts the layout shift from now on (input-driven shifts excluded, as CLS does). Started once the photos
+ * are in the DOM, it measures what loading them shifts — not the earlier swap of a streamed Suspense
+ * fallback for its content, which moves the footer whether or not a page has photos.
+ */
+async function recordShiftFromNow(page: Page) {
+  await afterTwoFrames(page);
+  await page.evaluate(() => {
+    const w = window as ShiftWindow;
+    w.photoShift = 0;
+    new PerformanceObserver((list) => {
+      for (const entry of list.getEntries() as (PerformanceEntry & { value: number; hadRecentInput: boolean })[]) {
+        if (!entry.hadRecentInput) w.photoShift! += entry.value;
+      }
+    }).observe({ type: "layout-shift" });
+  });
+}
+
+async function recordedShift(page: Page): Promise<number> {
+  await afterTwoFrames(page);
+  return page.evaluate(() => (window as ShiftWindow).photoShift!);
+}
+
+function photoBoxes(photos: Locator) {
+  return photos.evaluateAll((images) =>
+    images.map((image) => {
+      const { width, height } = image.getBoundingClientRect();
+      return { width, height };
+    }),
+  );
+}
+
+/**
+ * Waits until the photos that load at once (not lazy) have loaded, and checks each loaded photo came from
+ * the optimizer at a fitting width.
+ */
+async function expectPhotosLoaded(photos: Locator) {
   await expect
     .poll(() =>
-      page.locator("main img").evaluateAll((images) =>
-        (images as HTMLImageElement[])
-          .filter((image) => image.getBoundingClientRect().top < window.innerHeight && image.loading !== "lazy")
-          .every((image) => image.complete && image.naturalWidth > 0),
-      ),
+      photos.evaluateAll((images) => {
+        const eager = (images as HTMLImageElement[]).filter((image) => image.loading !== "lazy");
+        return eager.length > 0 && eager.every((image) => image.complete && image.naturalWidth > 0);
+      }),
     )
     .toBe(true);
-  const visible = await page.locator("main img").evaluateAll((images) =>
+  const loaded = await photos.evaluateAll((images) =>
     (images as HTMLImageElement[])
       .filter((image) => image.complete && image.naturalWidth > 0 && !image.currentSrc.startsWith("data:"))
       .map((image) => ({ src: image.currentSrc, rendered: image.clientWidth })),
   );
-  expect(visible.length).toBeGreaterThan(0);
-  for (const image of visible) {
+  expect(loaded.length).toBeGreaterThan(0);
+  for (const image of loaded) {
     expect(image.src).toContain("/_next/image?");
     // the width the browser picked from `sizes` is never narrower than the photo's box
     const width = Number(new URL(image.src).searchParams.get("w"));
@@ -106,10 +135,23 @@ async function expectPhotosLoaded(page: Page) {
   }
 }
 
-for (const path of [SHOP, PRODUCT]) {
+const PAGES = [
+  // the first-row cards (EAGER_CARDS in shop-view.tsx) load at once
+  { path: SHOP, photos: (page: Page) => page.getByTestId("product-grid").locator('img[fetchpriority="high"]'), count: 4 },
+  // the seeded product has three photos; the first loads at once
+  { path: PRODUCT, photos: (page: Page) => page.getByRole("region", { name: de.page.gallery.label }).getByRole("img"), count: 3 },
+];
+
+for (const { path, photos, count } of PAGES) {
   test(`photos of ${path} load optimized and shift nothing`, async ({ page }) => {
     await page.goto(path);
-    await expectPhotosLoaded(page);
-    expect(await layoutShift(page)).toBeLessThan(0.01);
+    // the listing and the gallery stream in after the shell: wait for the page's photos first
+    await expect(photos(page)).toHaveCount(count);
+    await recordShiftFromNow(page);
+    const boxes = await photoBoxes(photos(page));
+    await expectPhotosLoaded(photos(page));
+    // a loaded photo keeps the box it had before, and loading the photos shifts nothing
+    expect(await photoBoxes(photos(page))).toEqual(boxes);
+    expect(await recordedShift(page)).toBeLessThan(0.01);
   });
 }
