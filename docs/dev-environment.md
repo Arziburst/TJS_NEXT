@@ -150,6 +150,65 @@ named by `--pr <n>`, else the PR whose head ref is the current branch or whose h
 `$MIGRATIONS_BASE_REF`, else `origin/$GITHUB_BASE_REF`, else `origin/main` (run `git fetch origin main`
 first). The remote migration history stays a manual check.
 
+## Legacy catalogue import
+
+`scripts/import/legacy-catalogue.mjs` moves the legacy catalogue (D33) into a Supabase project from a
+read-only export folder that lives outside every repository: `products.json` (mongoexport EJSON),
+`images.json`, `cloudinary-resources.json` and `cloudinary/image/<public_id>.<ext>` (the archived originals).
+It never connects to MongoDB or Cloudinary. Next to the export, a state folder `<export>-import/` (`--state`
+to change it) holds what the runs share:
+
+| File | What |
+|---|---|
+| `translations.json` | uk and en machine translations of every legacy title and description, produced once and reused; each entry carries the hash of its legacy text, so a changed export fails as stale instead of importing an old translation. A uk entry marked `"source": "human"` is the owner's own Ukrainian legacy text, kept verbatim (22 products). The Russian originals stay only in the export. |
+| `rate.json` | the NBU USD rate the prices were converted at, pinned by the first real run (written by the importer) |
+| `report-local.md`, `report-production.md` | the report of the last run on that target: the rate and its date, counts per category and kind, the price range, the weight-0 products, the questions for the owner, every product with its legacy id, category, kind, UAH and USD price |
+
+What a run does, per product: `products` row keyed by `legacy_id` (a hidden column, migration
+`20261016006900`): category from the legacy `type`, `available: false` → made to order without a lead time,
+`available: true` → one of a kind, available (D34), USD = UAH / rate half up to the cent, the weight as given (a
+missing one is the legacy default 0), `created_at` = `published_at` = the legacy `created`, published. Then the
+uk and en texts (`source = machine`, `reviewed_at` null, so the review flow applies; a uk text marked human in
+`translations.json` gets `source = human` and `reviewed_at` = the import time; slugs transliterated / from the English title, numbered
+`-2`, `-3` … for repeated titles, oldest first, existing slugs never changed), and every photo in its order to
+`product-images/legacy/<product id>/<n>-<file>` with width, height, an 8 px blur placeholder and the title as
+alt text per locale. Customers, orders, views and unused media stay in the archive.
+
+It is idempotent: a second run changes nothing (`plan: products created 0, …`). A row that differs from the
+export (edited in the admin since) is kept and listed; `--overwrite` resets it to the export. An interrupted run
+is finished by running it again.
+
+```sh
+# local: the worktree's stack (.env.local); a non-loopback URL is refused
+node scripts/import/legacy-catalogue.mjs C:/Users/arzib/tjs-backups/legacy-20261015 --dry-run   # prints the plan
+node scripts/import/legacy-catalogue.mjs C:/Users/arzib/tjs-backups/legacy-20261015
+```
+
+Call it with `node`, not through an npm script: npm would take `--dry-run` as its own flag (PowerShell drops
+the `--` that keeps it away from npm) and the run would write for real.
+
+Options: `--dry-run` (reads the target, prints the plan, writes nothing), `--production` (allows a non-loopback
+URL), `--overwrite`, `--rate-date YYYY-MM-DD` (converts at that day's NBU rate instead of the pinned one; a real
+run re-pins it, and only `--overwrite` reprices products already imported), `--state <dir>`.
+
+**Production run (the coordinator only; a worker never writes production).** After the owner has accepted the
+local import and the migration is applied to `tjs-prod`, from a checkout of `main`:
+
+```powershell
+$env:NEXT_PUBLIC_SUPABASE_URL = "https://<project ref>.supabase.co"
+$env:SUPABASE_SERVICE_ROLE_KEY = "<service-role key of tjs-prod>"   # from the dashboard; never stored in a file
+node scripts/import/legacy-catalogue.mjs C:/Users/arzib/tjs-backups/legacy-20261015 --production --dry-run
+node scripts/import/legacy-catalogue.mjs C:/Users/arzib/tjs-backups/legacy-20261015 --production
+Remove-Item Env:SUPABASE_SERVICE_ROLE_KEY, Env:NEXT_PUBLIC_SUPABASE_URL
+```
+
+The variables of the environment win over `.env.local`, which is read only when no URL is set. The run uses the
+rate pinned in `rate.json`, so production gets exactly the prices the owner reviewed, and writes
+`report-production.md`. Check the dry run's target line (`PRODUCTION`) and its plan (167 products, 334
+texts, 441 photos on an empty catalogue) before the real run. The shop's catalogue reads are cached
+(`cacheLife("hours")`, `src/lib/catalog/cache.ts`): the products appear within the hour, or at once after a
+redeploy. Locally, restart `next dev` (or rebuild) after an import.
+
 ## Auth
 
 Supabase Auth with email/password and Google (D12); the app side is `src/lib/auth/`, `src/proxy.ts` and

@@ -22,7 +22,7 @@ Each line: the decision, its source, its date.
 | D10 | Delivery: Ukraine — Nova Poshta API 2.0 (branch, postomat, address; live quote); EU + CH — Nova Post international API (branch, locker, PUDO or address; live quote); flat rate per zone as a fallback, marked as estimate | owner + research | 2026-10-15 |
 | D11 | Notifications: Telegram to the owner's group (new order, paid, status change); email to the customer in their locale (confirmation with terms and the withdrawal form, status changes); sending never blocks or loses an order (outbox + retry) | owner | 2026-10-15 |
 | D12 | Accounts: Supabase Auth — Google + email/password; guest checkout allowed; roles customer / admin, admin granted only in the database | owner | 2026-10-15 |
-| D13 | Legacy data: none migrated; the catalog starts empty and is filled in the new admin | owner | 2026-10-15 |
+| D13 | Legacy data: ~~none migrated; the catalog starts empty and is filled in the new admin~~ — superseded by D33 (the legacy products and photos are imported; customers and orders are not) | owner | 2026-10-15 |
 | D14 | Production Supabase `tjs-prod` in **Frankfurt** (eu-central-1), in the owner's personal org. **No preview database for now** (free plan limit of 2 active projects): Vercel PR previews are off; every task is verified on its local Docker stack (worker + verifier browser walk) and in CI with e2e; a `tjs-preview` project comes with a paid plan or a freed slot | owner | 2026-10-15 |
 | D15 | EU responsible person (GPSR) and GDPR representative: **TBD** — fields in the admin settings, shown on legal pages and product pages; EU sales are enabled by the owner once they exist | owner | 2026-10-15 |
 | D16 | Display font: a free look-alike of "TT Ricordi Allegria" with Cyrillic + Latin Extended, via next/font; two candidates shown to the owner | owner | 2026-10-15 |
@@ -41,4 +41,6 @@ Each line: the decision, its source, its date.
 | D30 | Lead time of made-to-order products: a number of days (range, rendered per locale) **and** an optional free-text note (machine-translated like other texts) | owner | 2026-10-15 |
 | D31 | Ukrainian name of the necklace category: «Намиста» (plural, like the other categories) | owner | 2026-10-15 |
 | D32 | Hosting plan (Vercel Hobby is non-commercial): the owner decides closer to launch (#31); Hobby until then | owner | 2026-10-15 |
+| D33 | Legacy catalogue import (supersedes "no data from the old site"): products and photos are moved, all Cloudinary files archived; customers and orders are not. Prices UAH → USD at the NBU rate of the import day (no markup compensation; UAH display ends ~3 % above the old price). Local import first, the owner reviews, then production | owner | 2026-10-15 |
+| D34 | Legacy `available: false` ("Only order" badge) maps to made-to-order; `available: true` to a one-of-a-kind ready piece — the owner corrects exceptions in the admin | coordinator (legacy semantics), owner reviews | 2026-10-15 |
 | D35 | Nova Poshta (Ukraine): sender city Kyiv; the recipient pays delivery on receipt (the site shows an estimate); declared value = the order total | owner | 2026-10-15 |
