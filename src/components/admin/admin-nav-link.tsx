@@ -33,7 +33,7 @@ export function AdminNavLink({ entry, label }: { entry: keyof typeof ENTRIES; la
       aria-current={active ? "page" : undefined}
       className={cn(
         "flex min-h-14 flex-col items-center justify-center gap-1 px-2 font-sans text-xs font-semibold outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring sb:min-h-11 sb:flex-row sb:justify-start sb:gap-3 sb:px-3 sb:text-sm",
-        active ? "text-accent" : "hover:text-accent",
+        active ? "text-accent-text" : "hover:text-accent-text",
       )}
     >
       <Icon aria-hidden className="size-5 shrink-0" />

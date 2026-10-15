@@ -46,7 +46,7 @@ export async function ProductList({ items, categories }: { items: AdminProductLi
               <Link
                 href={editProductHref(item.id)}
                 lang={item.title?.locale}
-                className="truncate font-sans text-base font-semibold underline-offset-4 hover:text-accent hover:underline"
+                className="truncate font-sans text-base font-semibold underline-offset-4 hover:text-accent-text hover:underline"
               >
                 {title}
               </Link>
@@ -66,7 +66,7 @@ export async function ProductList({ items, categories }: { items: AdminProductLi
               </p>
               {item.missingLocales.length > 0 && (
                 <p className="font-input text-xs">
-                  {missingUk && <strong className="text-destructive">{t("missingUk")} </strong>}
+                  {missingUk && <strong>{t("missingUk")} </strong>}
                   {t("missing", {
                     count: item.missingLocales.length,
                     locales: format.list(item.missingLocales.map((l) => tLocales(l))),

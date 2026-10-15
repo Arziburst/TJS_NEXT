@@ -57,7 +57,7 @@ export function TranslationFields({ locale, initial, errors, open, onToggle, mad
             <span>{locale === PUBLISH_LOCALE ? t("requiredToPublish") : t("empty")}</span>
           )}
           {machine && <span>{t("machine")}</span>}
-          {hasErrors && <span className="text-destructive">{t("hasErrors")}</span>}
+          {hasErrors && <span className="font-semibold underline decoration-destructive decoration-2 underline-offset-4">{t("hasErrors")}</span>}
         </span>
         <ChevronDownIcon aria-hidden className="size-5 shrink-0 transition group-open:rotate-180" />
       </summary>

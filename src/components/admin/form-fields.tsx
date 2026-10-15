@@ -59,8 +59,8 @@ export function FieldShell({ name, label, hint, error, className, children }: Fi
         </p>
       )}
       {error && (
-        <p id={`${id}-error`} className="flex items-start gap-1.5 font-input text-sm text-destructive">
-          <CircleAlertIcon aria-hidden className="mt-0.5 size-4 shrink-0" />
+        <p id={`${id}-error`} className="flex items-start gap-1.5 font-input text-sm">
+          <CircleAlertIcon aria-hidden className="mt-0.5 size-4 shrink-0 text-destructive" />
           {error}
         </p>
       )}
@@ -136,8 +136,8 @@ export function ChoiceField({ name, legend, options, value, onChange, error }: C
         ))}
       </div>
       {error && (
-        <p id={`${id}-error`} className="flex items-start gap-1.5 font-input text-sm text-destructive">
-          <CircleAlertIcon aria-hidden className="mt-0.5 size-4 shrink-0" />
+        <p id={`${id}-error`} className="flex items-start gap-1.5 font-input text-sm">
+          <CircleAlertIcon aria-hidden className="mt-0.5 size-4 shrink-0 text-destructive" />
           {error}
         </p>
       )}

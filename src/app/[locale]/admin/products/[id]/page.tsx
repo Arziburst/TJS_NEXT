@@ -67,7 +67,7 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
     <AdminShell>
       <div className="grid gap-5">
         <header className="grid gap-2">
-          <Link href={ADMIN_PRODUCTS_HREF} className="justify-self-start font-sans text-sm underline-offset-4 hover:text-accent hover:underline">
+          <Link href={ADMIN_PRODUCTS_HREF} className="justify-self-start font-sans text-sm underline-offset-4 hover:text-accent-text hover:underline">
             {t("back")}
           </Link>
           <h1 className="text-xl font-bold tracking-[0.2em] break-words uppercase sb:text-2xl">{title ?? t("editTitle")}</h1>
