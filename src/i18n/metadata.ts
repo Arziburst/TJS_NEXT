@@ -5,10 +5,12 @@ import { defaultLocale, locales, type Locale } from "./routing";
 type Href = Parameters<typeof getPathname>[0]["href"];
 
 /**
- * Origin for absolute canonical/hreflang URLs: the production domain Vercel assigns to the project,
- * else the local server. The shop's own domain is not decided yet; it is configured on Vercel.
+ * Origin for absolute canonical/hreflang URLs: NEXT_PUBLIC_SITE_URL (the shop's domain, set on Vercel),
+ * else the production domain Vercel assigns to the project, else the local server.
  */
 export function getMetadataBase(): URL {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (siteUrl) return new URL(siteUrl);
   const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
   if (productionHost) return new URL(`https://${productionHost}`);
   return new URL(`http://localhost:${process.env.PORT ?? 3000}`);

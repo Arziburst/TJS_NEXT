@@ -37,12 +37,20 @@ describe("getAlternates", () => {
 describe("getMetadataBase", () => {
   afterEach(() => vi.unstubAllEnvs());
 
-  it("uses the Vercel production domain when deployed", () => {
+  it("prefers NEXT_PUBLIC_SITE_URL", () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://tjstore.pp.ua");
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "shop.example.com");
+    expect(getMetadataBase().href).toBe("https://tjstore.pp.ua/");
+  });
+
+  it("uses the Vercel production domain without NEXT_PUBLIC_SITE_URL", () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
     vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "shop.example.com");
     expect(getMetadataBase().href).toBe("https://shop.example.com/");
   });
 
   it("falls back to the local server", () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
     vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "");
     vi.stubEnv("PORT", "3010");
     expect(getMetadataBase().href).toBe("http://localhost:3010/");
