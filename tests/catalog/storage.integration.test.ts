@@ -84,14 +84,14 @@ describe.skipIf(!stack)("product-images bucket on the local stack", () => {
     }
   });
 
-  it("refuses a file over 5 MiB and accepts one at the limit", async () => {
+  it("refuses a file over 15 MiB and accepts one at the limit", async () => {
     const over = await admin.storage
       .from(BUCKET)
-      .upload(`${prefix}/big.png`, Buffer.alloc(5 * 1024 * 1024 + 1), { contentType: "image/png" });
+      .upload(`${prefix}/big.png`, Buffer.alloc(15 * 1024 * 1024 + 1), { contentType: "image/png" });
     expect(over.error?.message).toMatch(/size/i);
     const at = await admin.storage
       .from(BUCKET)
-      .upload(`${prefix}/limit.png`, Buffer.alloc(5 * 1024 * 1024), { contentType: "image/png" });
+      .upload(`${prefix}/limit.png`, Buffer.alloc(15 * 1024 * 1024), { contentType: "image/png" });
     expect(at.error).toBeNull();
   });
 

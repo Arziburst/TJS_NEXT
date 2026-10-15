@@ -254,8 +254,17 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "admin_delete_product":
+            "admin_add_product_image":
+{ Args: { "p_blur_data_url": string,"p_height": number,"p_product_id": string,"p_storage_path": string,"p_width": number }; Returns: string
+                           },
+"admin_delete_product":
 { Args: { "p_id": string }; Returns: boolean
+                           },
+"admin_reorder_product_images":
+{ Args: { "p_image_ids": (string)[],"p_product_id": string }; Returns: undefined
+                           },
+"admin_save_image_alts":
+{ Args: { "p_alts": Json,"p_image_id": string,"p_product_id": string }; Returns: boolean
                            },
 "admin_save_product":
 { Args: { "p_id": string,"p_product": Json,"p_translations": Json }; Returns: string
