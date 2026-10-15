@@ -192,6 +192,7 @@
     "makeMain": "Zum Hauptfoto machen",
     "moveEarlier": "Foto {index} nach vorne verschieben",
     "moveLater": "Foto {index} nach hinten verschieben",
+    "moved": "Foto an Position {position} von {count} verschoben.",
     "altTextsOf": "Alternativtexte von Foto {index}",
     "altHint": "Eine kurze Beschreibung des Fotos für Screenreader und Suchmaschinen. Ein leeres Feld verwendet den darin angezeigten Text.",
     "altSave": "Alternativtexte speichern",

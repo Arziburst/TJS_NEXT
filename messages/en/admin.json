@@ -192,6 +192,7 @@
     "makeMain": "Make main",
     "moveEarlier": "Move photo {index} earlier",
     "moveLater": "Move photo {index} later",
+    "moved": "Photo moved to position {position} of {count}.",
     "altTextsOf": "Alt texts of photo {index}",
     "altHint": "A short description of the photo for screen readers and search engines. An empty field uses the text shown in it.",
     "altSave": "Save alt texts",

@@ -17,8 +17,8 @@ from public.categories where slug = 'rings';
 
 select results_eq(
   $$select public, file_size_limit, allowed_mime_types from storage.buckets where id = 'product-image-uploads'$$,
-  $$values (false, 15728640::bigint, array['image/jpeg', 'image/png', 'image/webp'])$$,
-  'product-image-uploads is private, 15 MiB, JPEG / PNG / WebP'
+  $$values (false, 15728640::bigint, null::text[])$$,
+  'product-image-uploads is private, 15 MiB, any claimed type (#92: the server decides by the bytes)'
 );
 
 -- Anon

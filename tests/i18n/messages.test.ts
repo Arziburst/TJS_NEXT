@@ -98,6 +98,7 @@ describe("message catalogs", () => {
       // a file name (admin.images) and a person's first name (checkout.done) alike
       name: "IMG_0042.jpg",
       done: 3,
+      position: 2,
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };
