@@ -427,9 +427,12 @@ and `/delivery-demo` showcases stay a 404; the fixture transport refuses under `
 **Cron.** `vercel.json` `crons` calls `GET /api/cron/fx-rates` daily at `15 14 * * *` (UTC) on the
 production deployment only, with `CRON_SECRET`; without the secret the route answers 401. On Hobby, Vercel
 fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv.
-`GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), and
-`GET /api/cron/notifications` sends the due retries of the notifications outbox daily at `0 6 * * *` (UTC), with the
-same secret. Hobby allows each cron once a day (`tests/money/vercel-cron.test.ts` checks every schedule). Runs and their logs: the project's *Cron Jobs* settings and the function logs.
+`GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), with the same
+secret. `GET /api/cron/staged-uploads` (#92) removes photo uploads older than a day that never left the private
+`product-image-uploads` staging bucket, daily at `45 3 * * *` (UTC), and `GET /api/cron/notifications` (#26) sends
+the due retries of the notifications outbox daily at `0 6 * * *` (UTC), both with the same secret (Hobby allows up
+to 100 crons a project, each at most once a day; `tests/money/vercel-cron.test.ts` checks every schedule). Runs and
+their logs: the project's *Cron Jobs* settings and the function logs.
 
 **Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`
 renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the document of every page only when

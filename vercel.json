@@ -16,6 +16,10 @@
       "schedule": "30 2 * * *"
     },
     {
+      "path": "/api/cron/staged-uploads",
+      "schedule": "45 3 * * *"
+    },
+    {
       "path": "/api/cron/notifications",
       "schedule": "0 6 * * *"
     }

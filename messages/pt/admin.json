@@ -30,6 +30,7 @@
     "nav": "Gestão",
     "products": "Produtos",
     "newProduct": "Adicionar",
+    "attributes": "Materiais e cores",
     "viewShop": "Loja"
   },
   "status": {
@@ -105,6 +106,7 @@
       "making": "Produção e disponibilidade",
       "dimensions": "Dimensões",
       "translations": "Textos em todos os idiomas",
+      "taxonomy": "Materiais e cores",
       "photos": "Fotos",
       "publication": "Publicação"
     },
@@ -122,6 +124,7 @@
     "heightMm": "Altura, mm",
     "dimensionsHint": "Opcional; em milímetros, no máximo uma casa decimal.",
     "translationsHint": "O ucraniano é necessário para publicar; um idioma sem título não é mostrado e a loja mostra o texto em inglês.",
+    "manageTerms": "Editar as listas de materiais e cores",
     "status": "Estado",
     "position": "Posição",
     "positionHint": "Um número para a ordem manual; 0 por predefinição.",
@@ -169,6 +172,7 @@
       "notAuthorized": "Só a gestão pode fazer isto. Inicie sessão novamente.",
       "notFound": "Este produto já não existe.",
       "conflict": "Outro produto acabou de ficar com este endereço ou referência. Verifique e guarde novamente.",
+      "termsChanged": "Um material ou cor escolhido acabou de ser eliminado. Verifique a lista e guarde novamente.",
       "unexpectedError": "Não foi possível guardar o produto. Tente novamente.",
       "required": "Este campo é obrigatório",
       "tooLong": "No máximo {max} caracteres",
@@ -182,6 +186,50 @@
       "requiredToPublish": "Para publicar é necessário um título em ucraniano"
     }
   },
+  "taxonomy": {
+    "title": "Materiais e cores",
+    "intro": "Os filtros da loja mostram-nos. Cada um precisa do nome em ucraniano; um idioma sem nome próprio mostra o inglês e, se não houver, o ucraniano.",
+    "kinds": {
+      "material": "Materiais",
+      "colour": "Cores"
+    },
+    "add": {
+      "material": "Adicionar um material",
+      "colour": "Adicionar uma cor"
+    },
+    "empty": {
+      "material": "Ainda não há materiais.",
+      "colour": "Ainda não há cores."
+    },
+    "nameIn": "Nome ({language})",
+    "required": "(obrigatório)",
+    "otherLocales": "Outros idiomas",
+    "slug": "Nos links da loja: {slug}",
+    "usedBy": "{count, plural, =0 {Não usado} one {Usado por # produto} other {Usado por # produtos}}",
+    "save": "Guardar",
+    "saving": "A guardar…",
+    "create": "Adicionar",
+    "saved": "Guardado",
+    "created": "Adicionado",
+    "delete": "Eliminar",
+    "deleteTitle": "Eliminar «{name}»?",
+    "deleteDescription": "Desaparece dos filtros da loja. Não é possível anular.",
+    "deleteConfirm": "Eliminar",
+    "cancel": "Cancelar",
+    "deleted": "«{name}» eliminado",
+    "inUseHint": "Há produtos que o usam: desmarque-o nos respetivos formulários para o eliminar.",
+    "loadError": "Não foi possível carregar as listas. Tente novamente.",
+    "errors": {
+      "required": "Introduza o nome em ucraniano",
+      "tooLong": "No máximo {max} caracteres",
+      "notAuthorized": "Só o administrador pode fazer isto. Inicie sessão novamente.",
+      "notFound": "Esta entrada já não existe.",
+      "nameTaken": "Outra entrada desta lista já tem este nome.",
+      "invalid": "Este pedido não é válido.",
+      "unexpectedError": "Algo correu mal. Tente novamente.",
+      "inUse": "Há produtos que o usam: desmarque-o primeiro nos respetivos formulários."
+    }
+  },
   "images": {
     "hint": "JPEG, PNG ou WebP, até {maxMb} MB cada. A primeira foto é a principal na loja. Os dados de localização e da câmara são removidos no envio.",
     "saveFirst": "Guarde primeiro o produto e depois adicione aqui as suas fotos.",
@@ -192,6 +240,7 @@
     "makeMain": "Tornar principal",
     "moveEarlier": "Mover a foto {index} para a frente",
     "moveLater": "Mover a foto {index} para trás",
+    "moved": "Foto movida para a posição {position} de {count}.",
     "altTextsOf": "Textos alternativos da foto {index}",
     "altHint": "Uma breve descrição da foto para leitores de ecrã e motores de busca. Um campo vazio usa o texto nele apresentado.",
     "altSave": "Guardar textos",

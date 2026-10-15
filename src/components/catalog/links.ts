@@ -4,6 +4,8 @@ import { isRouteEnabled, routes } from "@/config/routes";
 
 export const SHOP_HREF = routes.shop.path;
 
+export const SEARCH_HREF = routes.search.path;
+
 export function categoryHref(slug: string): string {
   return `${SHOP_HREF}/${slug}`;
 }

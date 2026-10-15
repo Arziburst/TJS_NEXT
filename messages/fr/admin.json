@@ -30,6 +30,7 @@
     "nav": "Administration",
     "products": "Produits",
     "newProduct": "Ajouter",
+    "attributes": "Matières et couleurs",
     "viewShop": "Boutique"
   },
   "status": {
@@ -105,6 +106,7 @@
       "making": "Fabrication et disponibilité",
       "dimensions": "Dimensions",
       "translations": "Textes dans toutes les langues",
+      "taxonomy": "Matières et couleurs",
       "photos": "Photos",
       "publication": "Publication"
     },
@@ -122,6 +124,7 @@
     "heightMm": "Hauteur, mm",
     "dimensionsHint": "Facultatif ; en millimètres, une décimale au plus.",
     "translationsHint": "L’ukrainien est requis pour publier ; une langue sans titre n’est pas affichée, la boutique montre alors le texte anglais.",
+    "manageTerms": "Modifier les listes de matières et de couleurs",
     "status": "Statut",
     "position": "Position",
     "positionHint": "Un nombre pour l’ordre manuel ; 0 par défaut.",
@@ -169,6 +172,7 @@
       "notAuthorized": "Seule l’administration peut faire cela. Veuillez vous reconnecter.",
       "notFound": "Ce produit n’existe plus.",
       "conflict": "Un autre produit vient de prendre cette adresse ou cette référence. Vérifiez et enregistrez à nouveau.",
+      "termsChanged": "Une matière ou une couleur choisie vient d’être supprimée. Vérifiez la liste et enregistrez à nouveau.",
       "unexpectedError": "Impossible d’enregistrer le produit. Veuillez réessayer.",
       "required": "Ce champ est obligatoire",
       "tooLong": "{max} caractères au maximum",
@@ -182,6 +186,50 @@
       "requiredToPublish": "Un titre ukrainien est requis pour publier"
     }
   },
+  "taxonomy": {
+    "title": "Matières et couleurs",
+    "intro": "Les filtres de la boutique les affichent. Chacune a besoin de son nom ukrainien ; une langue sans nom propre affiche le nom anglais, sinon l’ukrainien.",
+    "kinds": {
+      "material": "Matières",
+      "colour": "Couleurs"
+    },
+    "add": {
+      "material": "Ajouter une matière",
+      "colour": "Ajouter une couleur"
+    },
+    "empty": {
+      "material": "Aucune matière pour l’instant.",
+      "colour": "Aucune couleur pour l’instant."
+    },
+    "nameIn": "Nom ({language})",
+    "required": "(obligatoire)",
+    "otherLocales": "Autres langues",
+    "slug": "Dans les liens de la boutique : {slug}",
+    "usedBy": "{count, plural, =0 {Non utilisée} one {Utilisée par # produit} other {Utilisée par # produits}}",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "create": "Ajouter",
+    "saved": "Enregistré",
+    "created": "Ajouté",
+    "delete": "Supprimer",
+    "deleteTitle": "Supprimer « {name} » ?",
+    "deleteDescription": "Elle disparaît des filtres de la boutique. Cette action est irréversible.",
+    "deleteConfirm": "Supprimer",
+    "cancel": "Annuler",
+    "deleted": "« {name} » supprimé",
+    "inUseHint": "Des produits l’utilisent : décochez-la dans leurs formulaires pour la supprimer.",
+    "loadError": "Impossible de charger les listes. Veuillez réessayer.",
+    "errors": {
+      "required": "Saisissez le nom ukrainien",
+      "tooLong": "{max} caractères au maximum",
+      "notAuthorized": "Seul l’administrateur peut faire cela. Veuillez vous reconnecter.",
+      "notFound": "Cette entrée n’existe plus.",
+      "nameTaken": "Une autre entrée de cette liste porte déjà ce nom.",
+      "invalid": "Cette requête n’est pas valide.",
+      "unexpectedError": "Une erreur s’est produite. Veuillez réessayer.",
+      "inUse": "Des produits l’utilisent : décochez-la d’abord dans leurs formulaires."
+    }
+  },
   "images": {
     "hint": "JPEG, PNG ou WebP, jusqu’à {maxMb} Mo chacune. La première photo est la photo principale de la boutique. Les données de lieu et d’appareil sont supprimées à l’envoi.",
     "saveFirst": "Enregistrez d’abord le produit, puis ajoutez ses photos ici.",
@@ -192,6 +240,7 @@
     "makeMain": "Définir comme principale",
     "moveEarlier": "Avancer la photo {index}",
     "moveLater": "Reculer la photo {index}",
+    "moved": "Photo déplacée en position {position} sur {count}.",
     "altTextsOf": "Textes alternatifs de la photo {index}",
     "altHint": "Une courte description de la photo pour les lecteurs d’écran et les moteurs de recherche. Un champ vide utilise le texte qui y est affiché.",
     "altSave": "Enregistrer les textes",

@@ -2,7 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
+import { SearchForm } from "@/components/search/search-form";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { isRouteEnabled } from "@/config/routes";
 import { cn } from "@/lib/utils";
 import { MenuBarsIcon, MenuCloseIcon } from "./icons";
 import { Logo } from "./logo";
@@ -41,6 +43,11 @@ export function MobileMenu({ className, languageSwitcher, currencySwitcher, acco
           </SheetTitle>
           <span className="w-[25px]" aria-hidden />
         </div>
+        {isRouteEnabled("search") && (
+          <div className="page-container pt-2">
+            <SearchForm id="menu-search" onSubmit={close} />
+          </div>
+        )}
         <nav aria-label={t("main")} className="page-container flex grow flex-col">
           <ul className="flex grow flex-col items-center justify-evenly gap-5 py-6">
             {[...NAV_LEFT, ...NAV_RIGHT].map((item) => (

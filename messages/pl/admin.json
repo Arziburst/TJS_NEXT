@@ -30,6 +30,7 @@
     "nav": "Panel",
     "products": "Produkty",
     "newProduct": "Dodaj",
+    "attributes": "Materiały i kolory",
     "viewShop": "Sklep"
   },
   "status": {
@@ -105,6 +106,7 @@
       "making": "Wykonanie i dostępność",
       "dimensions": "Wymiary",
       "translations": "Teksty we wszystkich językach",
+      "taxonomy": "Materiały i kolory",
       "photos": "Zdjęcia",
       "publication": "Publikacja"
     },
@@ -122,6 +124,7 @@
     "heightMm": "Wysokość, mm",
     "dimensionsHint": "Opcjonalnie; w milimetrach, najwyżej jedno miejsce po przecinku.",
     "translationsHint": "Ukraiński jest wymagany do publikacji; język bez nazwy nie jest pokazywany, sklep pokazuje wtedy tekst angielski.",
+    "manageTerms": "Edytuj listy materiałów i kolorów",
     "status": "Status",
     "position": "Pozycja",
     "positionHint": "Liczba do ręcznego porządkowania; domyślnie 0.",
@@ -169,6 +172,7 @@
       "notAuthorized": "Tylko administrator może to zrobić. Zaloguj się ponownie.",
       "notFound": "Ten produkt już nie istnieje.",
       "conflict": "Inny produkt właśnie zajął ten adres lub kod. Sprawdź i zapisz ponownie.",
+      "termsChanged": "Wybrany materiał lub kolor został właśnie usunięty. Sprawdź listę i zapisz ponownie.",
       "unexpectedError": "Nie udało się zapisać produktu. Spróbuj ponownie.",
       "required": "To pole jest wymagane",
       "tooLong": "Najwyżej {max} znaków",
@@ -182,6 +186,50 @@
       "requiredToPublish": "Do publikacji potrzebna jest nazwa po ukraińsku"
     }
   },
+  "taxonomy": {
+    "title": "Materiały i kolory",
+    "intro": "Pokazują je filtry sklepu. Każdy potrzebuje nazwy ukraińskiej; język bez własnej nazwy pokazuje angielską, a jeśli jej nie ma — ukraińską.",
+    "kinds": {
+      "material": "Materiały",
+      "colour": "Kolory"
+    },
+    "add": {
+      "material": "Dodaj materiał",
+      "colour": "Dodaj kolor"
+    },
+    "empty": {
+      "material": "Nie ma jeszcze materiałów.",
+      "colour": "Nie ma jeszcze kolorów."
+    },
+    "nameIn": "Nazwa ({language})",
+    "required": "(wymagane)",
+    "otherLocales": "Inne języki",
+    "slug": "W linkach sklepu: {slug}",
+    "usedBy": "{count, plural, =0 {Nieużywany} one {Używany w # produkcie} few {Używany w # produktach} many {Używany w # produktach} other {Używany w # produktu}}",
+    "save": "Zapisz",
+    "saving": "Zapisywanie…",
+    "create": "Dodaj",
+    "saved": "Zapisano",
+    "created": "Dodano",
+    "delete": "Usuń",
+    "deleteTitle": "Usunąć „{name}”?",
+    "deleteDescription": "Zniknie z filtrów sklepu. Tej operacji nie można cofnąć.",
+    "deleteConfirm": "Usuń",
+    "cancel": "Anuluj",
+    "deleted": "Usunięto „{name}”",
+    "inUseHint": "Produkty go używają: odznacz go w ich formularzach, aby go usunąć.",
+    "loadError": "Nie udało się wczytać list. Spróbuj ponownie.",
+    "errors": {
+      "required": "Wpisz nazwę ukraińską",
+      "tooLong": "Najwyżej {max} znaków",
+      "notAuthorized": "Tylko administrator może to zrobić. Zaloguj się ponownie.",
+      "notFound": "Ten wpis już nie istnieje.",
+      "nameTaken": "Inny wpis tej listy ma już taką nazwę.",
+      "invalid": "To żądanie jest nieprawidłowe.",
+      "unexpectedError": "Coś poszło nie tak. Spróbuj ponownie.",
+      "inUse": "Produkty go używają: najpierw odznacz go w ich formularzach."
+    }
+  },
   "images": {
     "hint": "JPEG, PNG lub WebP, każde do {maxMb} MB. Pierwsze zdjęcie jest głównym zdjęciem w sklepie. Dane o miejscu i aparacie są usuwane podczas przesyłania.",
     "saveFirst": "Najpierw zapisz produkt, potem dodaj tutaj jego zdjęcia.",
@@ -192,6 +240,7 @@
     "makeMain": "Ustaw jako główne",
     "moveEarlier": "Przesuń zdjęcie {index} wcześniej",
     "moveLater": "Przesuń zdjęcie {index} później",
+    "moved": "Zdjęcie przeniesiono na pozycję {position} z {count}.",
     "altTextsOf": "Teksty alternatywne zdjęcia {index}",
     "altHint": "Krótki opis zdjęcia dla czytników ekranu i wyszukiwarek. Puste pole używa wyświetlonego w nim tekstu.",
     "altSave": "Zapisz teksty",

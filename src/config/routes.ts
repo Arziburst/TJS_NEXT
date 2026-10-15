@@ -7,6 +7,8 @@ export const routes = {
   home: { path: "/", enabled: true },
   // #15
   shop: { path: "/shop", enabled: true },
+  // #25: /search?q=…; the header's search form submits here
+  search: { path: "/search", enabled: true },
   // #16: /product/<slug>; product cards link here, the shell does not
   product: { path: "/product", enabled: true },
   // #21

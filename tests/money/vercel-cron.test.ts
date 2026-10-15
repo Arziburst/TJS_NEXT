@@ -17,6 +17,11 @@ describe("vercel.json crons", () => {
     expect(config.crons).toContainEqual({ path: "/api/cron/nova-poshta", schedule: "30 2 * * *" });
   });
 
+  it("sweeps abandoned photo uploads daily at 03:45 UTC", () => {
+    // once a day as the Hobby plan allows (up to 100 daily crons per project)
+    expect(config.crons).toContainEqual({ path: "/api/cron/staged-uploads", schedule: "45 3 * * *" });
+  });
+
   it("passes over the notifications outbox daily at 06:00 UTC", () => {
     // the morning in Kyiv (08:00 or 09:00): retries that came due overnight reach the owner and the customers then
     expect(config.crons).toContainEqual({ path: "/api/cron/notifications", schedule: "0 6 * * *" });
@@ -27,6 +32,7 @@ describe("vercel.json crons", () => {
       "/api/cron/fx-rates",
       "/api/cron/notifications",
       "/api/cron/nova-poshta",
+      "/api/cron/staged-uploads",
     ]);
   });
 

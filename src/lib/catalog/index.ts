@@ -26,7 +26,7 @@ export const PRODUCT_IMAGES_BUCKET = "product-images";
 /** Technical upper bound of one page, well below the API's max_rows. */
 export const MAX_PAGE_SIZE = 100;
 
-const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+export const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const FULFILLMENTS = ["made_to_order", "one_of_a_kind"] as const;
 const AVAILABILITIES = ["available", "reserved", "sold"] as const;
 const SORTS: readonly ProductSort[] = ["newest", "price_asc", "price_desc"];
@@ -34,7 +34,7 @@ const SORTS: readonly ProductSort[] = ["newest", "price_asc", "price_desc"];
 // The storefront reads through the anonymous client: RLS hides drafts, archived and soft-deleted products,
 // and the column grants hide the internal columns (hs_code, deleted_at, created_by, updated_by), so
 // they are neither selected nor filtered on here. The explicit status filter keeps it a storefront view for any client.
-const PRODUCT_COLUMNS = `
+export const PRODUCT_COLUMNS = `
   id, sku, fulfillment, availability, lead_time_min_days, lead_time_max_days, price_usd_text:price_usd::text, weight_g,
   length_mm, width_mm, height_mm,
   created_at, published_at,
@@ -47,7 +47,7 @@ function publicUrlFor(client: ServerSupabaseClient) {
   return (path: string) => client.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(path).data.publicUrl;
 }
 
-function mapRows(rows: ProductRow[], locale: Locale, client: ServerSupabaseClient): Product[] {
+export function mapRows(rows: ProductRow[], locale: Locale, client: ServerSupabaseClient): Product[] {
   const urlFor = publicUrlFor(client);
   return rows.map((row) => mapProduct(row, locale, urlFor)).filter((p): p is Product => p !== null);
 }
