@@ -13,5 +13,50 @@
     "success": "Bestellung erfolgreich",
     "grandTotal": "Gesamtsumme",
     "continueShopping": "Weiter einkaufen"
+  },
+  "delivery": {
+    "title": "Lieferung in der Ukraine",
+    "city": {
+      "label": "Stadt",
+      "placeholder": "Stadtnamen eingeben"
+    },
+    "search": {
+      "searching": "Suche…",
+      "typeMore": "Mindestens {min} Buchstaben eingeben",
+      "empty": "Nichts gefunden",
+      "ukrainianOnly": "Namen auf Ukrainisch eingeben",
+      "unavailable": "Die Suche ist gerade nicht verfügbar. Bitte später erneut versuchen.",
+      "clear": "Leeren",
+      "open": "Liste anzeigen"
+    },
+    "method": {
+      "label": "Wie Sie das Paket erhalten",
+      "warehouse": "In einer Filiale oder an einer Paketstation",
+      "address": "Per Kurier an die Adresse",
+      "addressUnavailable": "Nova Poshta liefert an diesem Ort nicht an Adressen"
+    },
+    "warehouse": {
+      "label": "Filiale oder Paketstation",
+      "placeholder": "Nummer oder Straße",
+      "filter": "Anzeigen",
+      "all": "Alle",
+      "branch": "Filialen",
+      "postomat": "Paketstationen",
+      "maxWeight": "bis {kg} kg"
+    },
+    "address": {
+      "street": "Straße",
+      "streetPlaceholder": "Straßennamen eingeben",
+      "house": "Hausnummer",
+      "flat": "Wohnung (optional)"
+    },
+    "quote": {
+      "label": "Lieferung mit Nova Poshta",
+      "calculating": "Wird berechnet…",
+      "estimate": "≈ {price}",
+      "note": "Eine Schätzung nach dem Tarif von Nova Poshta: Sie bezahlen die Lieferung bei Erhalt.",
+      "unavailable": "Der Preis ist gerade nicht verfügbar: Nova Poshta berechnet ihn bei Erhalt.",
+      "choose": "Wählen Sie den Lieferort, um den Preis zu sehen"
+    }
   }
 }

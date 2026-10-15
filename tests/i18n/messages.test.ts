@@ -82,6 +82,8 @@ describe("message catalogs", () => {
       page: 2,
       category: "Rings",
       url: "https://example.com/a.jpg",
+      kg: 30,
+      price: "96,45 ₴",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

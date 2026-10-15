@@ -13,5 +13,50 @@
     "success": "Commande réussie",
     "grandTotal": "Total général",
     "continueShopping": "Continuer mes achats"
+  },
+  "delivery": {
+    "title": "Livraison en Ukraine",
+    "city": {
+      "label": "Ville",
+      "placeholder": "Commencez à saisir le nom de la ville"
+    },
+    "search": {
+      "searching": "Recherche…",
+      "typeMore": "Saisissez au moins {min} lettres",
+      "empty": "Aucun résultat",
+      "ukrainianOnly": "Saisissez le nom en ukrainien",
+      "unavailable": "La recherche est indisponible pour le moment. Veuillez réessayer plus tard.",
+      "clear": "Effacer",
+      "open": "Afficher la liste"
+    },
+    "method": {
+      "label": "Comment recevoir le colis",
+      "warehouse": "En agence ou en consigne automatique",
+      "address": "Par coursier à l'adresse",
+      "addressUnavailable": "Nova Poshta ne livre pas à domicile dans cette localité"
+    },
+    "warehouse": {
+      "label": "Agence ou consigne automatique",
+      "placeholder": "Numéro ou rue",
+      "filter": "Afficher",
+      "all": "Tout",
+      "branch": "Agences",
+      "postomat": "Consignes",
+      "maxWeight": "jusqu'à {kg} kg"
+    },
+    "address": {
+      "street": "Rue",
+      "streetPlaceholder": "Commencez à saisir le nom de la rue",
+      "house": "Numéro",
+      "flat": "Appartement (facultatif)"
+    },
+    "quote": {
+      "label": "Livraison par Nova Poshta",
+      "calculating": "Calcul en cours…",
+      "estimate": "≈ {price}",
+      "note": "Une estimation selon le tarif de Nova Poshta : vous payez la livraison à la réception.",
+      "unavailable": "Le prix est indisponible pour le moment : Nova Poshta le calcule à la réception.",
+      "choose": "Choisissez le lieu de livraison pour voir le prix"
+    }
   }
 }

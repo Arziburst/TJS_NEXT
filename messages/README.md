@@ -27,7 +27,9 @@ messages/<locale>/{common,nav,home,catalog,product,cart,checkout,auth,account,ad
 Keys new in this rebuild (no legacy text): `home.meta.*`, `home.introBrand`, `errors.notFound.*`,
 `nav.localeNames.*`, `nav.currency`, `common.price.*`, and from #15 `catalog.sort.newest`,
 `catalog.newBadge`, `catalog.loadError`, `catalog.meta.*`, `catalog.pagination.*` (`catalog.shownCount`
-now bolds its numbers with `<b>`, as the legacy text did), and from #16 `product.page.*`. Legacy `{{ index }}` arguments became named ICU
+now bolds its numbers with `<b>`, as the legacy text did), from #16 `product.page.*`, and from #22
+`checkout.delivery.*` (Nova Poshta city, branch, address and price; the legacy app had no such texts beyond
+`errors.form.chooseCity` / `chooseWarehouse`). Legacy `{{ index }}` arguments became named ICU
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the
 admin enters USD).
 

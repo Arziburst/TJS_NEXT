@@ -41,3 +41,4 @@ Each line: the decision, its source, its date.
 | D30 | Lead time of made-to-order products: a number of days (range, rendered per locale) **and** an optional free-text note (machine-translated like other texts) | owner | 2026-10-15 |
 | D31 | Ukrainian name of the necklace category: «Намиста» (plural, like the other categories) | owner | 2026-10-15 |
 | D32 | Hosting plan (Vercel Hobby is non-commercial): the owner decides closer to launch (#31); Hobby until then | owner | 2026-10-15 |
+| D35 | Nova Poshta (Ukraine): sender city Kyiv; the recipient pays delivery on receipt (the site shows an estimate); declared value = the order total | owner | 2026-10-15 |

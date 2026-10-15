@@ -63,6 +63,45 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"np_lookups": {
+                  Row: {
+                    "fetched_at": string,"key": string,"kind": string,"last_used_at": string,"params": NonNullable<Json>,"refs": (string)[]
+                  }
+                  Insert: {
+                    "fetched_at"?: string,"key": string,"kind": string,"last_used_at"?: string,"params": NonNullable<Json>,"refs": (string)[]
+                  }
+                  Update: {
+                    "fetched_at"?: string,"key"?: string,"kind"?: string,"last_used_at"?: string,"params"?: NonNullable<Json>,"refs"?: (string)[]
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"np_settlements": {
+                  Row: {
+                    "address_delivery": boolean,"area": string,"city_ref": string,"fetched_at": string,"label": string,"name": string,"ref": string,"region": string,"warehouse_count": number
+                  }
+                  Insert: {
+                    "address_delivery"?: boolean,"area"?: string,"city_ref": string,"fetched_at"?: string,"label": string,"name": string,"ref": string,"region"?: string,"warehouse_count"?: number
+                  }
+                  Update: {
+                    "address_delivery"?: boolean,"area"?: string,"city_ref"?: string,"fetched_at"?: string,"label"?: string,"name"?: string,"ref"?: string,"region"?: string,"warehouse_count"?: number
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"np_warehouses": {
+                  Row: {
+                    "city_ref": string,"fetched_at": string,"kind": string,"max_weight_kg": number | null,"name": string,"number": number,"ref": string,"settlement_ref": string,"short_address": string,"type_ref": string
+                  }
+                  Insert: {
+                    "city_ref": string,"fetched_at"?: string,"kind": string,"max_weight_kg"?: number | null,"name": string,"number": number,"ref": string,"settlement_ref": string,"short_address"?: string,"type_ref": string
+                  }
+                  Update: {
+                    "city_ref"?: string,"fetched_at"?: string,"kind"?: string,"max_weight_kg"?: number | null,"name"?: string,"number"?: number,"ref"?: string,"settlement_ref"?: string,"short_address"?: string,"type_ref"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"product_image_alts": {
                   Row: {
                     "alt": string,"image_id": string,"locale": string
@@ -163,6 +202,11 @@ isOneToOne: false
                            },
 "is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
+                           },
+"np_prune_dictionary":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "settlements": number,"warehouses": number
+            }[]
                            }
           }
           Enums: {

@@ -13,5 +13,50 @@
     "success": "Comandă finalizată cu succes",
     "grandTotal": "Total general",
     "continueShopping": "Continuă cumpărăturile"
+  },
+  "delivery": {
+    "title": "Livrare în Ucraina",
+    "city": {
+      "label": "Oraș",
+      "placeholder": "Începeți să tastați numele orașului"
+    },
+    "search": {
+      "searching": "Se caută…",
+      "typeMore": "Tastați cel puțin {min} litere",
+      "empty": "Nu s-a găsit nimic",
+      "ukrainianOnly": "Tastați numele în ucraineană",
+      "unavailable": "Căutarea nu este disponibilă acum. Încercați din nou mai târziu.",
+      "clear": "Ștergeți",
+      "open": "Afișați lista"
+    },
+    "method": {
+      "label": "Cum primiți coletul",
+      "warehouse": "La o filială sau la un locker",
+      "address": "Prin curier la adresă",
+      "addressUnavailable": "Nova Poshta nu livrează la adresă în această localitate"
+    },
+    "warehouse": {
+      "label": "Filială sau locker",
+      "placeholder": "Număr sau stradă",
+      "filter": "Afișați",
+      "all": "Toate",
+      "branch": "Filiale",
+      "postomat": "Lockere",
+      "maxWeight": "până la {kg} kg"
+    },
+    "address": {
+      "street": "Stradă",
+      "streetPlaceholder": "Începeți să tastați numele străzii",
+      "house": "Număr",
+      "flat": "Apartament (opțional)"
+    },
+    "quote": {
+      "label": "Livrare prin Nova Poshta",
+      "calculating": "Se calculează…",
+      "estimate": "≈ {price}",
+      "note": "O estimare după tariful Nova Poshta: plătiți livrarea la primire.",
+      "unavailable": "Prețul nu este disponibil acum: Nova Poshta îl calculează la primire.",
+      "choose": "Alegeți unde să livrăm pentru a vedea prețul"
+    }
   }
 }
