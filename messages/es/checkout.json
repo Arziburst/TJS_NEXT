@@ -59,5 +59,56 @@
       "unavailable": "El precio no está disponible ahora: Nova Poshta lo calcula al recibir el paquete.",
       "choose": "Elige dónde entregar para ver el precio"
     }
+  },
+  "internationalDelivery": {
+    "country": "País",
+    "countryPlaceholder": "Elige un país",
+    "method": "Método de envío",
+    "methods": {
+      "division": "A una oficina, taquilla o punto de recogida de Nova Post",
+      "address": "Por mensajero a la dirección"
+    },
+    "courierOnly": "Nova Post entrega en {country} por mensajero a la dirección.",
+    "settlement": "Ciudad o localidad",
+    "settlementPlaceholder": "Empieza a escribir el nombre",
+    "settlementHint": "Escribe al menos 2 letras",
+    "searching": "Buscando…",
+    "nothingFound": "No se ha encontrado nada",
+    "loadError": "No se ha podido cargar la lista. Inténtalo de nuevo más tarde.",
+    "clear": "Borrar",
+    "showList": "Mostrar la lista",
+    "division": "Lugar de recogida",
+    "divisionTypeFilter": "Tipo de punto",
+    "divisionTypes": {
+      "all": "Todos",
+      "PostBranch": "Oficina",
+      "Postomat": "Taquilla",
+      "PUDO": "Punto de recogida"
+    },
+    "loading": "Cargando…",
+    "noDivisions": "Aquí no hay puntos de este tipo.",
+    "address": {
+      "city": "Ciudad",
+      "postCode": "Código postal",
+      "street": "Calle",
+      "building": "Número",
+      "flat": "Piso (opcional)",
+      "submit": "Calcular el envío"
+    },
+    "quote": {
+      "label": "Envío",
+      "estimate": "Estimación",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Calculando…",
+      "error": "No se ha podido calcular el coste del envío.",
+      "tbd": "TBD",
+      "unavailable": "No disponible en este momento",
+      "deliveryDate": "Entrega prevista: {date}",
+      "estimateNote": "Tarifa fija de la zona de destino: pagas el precio real al recibirlo.",
+      "tbdNote": "La tarifa de envío de esta zona aún no se ha fijado.",
+      "carrierNote": "Una estimación según la tarifa de Nova Post para una caja pequeña (10 × 10 × 5 cm): pagas el precio real al recibirlo."
+    },
+    "customsNotice": "Es posible que el destinatario deba pagar el IVA de importación y los aranceles en la entrega."
   }
 }

@@ -19,7 +19,7 @@ function files(dir: string): string[] {
   });
 }
 
-// what only the server-side client knows: its env name, endpoint, request vocabulary and recorded fixtures
+// what only the server-side clients know: their env names, endpoints, request vocabulary and recorded fixtures
 const FORBIDDEN = [
   "NOVA_POSHTA_API_KEY",
   "NOVA_POSHTA_FIXTURES",
@@ -29,6 +29,14 @@ const FORBIDDEN = [
   "InternetDocument",
   "TypeOfWarehouseRef",
   "recordedAt",
+  // Nova Post international (#23)
+  "NOVA_POST_API_KEY",
+  "NOVA_POST_API_URL",
+  "api.novapost.com",
+  "api-stage.novapost",
+  "clients/authorization",
+  "shipments/calculations",
+  "e2e-fixture-key",
 ];
 
 describe.skipIf(!built)("the client bundle of the production build", () => {
@@ -38,15 +46,17 @@ describe.skipIf(!built)("the client bundle of the production build", () => {
   it("contains the delivery UI, so the scan covers it", () => {
     // a marker of src/components/delivery (data-slot), shipped to the browser with the components
     expect(contents.some(({ text }) => text.includes("delivery-city-combobox"))).toBe(true);
+    // ... and of src/components/delivery/nova-post
+    expect(contents.some(({ text }) => text.includes("international-delivery"))).toBe(true);
   });
 
   it.each(FORBIDDEN)("does not contain %s", (needle) => {
     expect(contents.filter(({ text }) => text.includes(needle)).map(({ path }) => path)).toEqual([]);
   });
 
-  it("does not contain the configured key", () => {
+  it.each(["NOVA_POSHTA_API_KEY", "NOVA_POST_API_KEY"])("does not contain the configured %s", (name) => {
     if (existsSync(".env.local")) process.loadEnvFile(".env.local");
-    const key = process.env.NOVA_POSHTA_API_KEY;
+    const key = process.env[name];
     // CI has no key: the names above are what can leak there
     if (!key) return;
     expect(contents.filter(({ text }) => text.includes(key)).map(({ path }) => path)).toEqual([]);

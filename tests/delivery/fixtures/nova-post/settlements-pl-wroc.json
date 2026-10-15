@@ -1,0 +1,68 @@
+{
+  "current_page": 1,
+  "last_page": 1,
+  "per_page": 20,
+  "total": 3,
+  "from": null,
+  "to": null,
+  "items": [
+    {
+      "id": 26061,
+      "name": "Wrocław",
+      "country": { "name": "Poland", "code": "PL" },
+      "region": {
+        "id": 344,
+        "name": "Wrocław County",
+        "parent": { "id": 2, "name": "Lower Silesian voivodeship" }
+      },
+      "latitude": 51.1079,
+      "longitude": 17.0385,
+      "postCode1": "50-001",
+      "postCode2": "54-612",
+      "alternativeNames": ["Wroclaw", "Breslau"],
+      "externalId": null,
+      "boost": 100,
+      "prohibitedIssuance": false,
+      "prohibitedSending": false,
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null
+    },
+    {
+      "id": 26188,
+      "name": "Wrocki",
+      "country": { "name": "Poland", "code": "PL" },
+      "region": null,
+      "latitude": 53.0402,
+      "longitude": 19.1931,
+      "postCode1": "87-300",
+      "postCode2": null,
+      "alternativeNames": [],
+      "externalId": null,
+      "boost": 0,
+      "prohibitedIssuance": null,
+      "prohibitedSending": null,
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null
+    },
+    {
+      "id": 26190,
+      "name": "Wrociszew",
+      "country": { "name": "Poland", "code": "PL" },
+      "region": { "id": 511, "name": "Grójec County", "parent": null },
+      "latitude": 51.7651,
+      "longitude": 20.9142,
+      "postCode1": "05-660",
+      "postCode2": null,
+      "alternativeNames": [],
+      "externalId": null,
+      "boost": 0,
+      "prohibitedIssuance": true,
+      "prohibitedSending": false,
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null
+    }
+  ]
+}

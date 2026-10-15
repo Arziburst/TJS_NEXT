@@ -1,0 +1,79 @@
+{
+  "scheduledDeliveryDate": "2026-10-22T09:00:00.000000Z",
+  "sender": {
+    "countryCode": "UA",
+    "settlementId": null,
+    "divisionId": null
+  },
+  "recipient": {
+    "countryCode": "DE",
+    "settlementId": null,
+    "divisionId": null
+  },
+  "services": [
+    {
+      "shipmentId": null,
+      "shipmentParcelRowNumber": null,
+      "serviceId": "5637144595",
+      "serviceType": "Delivery",
+      "serviceName": "Delivery",
+      "serviceCode": "Delivery",
+      "amount": 1,
+      "contractNumber": null,
+      "payerType": "Sender",
+      "paymentStatus": "NeedPay",
+      "divisionId": null,
+      "price": 11.4,
+      "discount": 0,
+      "cost": 11.4,
+      "user": "",
+      "shipmentLockVersion": 1,
+      "additionalParameters": {
+        "cod": null,
+        "date": null,
+        "from": null,
+        "to": null,
+        "string": null,
+        "fullName": null,
+        "phone": null
+      },
+      "createdAt": null,
+      "updatedAt": null,
+      "deliveryType": "fe0a07b5-a212-11eb-94e4-b8830365bd14",
+      "deliveryTypeName": "standard",
+      "currencyCode": "EUR"
+    },
+    {
+      "shipmentId": null,
+      "shipmentParcelRowNumber": 1,
+      "serviceId": "5637146077",
+      "serviceType": "Insurance",
+      "serviceName": "Insurance",
+      "serviceCode": "Insurance",
+      "amount": 1,
+      "contractNumber": null,
+      "payerType": "Sender",
+      "paymentStatus": "NeedPay",
+      "divisionId": null,
+      "price": 0.35,
+      "discount": 0,
+      "cost": 0.35,
+      "user": "",
+      "shipmentLockVersion": 1,
+      "additionalParameters": {
+        "cod": null,
+        "date": null,
+        "from": null,
+        "to": null,
+        "string": null,
+        "fullName": null,
+        "phone": null
+      },
+      "createdAt": null,
+      "updatedAt": null,
+      "deliveryType": "fe0a07b5-a212-11eb-94e4-b8830365bd14",
+      "deliveryTypeName": "standard",
+      "currencyCode": "EUR"
+    }
+  ]
+}

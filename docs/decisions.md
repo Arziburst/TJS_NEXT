@@ -46,3 +46,4 @@ Each line: the decision, its source, its date.
 | D35 | Nova Poshta (Ukraine): sender city Kyiv; the recipient pays delivery on receipt (the site shows an estimate); declared value = the order total | owner | 2026-10-15 |
 | D36 | Maximum quantity of one made-to-order product in a cart line: 10 | owner | 2026-10-15 |
 | D37 | Parcels are handed in at a Nova Poshta branch in Kyiv (sender service Warehouse). Packaging varies: delivery quotes are estimates on a small box (10 × 10 × 5 cm, 100 g added to the products' weight); the customer pays the actual price at the post office | owner | 2026-10-15 |
+| D38 | EU and Switzerland delivery is paid by the customer (Nova Post payer = recipient); the site shows an estimate, the actual price is paid on receipt, like D37 | owner | 2026-10-15 |

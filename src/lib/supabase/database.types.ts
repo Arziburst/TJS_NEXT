@@ -82,6 +82,25 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"nova_post_zone_rates": {
+                  Row: {
+                    "amount_minor": number | null,"created_at": string,"created_by": string | null,"currency": string | null,"updated_at": string,"updated_by": string | null,"zone": string
+                  }
+                  Insert: {
+                    "amount_minor"?: number | null,"created_at"?: string,"created_by"?: string | null,"currency"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"zone": string
+                  }
+                  Update: {
+                    "amount_minor"?: number | null,"created_at"?: string,"created_by"?: string | null,"currency"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"zone"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "nova_post_zone_rates_currency_fkey"
+      columns: ["currency"]
+isOneToOne: false
+      referencedRelation: "currency_settings"
+      referencedColumns: ["currency"]
+    }
+                  ]
                 },"np_lookups": {
                   Row: {
                     "fetched_at": string,"key": string,"kind": string,"last_used_at": string,"params": NonNullable<Json>,"refs": (string)[]

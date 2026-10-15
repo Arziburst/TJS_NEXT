@@ -288,6 +288,34 @@ UI pieces for the checkout are `src/components/delivery/`, shown on the dev show
   client IP, counted by `public.consume_rate_limit` like the auth actions (fails closed); the e2e tests send
   their own `x-forwarded-for` per test.
 
+## Delivery abroad: Nova Post
+
+The Nova Post international client (`src/lib/delivery/nova-post/`, #23) reads `NOVA_POST_API_KEY` and
+`NOVA_POST_API_URL` on the server at request time. Without a key (today: no contract yet) nothing is
+searched and every estimate is the zone flat rate of `nova_post_zone_rates` (TBD until an admin sets it).
+
+- **Fixture server.** `e2e/nova-post-mock.ts` answers `/clients/authorization`, `/settlements`, `/divisions`
+  and `/shipments/calculations` from `tests/delivery/fixtures/nova-post/` (shaped after the public OpenAPI
+  spec, no real traffic). Playwright starts it on `E2E_PORT + 1000` (CI: 4000) and gives the app
+  `NOVA_POST_API_KEY=e2e-fixture-key` and its URL. For a dev walk of the demo page
+  (`/<locale>/delivery-demo/nova-post`, needs `TJS_UI_KIT=true`), from Git Bash:
+
+  ```sh
+  NOVA_POST_MOCK_PORT=4023 node e2e/nova-post-mock.ts &
+  TJS_UI_KIT=true NOVA_POST_API_KEY=e2e-fixture-key NOVA_POST_API_URL=http://127.0.0.1:4023/v.1.0 npx next dev -p 3023
+  ```
+
+  Towns with points in the fixtures: Wrocław (PL), Berlin (DE), Paris (FR).
+- **Sandbox.** `NOVA_POST_API_URL=https://api-stage.novapost.com/v.1.0` with a sandbox key
+  (`POST /test-api-keys` for a phone registered in the Nova Post client portal). Never commit a key.
+- **Live calculation.** With a key, the price is asked for the D37 estimate box (10 × 10 × 5 cm, the goods'
+  weight + 100 g), declared and insured at the order total in UAH (`parcelForOrder`, D35), with the recipient as
+  the payer (D38: the customer pays the actual price on receipt); without goods of any value the flat rate stands
+  in. Every price is shown as an estimate.
+- **Rate limits.** The same per-client budget as Nova Poshta (`src/lib/delivery/rate-limit.ts`, shared): town and
+  point searches count as `search`, quotes as `quote`; over the budget the shop's "too many attempts" text
+  (`auth.errors.rateLimited`) is shown.
+
 ## Vercel
 
 The shop runs on the Vercel project `tjs-next` in the team `arzibursts-projects`, production
@@ -312,6 +340,7 @@ production deployment in the dashboard; the database is not rolled back with it.
 | `NEXT_PUBLIC_SITE_URL` | the shop's public origin for canonical and hreflang URLs; unset → `VERCEL_PROJECT_PRODUCTION_URL` |
 | `CRON_SECRET` | the cron routes; Vercel Cron sends it as `Authorization: Bearer …` |
 | `NOVA_POSHTA_API_KEY` | server only: the Nova Poshta client (optional, see Nova Poshta above) |
+| `NOVA_POST_API_KEY` | server only: Nova Post international delivery (#23); unset → zone flat rates only. `NOVA_POST_API_URL` stays unset in production |
 
 Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
 `VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`

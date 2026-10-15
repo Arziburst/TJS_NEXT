@@ -59,5 +59,56 @@
       "unavailable": "Der Preis ist gerade nicht verfügbar: Nova Poshta berechnet ihn bei Erhalt.",
       "choose": "Wählen Sie den Lieferort, um den Preis zu sehen"
     }
+  },
+  "internationalDelivery": {
+    "country": "Land",
+    "countryPlaceholder": "Land auswählen",
+    "method": "Versandart",
+    "methods": {
+      "division": "An eine Nova Post Filiale, Paketstation oder Abholstelle",
+      "address": "Per Kurier an die Adresse"
+    },
+    "courierOnly": "{country}: Nova Post liefert per Kurier an die Adresse.",
+    "settlement": "Stadt oder Ort",
+    "settlementPlaceholder": "Namen eingeben",
+    "settlementHint": "Mindestens 2 Buchstaben eingeben",
+    "searching": "Suche…",
+    "nothingFound": "Nichts gefunden",
+    "loadError": "Die Liste konnte nicht geladen werden. Bitte versuchen Sie es später erneut.",
+    "clear": "Leeren",
+    "showList": "Liste anzeigen",
+    "division": "Abholort",
+    "divisionTypeFilter": "Art des Abholorts",
+    "divisionTypes": {
+      "all": "Alle",
+      "PostBranch": "Filiale",
+      "Postomat": "Paketstation",
+      "PUDO": "Abholstelle"
+    },
+    "loading": "Wird geladen…",
+    "noDivisions": "Hier gibt es keine Abholorte dieser Art.",
+    "address": {
+      "city": "Stadt",
+      "postCode": "Postleitzahl",
+      "street": "Straße",
+      "building": "Hausnummer",
+      "flat": "Wohnung (optional)",
+      "submit": "Versand berechnen"
+    },
+    "quote": {
+      "label": "Versand",
+      "estimate": "Schätzung",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Wird berechnet…",
+      "error": "Die Versandkosten konnten nicht berechnet werden.",
+      "tbd": "TBD",
+      "unavailable": "Derzeit nicht verfügbar",
+      "deliveryDate": "Voraussichtliche Zustellung: {date}",
+      "estimateNote": "Pauschale für die Zielzone: Den tatsächlichen Preis bezahlen Sie bei Erhalt.",
+      "tbdNote": "Der Versandtarif für diese Zone steht noch nicht fest.",
+      "carrierNote": "Eine Schätzung nach dem Tarif von Nova Post für eine kleine Schachtel (10 × 10 × 5 cm): Den tatsächlichen Preis bezahlen Sie bei Erhalt."
+    },
+    "customsNotice": "Bei der Zustellung können für den Empfänger Einfuhrumsatzsteuer und Zoll anfallen."
   }
 }

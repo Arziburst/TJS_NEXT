@@ -1,0 +1,120 @@
+{
+  "current_page": 2,
+  "last_page": 2,
+  "per_page": 100,
+  "total": 4,
+  "from": 4,
+  "to": 4,
+  "items": [
+    {
+      "id": 3307,
+      "name": "Punkt Żabka Rynek",
+      "shortName": "Punkt Żabka Rynek",
+      "externalId": "00000000-0000-4000-8000-000000003307",
+      "source": "NPAX",
+      "countryCode": "PL",
+      "settlement": {
+        "id": 26061,
+        "name": "Wroclaw",
+        "region": {
+          "id": 344,
+          "name": "Wrocław County",
+          "parent": {
+            "id": 2,
+            "name": "Lower Silesian voivodeship"
+          }
+        }
+      },
+      "address": "50-101, Polska, Województwo dolnośląskie, Wrocław County, Wrocław, Rynek, 12",
+      "number": "50/PUDO-12",
+      "status": "Working",
+      "customerServiceAvailable": false,
+      "divisionCategory": "PUDO",
+      "publicPhones": [],
+      "internalPhones": [],
+      "responsiblePerson": null,
+      "partner": null,
+      "ownerDivision": null,
+      "latitude": 51.11,
+      "longitude": 17.03,
+      "distance": null,
+      "maxWeightPlaceSender": 30000,
+      "maxLengthPlaceSender": 1200,
+      "maxWidthPlaceSender": 700,
+      "maxHeightPlaceSender": 700,
+      "maxWeightPlaceRecipient": 30000,
+      "maxLengthPlaceRecipient": 1200,
+      "maxWidthPlaceRecipient": 700,
+      "maxHeightPlaceRecipient": 700,
+      "prohibitedSending": false,
+      "prohibitedIssuance": false,
+      "maxCostPlace": 999999,
+      "maxDeclaredCostPlace": 999999,
+      "workSchedule": [
+        {
+          "day": "sunday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "monday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "tuesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "wednesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "thursday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "friday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "saturday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        }
+      ],
+      "settings": [],
+      "logisticsCode": null,
+      "attributes": {},
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null,
+      "fullAddress": {
+        "country": "Poland",
+        "settlement": "Wrocław",
+        "street": "Rynek",
+        "building": "12",
+        "note": "",
+        "zipcode": "50-101"
+      }
+    }
+  ]
+}

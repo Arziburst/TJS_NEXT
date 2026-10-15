@@ -59,5 +59,56 @@
       "unavailable": "The price is not available right now: Nova Poshta calculates it on receipt.",
       "choose": "Choose where to deliver to see the price"
     }
+  },
+  "internationalDelivery": {
+    "country": "Country",
+    "countryPlaceholder": "Choose a country",
+    "method": "Delivery method",
+    "methods": {
+      "division": "To a Nova Post branch, parcel locker or pick-up point",
+      "address": "By courier to the address"
+    },
+    "courierOnly": "Nova Post delivers to {country} by courier to the address.",
+    "settlement": "City or town",
+    "settlementPlaceholder": "Start typing the name",
+    "settlementHint": "Type at least 2 letters",
+    "searching": "Searching…",
+    "nothingFound": "Nothing found",
+    "loadError": "The list could not be loaded. Please try again later.",
+    "clear": "Clear",
+    "showList": "Show the list",
+    "division": "Collection point",
+    "divisionTypeFilter": "Point type",
+    "divisionTypes": {
+      "all": "All",
+      "PostBranch": "Branch",
+      "Postomat": "Parcel locker",
+      "PUDO": "Pick-up point"
+    },
+    "loading": "Loading…",
+    "noDivisions": "There are no points of this type here.",
+    "address": {
+      "city": "City",
+      "postCode": "Postcode",
+      "street": "Street",
+      "building": "House number",
+      "flat": "Flat (optional)",
+      "submit": "Calculate delivery"
+    },
+    "quote": {
+      "label": "Delivery",
+      "estimate": "Estimate",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Calculating…",
+      "error": "The delivery cost could not be calculated.",
+      "tbd": "TBD",
+      "unavailable": "Not available at the moment",
+      "deliveryDate": "Expected delivery: {date}",
+      "estimateNote": "A flat rate for the destination zone: you pay the actual price on receipt.",
+      "tbdNote": "The delivery rate for this zone has not been set yet.",
+      "carrierNote": "An estimate by the Nova Post tariff for a small box (10 × 10 × 5 cm): you pay the actual price on receipt."
+    },
+    "customsNotice": "Import VAT and customs duty may be payable by the recipient on delivery."
   }
 }
