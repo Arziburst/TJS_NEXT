@@ -72,7 +72,13 @@
     "publishLabel": "{title} publiceren",
     "unpublishLabel": "{title} offline halen",
     "publishedToast": "{title} is gepubliceerd",
-    "unpublishedToast": "{title} is weer een concept"
+    "unpublishedToast": "{title} is weer een concept",
+    "pagination": {
+      "label": "Pagina’s",
+      "previous": "Vorige pagina",
+      "next": "Volgende pagina",
+      "page": "Pagina {page} van {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Alleen het beheer kan dit doen. Meld je opnieuw aan.",

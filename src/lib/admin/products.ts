@@ -75,8 +75,10 @@ export type AdminProduct = {
 };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-// a shop made by one person: every product fits one list
-const LIST_LIMIT = 1000;
+/** Products per page of the admin list: short enough for a phone, few photos per page. */
+export const ADMIN_PAGE_SIZE = 50;
+// below the API's max_rows (1000, supabase/config.toml)
+const READ_BATCH = 500;
 
 function imageUrl(client: ReturnType<typeof createServiceClient>, path: string): string {
   return client.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(path).data.publicUrl;
@@ -97,55 +99,88 @@ function matches(item: { sku: string | null; translations: { title: string }[] }
   );
 }
 
-/** Every product that is not deleted, newest first; search by title (any locale) or SKU. */
-export async function listAdminProducts(filters: AdminProductFilters): Promise<AdminResult<AdminProductListItem[]>> {
+export type AdminProductListPage = { items: AdminProductListItem[]; total: number; page: number; pageCount: number };
+
+/**
+ * One page of every product that is not deleted, newest first; search by title (any locale) or SKU. The
+ * light columns of all matching products are read in batches (the API answers at most 1000 rows a request),
+ * the photo only for the page shown. A page past the end shows the last one.
+ */
+export async function listAdminProducts(
+  filters: AdminProductFilters,
+  page: number,
+): Promise<AdminResult<AdminProductListPage>> {
   if (!(await getAdmin())) return { ok: false, reason: "notAuthorized" };
-  if (filters.categoryId !== undefined && !UUID.test(filters.categoryId)) return { ok: true, data: [] };
-  if (filters.status !== undefined && !STATUSES.includes(filters.status)) return { ok: true, data: [] };
+  const empty = { ok: true as const, data: { items: [], total: 0, page: 1, pageCount: 1 } };
+  if (filters.categoryId !== undefined && !UUID.test(filters.categoryId)) return empty;
+  if (filters.status !== undefined && !STATUSES.includes(filters.status)) return empty;
   try {
     const client = createServiceClient();
-    let query = client
-      .from("products")
-      .select(
-        `id, sku, category_id, status, fulfillment, availability, price_usd_text:price_usd::text, updated_at,
-         product_translations(locale, title),
-         product_images(id, storage_path, position, width, height)`,
-      )
-      .is("deleted_at", null);
-    if (filters.categoryId) query = query.eq("category_id", filters.categoryId);
-    if (filters.status) query = query.eq("status", filters.status);
-    const { data, error } = await query
-      .order("created_at", { ascending: false })
-      .order("id")
-      .order("position", { referencedTable: "product_images" })
-      .limit(1, { referencedTable: "product_images" })
-      .limit(LIST_LIMIT);
-    if (error) return { ok: false, reason: "unexpectedError" };
+    const rows = [];
+    for (let from = 0; ; from += READ_BATCH) {
+      let query = client
+        .from("products")
+        .select(
+          `id, sku, category_id, status, fulfillment, availability, price_usd_text:price_usd::text, updated_at,
+           product_translations(locale, title)`,
+        )
+        .is("deleted_at", null);
+      if (filters.categoryId) query = query.eq("category_id", filters.categoryId);
+      if (filters.status) query = query.eq("status", filters.status);
+      const { data, error } = await query
+        .order("created_at", { ascending: false })
+        .order("id")
+        .range(from, from + READ_BATCH - 1);
+      if (error) return { ok: false, reason: "unexpectedError" };
+      rows.push(...data);
+      if (data.length < READ_BATCH) break;
+    }
 
-    const query_ = filters.query?.trim();
-    const items = data
-      .map((row) => ({ row, translations: row.product_translations }))
-      .filter(({ row, translations }) => !query_ || matches({ sku: row.sku, translations }, query_))
-      .map(({ row, translations }): AdminProductListItem => {
-        const image = row.product_images[0];
-        const translated = new Set(translations.map((t) => t.locale));
-        return {
-          id: row.id,
-          sku: row.sku,
-          categoryId: row.category_id,
-          status: row.status,
-          fulfillment: row.fulfillment,
-          availability: row.availability,
-          priceUsdMinor: usdTextToMinor(row.price_usd_text),
-          title: titleFor(translations, filters.locale),
-          missingLocales: EDITOR_LOCALES.filter((l) => !translated.has(l)),
-          image: image
-            ? { id: image.id, url: imageUrl(client, image.storage_path), width: image.width, height: image.height }
-            : null,
-          updatedAt: row.updated_at,
-        };
-      });
-    return { ok: true, data: items };
+    const needle = filters.query?.trim();
+    const matching = needle
+      ? rows.filter((row) => matches({ sku: row.sku, translations: row.product_translations }, needle))
+      : rows;
+    const pageCount = Math.max(1, Math.ceil(matching.length / ADMIN_PAGE_SIZE));
+    const current = Math.min(Math.max(1, Number.isSafeInteger(page) ? page : 1), pageCount);
+    const shown = matching.slice((current - 1) * ADMIN_PAGE_SIZE, current * ADMIN_PAGE_SIZE);
+
+    const images = new Map<string, AdminImage>();
+    if (shown.length > 0) {
+      const { data, error } = await client
+        .from("product_images")
+        .select("id, product_id, storage_path, position, width, height")
+        .in("product_id", shown.map((row) => row.id))
+        .order("product_id")
+        .order("position");
+      if (error) return { ok: false, reason: "unexpectedError" };
+      for (const image of data) {
+        if (images.has(image.product_id)) continue;
+        images.set(image.product_id, {
+          id: image.id,
+          url: imageUrl(client, image.storage_path),
+          width: image.width,
+          height: image.height,
+        });
+      }
+    }
+
+    const items = shown.map((row): AdminProductListItem => {
+      const translated = new Set(row.product_translations.map((t) => t.locale));
+      return {
+        id: row.id,
+        sku: row.sku,
+        categoryId: row.category_id,
+        status: row.status,
+        fulfillment: row.fulfillment,
+        availability: row.availability,
+        priceUsdMinor: usdTextToMinor(row.price_usd_text),
+        title: titleFor(row.product_translations, filters.locale),
+        missingLocales: EDITOR_LOCALES.filter((l) => !translated.has(l)),
+        image: images.get(row.id) ?? null,
+        updatedAt: row.updated_at,
+      };
+    });
+    return { ok: true, data: { items, total: matching.length, page: current, pageCount } };
   } catch {
     return { ok: false, reason: "unexpectedError" };
   }

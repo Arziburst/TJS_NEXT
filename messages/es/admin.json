@@ -72,7 +72,13 @@
     "publishLabel": "Publicar {title}",
     "unpublishLabel": "Despublicar {title}",
     "publishedToast": "{title} está publicado",
-    "unpublishedToast": "{title} vuelve a ser un borrador"
+    "unpublishedToast": "{title} vuelve a ser un borrador",
+    "pagination": {
+      "label": "Páginas",
+      "previous": "Página anterior",
+      "next": "Página siguiente",
+      "page": "Página {page} de {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Solo la administración puede hacer esto. Vuelve a iniciar sesión.",

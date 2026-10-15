@@ -72,7 +72,13 @@
     "publishLabel": "Pubblica {title}",
     "unpublishLabel": "Ritira {title}",
     "publishedToast": "{title} è pubblicato",
-    "unpublishedToast": "{title} è di nuovo una bozza"
+    "unpublishedToast": "{title} è di nuovo una bozza",
+    "pagination": {
+      "label": "Pagine",
+      "previous": "Pagina precedente",
+      "next": "Pagina successiva",
+      "page": "Pagina {page} di {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Solo la gestione può farlo. Accedi di nuovo.",

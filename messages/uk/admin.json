@@ -72,7 +72,13 @@
     "publishLabel": "Опублікувати {title}",
     "unpublishLabel": "Зняти з публікації {title}",
     "publishedToast": "{title} опубліковано",
-    "unpublishedToast": "{title} повернено в чернетки"
+    "unpublishedToast": "{title} повернено в чернетки",
+    "pagination": {
+      "label": "Сторінки",
+      "previous": "Попередня сторінка",
+      "next": "Наступна сторінка",
+      "page": "Сторінка {page} з {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Це може зробити лише адміністратор. Увійдіть знову.",

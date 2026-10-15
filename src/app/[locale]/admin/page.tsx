@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AdminPending, AdminShell } from "@/components/admin/admin-shell";
 import { ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "@/components/admin/paths";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import { ProductList } from "@/components/admin/product-list";
 import { inputClass, labelClass, selectClass } from "@/components/admin/styles";
 import { buttonVariants } from "@/components/ui/button";
@@ -52,7 +53,7 @@ async function AdminProducts({ params, searchParams }: PageProps<"/[locale]/admi
     getTranslations("admin.list"),
     getTranslations("admin"),
     getCachedCategories(locale),
-    listAdminProducts({ locale, ...filters }),
+    listAdminProducts({ locale, ...filters }, Number(single(query.page) ?? "1")),
   ]);
   const categoryList = categories.ok ? categories.data : [];
   const filtered = filters.query !== undefined || filters.categoryId !== undefined || filters.status !== undefined;
@@ -65,7 +66,7 @@ async function AdminProducts({ params, searchParams }: PageProps<"/[locale]/admi
             <h1 className="text-xl font-bold tracking-[0.2em] uppercase sb:text-2xl">{t("title")}</h1>
             {products.ok && (
               <p className="font-input text-sm" role="status">
-                {t("count", { count: products.data.length })}
+                {t("count", { count: products.data.total })}
               </p>
             )}
           </div>
@@ -139,10 +140,13 @@ async function AdminProducts({ params, searchParams }: PageProps<"/[locale]/admi
           <p role="alert" className="border-2 border-destructive p-3 font-input text-sm">
             {t("loadError")}
           </p>
-        ) : products.data.length === 0 ? (
+        ) : products.data.total === 0 ? (
           <p className="font-input text-sm">{filtered ? t("noMatch") : t("empty")}</p>
         ) : (
-          <ProductList items={products.data} categories={categoryList} />
+          <>
+            <ProductList items={products.data.items} categories={categoryList} />
+            <AdminPagination page={products.data.page} pageCount={products.data.pageCount} filters={filters} />
+          </>
         )}
       </div>
     </AdminShell>

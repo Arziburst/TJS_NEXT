@@ -72,7 +72,13 @@
     "publishLabel": "Publier {title}",
     "unpublishLabel": "Dépublier {title}",
     "publishedToast": "{title} est publié",
-    "unpublishedToast": "{title} est de nouveau un brouillon"
+    "unpublishedToast": "{title} est de nouveau un brouillon",
+    "pagination": {
+      "label": "Pages",
+      "previous": "Page précédente",
+      "next": "Page suivante",
+      "page": "Page {page} sur {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Seule l’administration peut faire cela. Veuillez vous reconnecter.",

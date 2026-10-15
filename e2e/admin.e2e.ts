@@ -141,6 +141,35 @@ test.describe("admin on the local stack", () => {
     expect(errors).toEqual([]);
   });
 
+  test("the list pages a catalogue the size of the legacy import, keeping the search", async ({ page }) => {
+    // 170 drafts (the import brought 167 products): drafts never reach the storefront listings
+    const prefix = `E2E-17-PG-${randomUUID().slice(0, 6)}`;
+    const { data: category } = await db!.from("categories").select("id").eq("slug", "rings").single();
+    const rows = Array.from({ length: 170 }, (_, i) => ({
+      category_id: category!.id,
+      sku: `${prefix}-${String(i).padStart(3, "0")}`,
+      status: "draft" as const,
+      price_usd: 10,
+    }));
+    const { error } = await db!.from("products").insert(rows);
+    if (error) throw error;
+    createdSkus.push(...rows.map((r) => r.sku));
+
+    await signIn(page, await createUser("admin"), "/uk/admin");
+    await page.goto(`/uk/admin?q=${prefix}`);
+    await expect(page.getByRole("status")).toHaveText("170 товарів");
+    const cards = page.getByRole("main").getByRole("listitem");
+    await expect(cards).toHaveCount(50);
+    const pages = page.getByRole("navigation", { name: ukAdmin.list.pagination.label });
+    await expect(pages).toContainText("Сторінка 1 з 4");
+    await pages.getByRole("link", { name: ukAdmin.list.pagination.next }).click();
+    await page.waitForURL(`/uk/admin?q=${prefix}&page=2`);
+    await expect(pages).toContainText("Сторінка 2 з 4");
+    await page.goto(`/uk/admin?q=${prefix}&page=4`);
+    await expect(cards).toHaveCount(20);
+    await expect(pages.getByRole("link", { name: ukAdmin.list.pagination.next })).toHaveCount(0);
+  });
+
   test("an admin action called directly by a customer or a guest is refused", async ({ page, browser, playwright, baseURL }) => {
     const title = `Пряма дія ${randomUUID().slice(0, 8)}`;
     const product = await insertDraft(title);

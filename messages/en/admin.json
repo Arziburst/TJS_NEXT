@@ -72,7 +72,13 @@
     "publishLabel": "Publish {title}",
     "unpublishLabel": "Unpublish {title}",
     "publishedToast": "{title} is published",
-    "unpublishedToast": "{title} is back in drafts"
+    "unpublishedToast": "{title} is back in drafts",
+    "pagination": {
+      "label": "Pages",
+      "previous": "Previous page",
+      "next": "Next page",
+      "page": "Page {page} of {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Only the admin can do this. Please sign in again.",

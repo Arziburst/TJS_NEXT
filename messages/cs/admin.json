@@ -72,7 +72,13 @@
     "publishLabel": "Zveřejnit {title}",
     "unpublishLabel": "Stáhnout {title}",
     "publishedToast": "{title} je zveřejněno",
-    "unpublishedToast": "{title} je znovu koncept"
+    "unpublishedToast": "{title} je znovu koncept",
+    "pagination": {
+      "label": "Stránky",
+      "previous": "Předchozí stránka",
+      "next": "Další stránka",
+      "page": "Stránka {page} z {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "To může udělat jen správce. Přihlaste se znovu.",

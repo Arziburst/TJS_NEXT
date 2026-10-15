@@ -72,7 +72,13 @@
     "publishLabel": "Publică {title}",
     "unpublishLabel": "Retrage {title}",
     "publishedToast": "{title} este publicat",
-    "unpublishedToast": "{title} este din nou ciornă"
+    "unpublishedToast": "{title} este din nou ciornă",
+    "pagination": {
+      "label": "Pagini",
+      "previous": "Pagina anterioară",
+      "next": "Pagina următoare",
+      "page": "Pagina {page} din {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Doar administrarea poate face asta. Conectați-vă din nou.",

@@ -72,7 +72,13 @@
     "publishLabel": "Opublikuj {title}",
     "unpublishLabel": "Wycofaj {title}",
     "publishedToast": "{title} opublikowano",
-    "unpublishedToast": "{title} wrócił do szkiców"
+    "unpublishedToast": "{title} wrócił do szkiców",
+    "pagination": {
+      "label": "Strony",
+      "previous": "Poprzednia strona",
+      "next": "Następna strona",
+      "page": "Strona {page} z {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Tylko administrator może to zrobić. Zaloguj się ponownie.",

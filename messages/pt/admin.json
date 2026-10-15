@@ -72,7 +72,13 @@
     "publishLabel": "Publicar {title}",
     "unpublishLabel": "Despublicar {title}",
     "publishedToast": "{title} está publicado",
-    "unpublishedToast": "{title} voltou a ser rascunho"
+    "unpublishedToast": "{title} voltou a ser rascunho",
+    "pagination": {
+      "label": "Páginas",
+      "previous": "Página anterior",
+      "next": "Página seguinte",
+      "page": "Página {page} de {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Só a gestão pode fazer isto. Inicie sessão novamente.",

@@ -72,7 +72,13 @@
     "publishLabel": "{title} veröffentlichen",
     "unpublishLabel": "{title} zurückziehen",
     "publishedToast": "{title} ist veröffentlicht",
-    "unpublishedToast": "{title} ist wieder ein Entwurf"
+    "unpublishedToast": "{title} ist wieder ein Entwurf",
+    "pagination": {
+      "label": "Seiten",
+      "previous": "Vorherige Seite",
+      "next": "Nächste Seite",
+      "page": "Seite {page} von {count}"
+    }
   },
   "actionErrors": {
     "notAuthorized": "Nur die Verwaltung darf das. Bitte melden Sie sich erneut an.",
