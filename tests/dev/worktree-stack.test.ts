@@ -9,7 +9,12 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 // containers of two stacks, tjs-50 and tjs-150, in a state file. No real Docker is touched.
 
 const DEV = path.resolve(__dirname, "../../scripts/dev");
-const CONFIG = readFileSync(path.resolve(__dirname, "../../supabase/config.toml"), "utf8");
+// As committed: a worktree that ran supabase:start:worktree has its own project_id in the working copy.
+const PROJECT_ID_LINE = /^project_id = "[^"]*"/m;
+const CONFIG = readFileSync(path.resolve(__dirname, "../../supabase/config.toml"), "utf8").replace(
+  PROJECT_ID_LINE,
+  'project_id = "tjs-main"',
+);
 
 const FAKE_DOCKER = `
 Add-Content -LiteralPath $env:TJS_FAKE_LOG -Value ("docker " + ($args -join ' '))
@@ -36,17 +41,21 @@ function pwsh(args: string[], options: { cwd?: string; env?: NodeJS.ProcessEnv }
   return spawnSync("pwsh", ["-NoProfile", "-NonInteractive", ...args], { encoding: "utf8", ...options });
 }
 
-// pwsh wraps an error message over "      | " lines at the console width.
+// pwsh colours an error message and wraps it over "     | " lines at a width that differs per platform:
+// compare without colours, gutters and whitespace.
+const squash = (text: string) => text.replace(/\s+/g, "");
 const message = (stderr: string) =>
-  stderr
-    .split(/\r?\n/)
-    .map((line) => line.replace(/^\s*\|\s?/, "").trim())
-    .join(" ");
+  squash(
+    stderr
+      .replace(/\u001b\[[0-9;]*m/g, "")
+      .split(/\r?\n/)
+      .map((line) => line.replace(/^\s*\|/, ""))
+      .join(""),
+  );
 
 function withProjectId(projectId: string) {
-  const out = CONFIG.replace(/^project_id = "tjs-main"/m, `project_id = "${projectId}"`);
-  if (out === CONFIG && projectId !== "tjs-main") throw new Error('supabase/config.toml has no project_id = "tjs-main"');
-  return out;
+  if (!PROJECT_ID_LINE.test(CONFIG)) throw new Error("supabase/config.toml has no top-level project_id");
+  return CONFIG.replace(PROJECT_ID_LINE, `project_id = "${projectId}"`);
 }
 
 describe("Stop-WorktreeSupabase.ps1", () => {
@@ -118,8 +127,8 @@ describe("Stop-WorktreeSupabase.ps1", () => {
     const result = stop("tjs-150", "50");
 
     expect(result.status).not.toBe(0);
-    expect(message(result.stderr)).toContain("Refusing to stop tjs-50:");
-    expect(message(result.stderr)).toContain('project_id = "tjs-150"');
+    expect(message(result.stderr)).toContain(squash("Refusing to stop tjs-50:"));
+    expect(message(result.stderr)).toContain(squash('project_id = "tjs-150"'));
     expect(calls()).toEqual([]);
     expect(left()).toEqual(CONTAINERS);
   });
@@ -128,8 +137,8 @@ describe("Stop-WorktreeSupabase.ps1", () => {
     const result = stop("tjs-main", ...args);
 
     expect(result.status).not.toBe(0);
-    expect(message(result.stderr)).toContain('project_id = "tjs-main"');
-    expect(message(result.stderr)).toContain("never guessed from the folder name");
+    expect(message(result.stderr)).toContain(squash('project_id = "tjs-main"'));
+    expect(message(result.stderr)).toContain(squash("never guessed from the folder name"));
     expect(calls()).toEqual([]);
     expect(left()).toEqual(CONTAINERS);
   });
