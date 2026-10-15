@@ -241,10 +241,10 @@ Supabase Auth with email/password and Google (D12); the app side is `src/lib/aut
 - **Email confirmation** is on (`[auth.email] enable_confirmations`). Locally every email lands in the mail
   catcher (Mailpit) of the stack: `MAILPIT_URL` in `.env.local` (port base + 4), with a web UI and the API the
   e2e tests read (`/api/v1/search`, `/api/v1/message/<id>`).
-- **Email links.** The confirmation and recovery templates (`supabase/templates/`) link to
+- **Email links.** The confirmation, recovery and email change templates (`supabase/templates/`) link to
   `/<locale>/auth/confirm?token_hash=…&type=…`, built from `NEXT_PUBLIC_SITE_URL` (never from the request's
   Host). Open the link on that host: the session cookie is set there (locally `127.0.0.1:3000+n`, not
-  `localhost`). Production needs the same two templates and subjects in the dashboard (Authentication → Email
+  `localhost`). Production needs the same three templates and subjects in the dashboard (Authentication → Email
   Templates), the site URL and `https://<domain>/**` in the redirect URLs.
 - **Google.** Off in `config.toml` until the OAuth client exists. To try it locally: put `GOOGLE_CLIENT_ID` and
   `GOOGLE_CLIENT_SECRET` into `supabase/.env` (git-ignored), set `enabled = true` under
