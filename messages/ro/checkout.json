@@ -14,6 +14,65 @@
     "grandTotal": "Total general",
     "continueShopping": "Continuă cumpărăturile"
   },
+  "request": {
+    "title": "Cerere de comandă",
+    "intro": "Pe site nu se plătește nimic: trimiteți cererea, iar magazinul vă va contacta pentru a confirma comanda și a stabili plata.",
+    "loadError": "Comanda nu a putut fi încărcată. Încercați din nou mai târziu.",
+    "empty": "În coș nu există nimic ce poate fi comandat.",
+    "backToCart": "Înapoi la coș",
+    "contact": {
+      "firstName": "Prenume",
+      "lastName": "Nume (opțional)",
+      "phone": "Telefon",
+      "phoneHint": "Cu prefixul țării, de exemplu +40 712 345 678",
+      "email": "E-mail"
+    },
+    "commentHint": "Opțional",
+    "summary": {
+      "lines": "Piese din comandă",
+      "quantity": "Cantitate: {quantity}",
+      "goodsTotal": "Total pentru piese",
+      "pieces": "{count, plural, one {# piesă} few {# piese} other {# de piese}}",
+      "deliveryNote": "Livrarea nu este inclusă: o plătiți curierului la primire (vedeți estimarea în detaliile de livrare).",
+      "unavailableNote": "Piesele care nu mai pot fi comandate rămân în coș și nu fac parte din această cerere.",
+      "editCart": "Modificați coșul"
+    },
+    "submit": "Trimiteți cererea de comandă",
+    "sending": "Se trimite…",
+    "errors": {
+      "title": "Verificați formularul",
+      "firstName": "Introduceți prenumele.",
+      "lastName": "Numele este prea lung.",
+      "phone": "Introduceți numărul de telefon cu prefixul țării, de exemplu +40712345678.",
+      "email": "Introduceți o adresă de e-mail validă.",
+      "delivery": "Alegeți unde să fie livrată comanda.",
+      "deliveryAddress": "Apăsați „Calculați livrarea” pentru a confirma adresa de livrare.",
+      "comment": "Comentariul este prea lung.",
+      "rateLimited": "Prea multe cereri. Așteptați câteva minute și încercați din nou.",
+      "unavailable": "Ne pare rău, aceste piese tocmai au fost comandate de altcineva: {titles}. Nu s-a trimis nimic. Eliminați-le din coș și trimiteți din nou cererea.",
+      "cartChanged": "Între timp coșul dvs. s-a schimbat. Verificați comanda și trimiteți-o din nou.",
+      "emptyCart": "În coș nu există nimic ce poate fi comandat.",
+      "pricesUnavailable": "Prețurile nu pot fi calculate acum. Încercați din nou mai târziu.",
+      "unexpected": "Cererea nu a putut fi trimisă. Încercați din nou."
+    }
+  },
+  "done": {
+    "title": "Cererea de comandă a fost trimisă",
+    "thanks": "Vă mulțumim, {name}! Cererea dvs. de comandă a fost primită.",
+    "number": "Numărul comenzii",
+    "next": "Magazinul vă va contacta pentru a confirma comanda și a stabili plata și livrarea. Pe site nu se încasează nicio plată.",
+    "contactTitle": "Contactați magazinul",
+    "contactTbd": "Canale de contact: TBD",
+    "lines": "Piese comandate",
+    "quantity": "Cantitate: {quantity}",
+    "goodsTotal": "Total pentru piese",
+    "delivery": "Livrare (estimare)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "calculată de curier",
+    "deliveryNote": "Prețul real al livrării îl plătiți curierului la primire.",
+    "notAvailable": "Această comandă nu poate fi afișată aici.",
+    "notAvailableHint": "Confirmarea se deschide doar în browserul din care a fost trimisă cererea sau când sunteți conectat la contul din care a fost trimisă."
+  },
   "delivery": {
     "title": "Livrare în Ucraina",
     "city": {
@@ -93,7 +152,8 @@
       "street": "Stradă",
       "building": "Număr",
       "flat": "Apartament (opțional)",
-      "submit": "Calculați livrarea"
+      "submit": "Calculați livrarea",
+      "changed": "Adresa s-a schimbat: apăsați din nou „Calculați livrarea”."
     },
     "quote": {
       "label": "Livrare",

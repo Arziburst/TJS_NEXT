@@ -16,6 +16,11 @@ import { SettlementCombobox } from "./settlement-combobox";
 
 type Method = "division" | "address";
 
+// What the checkout (#24) stores on the order request; null until the destination is complete
+export type NovaPostSelection =
+  | { kind: "division"; country: DeliveryCountry; settlement: Settlement; division: Division }
+  | { kind: "address"; country: DeliveryCountry; address: AddressValue };
+
 type InternationalDeliveryProps = {
   countries: CountryOption[];
   // true when the Nova Post API is configured: branches, lockers and pick-up points can then be searched
@@ -23,8 +28,16 @@ type InternationalDeliveryProps = {
   // the order's goods (goodsOf on the server-side cart); null leaves the estimate to the zone flat rate
   goods: OrderGoods | null;
   defaultCountry?: DeliveryCountry;
+  // the country is chosen outside (the checkout's own country field): no country select here
+  fixedCountry?: DeliveryCountry;
+  onChange?: (selection: NovaPostSelection | null) => void;
+  // true while courier address fields are filled or edited but not calculated: no destination is chosen yet
+  onAddressPendingChange?: (pending: boolean) => void;
   className?: string;
 };
+
+// The courier address: nothing typed, typed but not calculated, calculated, or edited after calculating
+type AddressState = "empty" | "draft" | "calculated" | "changed";
 
 type QuoteState = { quote: QuoteView | null; failure: QuoteFailure | null };
 
@@ -33,18 +46,29 @@ type QuoteState = { quote: QuoteView | null; failure: QuoteFailure | null };
  * courier address → the estimate in the visitor's currency with the customs notice. Without the API only
  * the address is asked, and the zone's flat rate is the estimate.
  */
-export function InternationalDelivery({ countries, live, goods, defaultCountry, className }: InternationalDeliveryProps) {
+export function InternationalDelivery({
+  countries,
+  live,
+  goods,
+  defaultCountry,
+  fixedCountry,
+  onChange,
+  onAddressPendingChange,
+  className,
+}: InternationalDeliveryProps) {
   const t = useTranslations("checkout.internationalDelivery");
   const locale = useLocale();
   const methodName = useId();
-  const [country, setCountry] = useState<DeliveryCountry | null>(defaultCountry ?? null);
+  const [chosenCountry, setCountry] = useState<DeliveryCountry | null>(defaultCountry ?? null);
   const [method, setMethod] = useState<Method>("division");
   const [settlement, setSettlement] = useState<Settlement | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
   const [state, setState] = useState<QuoteState>({ quote: null, failure: null });
+  const [address, setAddress] = useState<AddressState>("empty");
   const [isPending, startTransition] = useTransition();
   const request = useRef(0);
 
+  const country = fixedCountry ?? chosenCountry;
   const divisionsOffered = live && country !== null && hasDivisions(country);
   const activeMethod: Method = divisionsOffered ? method : "address";
   const countryName = countries.find((option) => option.code === country)?.label ?? "";
@@ -52,6 +76,7 @@ export function InternationalDelivery({ countries, live, goods, defaultCountry, 
   function reset() {
     request.current++;
     setState({ quote: null, failure: null });
+    onChange?.(null);
   }
 
   function estimate(destination: Destination) {
@@ -68,22 +93,42 @@ export function InternationalDelivery({ countries, live, goods, defaultCountry, 
     });
   }
 
-  function submitAddress(address: AddressValue) {
-    estimate({ kind: "address", ...address, flat: address.flat || undefined });
+  function changeAddressState(next: AddressState) {
+    setAddress(next);
+    onAddressPendingChange?.(next === "draft" || next === "changed");
+  }
+
+  function submitAddress(value: AddressValue) {
+    changeAddressState("calculated");
+    if (country) onChange?.({ kind: "address", country, address: value });
+    estimate({ kind: "address", ...value, flat: value.flat || undefined });
+  }
+
+  // the chosen address is always the one in the fields: an edit after calculating drops it and its estimate
+  function editAddress() {
+    if (address === "calculated") {
+      reset();
+      changeAddressState("changed");
+    } else if (address === "empty") {
+      changeAddressState("draft");
+    }
   }
 
   return (
     <section className={cn("grid gap-6", className)} data-slot="international-delivery">
-      <CountrySelect
-        countries={countries}
-        value={country}
-        onChange={(next) => {
-          setCountry(next);
-          setSettlement(null);
-          setDivision(null);
-          reset();
-        }}
-      />
+      {fixedCountry ? null : (
+        <CountrySelect
+          countries={countries}
+          value={country}
+          onChange={(next) => {
+            setCountry(next);
+            setSettlement(null);
+            setDivision(null);
+            changeAddressState("empty");
+            reset();
+          }}
+        />
+      )}
 
       {country ? (
         <>
@@ -100,6 +145,7 @@ export function InternationalDelivery({ countries, live, goods, defaultCountry, 
                     onChange={() => {
                       setMethod(option);
                       setDivision(null);
+                      changeAddressState("empty");
                       reset();
                     }}
                     className="size-4 accent-primary"
@@ -131,13 +177,25 @@ export function InternationalDelivery({ countries, live, goods, defaultCountry, 
                   value={division}
                   onChange={(next) => {
                     setDivision(next);
-                    if (next) estimate({ kind: "division", divisionId: next.id });
+                    if (next) {
+                      onChange?.({ kind: "division", country, settlement, division: next });
+                      estimate({ kind: "division", divisionId: next.id });
+                    } else {
+                      reset();
+                    }
                   }}
                 />
               ) : null}
             </>
           ) : (
-            <AddressForm key={country} pending={isPending} onSubmit={submitAddress} />
+            <div className="grid gap-3">
+              <AddressForm key={country} pending={isPending} onSubmit={submitAddress} onEdit={editAddress} />
+              {address === "changed" ? (
+                <p role="status" data-slot="address-changed" className="font-input text-sm">
+                  {t("address.changed")}
+                </p>
+              ) : null}
+            </div>
           )}
 
           <div className="grid gap-3 border-t-2 border-hairline pt-4">

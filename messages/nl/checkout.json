@@ -14,6 +14,65 @@
     "grandTotal": "Eindtotaal",
     "continueShopping": "Verder winkelen"
   },
+  "request": {
+    "title": "Bestelaanvraag",
+    "intro": "Op de site wordt niets betaald: stuur de aanvraag en de winkel neemt contact met je op om de bestelling te bevestigen en de betaling af te spreken.",
+    "loadError": "De bestelling kon niet worden geladen. Probeer het later opnieuw.",
+    "empty": "Er staat niets in de winkelwagen dat besteld kan worden.",
+    "backToCart": "Terug naar de winkelwagen",
+    "contact": {
+      "firstName": "Voornaam",
+      "lastName": "Achternaam (optioneel)",
+      "phone": "Telefoon",
+      "phoneHint": "Met landcode, bijvoorbeeld +31 6 12345678",
+      "email": "E-mail"
+    },
+    "commentHint": "Optioneel",
+    "summary": {
+      "lines": "Stuks in de bestelling",
+      "quantity": "Aantal: {quantity}",
+      "goodsTotal": "Totaal voor de stuks",
+      "pieces": "{count, plural, one {# stuk} other {# stuks}}",
+      "deliveryNote": "Verzending is niet inbegrepen: je betaalt die bij ontvangst aan de vervoerder (zie de schatting bij de verzendgegevens).",
+      "unavailableNote": "Stuks die niet meer besteld kunnen worden, blijven in de winkelwagen en horen niet bij deze aanvraag.",
+      "editCart": "Winkelwagen wijzigen"
+    },
+    "submit": "Bestelaanvraag versturen",
+    "sending": "Versturen…",
+    "errors": {
+      "title": "Controleer het formulier",
+      "firstName": "Vul je voornaam in.",
+      "lastName": "De achternaam is te lang.",
+      "phone": "Vul het telefoonnummer met landcode in, bijvoorbeeld +31612345678.",
+      "email": "Vul een geldig e-mailadres in.",
+      "delivery": "Kies waar de bestelling bezorgd moet worden.",
+      "deliveryAddress": "Klik op ‘Verzending berekenen’ om het bezorgadres te bevestigen.",
+      "comment": "De opmerking is te lang.",
+      "rateLimited": "Te veel aanvragen. Wacht een paar minuten en probeer het opnieuw.",
+      "unavailable": "Helaas zijn deze stuks net door iemand anders besteld: {titles}. Er is niets verstuurd. Verwijder ze uit de winkelwagen en verstuur de aanvraag opnieuw.",
+      "cartChanged": "Je winkelwagen is intussen gewijzigd. Controleer de bestelling en verstuur hem opnieuw.",
+      "emptyCart": "Er staat niets in de winkelwagen dat besteld kan worden.",
+      "pricesUnavailable": "De prijzen kunnen nu niet worden berekend. Probeer het later opnieuw.",
+      "unexpected": "De aanvraag kon niet worden verstuurd. Probeer het opnieuw."
+    }
+  },
+  "done": {
+    "title": "Bestelaanvraag verstuurd",
+    "thanks": "Bedankt, {name}! Je bestelaanvraag is ontvangen.",
+    "number": "Bestelnummer",
+    "next": "De winkel neemt contact met je op om de bestelling te bevestigen en betaling en verzending af te spreken. Op de site wordt niet betaald.",
+    "contactTitle": "Contact met de winkel",
+    "contactTbd": "Contactkanalen: TBD",
+    "lines": "Bestelde stuks",
+    "quantity": "Aantal: {quantity}",
+    "goodsTotal": "Totaal voor de stuks",
+    "delivery": "Verzending (schatting)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "berekend door de vervoerder",
+    "deliveryNote": "De werkelijke verzendprijs betaal je bij ontvangst aan de vervoerder.",
+    "notAvailable": "Deze bestelling kan hier niet worden getoond.",
+    "notAvailableHint": "De bevestiging opent alleen in de browser waarmee de aanvraag is verstuurd, of als je bent ingelogd op het account waarmee die is verstuurd."
+  },
   "delivery": {
     "title": "Bezorging in Oekraïne",
     "city": {
@@ -93,7 +152,8 @@
       "street": "Straat",
       "building": "Huisnummer",
       "flat": "Toevoeging (optioneel)",
-      "submit": "Verzending berekenen"
+      "submit": "Verzending berekenen",
+      "changed": "Het adres is gewijzigd: klik opnieuw op ‘Verzending berekenen’."
     },
     "quote": {
       "label": "Verzending",

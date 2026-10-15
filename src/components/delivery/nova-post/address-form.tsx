@@ -22,11 +22,13 @@ type AddressFormProps = {
   defaultCity?: string;
   pending?: boolean;
   onSubmit: (address: AddressValue) => void;
+  // any field changed: an address calculated before no longer matches the fields
+  onEdit?: () => void;
   className?: string;
 };
 
 // The delivery address abroad for a courier delivery; submitting asks for the delivery estimate
-export function AddressForm({ defaultCity, pending = false, onSubmit, className }: AddressFormProps) {
+export function AddressForm({ defaultCity, pending = false, onSubmit, onEdit, className }: AddressFormProps) {
   const t = useTranslations("checkout.internationalDelivery.address");
   const id = useId();
 
@@ -38,7 +40,7 @@ export function AddressForm({ defaultCity, pending = false, onSubmit, className 
   }
 
   return (
-    <form onSubmit={submit} className={cn("grid gap-4 sm:grid-cols-2", className)} aria-busy={pending || undefined}>
+    <form onSubmit={submit} onInput={onEdit} className={cn("grid gap-4 sm:grid-cols-2", className)} aria-busy={pending || undefined}>
       {FIELDS.map((field) => (
         <div key={field.name} className={cn("grid gap-2", field.name === "street" && "sm:col-span-2")}>
           <label htmlFor={`${id}-${field.name}`} className="font-sans text-sm font-semibold">
