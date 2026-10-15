@@ -1,6 +1,7 @@
 "use server";
 
 import { updateTag } from "next/cache";
+import { z } from "zod";
 import { getAdmin } from "@/lib/auth/session";
 import { FX_CACHE_TAG } from "@/lib/money/cache";
 import { ABOUT_EDITOR_LOCALES, ABOUT_PUBLISH_LOCALE } from "@/lib/settings/about";
@@ -13,7 +14,7 @@ import { createSessionClient } from "@/lib/supabase/server";
 
 /*
  * The admin's settings writes. Each action is a public entry point: it checks the admin itself, validates its
- * input (the parsers are the only place the input is trusted after) and writes through the caller's session,
+ * input (zod for the form's shape, then the field parsers for each value) and writes through the caller's session,
  * so RLS, the column grants and the audit trigger apply; then it expires the storefront entries that show the
  * change (updateTag: the next request reads them again, no rebuild).
  */
@@ -26,10 +27,16 @@ export type SettingsFormState<Fields> =
   | { status: "error"; error?: SettingsError; fields?: Fields }
   | { status: "saved"; savedAt: number; values: Record<string, string> };
 
-function formValues(formData: FormData): Record<string, string> {
-  const values: Record<string, string> = {};
-  for (const [key, value] of formData) if (typeof value === "string") values[key] = value;
-  return values;
+// what every settings form posts: a bounded set of text fields of a bounded size; the parsers check each value
+const formShape = z
+  .record(z.string().max(64), z.string().max(RICH_TEXT_MAX_LENGTH * 2))
+  .refine((values) => Object.keys(values).length <= 100);
+
+function formValues(formData: FormData): Record<string, string> | null {
+  const values: Record<string, unknown> = {};
+  for (const [key, value] of formData) values[key] = value;
+  const parsed = formShape.safeParse(values);
+  return parsed.success ? parsed.data : null;
 }
 
 function refused(code: string | undefined): SettingsError {
@@ -41,7 +48,9 @@ export type ContactsFormState = SettingsFormState<ContactFieldErrors>;
 /** The shop's name, contact channels and the Telegram chat id of the notifications. */
 export async function saveContacts(_previous: ContactsFormState, formData: FormData): Promise<ContactsFormState> {
   if (!(await getAdmin())) return { status: "error", error: "notAuthorized" };
-  const parsed = parseContactsForm(formValues(formData));
+  const values = formValues(formData);
+  if (!values) return { status: "error", error: "unexpectedError" };
+  const parsed = parseContactsForm(values);
   if (!parsed.ok) return { status: "error", fields: parsed.fields };
 
   try {
@@ -70,7 +79,9 @@ export async function savePriceSettings(
   if (!stored) return { status: "error", error: "unexpectedError" };
 
   const decimalsOf = Object.fromEntries(stored.currencies.map((c) => [c.currency, c.decimals]));
-  const parsed = parsePriceSettingsForm(formValues(formData), decimalsOf);
+  const values = formValues(formData);
+  if (!values) return { status: "error", error: "unexpectedError" };
+  const parsed = parsePriceSettingsForm(values, decimalsOf);
   if (!parsed.ok) return { status: "error", fields: parsed.fields };
   const { markupBps, rules } = parsed.input;
 
@@ -111,6 +122,7 @@ const META_DESCRIPTION_MAX_LENGTH = 500;
 export async function saveAbout(_previous: AboutFormState, formData: FormData): Promise<AboutFormState> {
   if (!(await getAdmin())) return { status: "error", error: "notAuthorized" };
   const values = formValues(formData);
+  if (!values) return { status: "error", error: "unexpectedError" };
   const published = values.published === "published";
 
   const fields: AboutFieldErrors = {};
