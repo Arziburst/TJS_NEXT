@@ -275,6 +275,47 @@ UI pieces for the checkout are `src/components/delivery/`, shown on the dev show
   client IP, counted by `public.consume_rate_limit` like the auth actions (fails closed); the e2e tests send
   their own `x-forwarded-for` per test.
 
+## Vercel
+
+The shop runs on the Vercel project `tjs-next` in the team `arzibursts-projects`, production
+`https://tjs-next.vercel.app`, Hobby plan until the owner decides (D32). Project settings and environment
+variables are changed only in the dashboard, by the owner or the coordinator; the repository holds
+`vercel.json` (deploys and cron).
+
+**Deploys.** Only `main` deploys: every push to `main` (a squash merge) builds a production deployment from
+the Vercel Git integration. `git.deploymentEnabled` in `vercel.json` (`"**": false`, `"main": true`) turns off
+the deployments of every other branch, so task branches, `assets/<task>` and Dependabot branches build no
+preview: there is no preview database (D14), and a preview without one only renders errors. Verification
+happens on the local stacks and in CI (`docs/ci.md`). A rollback is an instant rollback to an earlier
+production deployment in the dashboard; the database is not rolled back with it.
+
+**Production environment variables** (names only; the values live in the Vercel project, never in a file):
+
+| Name | Read by |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | every Supabase client; build time (inlined) and the image optimizer's allowed host |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | the browser and server Supabase clients (public by design, RLS guards the data) |
+| `SUPABASE_SERVICE_ROLE_KEY` | server only: the auth rate limits, admin reads, the rates job |
+| `NEXT_PUBLIC_SITE_URL` | the shop's public origin for canonical and hreflang URLs; unset → `VERCEL_PROJECT_PRODUCTION_URL` |
+| `CRON_SECRET` | the cron routes; Vercel Cron sends it as `Authorization: Bearer …` |
+| `NOVA_POSHTA_API_KEY` | server only: the Nova Poshta client (optional, see Nova Poshta above) |
+
+Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
+`VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`
+and `/delivery-demo` showcases stay a 404; the fixture transport refuses under `VERCEL_ENV=production`).
+
+**Cron.** `vercel.json` `crons` calls `GET /api/cron/fx-rates` daily at `15 14 * * *` (UTC) on the
+production deployment only, with `CRON_SECRET`; without the secret the route answers 401. On Hobby, Vercel
+fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv.
+`GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), with the same
+secret. Runs and their logs: the project's *Cron Jobs* settings and the function logs.
+
+**Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`
+renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the document of every page only when
+`VERCEL_ENV` is `production`: local builds, CI and `next dev` load neither script. Both are cookieless; the
+shop sends no custom events, so no personal data leaves through them. Visits and Web Vitals: the project's
+*Analytics* and *Speed Insights* tabs.
+
 ## Windows traps
 
 - **Excluded ports.** Hyper-V / WinNAT reserve port ranges (today 46752–47251, 54320–54538 among others)
