@@ -65,6 +65,12 @@ Business values (prices, markets, locales, statuses …) are not here — they l
     (no JavaScript) and asserts the status 404, `<html lang="<locale>"`, the localized `<title>` and the
     message text in the raw HTML (see "the 404 under a locale is server-rendered …" in
     `e2e/i18n.e2e.ts`).
+- **No `"use cache"` database read in a route shell that the header links to (Next 16.4.1, found in
+  #15).** Such a read leaves the client's `/_tree` prefetch of that route open once the request carries
+  any cookie (the server answers at once; the browser never finishes the request), so pages linking to it
+  never reach network idle. Put database reads inside the page's own cached entry (request-time data in
+  its Suspense boundary, e.g. the shop listing), and keep shell texts static (category names come from
+  the messages).
 - **Route registry (`src/config/routes.ts`).** Every shop route is listed once with its locale-less
   `path` and an `enabled` flag; the shell (header nav, mobile menu, cart and account slots) links only to
   enabled routes, because the client router prefetches every link and a link to a page that does not

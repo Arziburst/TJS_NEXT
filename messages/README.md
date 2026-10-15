@@ -31,6 +31,11 @@ now bolds its numbers with `<b>`, as the legacy text did). Legacy `{{ index }}` 
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the
 admin enters USD).
 
+Category names (`catalog.categories.*`) live here until admin-editable names are decided: the shop shell
+cannot read them from the database (docs/standards.md, the `"use cache"` rule from #15). The categories
+table has its own names that differ in places — e.g. uk necklaces: messages "Намисто", database
+"Намиста" — listed for the owner to choose the source and the wording.
+
 Unreviewed machine translations must be checked by a native speaker before the locale is promoted
 (D3); business texts keep the legacy meaning and are not reworded here.
 
