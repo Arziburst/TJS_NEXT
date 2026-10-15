@@ -12,7 +12,7 @@ export const routes = {
   // #20
   cart: { path: "/cart", enabled: false },
   // #13
-  signIn: { path: "/sign-in-and-up", enabled: false },
+  signIn: { path: "/sign-in-and-up", enabled: true },
 } as const satisfies Record<string, { path: string; enabled: boolean }>;
 
 export type RouteKey = keyof typeof routes;

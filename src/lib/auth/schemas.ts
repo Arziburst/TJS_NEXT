@@ -13,6 +13,8 @@ import {
 export * from "./limits";
 
 const EMAIL_MAX_LENGTH = 254;
+// zod messages here are error codes (FieldErrorCode), not text; the form translates them
+const PASSWORDS_DONT_MATCH: FieldErrorCode = "passwordsDontMatch";
 
 const locale = z.enum(locales);
 
@@ -63,13 +65,13 @@ export const signUpSchema = z
     password: newPassword,
     passwordAgain: z.string().min(1, "required"),
   })
-  .refine((data) => data.password === data.passwordAgain, { path: ["passwordAgain"], message: "passwordsDontMatch" });
+  .refine((data) => data.password === data.passwordAgain, { path: ["passwordAgain"], message: PASSWORDS_DONT_MATCH });
 
 export const forgotPasswordSchema = z.object({ locale, email });
 
 export const updatePasswordSchema = z
   .object({ locale, password: newPassword, passwordAgain: z.string().min(1, "required") })
-  .refine((data) => data.password === data.passwordAgain, { path: ["passwordAgain"], message: "passwordsDontMatch" });
+  .refine((data) => data.password === data.passwordAgain, { path: ["passwordAgain"], message: PASSWORDS_DONT_MATCH });
 
 export const localeOnlySchema = z.object({ locale, next: nextPath });
 

@@ -29,14 +29,11 @@ const LINK_ERRORS = ["linkInvalid", "oauthFailed"] as const;
 
 // Signed-in visitors have nothing to do here (legacy: the page belonged to guests only).
 async function GuestOnly({ searchParams }: Pick<PageProps<"/[locale]/sign-in-and-up">, "searchParams">) {
-  const [locale, user, providers, params] = await Promise.all([
-    getLocale(),
-    getCurrentUser(),
-    getAuthProviders(),
-    searchParams,
-  ]);
+  const [locale, user, params] = await Promise.all([getLocale(), getCurrentUser(), searchParams]);
   const next = safeNextPath(typeof params.next === "string" ? params.next : undefined);
   if (user) redirect(next ?? `/${locale}`);
+  // after the request-time reads, so a build never caches what an unreachable Auth reported
+  const providers = await getAuthProviders();
   const linkError = LINK_ERRORS.find((code) => code === params.error);
 
   return (

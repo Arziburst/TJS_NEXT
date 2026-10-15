@@ -134,6 +134,44 @@ named by `--pr <n>`, else the PR whose head ref is the current branch or whose h
 `$MIGRATIONS_BASE_REF`, else `origin/$GITHUB_BASE_REF`, else `origin/main` (run `git fetch origin main`
 first). The remote migration history stays a manual check.
 
+## Auth
+
+Supabase Auth with email/password and Google (D12); the app side is `src/lib/auth/`, `src/proxy.ts` and
+`src/app/[locale]/(auth)/`.
+
+- **Email confirmation** is on (`[auth.email] enable_confirmations`). Locally every email lands in the mail
+  catcher (Mailpit) of the stack: `MAILPIT_URL` in `.env.local` (port base + 4), with a web UI and the API the
+  e2e tests read (`/api/v1/search`, `/api/v1/message/<id>`).
+- **Email links.** The confirmation and recovery templates (`supabase/templates/`) link to
+  `/<locale>/auth/confirm?token_hash=…&type=…`, built from `NEXT_PUBLIC_SITE_URL` (never from the request's
+  Host). Open the link on that host: the session cookie is set there (locally `127.0.0.1:3000+n`, not
+  `localhost`). Production needs the same two templates and subjects in the dashboard (Authentication → Email
+  Templates), the site URL and `https://<domain>/**` in the redirect URLs.
+- **Google.** Off in `config.toml` until the OAuth client exists. To try it locally: put `GOOGLE_CLIENT_ID` and
+  `GOOGLE_CLIENT_SECRET` into `supabase/.env` (git-ignored), set `enabled = true` under
+  `[auth.external.google]` in the worktree's `config.toml` (not committed: the start script keeps it
+  skip-worktree), add `http://127.0.0.1:<API port>/auth/v1/callback` to the OAuth client's redirect URIs and
+  restart the stack. The sign-in page shows the Google button only when `/auth/v1/settings` reports Google on.
+- **Rate limits.** Sign-in, sign-up, password reset and new password count 15 attempts per 5 minutes per
+  client IP and per email (`src/lib/auth/rate-limit-keys.ts`, the legacy rule) in `private.rate_limit_hits`
+  through `public.consume_rate_limit`, which only the service role may call: the app needs
+  `SUPABASE_SERVICE_ROLE_KEY` on the server (production too), and refuses the attempt when the counter is
+  unreachable. Locally the IP comes from `x-forwarded-for`; the e2e tests send their own per test.
+- **Admin role.** Granted only in the database (D12), never through the app or the API. As the database owner
+  (SQL editor of the project, or `psql` on the local stack):
+
+  ```sql
+  update public.profiles set role = 'admin'
+  where id = (select id from auth.users where email = 'owner@example.com');
+  -- revoke: set role = 'customer'
+  ```
+
+  The role is read from `profiles` on every request (`getCurrentUser()`), so the change applies at the
+  user's next page load. Admin pages call `requireAdmin(locale)` (a guest is sent to sign in, a customer
+  gets the not-found page); actions call `getAdmin()`. The API roles cannot read the internal catalog columns
+  (`sku`, `hs_code`, `deleted_at`, `created_by`, `updated_by`): admin screens read them on the server with the
+  service-role client after `requireAdmin()`.
+
 ## Windows traps
 
 - **Excluded ports.** Hyper-V / WinNAT reserve port ranges (today 46752–47251, 54320–54538 among others)
