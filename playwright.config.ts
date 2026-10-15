@@ -10,6 +10,7 @@ const serverScript = process.env.E2E_SERVER === "start" ? "start" : "dev";
 export default defineConfig({
   testDir: "./e2e",
   testMatch: "**/*.e2e.ts",
+  globalSetup: "./e2e/global-setup.ts",
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 1 : 0,

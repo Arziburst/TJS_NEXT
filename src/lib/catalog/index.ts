@@ -32,10 +32,10 @@ const AVAILABILITIES = ["available", "reserved", "sold"] as const;
 const SORTS: readonly ProductSort[] = ["newest", "price_asc", "price_desc"];
 
 // The storefront reads through the anonymous client: RLS hides drafts, archived and soft-deleted products,
-// and the column grants hide the internal columns (sku, hs_code, deleted_at, created_by, updated_by), so
+// and the column grants hide the internal columns (hs_code, deleted_at, created_by, updated_by), so
 // they are neither selected nor filtered on here. The explicit status filter keeps it a storefront view for any client.
 const PRODUCT_COLUMNS = `
-  id, fulfillment, availability, lead_time_days, price_usd_text:price_usd::text, weight_g,
+  id, sku, fulfillment, availability, lead_time_days, price_usd_text:price_usd::text, weight_g,
   created_at, published_at,
   category:categories!inner(id, slug),
   product_translations!inner(locale, slug, title, description, materials, care, alt_text, meta_title, meta_description, source, reviewed_at),

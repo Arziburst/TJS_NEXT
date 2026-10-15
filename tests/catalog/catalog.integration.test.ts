@@ -17,14 +17,8 @@ describe.skipIf(!stack)("catalog data layer on the local stack", async () => {
 
   const EARRINGS_1 = "a0000000-0000-4000-8000-000000000001";
   const imageIds: string[] = [];
-  // The storefront no longer exposes sku (internal column); the service role maps ids to the seed SKUs.
-  const skuById = new Map<string, string | null>();
-  const sku = (p: { id: string }) => skuById.get(p.id);
 
   beforeAll(async () => {
-    const skus = await admin.from("products").select("id, sku");
-    if (skus.error) throw skus.error;
-    for (const row of skus.data) skuById.set(row.id, row.sku);
     const { data, error } = await admin
       .from("product_images")
       .insert([
@@ -62,21 +56,21 @@ describe.skipIf(!stack)("catalog data layer on the local stack", async () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.data.total).toBe(11);
-    const skus = result.data.items.map(sku);
+    const skus = result.data.items.map((p) => p.sku);
     expect(skus[0]).toBe("TEST-001");
     expect(skus).toContain("TEST-008");
     expect(skus).not.toContain("TEST-011"); // draft
     expect(skus).not.toContain("TEST-013"); // archived
     expect(skus).not.toContain("TEST-014"); // soft-deleted
-    expect(result.data.items.find((p) => sku(p) === "TEST-008")?.availability).toBe("sold");
+    expect(result.data.items.find((p) => p.sku === "TEST-008")?.availability).toBe("sold");
   });
 
   it("filters by category, fulfillment and availability", async () => {
     const earrings = await getProducts({ locale: "en", categorySlug: "earrings" }, "newest", { page: 1, pageSize: 50 });
-    expect(earrings.ok && earrings.data.items.map(sku)).toEqual(["TEST-001", "TEST-002", "TEST-003"]);
+    expect(earrings.ok && earrings.data.items.map((p) => p.sku)).toEqual(["TEST-001", "TEST-002", "TEST-003"]);
 
     const unique = await getProducts({ locale: "en", fulfillment: "one_of_a_kind" }, "newest", { page: 1, pageSize: 50 });
-    expect(unique.ok && unique.data.items.map(sku).sort()).toEqual(["TEST-003", "TEST-005", "TEST-008", "TEST-009"]);
+    expect(unique.ok && unique.data.items.map((p) => p.sku).sort()).toEqual(["TEST-003", "TEST-005", "TEST-008", "TEST-009"]);
 
     const buyable = await getProducts({ locale: "en", availability: ["available"] }, "newest", { page: 1, pageSize: 50 });
     expect(buyable.ok && buyable.data.total).toBe(9);
@@ -87,7 +81,7 @@ describe.skipIf(!stack)("catalog data layer on the local stack", async () => {
 
   it("sorts by price in cents and paginates", async () => {
     const asc = await getProducts({ locale: "en" }, "price_asc", { page: 1, pageSize: 2 });
-    expect(asc.ok && asc.data.items.map((p) => [sku(p), p.priceUsdMinor])).toEqual([
+    expect(asc.ok && asc.data.items.map((p) => [p.sku, p.priceUsdMinor])).toEqual([
       ["TEST-010", 1690],
       ["TEST-002", 1850],
     ]);
@@ -114,13 +108,15 @@ describe.skipIf(!stack)("catalog data layer on the local stack", async () => {
     const result = await getProductBySlug("uk", "serezhky-krapli-z-koralom");
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.data.images.map((i) => [i.width, i.height, i.alt])).toEqual([
+    // the images this test inserted, in gallery order (npm run seed:images may have added others)
+    const inserted = result.data.images.filter((i) => imageIds.includes(i.id));
+    expect(inserted.map((i) => [i.width, i.height, i.alt])).toEqual([
       [800, 1000, "Перше фото"],
       [600, 600, "Сережки-краплі з коралом на бежевому тлі"],
     ]);
-    expect(result.data.images[0]?.url).toMatch(/\/storage\/v1\/object\/public\/product-images\/it\/.+\/1\.jpg$/);
+    expect(inserted[0]?.url).toMatch(/\/storage\/v1\/object\/public\/product-images\/it\/.+\/1\.jpg$/);
     expect(result.data).toMatchObject({
-      id: "a0000000-0000-4000-8000-000000000001",
+      sku: "TEST-001",
       materials: "Латунь, золотисте покриття, синтетичний корал",
       care: "Берегти від вологи; зберігати окремо",
     });

@@ -10,7 +10,7 @@ import uk from "../messages/uk/home.json" with { type: "json" };
 import ukNav from "../messages/uk/nav.json" with { type: "json" };
 import { NAV_LEFT, NAV_RIGHT } from "../src/components/layout/nav-items";
 import { routes } from "../src/config/routes";
-import { allRouteKeys, expectOnlyEnabledRouteLinks } from "./routes";
+import { shellRouteKeys, expectOnlyEnabledRouteLinks } from "./routes";
 
 const locales = ["uk", "en", "de", "fr", "es", "it", "pl", "nl", "cs", "pt", "ro"];
 
@@ -101,7 +101,7 @@ test("the shell (header, menu, footer) is localized", async ({ page }, testInfo)
   const header = page.locator("header");
   const navItems = [...NAV_LEFT, ...NAV_RIGHT];
 
-  await expectOnlyEnabledRouteLinks(header, "de", allRouteKeys);
+  await expectOnlyEnabledRouteLinks(header, "de", shellRouteKeys);
   if (routes.cart.enabled) {
     await expect(header.getByRole("link", { name: deNav.cart }).filter({ visible: true })).toBeVisible();
   }

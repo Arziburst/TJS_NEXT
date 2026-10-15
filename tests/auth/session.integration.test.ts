@@ -71,11 +71,11 @@ describe.skipIf(!stack)("session and profiles on the local stack", async () => {
 
   it("hides the internal catalog columns from the API, while the storefront columns stay readable", async () => {
     const anon = createClient<Database>(stack.url, stack.anonKey, options);
-    for (const column of ["sku", "hs_code", "deleted_at", "created_by", "updated_by"] as const) {
+    for (const column of ["hs_code", "deleted_at", "created_by", "updated_by"] as const) {
       const { error } = await anon.from("products").select(column).limit(1);
       expect(error?.code, column).toBe("42501");
     }
-    const { error, data } = await anon.from("products").select("id, price_usd, status").limit(1);
+    const { error, data } = await anon.from("products").select("id, sku, price_usd, status").limit(1);
     expect(error).toBeNull();
     expect(data?.length).toBe(1);
   });

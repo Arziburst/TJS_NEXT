@@ -1,8 +1,8 @@
--- Internal catalog columns (attribution, soft delete, SKU, HS code) are not readable through the Data API
--- roles, even on published rows; the storefront columns are.
+-- Internal catalog columns (attribution, soft delete, HS code) are not readable through the Data API roles,
+-- even on published rows; the storefront columns (the SKU among them) are.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(24);
+select plan(22);
 
 insert into auth.users (id, email) values
   ('11111111-1111-4111-8111-111111111111', 'customer-' || gen_random_uuid() || '@example.test');
@@ -17,7 +17,6 @@ insert into public.product_images (product_id, storage_path, width, height) valu
 
 create temp table hidden (stmt text) on commit drop;
 insert into hidden values
-  ($$select sku from public.products where id = 'b3000000-0000-4000-8000-000000000001'$$),
   ($$select hs_code from public.products where id = 'b3000000-0000-4000-8000-000000000001'$$),
   ($$select deleted_at from public.products where id = 'b3000000-0000-4000-8000-000000000001'$$),
   ($$select created_by, updated_by from public.products where id = 'b3000000-0000-4000-8000-000000000001'$$),
@@ -31,7 +30,7 @@ grant select on hidden to anon, authenticated;
 -- What the storefront data layer selects (src/lib/catalog/index.ts), without the internal columns.
 create temp table visible (stmt text) on commit drop;
 insert into visible values
-  ($$select id, category_id, status, fulfillment, availability, lead_time_days, price_usd, weight_g, position, published_at, created_at, updated_at
+  ($$select id, category_id, sku, status, fulfillment, availability, lead_time_days, price_usd, weight_g, position, published_at, created_at, updated_at
      from public.products where id = 'b3000000-0000-4000-8000-000000000001'$$),
   ($$select id, slug, position from public.categories where id = 'c3000000-0000-4000-8000-000000000001'$$),
   ($$select product_id, locale, slug, title, description, materials, care, alt_text, meta_title, meta_description, source, reviewed_at

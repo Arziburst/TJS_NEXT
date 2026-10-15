@@ -11,5 +11,23 @@
     "alt": "Imaginea produsului",
     "numberedAlt": "Imaginea {index} a produsului",
     "byUrlAlt": "Imagine după URL {url}"
+  },
+  "page": {
+    "materials": "Materiale",
+    "care": "Îngrijire",
+    "weight": "Greutate",
+    "leadTime": "Realizat în {days, plural, one {# zi} few {# zile} other {# de zile}}",
+    "oneOfAKind": "Piesă unică",
+    "reserved": "Rezervat",
+    "sold": "Vândut",
+    "addToCartFailed": "Produsul nu a putut fi adăugat în coș. Încercați din nou.",
+    "untranslated": "Acest produs nu este încă tradus în limba dvs.; este afișat în engleză.",
+    "gallery": {
+      "label": "Fotografiile produsului",
+      "previous": "Fotografia anterioară",
+      "next": "Fotografia următoare",
+      "goTo": "Afișează fotografia {index} din {count}",
+      "empty": "Încă nu există fotografii"
+    }
   }
 }
