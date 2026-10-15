@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from "lucide-react";
+import { ArrowLeftIcon, ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -68,7 +68,8 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
     <AdminShell>
       <div className="grid gap-5">
         <header className="grid gap-2">
-          <Link href={ADMIN_PRODUCTS_HREF} className="justify-self-start font-sans text-sm underline-offset-4 hover:text-accent-text hover:underline">
+          <Link href={ADMIN_PRODUCTS_HREF} className="inline-flex min-h-11 items-center gap-1.5 justify-self-start font-sans text-sm underline-offset-4 hover:text-accent-text hover:underline">
+            <ArrowLeftIcon aria-hidden className="size-4" />
             {t("back")}
           </Link>
           <h1 className="text-xl font-bold tracking-[0.2em] break-words uppercase sb:text-2xl">{title ?? t("editTitle")}</h1>
