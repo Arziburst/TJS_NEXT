@@ -84,6 +84,48 @@ function Get-TjsConfigProjectId {
     throw "No top-level project_id in $ConfigPath."
 }
 
+function Resolve-TjsConfiguredProjectId {
+    # The stack this worktree owns: the project_id that supabase:start:worktree wrote into its
+    # supabase/config.toml. Never derived from the folder name: a verifier in "15-verify" started as tjs-115
+    # would resolve tjs-15, another session's stack. An explicit number must match the config.
+    param([int]$IssueNumber = 0, [Parameter(Mandatory)][string]$RepoRoot)
+    if ($IssueNumber -lt 0) { throw "Task number must be 1 or more, got $IssueNumber." }
+    $configPath = Join-Path $RepoRoot 'supabase/config.toml'
+    if (-not (Test-Path -LiteralPath $configPath)) {
+        throw "Refusing: $configPath does not exist, so this checkout has no stack of its own. Nothing was stopped."
+    }
+    $configured = Get-TjsConfigProjectId -ConfigPath $configPath
+    if ($configured -notmatch '^tjs-\d+$') {
+        throw "Refusing: $configPath has project_id = `"$configured`", not a stack tjs-<n> written by npm run supabase:start:worktree. Nothing was stopped; the stack is never guessed from the folder name. A stack this worktree started before its config.toml was restored is stopped by hand (docs/dev-environment.md, Cleanup)."
+    }
+    if ($IssueNumber -gt 0 -and "tjs-$IssueNumber" -ne $configured) {
+        throw "Refusing to stop tjs-${IssueNumber}: this worktree's supabase/config.toml has project_id = `"$configured`", so tjs-$IssueNumber is not its stack (it may be another session's). Nothing was stopped. Run it without a number, or with $($configured -replace '^tjs-', '')."
+    }
+    $configured
+}
+
+function Get-TjsWorktreeStackIds {
+    # The stack ids that the existing worktrees of a repository own: each worktree's configured project_id
+    # (tjs-<n>, written by supabase:start:worktree). A worktree whose config.toml was not rewritten has no
+    # stack of its own; its folder number tjs-<n> is added only to keep such a stack, never to remove one.
+    param([Parameter(Mandatory)][string]$RepoPath)
+    $porcelain = & git -C $RepoPath worktree list --porcelain
+    if ($LASTEXITCODE -ne 0) { throw "git worktree list failed in $RepoPath." }
+    $ids = [System.Collections.Generic.SortedSet[string]]::new()
+    foreach ($line in $porcelain) {
+        if ($line -notmatch '^worktree (.+)$') { continue }
+        $path = $Matches[1]
+        if (-not (Test-Path -LiteralPath $path)) { continue }
+        $configPath = Join-Path $path 'supabase/config.toml'
+        $configured = if (Test-Path -LiteralPath $configPath) {
+            try { Get-TjsConfigProjectId -ConfigPath $configPath } catch { $null }
+        }
+        if ($configured -match '^tjs-\d+$') { [void]$ids.Add($configured); continue }
+        if ((Split-Path $path -Leaf) -match '^(\d+)(?:-|$)') { [void]$ids.Add("tjs-$([int]$Matches[1])") }
+    }
+    , $ids
+}
+
 function ConvertFrom-TjsStatusEnv {
     # The KEY="value" lines of `supabase status -o env`, as an ordered map; the values the app needs must be there.
     param([Parameter(Mandatory)][AllowEmptyCollection()][string[]]$Lines)

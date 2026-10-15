@@ -5,9 +5,11 @@ Removes per-task stacks tjs-<n> whose worktree no longer exists or that are olde
 
 .DESCRIPTION
 Looks at Docker containers and volumes named supabase_*_tjs-<n>. A stack is stale when no existing
-worktree of -RepoPath has the folder number n, or when its newest container (or volume, when no
-container is left) is older than -RetentionDays. Stale stacks are stopped and their containers,
-volumes and network removed. tjs-main and stacks of other projects are never touched.
+worktree of -RepoPath owns it, or when its newest container (or volume, when no container is left) is
+older than -RetentionDays. A worktree owns the project_id of its supabase/config.toml (written by
+npm run supabase:start:worktree), so "15-verify" started as tjs-115 keeps tjs-115; a worktree whose
+config.toml was not rewritten keeps tjs-<its folder number>. Stale stacks are stopped and their
+containers, volumes and network removed. tjs-main and stacks of other projects are never touched.
 Supports -WhatIf.
 
 .EXAMPLE
@@ -25,16 +27,9 @@ $ErrorActionPreference = 'Stop'
 
 $repo = (Resolve-Path -LiteralPath $RepoPath).Path
 
-# Task numbers of the worktrees that still exist on disk.
-$porcelain = & git -C $repo worktree list --porcelain
-if ($LASTEXITCODE -ne 0) { throw "git worktree list failed in $repo." }
-$liveNumbers = [System.Collections.Generic.HashSet[int]]::new()
-foreach ($line in $porcelain) {
-    if ($line -notmatch '^worktree (.+)$') { continue }
-    $path = $Matches[1]
-    if (-not (Test-Path -LiteralPath $path)) { continue }
-    if ((Split-Path $path -Leaf) -match '^(\d+)(?:-|$)') { [void]$liveNumbers.Add([int]$Matches[1]) }
-}
+# Stacks that existing worktrees own: each worktree's configured project_id (the folder number only for a
+# worktree whose config.toml was not rewritten).
+$liveIds = Get-TjsWorktreeStackIds -RepoPath $repo
 
 function ConvertTo-Age([string]$dockerTime) {
     # "2026-10-15 07:39:00 +0300 EEST": drop the zone abbreviation that [datetimeoffset] cannot parse.
@@ -50,7 +45,6 @@ foreach ($name in @(& docker ps -a --filter 'name=^supabase_' --format '{{.Names
 
 $removed = 0
 foreach ($id in $ids) {
-    $n = [int]($id -replace '^tjs-', '')
     $containers = @(Get-TjsStackContainers -ProjectId $id)
     $ages = if ($containers.Count -gt 0) {
         $containers | ForEach-Object { ConvertTo-Age $_.CreatedAt }
@@ -61,7 +55,7 @@ foreach ($id in $ids) {
     }
     $youngest = ($ages | Measure-Object -Property TotalDays -Minimum).Minimum
 
-    $reason = if (-not $liveNumbers.Contains($n)) { 'its worktree no longer exists' }
+    $reason = if (-not $liveIds.Contains($id)) { 'no existing worktree owns it' }
               elseif ($youngest -gt $RetentionDays) { "older than $RetentionDays days ($([math]::Round($youngest, 1)) d)" }
     if (-not $reason) { Write-Host "keep   $id"; continue }
 
