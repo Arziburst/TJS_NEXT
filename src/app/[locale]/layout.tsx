@@ -3,8 +3,11 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { locale as rootLocale } from "next/root-params";
+import { SiteShell } from "@/components/layout/site-shell";
 import { getMetadataBase } from "@/i18n/metadata";
 import { routing } from "@/i18n/routing";
+import { fontVariables } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -26,10 +29,14 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className="h-full antialiased">
+    <html lang={locale} className={cn("h-full antialiased", fontVariables)}>
       <body className="flex min-h-full flex-col">
         {/* client components only get the namespaces they use */}
-        <NextIntlClientProvider messages={{ nav: messages.nav }}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider
+          messages={{ nav: messages.nav, common: { brand: messages.common.brand, actions: messages.common.actions } }}
+        >
+          <SiteShell>{children}</SiteShell>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

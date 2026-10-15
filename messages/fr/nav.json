@@ -9,6 +9,10 @@
   "logout": "Déconnexion",
   "signInUp": "Connexion & Inscription",
   "language": "Langue",
+  "account": "Compte",
+  "openMenu": "Ouvrir le menu",
+  "closeMenu": "Fermer le menu",
+  "main": "Navigation principale",
   "localeNames": {
     "uk": "Українська",
     "en": "English",

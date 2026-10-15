@@ -9,6 +9,10 @@
   "logout": "Deconectare",
   "signInUp": "Autentificare și înregistrare",
   "language": "Limbă",
+  "account": "Cont",
+  "openMenu": "Deschide meniul",
+  "closeMenu": "Închide meniul",
+  "main": "Navigare principală",
   "localeNames": {
     "uk": "Українська",
     "en": "English",

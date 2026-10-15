@@ -10,7 +10,8 @@
     "remove": "Elimină",
     "create": "Creează",
     "edit": "Editează",
-    "goBack": "Înapoi"
+    "goBack": "Înapoi",
+    "close": "Închide"
   },
   "fields": {
     "firstName": "Prenume",
@@ -38,5 +39,10 @@
     "missionStart": "îmi iubesc munca și vreau să aduc bucurie și frumusețe în lumea noastră.",
     "motto": "Lux accesibil este deviza mea!",
     "customOrders": "Creez și bijuterii la comandă și țin mereu cont de dorințele clienților."
+  },
+  "footer": {
+    "contactsTbd": "Contacte: TBD",
+    "rights": "Trend Jewelry Store. Toate drepturile rezervate",
+    "developedBy": "Dezvoltat de <link>Arziburst*</link>"
   }
 }

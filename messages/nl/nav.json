@@ -9,6 +9,10 @@
   "logout": "Uitloggen",
   "signInUp": "Inloggen en registreren",
   "language": "Taal",
+  "account": "Account",
+  "openMenu": "Menu openen",
+  "closeMenu": "Menu sluiten",
+  "main": "Hoofdnavigatie",
   "localeNames": {
     "uk": "Українська",
     "en": "English",

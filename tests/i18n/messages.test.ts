@@ -19,7 +19,9 @@ function leaves(tree: Tree, prefix = ""): Map<string, string> {
 }
 
 function placeholders(text: string): string[] {
-  return [...text.matchAll(/\{(\w+)\}/g)].map((match) => match[1]).sort();
+  const args = [...text.matchAll(/\{(\w+)\}/g)].map((match) => `{${match[1]}}`);
+  const tags = [...text.matchAll(/<(\w+)>/g)].map((match) => `<${match[1]}>`);
+  return [...args, ...tags].sort();
 }
 
 describe("message catalogs", () => {
@@ -62,11 +64,19 @@ describe("message catalogs", () => {
       messages,
       onError: (error) => errors.push(error.message),
     });
-    const args = { min: 2, currency: "USD", shown: 12, total: 40, index: 1, url: "https://example.com/a.jpg" };
+    const args = {
+      min: 2,
+      currency: "USD",
+      shown: 12,
+      total: 40,
+      index: 1,
+      url: "https://example.com/a.jpg",
+      link: (chunks: string) => `<a>${chunks}</a>`,
+    };
 
     for (const key of leaves(messages as unknown as Tree).keys()) {
-      // keys are checked against en above; here every one is formatted at runtime
-      expect(t(key as never, args as never), `${locale}:${key}`).not.toBe(key);
+      // keys are checked against en above; here every one is formatted at runtime (markup covers rich tags)
+      expect(t.markup(key as never, args as never), `${locale}:${key}`).not.toBe(key);
     }
     expect(errors).toEqual([]);
   });

@@ -9,6 +9,10 @@
   "logout": "Odhlásit se",
   "signInUp": "Přihlášení a registrace",
   "language": "Jazyk",
+  "account": "Účet",
+  "openMenu": "Otevřít menu",
+  "closeMenu": "Zavřít menu",
+  "main": "Hlavní navigace",
   "localeNames": {
     "uk": "Українська",
     "en": "English",

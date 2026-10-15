@@ -10,7 +10,8 @@
     "remove": "Verwijderen",
     "create": "Aanmaken",
     "edit": "Bewerken",
-    "goBack": "Terug"
+    "goBack": "Terug",
+    "close": "Sluiten"
   },
   "fields": {
     "firstName": "Voornaam",
@@ -38,5 +39,10 @@
     "missionStart": "hou van mijn werk en wil vreugde en schoonheid in onze wereld brengen.",
     "motto": "Betaalbare luxe is mijn motto!",
     "customOrders": "Ik maak ook sieraden op maat en houd altijd rekening met de wensen van klanten."
+  },
+  "footer": {
+    "contactsTbd": "Contact: TBD",
+    "rights": "Trend Jewelry Store. Alle rechten voorbehouden",
+    "developedBy": "Ontwikkeld door <link>Arziburst*</link>"
   }
 }

@@ -10,7 +10,8 @@
     "remove": "Supprimer",
     "create": "Créer",
     "edit": "Modifier",
-    "goBack": "Retour"
+    "goBack": "Retour",
+    "close": "Fermer"
   },
   "fields": {
     "firstName": "Prénom",
@@ -38,5 +39,10 @@
     "missionStart": "aime mon travail et je veux apporter de la joie et de la beauté à notre monde.",
     "motto": "Le luxe abordable est ma devise !",
     "customOrders": "Je crée aussi des bijoux sur mesure, en tenant toujours compte des souhaits de mes clients."
+  },
+  "footer": {
+    "contactsTbd": "Contacts : TBD",
+    "rights": "Trend Jewelry Store. Tous droits réservés",
+    "developedBy": "Développé par <link>Arziburst*</link>"
   }
 }

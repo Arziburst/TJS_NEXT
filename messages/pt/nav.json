@@ -9,6 +9,10 @@
   "logout": "Terminar sessão",
   "signInUp": "Entrar e Registar",
   "language": "Idioma",
+  "account": "Conta",
+  "openMenu": "Abrir menu",
+  "closeMenu": "Fechar menu",
+  "main": "Navegação principal",
   "localeNames": {
     "uk": "Українська",
     "en": "English",

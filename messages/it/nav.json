@@ -9,6 +9,10 @@
   "logout": "Esci",
   "signInUp": "Accedi e registrati",
   "language": "Lingua",
+  "account": "Account",
+  "openMenu": "Apri menu",
+  "closeMenu": "Chiudi menu",
+  "main": "Navigazione principale",
   "localeNames": {
     "uk": "Українська",
     "en": "English",

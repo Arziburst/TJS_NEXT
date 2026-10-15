@@ -10,7 +10,8 @@
     "remove": "Odstranit",
     "create": "Vytvořit",
     "edit": "Upravit",
-    "goBack": "Zpět"
+    "goBack": "Zpět",
+    "close": "Zavřít"
   },
   "fields": {
     "firstName": "Jméno",
@@ -38,5 +39,10 @@
     "missionStart": "miluji svou práci a chci přinášet radost a krásu do našeho světa.",
     "motto": "Dostupný luxus je moje motto!",
     "customOrders": "Vyrábím také šperky na zakázku a vždy beru v úvahu přání zákazníků."
+  },
+  "footer": {
+    "contactsTbd": "Kontakty: TBD",
+    "rights": "Trend Jewelry Store. Všechna práva vyhrazena",
+    "developedBy": "Vytvořil <link>Arziburst*</link>"
   }
 }

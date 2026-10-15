@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { LocaleSwitcher } from "@/components/locale-switcher";
 import { Button } from "@/components/ui/button";
 import { getAlternates } from "@/i18n/metadata";
 
@@ -23,7 +22,6 @@ export default async function HomePage() {
       <Button variant="outline" disabled>
         {t("placeholder.comingSoon")}
       </Button>
-      <LocaleSwitcher />
     </main>
   );
 }
