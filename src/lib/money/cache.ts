@@ -13,7 +13,8 @@ export async function getMoneyTables(): Promise<MoneyTables | null> {
   cacheTag(FX_CACHE_TAG);
   try {
     const tables = await readMoneyTables();
-    cacheLife("days");
+    // part of the product route's shell (its JSON-LD price): no stale window, see daysNoSwr in next.config.ts
+    cacheLife("daysNoSwr");
     return tables;
   } catch (error) {
     console.error("money: rates unavailable", error);

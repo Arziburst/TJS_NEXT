@@ -192,11 +192,11 @@ describe("getProductPage", () => {
     expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
   });
 
-  it("keeps a complete page for days, tagged with its product", async () => {
+  it("keeps a complete page for a day without a stale window, tagged with its product", async () => {
     productReads();
     responses.categories = [categoryRows];
     expect(await getProductPage("de", "korallen-ohrringe")).toMatchObject({ kind: "ok", categoryName: "Ohrringe" });
-    expect(cacheLife.mock.calls).toEqual([["days"]]);
+    expect(cacheLife.mock.calls).toEqual([["daysNoSwr"]]);
     expect(cacheTag).toHaveBeenCalledWith("product:p1");
   });
 });

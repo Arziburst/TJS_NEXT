@@ -65,12 +65,22 @@ Business values (prices, markets, locales, statuses …) are not here — they l
     (no JavaScript) and asserts the status 404, `<html lang="<locale>"`, the localized `<title>` and the
     message text in the raw HTML (see "the 404 under a locale is server-rendered …" in
     `e2e/i18n.e2e.ts`).
-- **No `"use cache"` database read in a route shell that the header links to (Next 16.4.1, found in
-  #15).** Such a read leaves the client's `/_tree` prefetch of that route open once the request carries
-  any cookie (the server answers at once; the browser never finishes the request), so pages linking to it
-  never reach network idle. Put database reads inside the page's own cached entry (request-time data in
-  its Suspense boundary, e.g. the shop listing), and keep shell texts static (category names come from
-  the messages).
+- **No stale window in a prerendered route shell (Next 16.4.1, found in #15, cause found in #79).** A
+  `"use cache"` entry in a route's shell whose `cacheLife` has `expire` longer than `revalidate` (every
+  preset: `days`, `hours`, `max` …) makes `next start` send the route, its `/_tree` prefetch included,
+  with `Cache-Control: s-maxage=…, stale-while-revalidate=…`. The browser keeps that in its own HTTP cache:
+  on the next visit it answers the prefetch from there and revalidates in the background, and Chromium
+  never reports that revalidation as finished, so every page linking to the route misses network idle
+  (cookies play no part; any reload with a warm cache does it). Upstream: vercel/next.js#99726 (the fix
+  #86554 was reverted in #88457). Vercel's CDN strips the directive (`public, max-age=0,
+  must-revalidate` reaches the browser), so production was never hit; `next start` (CI e2e) is.
+  - A shell entry uses `cacheLife("daysNoSwr")` (`next.config.ts`: `expire` = `revalidate`, one day),
+    or a failure life; request-time data stays in its Suspense boundary (e.g. the shop listing), and
+    shell texts that need no data stay static (category names come from the messages).
+  - Prefetch stays on: no `prefetch={false}` against this.
+  - Check: `e2e/prefetch.e2e.ts` reloads the shop ten times and fails on any response of the page that
+    carries `stale-while-revalidate`; or `curl -sD - -o /dev/null -H "rsc: 1" -H
+    "next-router-prefetch: 1" -H "next-router-segment-prefetch: /_tree" <url>` on `next start`.
 - **A failed read is never cached as data (Next 16.4.1, found in #59).** A `"use cache"` data function
   either throws on a failed read or gives its entry `cacheLife(FAILED_READ_LIFE)`
   (`src/lib/failed-read.ts`: zero stale, revalidate and expire). That covers an *incomplete* read
