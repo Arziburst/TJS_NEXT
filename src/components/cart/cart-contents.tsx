@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { getCartView, orderableLines, type CartItem } from "@/lib/cart";
 import { maxQuantity } from "@/lib/cart/lines";
 import { cn } from "@/lib/utils";
-import { CART_PRODUCT_PREFETCH, CartItemImage } from "./cart-item-image";
+import { CartItemImage } from "./cart-item-image";
 import { CartLineControls } from "./cart-line-controls";
 import { OrderRequestLink } from "./order-request-link";
 
@@ -96,7 +96,6 @@ async function CartRow({ item }: { item: CartItem }) {
     <div className="flex gap-4 py-5 sb:gap-6">
       <Link
         href={productHref(product.slug)}
-        prefetch={CART_PRODUCT_PREFETCH}
         tabIndex={-1}
         aria-hidden
         className="shrink-0"
@@ -108,7 +107,6 @@ async function CartRow({ item }: { item: CartItem }) {
           <div className="flex min-w-0 flex-col gap-1">
             <Link
               href={productHref(product.slug)}
-              prefetch={CART_PRODUCT_PREFETCH}
               lang={lang}
               className="font-sans font-semibold break-words underline-offset-4 hover:text-accent-text hover:underline"
             >
