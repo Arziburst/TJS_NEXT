@@ -93,6 +93,9 @@ describe("message catalogs", () => {
       date: "21 October 2026",
       kg: 30,
       price: "96,45 ₴",
+      query: "coral",
+      language: "English",
+      slug: "brass",
       titles: "Coral drop earrings, Pearl ring",
       maxMb: 15,
       // a file name (admin.images) and a person's first name (checkout.done) alike

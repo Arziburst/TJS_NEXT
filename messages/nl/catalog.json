@@ -15,9 +15,42 @@
   },
   "sort": {
     "newest": "Nieuwste",
+    "relevance": "Relevantie",
     "placeholder": "Kies een filter",
     "priceAsc": "Prijs (laag naar hoog)",
     "priceDesc": "Prijs (hoog naar laag)"
+  },
+  "filters": {
+    "title": "Filters",
+    "open": "{count, plural, =0 {Filters} other {Filters (#)}}",
+    "close": "Filters sluiten",
+    "material": "Materiaal",
+    "colour": "Kleur",
+    "availability": "Beschikbaarheid",
+    "availabilityOptions": {
+      "in_stock": "Op voorraad",
+      "made_to_order": "Op bestelling"
+    },
+    "price": "Prijs, {currency}",
+    "priceMin": "Van",
+    "priceMax": "Tot",
+    "priceUnavailable": "Prijzen zijn nu niet beschikbaar, dus de prijsklasse wordt niet toegepast.",
+    "apply": "Toepassen",
+    "showResults": "Resultaten tonen",
+    "clear": "Filters wissen",
+    "noMatch": "Geen producten voldoen aan deze filters."
+  },
+  "search": {
+    "title": "Zoeken",
+    "prompt": "Typ wat je zoekt: een sieraad, een materiaal of een kleur.",
+    "found": "{count, plural, =0 {Niets gevonden voor ‘{query}’} one {# stuk gevonden voor ‘{query}’} other {# stuks gevonden voor ‘{query}’}}",
+    "noResults": "Niets gevonden voor ‘{query}’.",
+    "noResultsHint": "Controleer de spelling of probeer een ander woord.",
+    "browseShop": "Naar de winkel",
+    "meta": {
+      "title": "Zoeken",
+      "description": "Zoek de handgemaakte sieraden van TJS op naam, materiaal of kleur."
+    }
   },
   "newBadge": "Nieuw",
   "loadError": "De producten konden niet worden geladen. Probeer het later opnieuw.",

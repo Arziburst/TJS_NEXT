@@ -27,6 +27,7 @@ const db = stack
   : null;
 const createdUsers: string[] = [];
 const createdSkus: string[] = [];
+const createdTerms: string[] = [];
 
 // texts only the admin area renders: none of them may reach a guest or a customer
 const ADMIN_ONLY_TEXTS = [ukAdmin.shell.title, ukAdmin.list.searchPlaceholder, ukAdmin.form.translationsHint];
@@ -111,7 +112,74 @@ test.describe("admin on the local stack", () => {
   test.afterAll(async () => {
     // hard delete: translations go with their product
     if (createdSkus.length > 0) await db?.from("products").delete().in("sku", createdSkus.splice(0));
+    // after their products: a term in use cannot be deleted
+    if (createdTerms.length > 0) await db?.from("taxonomy_terms").delete().in("id", createdTerms.splice(0));
     for (const id of createdUsers.splice(0)) await db?.auth.admin.deleteUser(id);
+  });
+
+  test("the admin adds a material, ticks it on a product, and the shop's filter shows it (#25)", async ({ page, isMobile }) => {
+    const errors = collectErrors(page);
+    const suffix = randomUUID().slice(0, 8);
+    const ukName = `Матеріал ${suffix}`;
+    const enName = `Material ${suffix}`;
+    // a published product of its own, in uk and en
+    const sku = `E2E-25-${suffix}`;
+    createdSkus.push(sku);
+    const { data: category } = await db!.from("categories").select("id").eq("slug", "rings").single();
+    const { data: product, error } = await db!
+      .from("products")
+      .insert({ category_id: category!.id, sku, status: "published", price_usd: 15 })
+      .select("id")
+      .single();
+    if (error) throw error;
+    const translations = await db!.from("product_translations").insert([
+      { product_id: product.id, locale: "uk", slug: `e2e-25-uk-${suffix}`, title: `Каблучка ${suffix}` },
+      { product_id: product.id, locale: "en", slug: `e2e-25-en-${suffix}`, title: `Ring ${suffix}` },
+    ]);
+    if (translations.error) throw translations.error;
+
+    await signIn(page, await createUser("admin"), "/uk/admin/attributes");
+    await expect(page.getByRole("heading", { level: 1, name: ukAdmin.taxonomy.title })).toBeVisible();
+    const materials = page.getByTestId("taxonomy-material");
+    await materials.getByText(ukAdmin.taxonomy.add.material).click();
+    await materials.getByLabel(ukAdmin.taxonomy.nameIn.replace("{language}", "Українська")).first().fill(ukName);
+    await materials.getByLabel(ukAdmin.taxonomy.nameIn.replace("{language}", "English")).first().fill(enName);
+    await materials.getByRole("button", { name: ukAdmin.taxonomy.create }).first().click();
+    await expect(page.getByText(ukAdmin.taxonomy.created)).toBeVisible();
+    await expect(materials.getByText(ukName, { exact: true })).toBeVisible();
+
+    const { data: name } = await db!.from("taxonomy_term_translations").select("term_id").eq("name", ukName).single();
+    const { data: term } = await db!.from("taxonomy_terms").select("id, kind, slug").eq("id", name!.term_id).single();
+    createdTerms.push(term!.id);
+    expect(term).toMatchObject({ kind: "material", slug: `material-${suffix}` });
+
+    // ticked in the product form and saved with the product
+    await page.goto(`/uk/admin/products/${product.id}`);
+    await page.waitForLoadState("networkidle");
+    await page.getByTestId("product-terms").getByText(ukName, { exact: true }).click();
+    await page.getByRole("button", { name: ukAdmin.form.save }).click();
+    await expect(page.getByText(ukAdmin.form.saved)).toBeVisible();
+
+    // the shop lists the new material with its one product
+    await page.goto(`/en/shop?material=${term!.slug}`);
+    await expect(page.getByTestId("product-card")).toHaveCount(1);
+    await expect(page.getByTestId("product-card")).toContainText(`Ring ${suffix}`);
+    if (isMobile) {
+      await page.getByRole("button", { name: "Filters (1)" }).click();
+      await expect(page.getByTestId("sheet-filters").getByLabel(enName)).toBeChecked();
+    } else {
+      const option = page.getByTestId("desktop-filters").locator("label").filter({ hasText: enName });
+      await expect(option.getByRole("checkbox")).toBeChecked();
+      await expect(option).toContainText("1");
+    }
+
+    // in use, it cannot be deleted: the admin page says so instead of offering the button
+    await page.goto("/uk/admin/attributes");
+    await materials.getByText(ukName, { exact: true }).click();
+    const row = materials.locator("li").filter({ hasText: ukName });
+    await expect(row.getByText(ukAdmin.taxonomy.inUseHint)).toBeVisible();
+    await expect(row.getByRole("button", { name: ukAdmin.taxonomy.delete })).toHaveCount(0);
+    expect(errors).toEqual([]);
   });
 
   test("a guest is sent to sign in, a customer gets the not-found page, an admin gets the admin", async ({ page, browser, request }) => {

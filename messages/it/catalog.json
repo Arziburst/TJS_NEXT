@@ -15,9 +15,42 @@
   },
   "sort": {
     "newest": "Novità",
+    "relevance": "Pertinenza",
     "placeholder": "Seleziona un filtro",
     "priceAsc": "Prezzo (dal più basso al più alto)",
     "priceDesc": "Prezzo (dal più alto al più basso)"
+  },
+  "filters": {
+    "title": "Filtri",
+    "open": "{count, plural, =0 {Filtri} other {Filtri (#)}}",
+    "close": "Chiudi i filtri",
+    "material": "Materiale",
+    "colour": "Colore",
+    "availability": "Disponibilità",
+    "availabilityOptions": {
+      "in_stock": "Disponibile",
+      "made_to_order": "Su ordinazione"
+    },
+    "price": "Prezzo, {currency}",
+    "priceMin": "Da",
+    "priceMax": "A",
+    "priceUnavailable": "I prezzi non sono disponibili al momento, quindi la fascia di prezzo non viene applicata.",
+    "apply": "Applica",
+    "showResults": "Mostra i risultati",
+    "clear": "Cancella i filtri",
+    "noMatch": "Nessun prodotto corrisponde a questi filtri."
+  },
+  "search": {
+    "title": "Cerca",
+    "prompt": "Scrivi cosa cerchi: un gioiello, un materiale o un colore.",
+    "found": "{count, plural, =0 {Nessun risultato per «{query}»} one {# pezzo trovato per «{query}»} other {# pezzi trovati per «{query}»}}",
+    "noResults": "Nessun risultato per «{query}».",
+    "noResultsHint": "Controlla l’ortografia o prova un’altra parola.",
+    "browseShop": "Vai al negozio",
+    "meta": {
+      "title": "Cerca",
+      "description": "Cerca i gioielli fatti a mano di TJS per nome, materiale o colore."
+    }
   },
   "newBadge": "Nuovo",
   "loadError": "Impossibile caricare i prodotti. Riprova più tardi.",

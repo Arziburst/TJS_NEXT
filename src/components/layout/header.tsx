@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { CurrencySwitcherSlot } from "@/components/currency-switcher-slot";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { SearchForm } from "@/components/search/search-form";
 import { isRouteEnabled } from "@/config/routes";
 import { cn } from "@/lib/utils";
 import { AccountSlot, CartSlot, FavoritesSlot } from "./header-slots";
@@ -22,7 +23,8 @@ type HeaderProps = {
 };
 
 /*
- * Below 1024px: menu button, logo, favorites and cart. From 1024px: logo, inline nav, language and currency,
+ * Below 1024px: menu button, logo, favorites and cart (the search is in the menu). From 1024px: logo, inline
+ * nav, the search box, language and currency,
  * favorites, cart and account side by side on the nav's row (stacked, they made the header taller: #80).
  * The switch is CSS only (sb:hidden / hidden sb:flex); both variants are always in the markup.
  */
@@ -64,6 +66,7 @@ export function Header({
             ))}
           </ul>
           <div className="flex items-center gap-4">
+            {isRouteEnabled("search") && <SearchForm id="header-search" className="w-40 xl:w-56" />}
             <div data-slot="language-switcher">{languageSwitcher}</div>
             <div data-slot="currency-switcher">{currencySwitcher}</div>
           </div>

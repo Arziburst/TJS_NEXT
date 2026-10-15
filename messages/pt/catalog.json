@@ -15,9 +15,42 @@
   },
   "sort": {
     "newest": "Novidades",
+    "relevance": "Relevância",
     "placeholder": "Selecione o filtro",
     "priceAsc": "Preço (do mais baixo ao mais alto)",
     "priceDesc": "Preço (do mais alto ao mais baixo)"
+  },
+  "filters": {
+    "title": "Filtros",
+    "open": "{count, plural, =0 {Filtros} other {Filtros (#)}}",
+    "close": "Fechar os filtros",
+    "material": "Material",
+    "colour": "Cor",
+    "availability": "Disponibilidade",
+    "availabilityOptions": {
+      "in_stock": "Em stock",
+      "made_to_order": "Por encomenda"
+    },
+    "price": "Preço, {currency}",
+    "priceMin": "De",
+    "priceMax": "Até",
+    "priceUnavailable": "Os preços não estão disponíveis agora, por isso o intervalo de preços não é aplicado.",
+    "apply": "Aplicar",
+    "showResults": "Ver resultados",
+    "clear": "Limpar filtros",
+    "noMatch": "Nenhum produto corresponde a estes filtros."
+  },
+  "search": {
+    "title": "Pesquisar",
+    "prompt": "Escreva o que procura: uma peça, um material ou uma cor.",
+    "found": "{count, plural, =0 {Nada encontrado para «{query}»} one {# peça encontrada para «{query}»} other {# peças encontradas para «{query}»}}",
+    "noResults": "Nada encontrado para «{query}».",
+    "noResultsHint": "Verifique a ortografia ou experimente outra palavra.",
+    "browseShop": "Ver a loja",
+    "meta": {
+      "title": "Pesquisar",
+      "description": "Pesquise as joias feitas à mão da TJS por nome, material ou cor."
+    }
   },
   "newBadge": "Novo",
   "loadError": "Não foi possível carregar os produtos. Tente novamente mais tarde.",

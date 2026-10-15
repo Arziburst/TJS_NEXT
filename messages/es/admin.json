@@ -30,6 +30,7 @@
     "nav": "Administración",
     "products": "Productos",
     "newProduct": "Añadir",
+    "attributes": "Materiales y colores",
     "viewShop": "Tienda"
   },
   "status": {
@@ -105,6 +106,7 @@
       "making": "Elaboración y disponibilidad",
       "dimensions": "Medidas",
       "translations": "Textos en todos los idiomas",
+      "taxonomy": "Materiales y colores",
       "photos": "Fotos",
       "publication": "Publicación"
     },
@@ -122,6 +124,7 @@
     "heightMm": "Alto, mm",
     "dimensionsHint": "Opcional; en milímetros, con un decimal como máximo.",
     "translationsHint": "El ucraniano es necesario para publicar; un idioma sin título no se muestra y la tienda muestra el texto en inglés.",
+    "manageTerms": "Editar las listas de materiales y colores",
     "status": "Estado",
     "position": "Posición",
     "positionHint": "Un número para el orden manual; 0 por defecto.",
@@ -169,6 +172,7 @@
       "notAuthorized": "Solo la administración puede hacer esto. Vuelve a iniciar sesión.",
       "notFound": "Este producto ya no existe.",
       "conflict": "Otro producto acaba de tomar esta dirección o referencia. Revisa y guarda de nuevo.",
+      "termsChanged": "Un material o color elegido se acaba de eliminar. Revisa la lista y guarda de nuevo.",
       "unexpectedError": "No se pudo guardar el producto. Inténtalo de nuevo.",
       "required": "Este campo es obligatorio",
       "tooLong": "Como máximo {max} caracteres",
@@ -180,6 +184,50 @@
       "leadTimeOrder": "No puede ser menor que «Desde»",
       "titleRequired": "Introduce un título en este idioma o vacía sus otros textos",
       "requiredToPublish": "Para publicar hace falta un título en ucraniano"
+    }
+  },
+  "taxonomy": {
+    "title": "Materiales y colores",
+    "intro": "Los filtros de la tienda los muestran. Cada uno necesita su nombre en ucraniano; un idioma sin nombre propio muestra el inglés y, si no, el ucraniano.",
+    "kinds": {
+      "material": "Materiales",
+      "colour": "Colores"
+    },
+    "add": {
+      "material": "Añadir un material",
+      "colour": "Añadir un color"
+    },
+    "empty": {
+      "material": "Todavía no hay materiales.",
+      "colour": "Todavía no hay colores."
+    },
+    "nameIn": "Nombre ({language})",
+    "required": "(obligatorio)",
+    "otherLocales": "Otros idiomas",
+    "slug": "En los enlaces de la tienda: {slug}",
+    "usedBy": "{count, plural, =0 {Sin usar} one {Lo usa # producto} other {Lo usan # productos}}",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "create": "Añadir",
+    "saved": "Guardado",
+    "created": "Añadido",
+    "delete": "Eliminar",
+    "deleteTitle": "¿Eliminar «{name}»?",
+    "deleteDescription": "Desaparece de los filtros de la tienda. No se puede deshacer.",
+    "deleteConfirm": "Eliminar",
+    "cancel": "Cancelar",
+    "deleted": "«{name}» eliminado",
+    "inUseHint": "Hay productos que lo usan: desmárcalo en sus formularios para eliminarlo.",
+    "loadError": "No se pudieron cargar las listas. Inténtalo de nuevo.",
+    "errors": {
+      "required": "Introduce el nombre en ucraniano",
+      "tooLong": "Como máximo {max} caracteres",
+      "notAuthorized": "Solo el administrador puede hacer esto. Vuelve a iniciar sesión.",
+      "notFound": "Esta entrada ya no existe.",
+      "nameTaken": "Otra entrada de esta lista ya tiene este nombre.",
+      "invalid": "Esta solicitud no es válida.",
+      "unexpectedError": "Algo salió mal. Inténtalo de nuevo.",
+      "inUse": "Hay productos que lo usan: desmárcalo primero en sus formularios."
     }
   },
   "images": {

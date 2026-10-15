@@ -23,6 +23,8 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { routing, type Locale } from "@/i18n/routing";
 import { getAdminProduct, type AdminProduct } from "@/lib/admin/products";
+import { getProductTermIds, listAdminTerms } from "@/lib/admin/taxonomy";
+import { ProductTermsFields } from "@/components/admin/product-terms-fields";
 import { MAX_IMAGE_BYTES } from "@/lib/images/encode";
 import { getAdmin, requireAdmin } from "@/lib/auth/session";
 import { getCachedCategories } from "@/lib/catalog/cache";
@@ -60,10 +62,12 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
   const { locale, id } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   await requireAdmin(locale, `/${locale}${editProductHref(id)}`);
-  const [t, categories, product] = await Promise.all([
+  const [t, categories, product, terms, termIds] = await Promise.all([
     getTranslations("admin.form"),
     getCachedCategories(locale),
     getAdminProduct(id),
+    listAdminTerms(locale),
+    getProductTermIds(id),
   ]);
   if (!product.ok && product.reason === "notFound") notFound();
 
@@ -100,6 +104,14 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
             product={product.data}
             categories={categories.data.map((c) => ({ id: c.id, name: c.name }))}
             saveProduct={saveProduct}
+            taxonomy={
+              <ProductTermsFields
+                // re-sent with the photos' refresh(), so keyed like them
+                key="taxonomy"
+                terms={terms.ok && termIds.ok ? terms.data : null}
+                selected={termIds.ok ? termIds.data : []}
+              />
+            }
             photos={
               <ProductImages
                 // its actions refresh() the page; the re-sent element lands among the form's children, which React

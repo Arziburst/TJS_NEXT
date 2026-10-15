@@ -1,5 +1,8 @@
 {
   "shop": "Winkel",
+  "search": "Zoeken",
+  "searchLabel": "Zoeken in de winkel",
+  "searchPlaceholder": "Zoeken…",
   "aboutUs": "Over ons",
   "contacts": "Contact",
   "favorites": "Favorieten",

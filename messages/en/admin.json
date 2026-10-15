@@ -30,6 +30,7 @@
     "nav": "Admin",
     "products": "Products",
     "newProduct": "Add",
+    "attributes": "Materials & colours",
     "viewShop": "Shop"
   },
   "status": {
@@ -105,6 +106,7 @@
       "making": "Making and availability",
       "dimensions": "Dimensions",
       "translations": "Texts in every language",
+      "taxonomy": "Materials and colours",
       "photos": "Photos",
       "publication": "Publication"
     },
@@ -122,6 +124,7 @@
     "heightMm": "Height, mm",
     "dimensionsHint": "Optional; in millimetres, up to one decimal.",
     "translationsHint": "Ukrainian is required to publish; a language without a title is not shown, the shop then falls back to English.",
+    "manageTerms": "Edit the lists of materials and colours",
     "status": "Status",
     "position": "Position",
     "positionHint": "A number for manual ordering; 0 by default.",
@@ -169,6 +172,7 @@
       "notAuthorized": "Only the admin can do this. Please sign in again.",
       "notFound": "This product no longer exists.",
       "conflict": "Another product took this address or SKU just now. Please check and save again.",
+      "termsChanged": "A chosen material or colour was just deleted. Please check the list and save again.",
       "unexpectedError": "The product could not be saved. Please try again.",
       "required": "This field is required",
       "tooLong": "At most {max} characters",
@@ -180,6 +184,50 @@
       "leadTimeOrder": "Must not be less than “From”",
       "titleRequired": "Enter a title for this language, or clear its other texts",
       "requiredToPublish": "A Ukrainian title is required to publish"
+    }
+  },
+  "taxonomy": {
+    "title": "Materials and colours",
+    "intro": "The shop’s filters list them. Each needs its Ukrainian name; a language without its own name shows the English one, else the Ukrainian one.",
+    "kinds": {
+      "material": "Materials",
+      "colour": "Colours"
+    },
+    "add": {
+      "material": "Add a material",
+      "colour": "Add a colour"
+    },
+    "empty": {
+      "material": "No materials yet.",
+      "colour": "No colours yet."
+    },
+    "nameIn": "Name ({language})",
+    "required": "(required)",
+    "otherLocales": "Other languages",
+    "slug": "In shop links: {slug}",
+    "usedBy": "{count, plural, =0 {Not used} one {Used by # product} other {Used by # products}}",
+    "save": "Save",
+    "saving": "Saving…",
+    "create": "Add",
+    "saved": "Saved",
+    "created": "Added",
+    "delete": "Delete",
+    "deleteTitle": "Delete “{name}”?",
+    "deleteDescription": "It disappears from the shop’s filters. This cannot be undone.",
+    "deleteConfirm": "Delete",
+    "cancel": "Cancel",
+    "deleted": "“{name}” deleted",
+    "inUseHint": "Products use it: untick it in their forms to delete it.",
+    "loadError": "The lists could not be loaded. Please try again.",
+    "errors": {
+      "required": "Enter the Ukrainian name",
+      "tooLong": "At most {max} characters",
+      "notAuthorized": "Only the admin can do this. Please sign in again.",
+      "notFound": "This entry no longer exists.",
+      "nameTaken": "Another entry of this list already has this name.",
+      "invalid": "This request is not valid.",
+      "unexpectedError": "Something went wrong. Please try again.",
+      "inUse": "Products use it: untick it in their forms first."
     }
   },
   "images": {

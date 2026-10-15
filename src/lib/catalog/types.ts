@@ -80,6 +80,47 @@ export type ProductFilters = {
 /** Newest first (the legacy default), or by price. */
 export type ProductSort = "newest" | "price_asc" | "price_desc";
 
+/** A search result list adds its relevance order (the default there). */
+export type ListingSort = ProductSort | "relevance";
+
+/** "in_stock": a one-of-a-kind piece still available; "made_to_order": work made after the order. */
+export type AvailabilityFilter = "in_stock" | "made_to_order";
+
+export type TaxonomyKind = Enums["taxonomy_kind"];
+
+/**
+ * The filters of a listing as the database takes them (public.shop_search): canonical (sorted, no
+ * duplicates), so that one combination is one cache entry. Prices in US cents.
+ */
+export type ListingFilters = {
+  locale: Locale;
+  categorySlug: string | null;
+  /** Search words (src/lib/search/query.ts); empty for a plain listing. */
+  terms: string[];
+  materials: string[];
+  colours: string[];
+  priceMinUsdMinor: number | null;
+  priceMaxUsdMinor: number | null;
+  availability: AvailabilityFilter[];
+};
+
+/** A material or a colour, named in the requested locale (or the fallback en, else uk). */
+export type TaxonomyTerm = {
+  id: string;
+  kind: TaxonomyKind;
+  slug: string;
+  position: number;
+  name: string;
+  nameLocale: Locale;
+};
+
+/** Products per filter option, each counted with every other filter applied; options without products are absent. */
+export type Facets = {
+  material: Record<string, number>;
+  colour: Record<string, number>;
+  availability: Partial<Record<AvailabilityFilter, number>>;
+};
+
 export type PageRequest = { page: number; pageSize: number };
 
 export type ProductPage = {

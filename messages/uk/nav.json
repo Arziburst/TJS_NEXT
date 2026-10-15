@@ -1,5 +1,8 @@
 {
   "shop": "Магазин",
+  "search": "Пошук",
+  "searchLabel": "Пошук у магазині",
+  "searchPlaceholder": "Пошук…",
   "aboutUs": "Про нас",
   "contacts": "Контакти",
   "favorites": "Обране",
