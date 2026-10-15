@@ -90,7 +90,8 @@ test.describe("ui kit", () => {
     await expect(country).toContainText("Česko");
 
     await page.getByRole("tab", { name: "Sign up" }).click();
-    await expect(page.getByRole("tabpanel")).toHaveText("Sign-up panel placeholder.");
+    // by name: the old panel stays in the DOM (inert) during its exit transition
+    await expect(page.getByRole("tabpanel", { name: "Sign up" })).toHaveText("Sign-up panel placeholder.");
 
     const inStock = page.getByRole("switch").first();
     await expect(inStock).toBeChecked();
