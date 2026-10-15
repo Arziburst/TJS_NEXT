@@ -1,25 +1,7 @@
 -- Money display (D4, D5): daily exchange rates and per-currency display settings.
 -- The admin sets every price in USD; the visitor sees it converted at the NBU cross rate with a markup and
--- charm rounding. Everyone reads both tables; only admins write (the daily job writes with the secret key).
-
--- Admin check ------------------------------------------------------------------------------------------
--- The catalog schema (#12) defines public.is_admin() from profiles. Without it this migration creates a
--- stub that grants admin to nobody, so the policies below already fail closed; #12's function takes over.
-do $do$
-begin
-  if to_regprocedure('public.is_admin()') is null then
-    create function public.is_admin()
-    returns boolean
-    language sql
-    stable
-    set search_path = ''
-    as $fn$ select false $fn$;
-
-    revoke all on function public.is_admin() from public;
-    grant execute on function public.is_admin() to anon, authenticated, service_role;
-  end if;
-end;
-$do$;
+-- charm rounding. Everyone reads both tables; only admins (public.is_admin() from the catalog schema) write;
+-- the daily job writes with the service-role key.
 
 -- Exchange rates ---------------------------------------------------------------------------------------
 -- source 'nbu': official NBU rates, stored as X→UAH, plus the USD→X cross rates derived from them.

@@ -1,21 +1,20 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
+import { createPublicServerClient, type ServerSupabaseClient as Client } from "@/lib/supabase/server";
 import type { CurrencySettings } from "./convert";
 import { BASE_CURRENCY, currencies, isCurrency, type Currency } from "./currencies";
 import type { RatesStore } from "./rates-job";
 
-/*
- * Supabase access of the money module. On Vercel the Supabase integration sets SUPABASE_URL and the keys;
- * locally and in CI `supabase status -o env` writes API_URL, PUBLISHABLE_KEY and SECRET_KEY into .env.local.
- */
-function client(key: string | undefined) {
-  const url = process.env.SUPABASE_URL ?? process.env.API_URL;
+// Bypasses RLS: only for the daily rates job, after the cron route's secret check. Null when not configured.
+function serviceRoleClient(): Client | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
-  return createClient<Database>(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  return createClient<Database>(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
 }
-
-type Client = NonNullable<ReturnType<typeof client>>;
 
 export type CurrencyConfig = CurrencySettings & { enabled: boolean };
 
@@ -54,9 +53,7 @@ async function latestDisplayRates(db: Client): Promise<Partial<Record<Currency, 
 // The settings and the current display rate of every currency, read under RLS as a visitor.
 // Throws when the database is not configured or unreachable.
 export async function readMoneyTables(): Promise<MoneyTables> {
-  const db = client(process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.PUBLISHABLE_KEY);
-  if (!db) throw new Error("Supabase is not configured");
-
+  const db = createPublicServerClient();
   const [settings, displayRates] = await Promise.all([db.from("currency_settings").select("*"), latestDisplayRates(db)]);
   if (settings.error) throw new Error(`currency_settings: ${settings.error.message}`);
 
@@ -77,10 +74,9 @@ export async function readMoneyTables(): Promise<MoneyTables> {
   return tables;
 }
 
-// The store of the daily rates job. It uses the secret key (bypasses RLS) and is only ever called by the
-// cron route after its secret check. Null when the key is not configured.
+// The store of the daily rates job (service-role client). Null when the key is not configured.
 export function createRatesStore(): RatesStore | null {
-  const db = client(process.env.SUPABASE_SECRET_KEY ?? process.env.SECRET_KEY);
+  const db = serviceRoleClient();
   if (!db) return null;
 
   return {

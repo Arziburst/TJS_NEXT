@@ -3,13 +3,19 @@ begin;
 create extension if not exists pgtap with schema extensions;
 select plan(25);
 
+-- Fixtures: a customer and an admin (the role is granted here, as the database owner; D12)
+insert into auth.users (id, email) values
+  ('00000000-0000-4000-8000-0000000000c1', 'customer-' || gen_random_uuid() || '@example.test'),
+  ('00000000-0000-4000-8000-0000000000a1', 'admin-' || gen_random_uuid() || '@example.test');
+update public.profiles set role = 'admin' where id = '00000000-0000-4000-8000-0000000000a1';
+
 -- Structure -----------------------------------------------------------------------------------------------
 select has_table('public', 'fx_rates', 'fx_rates exists');
 select has_table('public', 'currency_settings', 'currency_settings exists');
 select ok((select relrowsecurity from pg_class where oid = 'public.fx_rates'::regclass), 'RLS on fx_rates');
 select ok((select relrowsecurity from pg_class where oid = 'public.currency_settings'::regclass), 'RLS on currency_settings');
 select col_is_pk('public', 'currency_settings', 'currency', 'currency is the key of currency_settings');
-select has_function('public', 'is_admin', 'is_admin() exists (from #12 or the stub)');
+select has_function('public', 'is_admin', 'the policies use public.is_admin()');
 
 -- Seeded settings (D4) --------------------------------------------------------------------------------------
 select results_eq(
@@ -72,12 +78,7 @@ reset role;
 select is((select count(*)::int from public.currency_settings where markup_bps = 300), 7, 'a customer update changes nothing');
 select ok((select count(*) from public.fx_rates) > 0, 'a customer delete removes nothing');
 
--- Admin: writes. is_admin() is swapped for this transaction only, so the test does not depend on how
--- the admin role is stored (profiles from #12, or the stub that grants it to nobody).
-create or replace function public.is_admin()
-returns boolean language sql stable set search_path = ''
-as $$ select (select auth.uid()) = '00000000-0000-4000-8000-0000000000a1'::uuid $$;
-
+-- Admin: writes ---------------------------------------------------------------------------------------------
 select set_config('request.jwt.claims', '{"sub": "00000000-0000-4000-8000-0000000000a1", "role": "authenticated"}', true);
 set local role authenticated;
 select lives_ok(
@@ -89,8 +90,7 @@ reset role;
 select is((select markup_bps from public.currency_settings where currency = 'PLN'), 250, 'an admin edits the markup');
 
 -- A revoked admin loses write access.
-create or replace function public.is_admin()
-returns boolean language sql stable set search_path = '' as $$ select false $$;
+update public.profiles set role = 'customer' where id = '00000000-0000-4000-8000-0000000000a1';
 set local role authenticated;
 update public.currency_settings set markup_bps = 100 where currency = 'PLN';
 select throws_ok(
