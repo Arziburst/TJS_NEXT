@@ -125,7 +125,6 @@
     "status": "Stav",
     "position": "Pořadí",
     "positionHint": "Číslo pro ruční řazení; výchozí 0.",
-    "photosReadOnly": "Fotky jsou zde jen k náhledu; přidávání a řazení přijde v další verzi.",
     "noPhotos": "Zatím žádné fotky.",
     "photoAlt": "Fotka {index}",
     "delete": "Smazat produkt",
@@ -181,6 +180,41 @@
       "leadTimeOrder": "Nesmí být menší než „Od“",
       "titleRequired": "Zadejte název v tomto jazyce, nebo vymažte jeho ostatní texty",
       "requiredToPublish": "Ke zveřejnění je nutný ukrajinský název"
+    }
+  },
+  "images": {
+    "hint": "JPEG, PNG nebo WebP, každá do {maxMb} MB. První fotka je hlavní fotkou v obchodě. Údaje o místě a fotoaparátu se při nahrání odstraní.",
+    "saveFirst": "Nejprve produkt uložte, potom sem přidejte jeho fotky.",
+    "add": "Přidat fotky",
+    "orderHint": "Přetažením fotku přesunete, nebo použijte její tlačítka se šipkami.",
+    "orderHintButtons": "Fotku přesunete jejími tlačítky se šipkami.",
+    "main": "Hlavní fotka",
+    "makeMain": "Nastavit jako hlavní",
+    "moveEarlier": "Posunout fotku {index} dopředu",
+    "moveLater": "Posunout fotku {index} dozadu",
+    "altTextsOf": "Alternativní texty fotky {index}",
+    "altHint": "Krátký popis fotky pro čtečky obrazovky a vyhledávače. Prázdné pole použije text, který je v něm zobrazen.",
+    "altSave": "Uložit texty",
+    "altSaved": "Alternativní texty uloženy",
+    "deleteOf": "Smazat fotku {index}",
+    "deleteTitle": "Smazat tuto fotku?",
+    "deleteDescription": "Fotka {index} okamžitě zmizí z produktu i z obchodu.",
+    "deleteConfirm": "Smazat",
+    "deleted": "Fotka smazána",
+    "uploading": "Nahrávání {name}…",
+    "uploaded": "{name} přidána",
+    "progress": "Přidáno: {done} z {total}",
+    "uploadErrors": {
+      "tooLarge": "{name}: větší než {maxMb} MB.",
+      "unsupportedType": "{name}: nejde o fotku JPEG, PNG ani WebP.",
+      "invalidImage": "{name}: soubor je poškozený nebo má příliš mnoho pixelů.",
+      "failed": "{name}: nahrání se nezdařilo. Zkontrolujte připojení a zkuste to znovu."
+    },
+    "errors": {
+      "notAuthorized": "To může udělat jen administrátor. Přihlaste se znovu.",
+      "notFound": "Tento produkt nebo fotka už neexistuje.",
+      "conflict": "Fotky se změnily v jiném okně; nyní se zobrazují aktuální.",
+      "unexpectedError": "To se nepovedlo. Zkuste to znovu."
     }
   }
 }
