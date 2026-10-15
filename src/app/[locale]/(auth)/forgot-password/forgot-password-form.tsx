@@ -14,7 +14,7 @@ export function ForgotPasswordForm() {
   const locale = useLocale();
   const [state, action] = useActionState<FormState<"email">, FormData>(requestPasswordReset, idle);
   const backLink = (
-    <Link href="/sign-in-and-up" className="justify-self-center font-input text-sm underline underline-offset-4 hover:text-accent">
+    <Link href="/sign-in-and-up" className="justify-self-center font-input text-sm underline underline-offset-4 hover:text-accent-text">
       {t("backToSignIn")}
     </Link>
   );

@@ -24,6 +24,7 @@ const SWATCHES = [
   { name: "background", value: "#F4F0EB", className: "bg-background" },
   { name: "foreground / borders", value: "#635A59", className: "bg-foreground" },
   { name: "accent", value: "#FF614A", className: "bg-accent" },
+  { name: "accent text (D26)", value: "#B93B27", className: "bg-accent-text" },
   { name: "success", value: "#00C853", className: "bg-success" },
   { name: "warning", value: "#FFD600", className: "bg-warning" },
   { name: "hairline", value: "rgba(99,90,89,.1)", className: "bg-hairline" },
@@ -34,7 +35,8 @@ const SWATCHES = [
 const CONTRAST_PAIRS = [
   { label: "Brown text on beige background", fg: "#635a59", bg: "#f4f0eb" },
   { label: "Beige text on brown (contained button)", fg: "#f4f0eb", bg: "#635a59" },
-  { label: "Coral accent text on beige", fg: "#ff614a", bg: "#f4f0eb" },
+  { label: "Coral fill as text on beige (not for text)", fg: "#ff614a", bg: "#f4f0eb" },
+  { label: "Coral text token on beige (D26)", fg: "#b93b27", bg: "#f4f0eb" },
 ];
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -52,7 +54,7 @@ function FontCandidate({ id, name, className }: { id: "A" | "B"; name: string; c
   return (
     <figure className="grid gap-3 border-2 border-foreground p-6">
       <figcaption className="font-sans text-xs font-bold tracking-[2.4px] uppercase">
-        Candidate {id}: {name} {DISPLAY_FONT === id && <span className="text-accent">(selected)</span>}
+        Candidate {id}: {name} {DISPLAY_FONT === id && <span className="text-accent-text">(selected)</span>}
       </figcaption>
       <div className={cn("grid gap-2", className)}>
         <p className="text-[40px] leading-[54px] uppercase">Earrings · Сережки</p>
@@ -82,7 +84,7 @@ export default function UiKitPage() {
           <p className="font-sans text-sm">Raleway UI · {SAMPLE_CS_RO}</p>
           <p className="font-sans text-xs font-bold tracking-[2.4px] uppercase">Product title · {SAMPLE_PL}</p>
           <p className="font-input text-sm font-medium">Inter inputs · {SAMPLE_UK} · {SAMPLE_CS_RO}</p>
-          <p className="font-sans text-sm font-bold text-accent uppercase">Price —</p>
+          <p className="font-sans text-sm font-bold text-accent-text uppercase">Price —</p>
         </div>
       </Section>
 
@@ -150,7 +152,7 @@ export default function UiKitPage() {
           {DEMO_USD_PRICES.map((usdMinor) => (
             <div key={usdMinor} className="contents">
               <dt className="tabular-nums">${(usdMinor / 100).toFixed(2)}</dt>
-              <dd className="text-right font-bold text-accent">
+              <dd className="text-right font-bold text-accent-text">
                 <Price usdMinor={usdMinor} />
               </dd>
             </div>

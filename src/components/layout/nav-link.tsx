@@ -24,7 +24,7 @@ export function NavLink({ href, labelKey, className, onNavigate }: NavLinkProps)
       onClick={onNavigate}
       className={cn(
         "move-underline font-sans text-base font-semibold tracking-[1.6px] italic sb:text-sm sb:not-italic",
-        isActive && "text-accent",
+        isActive && "text-accent-text",
         className,
       )}
     >
