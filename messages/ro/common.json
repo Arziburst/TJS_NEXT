@@ -2,6 +2,10 @@
   "brand": "TJS",
   "noData": "Nu există date",
   "total": "Total",
+  "price": {
+    "unavailable": "Preț indisponibil",
+    "none": "—"
+  },
   "pagination": {
     "of": "din"
   },

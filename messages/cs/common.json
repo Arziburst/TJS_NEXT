@@ -2,6 +2,10 @@
   "brand": "TJS",
   "noData": "Žádná data",
   "total": "Celkem",
+  "price": {
+    "unavailable": "Cena není k dispozici",
+    "none": "—"
+  },
   "pagination": {
     "of": "z"
   },

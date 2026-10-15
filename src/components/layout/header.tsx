@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
+import { CurrencySwitcherSlot } from "@/components/currency-switcher-slot";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { cn } from "@/lib/utils";
 import { AccountSlot, CartSlot } from "./header-slots";
@@ -13,12 +14,13 @@ type HeaderProps = {
   cart?: ReactNode;
   account?: ReactNode;
   languageSwitcher?: ReactNode;
+  currencySwitcher?: ReactNode;
   // rendered at the bottom of the mobile menu
   menuFooter?: ReactNode;
 };
 
 /*
- * Below 1024px: menu button, logo, cart. From 1024px: logo, inline nav, language, cart over account.
+ * Below 1024px: menu button, logo, cart. From 1024px: logo, inline nav, language and currency, cart over account.
  * The switch is CSS only (sb:hidden / hidden sb:flex); both variants are always in the markup.
  */
 export function Header({
@@ -26,6 +28,7 @@ export function Header({
   cart = <CartSlot />,
   account = <AccountSlot />,
   languageSwitcher = <LocaleSwitcher hideLabel />,
+  currencySwitcher = <CurrencySwitcherSlot hideLabel />,
   menuFooter,
 }: HeaderProps) {
   const t = useTranslations("nav");
@@ -36,6 +39,7 @@ export function Header({
         <MobileMenu
           className="sb:hidden"
           languageSwitcher={languageSwitcher}
+          currencySwitcher={currencySwitcher}
           account={account}
           footer={menuFooter}
         />
@@ -53,7 +57,10 @@ export function Header({
               </li>
             ))}
           </ul>
-          <div data-slot="language-switcher">{languageSwitcher}</div>
+          <div className="flex items-center gap-4">
+            <div data-slot="language-switcher">{languageSwitcher}</div>
+            <div data-slot="currency-switcher">{currencySwitcher}</div>
+          </div>
         </nav>
         <ul className="flex items-center sb:flex-col sb:items-end">
           <li data-slot="cart">{cart}</li>

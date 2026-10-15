@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+import { Price } from "@/components/price";
 import { DISPLAY_FONT, displayCandidateA, displayCandidateB } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { contrastRatio } from "./contrast";
@@ -15,6 +16,9 @@ export const metadata: Metadata = {
 const SAMPLE_UK = "Прикраси ручної роботи — ґудзики, сережки, намисто, їжак і щастя";
 const SAMPLE_CS_RO = "Šperky ručně vyrobené: řetízek, náušnice · Bijuterii lucrate manual: brățară, colier, ținută";
 const SAMPLE_PL = "Biżuteria ręcznie robiona: łańcuszek, kolczyki, źródło";
+
+// USD cents: tiny, under and over the 100 threshold, the D4 examples, large
+const DEMO_USD_PRICES = [50, 2780, 2900, 3200, 3300, 15000, 250000];
 
 const SWATCHES = [
   { name: "background", value: "#F4F0EB", className: "bg-background" },
@@ -135,6 +139,22 @@ export default function UiKitPage() {
 
       <Section title="Badges">
         <BadgesDemo />
+      </Section>
+
+      <Section title="Prices">
+        <p className="font-sans text-sm">
+          USD prices in the visitor&apos;s currency: switch the currency in the header; the URL stays the same.
+        </p>
+        <dl className="grid max-w-xl grid-cols-2 gap-x-6 gap-y-2 font-sans text-sm" data-testid="demo-prices">
+          {DEMO_USD_PRICES.map((usdMinor) => (
+            <div key={usdMinor} className="contents">
+              <dt className="tabular-nums">${(usdMinor / 100).toFixed(2)}</dt>
+              <dd className="text-right font-bold text-accent">
+                <Price usdMinor={usdMinor} />
+              </dd>
+            </div>
+          ))}
+        </dl>
       </Section>
 
       <Section title="Rules">
