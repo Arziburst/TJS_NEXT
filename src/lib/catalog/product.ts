@@ -130,7 +130,8 @@ export async function getProductPage(locale: Locale, slug: string): Promise<Prod
   const translations = matches.data.find((m) => m.productId === resolution.productId)?.productSlugs ?? [];
   const category = categories.ok ? categories.data.find((c) => c.id === product.data.category.id) : undefined;
   // a page without its category name (no breadcrumb) is an incomplete read: never kept, never prerendered
-  if (categories.ok) cacheLife("days");
+  // the product route's shell: no stale window, see daysNoSwr in next.config.ts
+  if (categories.ok) cacheLife("daysNoSwr");
   else cacheLife(FAILED_READ_LIFE);
 
   return { kind: "ok", product: product.data, categoryName: category?.name ?? null, translations };

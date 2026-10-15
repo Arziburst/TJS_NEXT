@@ -34,6 +34,12 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2_678_400,
   },
   cacheComponents: true,
+  cacheLife: {
+    // `days` without its stale window (expire = revalidate) for entries in a prerendered route shell: a
+    // longer expire makes `next start` send `stale-while-revalidate` with the route, so the browser answers
+    // its prefetch from the HTTP cache and revalidates in the background (#79, docs/standards.md §3)
+    daysNoSwr: { stale: 300, revalidate: 86_400, expire: 86_400 },
+  },
   partialPrefetching: true,
   typedRoutes: true,
   // dev only: browser tooling that opens 127.0.0.1 instead of localhost would otherwise get
