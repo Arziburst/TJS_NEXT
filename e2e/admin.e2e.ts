@@ -205,96 +205,123 @@ test.describe("admin on the local stack", () => {
     await customerContext.close();
   });
 
-  test("create a made-to-order product, publish it, edit its price, archive and delete it", async ({ page }) => {
-    const errors = collectErrors(page);
-    const suffix = randomUUID().slice(0, 8);
-    const title = `Каблучка тест ${suffix}`;
-    const sku = `E2E-17-${suffix}`;
-    createdSkus.push(sku);
+  // One product's life in three steps, each with its own time budget; a failed step skips the ones after it.
+  test.describe.serial("a made-to-order product from creation to deletion", () => {
+    let admin: Credentials;
+    let suffix: string;
+    let title: string;
+    let productId: string;
+    let productPath: string;
+    let priceBefore: string | null;
 
-    await signIn(page, await createUser("admin"), "/uk/admin");
-    await page.getByRole("navigation", { name: ukAdmin.shell.nav }).getByRole("link", { name: ukAdmin.shell.newProduct }).click();
-    await page.waitForURL("/uk/admin/products/new");
-    await page.waitForLoadState("networkidle");
+    function productForm(page: Page) {
+      return page.locator("form").filter({ has: page.getByRole("button", { name: ukAdmin.form.save }) });
+    }
+    const priceLabel = ukAdmin.product.priceLabel.replace("{currency}", "USD");
+    const shownPrice = (page: Page) => page.getByRole("main").getByText(/\d\s*₴/).first();
 
-    // a refused save keeps what was typed and names the field
-    const form = page.locator("form").filter({ has: page.getByRole("button", { name: ukAdmin.form.save }) });
-    await form.getByLabel(ukAdmin.form.translation.title).first().fill(title);
-    await form.getByRole("button", { name: ukAdmin.form.save }).click();
-    const price = form.getByLabel(ukAdmin.product.priceLabel.replace("{currency}", "USD"));
-    await expect(price).toHaveAttribute("aria-invalid", "true");
-    await expect(price).toHaveAccessibleDescription(ukAdmin.form.errors.required);
-    await expect(form.getByLabel(ukAdmin.form.translation.title).first()).toHaveValue(title);
+    async function openEditForm(page: Page) {
+      await signIn(page, admin, `/uk/admin/products/${productId}`);
+      await page.waitForLoadState("networkidle");
+      return productForm(page);
+    }
 
-    await form.getByLabel(ukAdmin.product.typeLabel).selectOption({ label: "Каблучки" });
-    await price.fill("31.50");
-    await form.getByLabel(ukAdmin.product.weightLabel).fill("4");
-    await form.getByLabel(ukAdmin.form.sku, { exact: true }).fill(sku);
-    await form.getByLabel(ukAdmin.form.leadTimeMin, { exact: true }).fill("5");
-    await form.getByLabel(ukAdmin.form.leadTimeMax, { exact: true }).fill("9");
-    await form.getByLabel(ukAdmin.form.lengthMm).fill("22");
-    // the slug follows the title (KMU 2010 transliteration)
-    await expect(form.getByLabel(ukAdmin.form.translation.slug).first()).toHaveValue(`kabluchka-test-${suffix}`);
-    await form.getByLabel(ukAdmin.form.translation.clasp).first().fill("Без застібки");
-    await form.getByLabel(ukAdmin.form.translation.leadTimeNote).first().fill("У грудні довше.");
-    await form.getByText(ukAdmin.status.published, { exact: true }).click();
-    await form.getByRole("button", { name: ukAdmin.form.save }).click();
-    await page.waitForURL(/\/uk\/admin\/products\/[0-9a-f-]{36}$/);
-    await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+    test("create it with a lead time, publish it: the shop and its page show it", async ({ page }) => {
+      const errors = collectErrors(page);
+      suffix = randomUUID().slice(0, 8);
+      title = `Каблучка тест ${suffix}`;
+      const sku = `E2E-17-${suffix}`;
+      createdSkus.push(sku);
+      admin = await createUser("admin");
 
-    const { data: saved } = await db!
-      .from("products")
-      .select("id, created_by, updated_by, lead_time_min_days, lead_time_max_days, length_mm")
-      .eq("sku", sku)
-      .single();
-    expect(saved).toMatchObject({ lead_time_min_days: 5, lead_time_max_days: 9, length_mm: 22 });
-    expect(saved!.created_by).not.toBeNull();
+      await signIn(page, admin, "/uk/admin");
+      await page.getByRole("navigation", { name: ukAdmin.shell.nav }).getByRole("link", { name: ukAdmin.shell.newProduct }).click();
+      await page.waitForURL("/uk/admin/products/new");
+      await page.waitForLoadState("networkidle");
 
-    // the storefront has it on the next request: the listing and the product page with the new fields
-    await page.goto("/uk/shop");
-    await expect(page.getByRole("link", { name: title }).first()).toBeVisible();
-    const productPath = `/uk/product/kabluchka-test-${suffix}`;
-    await page.goto(productPath);
-    await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
-    await expect(page.getByText("Виготовлення 5–9 днів")).toBeVisible();
-    await expect(page.getByText("У грудні довше.")).toBeVisible();
-    await expect(page.getByText("Без застібки")).toBeVisible();
-    await expect(page.getByText(ukProduct.page.dimensions)).toBeVisible();
-    const shownPrice = page.getByRole("main").getByText(/\d\s*₴/).first();
-    const priceBefore = await shownPrice.textContent();
+      // a refused save keeps what was typed and names the field
+      const form = productForm(page);
+      await form.getByLabel(ukAdmin.form.translation.title).first().fill(title);
+      await form.getByRole("button", { name: ukAdmin.form.save }).click();
+      const price = form.getByLabel(priceLabel);
+      await expect(price).toHaveAttribute("aria-invalid", "true");
+      await expect(price).toHaveAccessibleDescription(ukAdmin.form.errors.required);
+      await expect(form.getByLabel(ukAdmin.form.translation.title).first()).toHaveValue(title);
 
-    // edit the price: the product page shows the new one without a rebuild
-    await page.goto(`/uk/admin/products/${saved!.id}`);
-    await page.waitForLoadState("networkidle");
-    await price.fill("99.00");
-    await form.getByRole("button", { name: ukAdmin.form.save }).click();
-    await expect(page.getByText(ukAdmin.form.saved)).toBeVisible();
-    await page.goto(productPath);
-    await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
-    await expect(shownPrice).not.toHaveText(priceBefore ?? "");
+      await form.getByLabel(ukAdmin.product.typeLabel).selectOption({ label: "Каблучки" });
+      await price.fill("31.50");
+      await form.getByLabel(ukAdmin.product.weightLabel).fill("4");
+      await form.getByLabel(ukAdmin.form.sku, { exact: true }).fill(sku);
+      await form.getByLabel(ukAdmin.form.leadTimeMin, { exact: true }).fill("5");
+      await form.getByLabel(ukAdmin.form.leadTimeMax, { exact: true }).fill("9");
+      await form.getByLabel(ukAdmin.form.lengthMm).fill("22");
+      // the slug follows the title (KMU 2010 transliteration)
+      await expect(form.getByLabel(ukAdmin.form.translation.slug).first()).toHaveValue(`kabluchka-test-${suffix}`);
+      await form.getByLabel(ukAdmin.form.translation.clasp).first().fill("Без застібки");
+      await form.getByLabel(ukAdmin.form.translation.leadTimeNote).first().fill("У грудні довше.");
+      await form.getByText(ukAdmin.status.published, { exact: true }).click();
+      await form.getByRole("button", { name: ukAdmin.form.save }).click();
+      await page.waitForURL(/\/uk\/admin\/products\/[0-9a-f-]{36}$/);
+      await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
 
-    // archive: gone from the shop
-    await page.goto(`/uk/admin/products/${saved!.id}`);
-    await page.waitForLoadState("networkidle");
-    await form.getByText(ukAdmin.status.archived, { exact: true }).click();
-    await form.getByRole("button", { name: ukAdmin.form.save }).click();
-    await expect(page.getByText(ukAdmin.form.saved)).toBeVisible();
-    await page.goto("/uk/shop");
-    await expect(page.getByRole("link", { name: title })).toHaveCount(0);
+      const { data: saved } = await db!
+        .from("products")
+        .select("id, created_by, updated_by, lead_time_min_days, lead_time_max_days, length_mm")
+        .eq("sku", sku)
+        .single();
+      expect(saved).toMatchObject({ lead_time_min_days: 5, lead_time_max_days: 9, length_mm: 22 });
+      expect(saved!.created_by).not.toBeNull();
+      productId = saved!.id;
 
-    // delete with confirmation: gone from the admin list, kept as a soft-deleted row
-    await page.goto(`/uk/admin/products/${saved!.id}`);
-    await page.waitForLoadState("networkidle");
-    await page.getByRole("button", { name: ukAdmin.form.delete }).click();
-    const dialog = page.getByRole("dialog");
-    await expect(dialog).toContainText(ukAdmin.product.confirmDeletionTwice);
-    await dialog.getByRole("button", { name: ukAdmin.form.deleteConfirm }).click();
-    await page.waitForURL("/uk/admin");
-    await expect(page.getByRole("link", { name: title })).toHaveCount(0);
-    const { data: deleted } = await db!.from("products").select("deleted_at").eq("id", saved!.id).single();
-    expect(deleted?.deleted_at).not.toBeNull();
-    await page.goto(productPath);
-    await expect(page.getByRole("heading", { name: ukErrors.notFound.title })).toBeVisible();
-    expect(errors).toEqual([]);
+      // the storefront has it on the next request: the listing and the product page with the new fields
+      await page.goto("/uk/shop");
+      await expect(page.getByRole("link", { name: title }).first()).toBeVisible();
+      productPath = `/uk/product/kabluchka-test-${suffix}`;
+      await page.goto(productPath);
+      await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+      await expect(page.getByText("Виготовлення 5–9 днів")).toBeVisible();
+      await expect(page.getByText("У грудні довше.")).toBeVisible();
+      await expect(page.getByText("Без застібки")).toBeVisible();
+      await expect(page.getByText(ukProduct.page.dimensions)).toBeVisible();
+      priceBefore = await shownPrice(page).textContent();
+      expect(errors).toEqual([]);
+    });
+
+    test("edit its price: the product page shows the new price without a rebuild", async ({ page }) => {
+      const errors = collectErrors(page);
+      const form = await openEditForm(page);
+      await form.getByLabel(priceLabel).fill("99.00");
+      await form.getByRole("button", { name: ukAdmin.form.save }).click();
+      await expect(page.getByText(ukAdmin.form.saved)).toBeVisible();
+      await page.goto(productPath);
+      await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+      await expect(shownPrice(page)).not.toHaveText(priceBefore ?? "");
+      expect(errors).toEqual([]);
+    });
+
+    test("archive it, then delete it: gone from the shop, the admin list and its page", async ({ page }) => {
+      const errors = collectErrors(page);
+      const form = await openEditForm(page);
+      await form.getByText(ukAdmin.status.archived, { exact: true }).click();
+      await form.getByRole("button", { name: ukAdmin.form.save }).click();
+      await expect(page.getByText(ukAdmin.form.saved)).toBeVisible();
+      await page.goto("/uk/shop");
+      await expect(page.getByRole("link", { name: title })).toHaveCount(0);
+
+      // delete with confirmation: gone from the admin list, kept as a soft-deleted row
+      await page.goto(`/uk/admin/products/${productId}`);
+      await page.waitForLoadState("networkidle");
+      await page.getByRole("button", { name: ukAdmin.form.delete }).click();
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toContainText(ukAdmin.product.confirmDeletionTwice);
+      await dialog.getByRole("button", { name: ukAdmin.form.deleteConfirm }).click();
+      await page.waitForURL("/uk/admin");
+      await expect(page.getByRole("link", { name: title })).toHaveCount(0);
+      const { data: deleted } = await db!.from("products").select("deleted_at").eq("id", productId).single();
+      expect(deleted?.deleted_at).not.toBeNull();
+      await page.goto(productPath);
+      await expect(page.getByRole("heading", { name: ukErrors.notFound.title })).toBeVisible();
+      expect(errors).toEqual([]);
+    });
   });
 });
