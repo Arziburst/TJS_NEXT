@@ -3,6 +3,7 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import type { Locale } from "@/i18n/routing";
 import { createPublicServerClient } from "@/lib/supabase/server";
+import { FAILED_READ_LIFE } from "@/lib/failed-read";
 import { getCategories, getProductBySlug } from "./index";
 import { isLocale, localesFor } from "./mappers";
 import {
@@ -119,15 +120,15 @@ export async function getProductPage(locale: Locale, slug: string): Promise<Prod
   }
   const translations = matches.data.find((m) => m.productId === resolution.productId)?.productSlugs ?? [];
   const category = categories.ok ? categories.data.find((c) => c.id === product.data.category.id) : undefined;
-  // a page without its category name is retried soon
+  // a page without its category name (no breadcrumb) is an incomplete read: never kept, never prerendered
   if (categories.ok) cacheLife("days");
-  else cacheLife("minutes");
+  else cacheLife(FAILED_READ_LIFE);
 
   return { kind: "ok", product: product.data, categoryName: category?.name ?? null, translations };
 }
 
-// a failure is retried soon instead of being kept for days (and is never baked into a prerender)
+// a failure is read again by the next request instead of being kept (and is never baked into a prerender)
 function failed(): ProductPageData {
-  cacheLife("seconds");
+  cacheLife(FAILED_READ_LIFE);
   return { kind: "unexpectedError" };
 }

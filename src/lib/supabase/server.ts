@@ -16,6 +16,11 @@ function publicConfig(): { url: string; anonKey: string } {
   return { url, anonKey };
 }
 
+// Next's build puts every fetch without a cache option into an implicit fetch cache (.next/cache/fetch-cache,
+// kept for a year) that the next build reads again, so a build would prerender the previous build's rows.
+// The reads are never fetch-cached: "use cache" entries (cacheLife, cacheTag) alone decide their freshness.
+const uncachedFetch: typeof fetch = (input, init) => fetch(input, { ...init, cache: "no-store" });
+
 /**
  * A server-side client that acts as an anonymous visitor: no session and no cookies, so RLS applies as for
  * `anon` and the result is the same for every request (safe to cache).
@@ -24,6 +29,7 @@ export function createPublicServerClient(): ServerSupabaseClient {
   const { url, anonKey } = publicConfig();
   return createClient<Database>(url, anonKey, {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    global: { fetch: uncachedFetch },
   });
 }
 
