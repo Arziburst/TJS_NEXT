@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { allRouteKeys, expectOnlyEnabledRouteLinks, mobileMenuRouteKeys } from "./routes";
 
 function collectErrors(page: Page): string[] {
   const errors: string[] = [];
@@ -17,7 +18,7 @@ test.describe("layout shell", () => {
     const isDesktop = testInfo.project.name === "desktop";
 
     await expect(header.getByRole("link", { name: "TJS" })).toBeVisible();
-    await expect(header.getByRole("link", { name: "Cart" })).toBeVisible();
+    await expectOnlyEnabledRouteLinks(header, "en", allRouteKeys);
     await expect(header.getByRole("navigation", { name: "Main" })).toBeVisible({ visible: isDesktop });
     await expect(header.getByRole("button", { name: "Open menu" })).toBeVisible({ visible: !isDesktop });
     await expect(page.locator("footer").first()).toBeVisible();
@@ -37,8 +38,7 @@ test.describe("layout shell", () => {
     await trigger.click();
     const menu = page.getByRole("dialog");
     await expect(menu).toBeVisible();
-    await expect(menu.getByRole("link", { name: "Shop" })).toBeVisible();
-    await expect(menu.getByRole("link", { name: "About us" })).toBeVisible();
+    await expectOnlyEnabledRouteLinks(menu, "en", mobileMenuRouteKeys);
     await menu.getByRole("button", { name: "Close menu" }).click();
     await expect(menu).toBeHidden();
 
@@ -90,7 +90,8 @@ test.describe("ui kit", () => {
     await expect(country).toContainText("Česko");
 
     await page.getByRole("tab", { name: "Sign up" }).click();
-    await expect(page.getByRole("tabpanel")).toHaveText("Sign-up panel placeholder.");
+    // by name: the old panel stays in the DOM (inert) during its exit transition
+    await expect(page.getByRole("tabpanel", { name: "Sign up" })).toHaveText("Sign-up panel placeholder.");
 
     const inStock = page.getByRole("switch").first();
     await expect(inStock).toBeChecked();

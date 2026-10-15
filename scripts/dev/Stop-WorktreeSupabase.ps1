@@ -9,7 +9,7 @@ every other stack are left alone. The data is not kept (--no-backup): the next s
 
 .EXAMPLE
 npm run supabase:stop:worktree
-npm run supabase:stop:worktree -- -IssueNumber 207
+npm run supabase:stop:worktree -- 207
 #>
 [CmdletBinding()]
 param(

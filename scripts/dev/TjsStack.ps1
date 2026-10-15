@@ -17,6 +17,10 @@ $script:TjsPortOffsets = [ordered]@{
     analytics = 7
     pooler    = 9
 }
+# [edge_runtime] inspector_port: the CLI default in the committed config.toml (the main stack), base + 8
+# per worktree stack so two stacks never share it. Bound only by `supabase functions serve --inspect`.
+$script:TjsMainInspectorPort = 8083
+$script:TjsInspectorOffset = 8
 
 function Get-TjsRepoRoot {
     (Resolve-Path (Join-Path $PSScriptRoot '..' '..')).Path
@@ -46,6 +50,7 @@ function Get-TjsStackPorts {
     $base = $script:TjsWorktreePortBase + ($IssueNumber % 200) * 10
     $ports = [ordered]@{ base = $base }
     foreach ($k in $script:TjsPortOffsets.Keys) { $ports[$k] = $base + $script:TjsPortOffsets[$k] }
+    $ports['inspector'] = $base + $script:TjsInspectorOffset
     $ports['dev'] = $devPort
     $ports
 }
@@ -53,6 +58,7 @@ function Get-TjsStackPorts {
 function Get-TjsMainPorts {
     $ports = [ordered]@{ base = $script:TjsMainPortBase }
     foreach ($k in $script:TjsPortOffsets.Keys) { $ports[$k] = $script:TjsMainPortBase + $script:TjsPortOffsets[$k] }
+    $ports['inspector'] = $script:TjsMainInspectorPort
     $ports['dev'] = 3000
     $ports
 }
@@ -76,6 +82,29 @@ function Get-TjsConfigProjectId {
     $content = Get-Content -LiteralPath $ConfigPath -Raw
     if ($content -match '(?m)^project_id\s*=\s*"([^"]+)"') { return $Matches[1] }
     throw "No top-level project_id in $ConfigPath."
+}
+
+function ConvertFrom-TjsStatusEnv {
+    # The KEY="value" lines of `supabase status -o env`, as an ordered map; the values the app needs must be there.
+    param([Parameter(Mandatory)][AllowEmptyCollection()][string[]]$Lines)
+    $values = [ordered]@{}
+    foreach ($line in $Lines) {
+        if ($line -match '^([A-Z][A-Z0-9_]*)="?(.*?)"?\s*$') { $values[$Matches[1]] = $Matches[2] }
+    }
+    foreach ($required in 'API_URL', 'ANON_KEY', 'SERVICE_ROLE_KEY') {
+        if (-not $values.Contains($required)) { throw "supabase status -o env returned no ${required}:`n$($Lines -join "`n")" }
+    }
+    $values
+}
+
+function Get-TjsAppEnvLines {
+    # .env lines for a stack: every status value, then the names the app's Supabase clients read
+    # (.env.example); the service-role key is server-only. Used by supabase:start:worktree and CI.
+    param([Parameter(Mandatory)][System.Collections.Specialized.OrderedDictionary]$Values)
+    foreach ($k in $Values.Keys) { "$k=`"$($Values[$k])`"" }
+    "NEXT_PUBLIC_SUPABASE_URL=`"$($Values['API_URL'])`""
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY=`"$($Values['ANON_KEY'])`""
+    "SUPABASE_SERVICE_ROLE_KEY=`"$($Values['SERVICE_ROLE_KEY'])`""
 }
 
 function Get-TjsExcludedPortRanges {

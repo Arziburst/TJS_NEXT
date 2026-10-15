@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("errors.notFound");
+  return { title: t("title") };
+}
 
 export default async function NotFound() {
   const t = await getTranslations("errors.notFound");

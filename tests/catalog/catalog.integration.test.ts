@@ -10,6 +10,8 @@ vi.mock("server-only", () => ({}));
 const stack = localStack();
 
 describe.skipIf(!stack)("catalog data layer on the local stack", async () => {
+  // a skipped describe still runs its body to collect the tests: nothing below may touch the stack
+  if (!stack) return;
   const { getCategories, getProducts, getProductBySlug } = await import("@/lib/catalog");
   const admin = createClient<Database>(stack!.url, stack!.serviceRoleKey, { auth: { persistSession: false } });
 
