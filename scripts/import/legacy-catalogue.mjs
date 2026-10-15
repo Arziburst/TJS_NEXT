@@ -25,6 +25,7 @@ import {
   slugify,
   sourceHash,
   storagePathOf,
+  textProvenance,
   uniqueSlugs,
 } from "./legacy-mapping.mjs";
 import { renderReport } from "./legacy-report.mjs";
@@ -153,6 +154,8 @@ function loadTranslations(stateDir, products) {
       for (const locale of IMPORT_LOCALES)
         if (!t[locale]?.title?.trim() || !t[locale]?.description?.trim())
           problems.push(`${product.legacyId}: no ${locale} title or description`);
+        else if (t[locale].source !== undefined && !["human", "machine"].includes(t[locale].source))
+          problems.push(`${product.legacyId}: unknown ${locale} source "${t[locale].source}"`);
   }
   if (problems.length) throw new Error(`${file}:\n  ${problems.join("\n  ")}`);
   return translations;
@@ -186,6 +189,7 @@ async function buildPlan({ client, exportDir, products, translations, rate }) {
       .order("storage_path"),
   );
   const imageByPath = new Map(existingImages.map((i) => [i.storage_path, i]));
+  const importedAt = new Date().toISOString();
 
   const plans = [...products].sort(byCreation).map((product) => {
     const existing = productByLegacyId.get(product.legacyId);
@@ -218,10 +222,10 @@ async function buildPlan({ client, exportDir, products, translations, rate }) {
         slug: current?.slug ?? newSlug.get(plan),
         title: text.title.trim(),
         description: text.description.trim(),
-        source: "machine",
-        reviewed_at: null,
+        ...textProvenance(text, importedAt, current?.reviewed_at),
       };
-      const diffs = current ? differingFields(current, row, ["title", "description"]) : [];
+      // reviewed_at is not compared: it is the import time of a human text, so it would differ on every run
+      const diffs = current ? differingFields(current, row, ["title", "description", "source"]) : [];
       plan.translations.push({ row, action: !current ? "create" : diffs.length ? "differs" : "unchanged", diffs });
     }
   }
@@ -377,6 +381,7 @@ function reportProducts(plans) {
     photos: plan.images.length,
     titles: Object.fromEntries(plan.translations.map((t) => [t.row.locale, t.row.title])),
     slugs: Object.fromEntries(plan.translations.map((t) => [t.row.locale, t.row.slug])),
+    sources: Object.fromEntries(plan.translations.map((t) => [t.row.locale, t.row.source])),
   }));
 }
 

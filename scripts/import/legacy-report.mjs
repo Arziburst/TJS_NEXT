@@ -1,12 +1,12 @@
 // The import report for the owner (Markdown): the rate used, the summary and every imported product.
-// Pure, so it is unit-tested (tests/import/legacy-report.test.ts).
+// Pure, so it is unit-tested (tests/import/legacy-catalogue.test.ts).
 
 const KIND_LABEL = { made_to_order: "made to order", one_of_a_kind: "one of a kind" };
 
 /**
  * @typedef {{ legacyId: string, category: string, fulfillment: string, priceUah: number, priceUsd: string,
  *   weight: number, weightMissing: boolean, photos: number, titles: Record<string, string>,
- *   slugs: Record<string, string> }} ReportProduct
+ *   slugs: Record<string, string>, sources: Record<string, string> }} ReportProduct
  */
 
 /** Counts per category and kind, the price range and the products with weight 0. */
@@ -26,6 +26,7 @@ export function summarize(/** @type {ReportProduct[]} */ products) {
     cheapest: byUsd[0] ?? null,
     dearest: byUsd.at(-1) ?? null,
     weightZero: products.filter((p) => p.weight === 0),
+    humanUk: products.filter((p) => p.sources?.uk === "human").length,
   };
 }
 
@@ -68,7 +69,8 @@ export function renderReport({ exportName, target, generatedAt, rate, products, 
     `- Lead time: the ${s.madeToOrder} made-to-order products have none yet (TBD in the admin).`,
     `- Weight 0: ${s.weightZero.length} products (${s.weightZero.filter((p) => p.weightMissing).length} had no weight at all): ` +
       "real weights are needed for delivery estimates.",
-    "- Texts: uk and en are machine translations (not reviewed; the review flow applies).",
+    `- Texts: machine translations (not reviewed; the review flow applies), except the ${s.humanUk} uk texts that were ` +
+      "already the owner's Ukrainian (source human, reviewed at the import).",
     "",
     "## Products",
     "",

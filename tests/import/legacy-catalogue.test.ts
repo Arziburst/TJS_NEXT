@@ -45,13 +45,21 @@ const product = (overrides = {}) => ({
   photos: 2,
   titles: { uk: "Сережки", en: "Earrings | pearls" },
   slugs: { uk: "serezhky", en: "earrings" },
+  sources: { uk: "machine", en: "machine" },
   ...overrides,
 });
 
 describe("the import report", () => {
   const products = [
     product(),
-    product({ legacyId: "a".repeat(24), fulfillment: "made_to_order", priceUah: 250, priceUsd: "5.56", weight: 0 }),
+    product({
+      legacyId: "a".repeat(24),
+      fulfillment: "made_to_order",
+      priceUah: 250,
+      priceUsd: "5.56",
+      weight: 0,
+      sources: { uk: "human", en: "machine" },
+    }),
     product({ legacyId: "b".repeat(24), category: "rings", priceUah: 12800, priceUsd: "284.57", weight: 0, weightMissing: true }),
   ];
 
@@ -64,6 +72,7 @@ describe("the import report", () => {
     expect([s.total, s.madeToOrder, s.oneOfAKind, s.photos]).toEqual([3, 1, 2, 6]);
     expect([s.cheapest?.priceUsd, s.dearest?.priceUsd]).toEqual(["5.56", "284.57"]);
     expect(s.weightZero.map((p) => p.legacyId)).toEqual(["a".repeat(24), "b".repeat(24)]);
+    expect(s.humanUk).toBe(1);
   });
 
   it("states the rate and lists every product with its legacy id, category, kind and both prices", () => {
@@ -80,6 +89,7 @@ describe("the import report", () => {
     expect(report).toContain("Prices: 5.56–284.57 USD (250–12800 UAH).");
     expect(report).toContain("Weight 0: 2 products (1 had no weight at all)");
     expect(report).toContain("the 1 made-to-order products have none yet");
+    expect(report).toContain("except the 1 uk texts that were already the owner's Ukrainian");
     expect(report).toContain("| 64e3d6fc0fffc723ced6f133 | earrings | one of a kind | 3800 | 84.48 | 5 | 2 | Earrings \\| pearls |");
     expect(report).toContain(`| ${"b".repeat(24)} | rings | one of a kind | 12800 | 284.57 | 0 (none) |`);
     expect(report).toContain("3 entries of the legacy media registry and 4 archived Cloudinary files");

@@ -113,6 +113,20 @@ export function weightOf(weight) {
   return weight ?? 0;
 }
 
+/**
+ * Where an imported text comes from. The data file marks with `source: "human"` a legacy text that was already
+ * the owner's own Ukrainian: it counts as reviewed at the import (an earlier review date is kept). Everything
+ * else is an unreviewed machine translation, so the review flow and its noindex rules apply.
+ * @param {{ title: string, description: string, source?: string }} text
+ * @param {string} importedAt
+ * @param {string | null} [previousReviewedAt]
+ */
+export function textProvenance(text, importedAt, previousReviewedAt = null) {
+  return text.source === "human"
+    ? { source: "human", reviewed_at: previousReviewedAt ?? importedAt }
+    : { source: "machine", reviewed_at: null };
+}
+
 /** The hash a translation is tied to: a changed legacy text makes its translation stale. */
 export function sourceHash(product) {
   return createHash("sha256").update(`${product.title}\n${product.description}`).digest("hex");

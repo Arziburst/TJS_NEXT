@@ -160,7 +160,7 @@ to change it) holds what the runs share:
 
 | File | What |
 |---|---|
-| `translations.json` | uk and en machine translations of every legacy title and description, produced once and reused; each entry carries the hash of its legacy text, so a changed export fails as stale instead of importing an old translation. The Russian originals stay only in the export. |
+| `translations.json` | uk and en machine translations of every legacy title and description, produced once and reused; each entry carries the hash of its legacy text, so a changed export fails as stale instead of importing an old translation. A uk entry marked `"source": "human"` is the owner's own Ukrainian legacy text, kept verbatim (22 products). The Russian originals stay only in the export. |
 | `rate.json` | the NBU USD rate the prices were converted at, pinned by the first real run (written by the importer) |
 | `report-local.md`, `report-production.md` | the report of the last run on that target: the rate and its date, counts per category and kind, the price range, the weight-0 products, the questions for the owner, every product with its legacy id, category, kind, UAH and USD price |
 
@@ -168,7 +168,8 @@ What a run does, per product: `products` row keyed by `legacy_id` (a hidden colu
 `20261016006900`): category from the legacy `type`, `available: false` → made to order without a lead time,
 `available: true` → one of a kind, available (D34), USD = UAH / rate half up to the cent, the weight as given (a
 missing one is the legacy default 0), `created_at` = `published_at` = the legacy `created`, published. Then the
-uk and en texts (`source = machine`, `reviewed_at` null; slugs transliterated / from the English title, numbered
+uk and en texts (`source = machine`, `reviewed_at` null, so the review flow applies; a uk text marked human in
+`translations.json` gets `source = human` and `reviewed_at` = the import time; slugs transliterated / from the English title, numbered
 `-2`, `-3` … for repeated titles, oldest first, existing slugs never changed), and every photo in its order to
 `product-images/legacy/<product id>/<n>-<file>` with width, height, an 8 px blur placeholder and the title as
 alt text per locale. Customers, orders, views and unused media stay in the archive.

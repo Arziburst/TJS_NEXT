@@ -11,6 +11,7 @@ import {
   slugify,
   sourceHash,
   storagePathOf,
+  textProvenance,
   uahToUsd,
   uniqueSlugs,
   weightOf,
@@ -192,6 +193,26 @@ describe("photos", () => {
   it("stores them under legacy/<product id>/ in their order", () => {
     expect(storagePathOf("0b5c…", 0, "abc.jpg")).toBe("legacy/0b5c…/1-abc.jpg");
     expect(storagePathOf("0b5c…", 2, "def.jpg")).toBe("legacy/0b5c…/3-def.jpg");
+  });
+});
+
+describe("textProvenance", () => {
+  const at = "2026-10-15T17:00:00.000Z";
+
+  it("keeps a machine translation unreviewed", () => {
+    expect(textProvenance({ title: "t", description: "d" }, at)).toEqual({ source: "machine", reviewed_at: null });
+    expect(textProvenance({ title: "t", description: "d", source: "machine" }, at, "2026-01-01T00:00:00Z")).toEqual({
+      source: "machine",
+      reviewed_at: null,
+    });
+  });
+
+  it("marks the owner's own text human, reviewed at the import, keeping an earlier review date", () => {
+    expect(textProvenance({ title: "t", description: "d", source: "human" }, at)).toEqual({ source: "human", reviewed_at: at });
+    expect(textProvenance({ title: "t", description: "d", source: "human" }, at, "2026-10-14T09:00:00+00:00")).toEqual({
+      source: "human",
+      reviewed_at: "2026-10-14T09:00:00+00:00",
+    });
   });
 });
 
