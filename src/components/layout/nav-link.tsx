@@ -23,7 +23,7 @@ export function NavLink({ href, labelKey, className, onNavigate }: NavLinkProps)
       aria-current={isActive ? "page" : undefined}
       onClick={onNavigate}
       className={cn(
-        "move-underline font-sans text-base font-semibold tracking-[1.6px] capitalize italic sb:text-sm sb:not-italic",
+        "move-underline font-sans text-base font-semibold tracking-[1.6px] italic sb:text-sm sb:not-italic",
         isActive && "text-accent",
         className,
       )}

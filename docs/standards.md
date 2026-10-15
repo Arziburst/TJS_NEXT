@@ -45,6 +45,33 @@ Business values (prices, markets, locales, statuses …) are not here — they l
 - Cache Components are on (`cacheComponents: true`): read the Next docs in `node_modules/next/dist/docs/`
   before using `"use cache"`, `cacheLife`, `cacheTag`; never cache per-user data in a shared cache.
 - Feature flags are "exactly `true` turns it on" (`process.env.PAYMENTS_LIVE === "true"`).
+- **Not found pages (Next 16.4.1 + Cache Components, found in #43).** A `notFound()` thrown while a
+  route is prerendered (at build time, or in the fallback shell of a route with unknown params) is
+  stored as an empty `<html id="__next_error__">` shell that only client JavaScript fills in: status
+  404, but no text and no `<title>` for crawlers and no-JS clients. Making the page dynamic (`await
+  params`) is worse: the static layout shell is already sent, so the answer is **200** with an error
+  shell that still lacks the not-found text. `next dev` renders it fine, so only a production build shows it. Rules:
+  - Unknown URLs need no code: there is no catch-all route; they reach `src/app/global-not-found.tsx`,
+    which renders per request in the visitor's locale (the proxy's `X-NEXT-INTL-LOCALE` header via
+    `src/i18n/request.ts`) with the site shell, a localized `<title>` and status 404.
+  - Do not add a catch-all (`[...rest]`) that calls `notFound()`, and do not rely on `notFound()` in a
+    prerendered page for a crawler-visible 404 until a production-build test proves it works on the Next
+    version in use.
+  - A missing resource under a real route (an unknown product slug, #15/#16) must still answer 404
+    with the localized text in the HTML. Prove the chosen way in the task — e.g. the proxy checks the
+    slug and rewrites to a path no route matches, which then gets the global 404 (the Next docs'
+    suggestion; not yet verified here) — and raise it as a question if none works.
+  - Test pattern: an e2e against `next build` + `next start` that requests the URL with `request.get`
+    (no JavaScript) and asserts the status 404, `<html lang="<locale>"`, the localized `<title>` and the
+    message text in the raw HTML (see "the 404 under a locale is server-rendered …" in
+    `e2e/i18n.e2e.ts`).
+- **Route registry (`src/config/routes.ts`).** Every shop route is listed once with its locale-less
+  `path` and an `enabled` flag; the shell (header nav, mobile menu, cart and account slots) links only to
+  enabled routes, because the client router prefetches every link and a link to a page that does not
+  exist yet answers 404 (console errors on the production build). The task that lands a page sets its
+  route to `enabled: true` in the same change and links to it via `routes.<key>.path`, never a
+  hard-coded path. The shell e2e (`expectOnlyEnabledRouteLinks` in `e2e/routes.ts`) assert that enabled
+  routes are linked and disabled ones are not; the dev-only `/ui-kit` showcase is not in the registry.
 
 ## 4. Data and security
 
