@@ -22,7 +22,8 @@ export function isMigrationCandidate(fileName) {
 
 /**
  * @typedef {{ status: string, file: string }} BaseChange  a `git diff --name-status` entry (base name)
- * @typedef {{ number: number, files: string[] }} OpenPr  migration base names an open PR adds
+ * @typedef {{ number: number, files: string[], headRefName?: string, headSha?: string }} OpenPr
+ *   an open PR: the migration base names it adds, and its head
  * @typedef {{
  *   localFiles: string[],
  *   baseFiles: string[],
@@ -33,6 +34,19 @@ export function isMigrationCandidate(fileName) {
  * }} MigrationInput
  * @typedef {{ errors: string[], warnings: string[] }} MigrationReport
  */
+
+/**
+ * Whether an open PR is the one this branch belongs to, so its migrations are not a conflict. An
+ * explicit PR number decides alone; otherwise the PR's head ref is the current branch, or HEAD is or
+ * contains the PR's head commit (a verifier's worktree or an integration branch under another name).
+ * @param {OpenPr} pr
+ * @param {{ currentBranch: string, prNumber?: number, headContains: (sha: string) => boolean }} own
+ */
+export function isOwnPr(pr, { currentBranch, prNumber, headContains }) {
+  if (prNumber !== undefined) return pr.number === prNumber;
+  if (pr.headRefName !== undefined && pr.headRefName === currentBranch) return true;
+  return pr.headSha !== undefined && headContains(pr.headSha);
+}
 
 /**
  * @param {MigrationInput} input
