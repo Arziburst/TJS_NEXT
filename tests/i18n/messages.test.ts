@@ -82,6 +82,8 @@ describe("message catalogs", () => {
       page: 2,
       category: "Rings",
       url: "https://example.com/a.jpg",
+      country: "Polska",
+      date: "21 October 2026",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

@@ -13,5 +13,55 @@
     "success": "Commande réussie",
     "grandTotal": "Total général",
     "continueShopping": "Continuer mes achats"
+  },
+  "internationalDelivery": {
+    "country": "Pays",
+    "countryPlaceholder": "Choisissez un pays",
+    "method": "Mode de livraison",
+    "methods": {
+      "division": "En agence, consigne ou point relais Nova Post",
+      "address": "Par coursier à l’adresse"
+    },
+    "courierOnly": "Nova Post livre vers ce pays ({country}) par coursier à l’adresse.",
+    "settlement": "Ville ou localité",
+    "settlementPlaceholder": "Commencez à saisir le nom",
+    "settlementHint": "Saisissez au moins 2 lettres",
+    "searching": "Recherche…",
+    "nothingFound": "Aucun résultat",
+    "loadError": "Impossible de charger la liste. Veuillez réessayer plus tard.",
+    "clear": "Effacer",
+    "showList": "Afficher la liste",
+    "division": "Point de retrait",
+    "divisionTypeFilter": "Type de point",
+    "divisionTypes": {
+      "all": "Tous",
+      "PostBranch": "Agence",
+      "Postomat": "Consigne",
+      "PUDO": "Point relais"
+    },
+    "loading": "Chargement…",
+    "noDivisions": "Il n’y a pas de point de ce type ici.",
+    "address": {
+      "city": "Ville",
+      "postCode": "Code postal",
+      "street": "Rue",
+      "building": "Numéro",
+      "flat": "Appartement (facultatif)",
+      "submit": "Calculer la livraison"
+    },
+    "quote": {
+      "label": "Livraison",
+      "estimate": "Estimation",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Calcul en cours…",
+      "error": "Impossible de calculer le coût de la livraison.",
+      "tbd": "TBD",
+      "unavailable": "Indisponible pour le moment",
+      "deliveryDate": "Livraison prévue : {date}",
+      "estimateNote": "Tarif forfaitaire de la zone de destination ; le coût final peut différer.",
+      "tbdNote": "Le tarif de livraison de cette zone n’est pas encore fixé."
+    },
+    "customsNotice": "La TVA à l’importation et les droits de douane peuvent être à la charge du destinataire à la livraison."
   }
 }

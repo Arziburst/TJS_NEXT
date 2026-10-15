@@ -13,5 +13,55 @@
     "success": "Bestelling geslaagd",
     "grandTotal": "Eindtotaal",
     "continueShopping": "Verder winkelen"
+  },
+  "internationalDelivery": {
+    "country": "Land",
+    "countryPlaceholder": "Kies een land",
+    "method": "Verzendmethode",
+    "methods": {
+      "division": "Naar een Nova Post-filiaal, pakketautomaat of afhaalpunt",
+      "address": "Per koerier naar het adres"
+    },
+    "courierOnly": "Nova Post bezorgt in {country} per koerier op het adres.",
+    "settlement": "Stad of plaats",
+    "settlementPlaceholder": "Begin de naam te typen",
+    "settlementHint": "Typ minstens 2 letters",
+    "searching": "Zoeken…",
+    "nothingFound": "Niets gevonden",
+    "loadError": "De lijst kon niet worden geladen. Probeer het later opnieuw.",
+    "clear": "Wissen",
+    "showList": "Lijst tonen",
+    "division": "Afhaalpunt",
+    "divisionTypeFilter": "Soort afhaalpunt",
+    "divisionTypes": {
+      "all": "Alle",
+      "PostBranch": "Filiaal",
+      "Postomat": "Pakketautomaat",
+      "PUDO": "Afhaalpunt"
+    },
+    "loading": "Laden…",
+    "noDivisions": "Hier zijn geen afhaalpunten van dit soort.",
+    "address": {
+      "city": "Plaats",
+      "postCode": "Postcode",
+      "street": "Straat",
+      "building": "Huisnummer",
+      "flat": "Toevoeging (optioneel)",
+      "submit": "Verzending berekenen"
+    },
+    "quote": {
+      "label": "Verzending",
+      "estimate": "Schatting",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Berekenen…",
+      "error": "De verzendkosten konden niet worden berekend.",
+      "tbd": "TBD",
+      "unavailable": "Momenteel niet beschikbaar",
+      "deliveryDate": "Verwachte bezorging: {date}",
+      "estimateNote": "Vast tarief voor de bestemmingszone; de uiteindelijke kosten kunnen afwijken.",
+      "tbdNote": "Het verzendtarief voor deze zone is nog niet vastgesteld."
+    },
+    "customsNotice": "Bij bezorging moet de ontvanger mogelijk invoer-btw en douanerechten betalen."
   }
 }

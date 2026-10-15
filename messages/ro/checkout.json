@@ -13,5 +13,55 @@
     "success": "Comandă finalizată cu succes",
     "grandTotal": "Total general",
     "continueShopping": "Continuă cumpărăturile"
+  },
+  "internationalDelivery": {
+    "country": "Țara",
+    "countryPlaceholder": "Alegeți țara",
+    "method": "Metoda de livrare",
+    "methods": {
+      "division": "La o filială, un locker sau un punct de ridicare Nova Post",
+      "address": "Prin curier la adresă"
+    },
+    "courierOnly": "Nova Post livrează în {country} prin curier la adresă.",
+    "settlement": "Oraș sau localitate",
+    "settlementPlaceholder": "Începeți să scrieți numele",
+    "settlementHint": "Scrieți cel puțin 2 litere",
+    "searching": "Se caută…",
+    "nothingFound": "Nu s-a găsit nimic",
+    "loadError": "Lista nu a putut fi încărcată. Încercați din nou mai târziu.",
+    "clear": "Ștergeți",
+    "showList": "Afișați lista",
+    "division": "Punct de ridicare",
+    "divisionTypeFilter": "Tipul punctului",
+    "divisionTypes": {
+      "all": "Toate",
+      "PostBranch": "Filială",
+      "Postomat": "Locker",
+      "PUDO": "Punct de ridicare"
+    },
+    "loading": "Se încarcă…",
+    "noDivisions": "Aici nu există puncte de acest tip.",
+    "address": {
+      "city": "Oraș",
+      "postCode": "Cod poștal",
+      "street": "Stradă",
+      "building": "Număr",
+      "flat": "Apartament (opțional)",
+      "submit": "Calculați livrarea"
+    },
+    "quote": {
+      "label": "Livrare",
+      "estimate": "Estimare",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Se calculează…",
+      "error": "Costul livrării nu a putut fi calculat.",
+      "tbd": "TBD",
+      "unavailable": "Momentan indisponibil",
+      "deliveryDate": "Livrare estimată: {date}",
+      "estimateNote": "Tarif fix pentru zona de destinație; costul final poate diferi.",
+      "tbdNote": "Tariful de livrare pentru această zonă nu a fost încă stabilit."
+    },
+    "customsNotice": "La livrare, destinatarul poate avea de plătit TVA la import și taxe vamale."
   }
 }

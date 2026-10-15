@@ -13,5 +13,55 @@
     "success": "Ordine completato",
     "grandTotal": "Totale complessivo",
     "continueShopping": "Continua lo shopping"
+  },
+  "internationalDelivery": {
+    "country": "Paese",
+    "countryPlaceholder": "Scegli un paese",
+    "method": "Metodo di consegna",
+    "methods": {
+      "division": "In una filiale, un locker o un punto di ritiro Nova Post",
+      "address": "Con corriere all’indirizzo"
+    },
+    "courierOnly": "Nova Post consegna in questo paese ({country}) con corriere all’indirizzo.",
+    "settlement": "Città o località",
+    "settlementPlaceholder": "Inizia a digitare il nome",
+    "settlementHint": "Digita almeno 2 lettere",
+    "searching": "Ricerca…",
+    "nothingFound": "Nessun risultato",
+    "loadError": "Impossibile caricare l’elenco. Riprova più tardi.",
+    "clear": "Cancella",
+    "showList": "Mostra l’elenco",
+    "division": "Punto di ritiro",
+    "divisionTypeFilter": "Tipo di punto",
+    "divisionTypes": {
+      "all": "Tutti",
+      "PostBranch": "Filiale",
+      "Postomat": "Locker",
+      "PUDO": "Punto di ritiro"
+    },
+    "loading": "Caricamento…",
+    "noDivisions": "Qui non ci sono punti di questo tipo.",
+    "address": {
+      "city": "Città",
+      "postCode": "CAP",
+      "street": "Via",
+      "building": "Numero civico",
+      "flat": "Interno (facoltativo)",
+      "submit": "Calcola la spedizione"
+    },
+    "quote": {
+      "label": "Spedizione",
+      "estimate": "Stima",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Calcolo in corso…",
+      "error": "Impossibile calcolare il costo della spedizione.",
+      "tbd": "TBD",
+      "unavailable": "Al momento non disponibile",
+      "deliveryDate": "Consegna prevista: {date}",
+      "estimateNote": "Tariffa forfettaria per la zona di destinazione; il costo finale può variare.",
+      "tbdNote": "La tariffa di spedizione per questa zona non è ancora stata fissata."
+    },
+    "customsNotice": "Alla consegna il destinatario potrebbe dover pagare l’IVA all’importazione e i dazi doganali."
   }
 }

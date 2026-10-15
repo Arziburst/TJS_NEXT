@@ -13,5 +13,55 @@
     "success": "Zamówienie złożone",
     "grandTotal": "Suma całkowita",
     "continueShopping": "Kontynuuj zakupy"
+  },
+  "internationalDelivery": {
+    "country": "Kraj",
+    "countryPlaceholder": "Wybierz kraj",
+    "method": "Sposób dostawy",
+    "methods": {
+      "division": "Do oddziału, paczkomatu lub punktu odbioru Nova Post",
+      "address": "Kurierem pod adres"
+    },
+    "courierOnly": "Nova Post dostarcza do kraju {country} kurierem pod adres.",
+    "settlement": "Miasto lub miejscowość",
+    "settlementPlaceholder": "Zacznij wpisywać nazwę",
+    "settlementHint": "Wpisz co najmniej 2 litery",
+    "searching": "Wyszukiwanie…",
+    "nothingFound": "Nic nie znaleziono",
+    "loadError": "Nie udało się wczytać listy. Spróbuj ponownie później.",
+    "clear": "Wyczyść",
+    "showList": "Pokaż listę",
+    "division": "Punkt odbioru",
+    "divisionTypeFilter": "Rodzaj punktu",
+    "divisionTypes": {
+      "all": "Wszystkie",
+      "PostBranch": "Oddział",
+      "Postomat": "Paczkomat",
+      "PUDO": "Punkt odbioru"
+    },
+    "loading": "Wczytywanie…",
+    "noDivisions": "Brak punktów tego rodzaju w tej miejscowości.",
+    "address": {
+      "city": "Miasto",
+      "postCode": "Kod pocztowy",
+      "street": "Ulica",
+      "building": "Numer domu",
+      "flat": "Mieszkanie (opcjonalnie)",
+      "submit": "Oblicz dostawę"
+    },
+    "quote": {
+      "label": "Dostawa",
+      "estimate": "Szacunek",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Obliczanie…",
+      "error": "Nie udało się obliczyć kosztu dostawy.",
+      "tbd": "TBD",
+      "unavailable": "Obecnie niedostępne",
+      "deliveryDate": "Przewidywana dostawa: {date}",
+      "estimateNote": "Stała stawka dla strefy docelowej; ostateczny koszt może się różnić.",
+      "tbdNote": "Stawka dostawy dla tej strefy nie została jeszcze ustalona."
+    },
+    "customsNotice": "Przy odbiorze odbiorca może być zobowiązany do zapłaty importowego VAT i cła."
   }
 }

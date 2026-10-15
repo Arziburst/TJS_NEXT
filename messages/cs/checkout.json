@@ -13,5 +13,55 @@
     "success": "Objednávka byla úspěšně odeslána",
     "grandTotal": "Celková částka",
     "continueShopping": "Pokračovat v nákupu"
+  },
+  "internationalDelivery": {
+    "country": "Země",
+    "countryPlaceholder": "Vyberte zemi",
+    "method": "Způsob doručení",
+    "methods": {
+      "division": "Na pobočku, do výdejního boxu nebo na výdejní místo Nova Post",
+      "address": "Kurýrem na adresu"
+    },
+    "courierOnly": "Nova Post doručuje do země {country} kurýrem na adresu.",
+    "settlement": "Město nebo obec",
+    "settlementPlaceholder": "Začněte psát název",
+    "settlementHint": "Napište alespoň 2 písmena",
+    "searching": "Hledání…",
+    "nothingFound": "Nic nenalezeno",
+    "loadError": "Seznam se nepodařilo načíst. Zkuste to prosím později.",
+    "clear": "Vymazat",
+    "showList": "Zobrazit seznam",
+    "division": "Výdejní místo",
+    "divisionTypeFilter": "Typ místa",
+    "divisionTypes": {
+      "all": "Vše",
+      "PostBranch": "Pobočka",
+      "Postomat": "Výdejní box",
+      "PUDO": "Výdejní místo"
+    },
+    "loading": "Načítání…",
+    "noDivisions": "Zde nejsou žádná místa tohoto typu.",
+    "address": {
+      "city": "Město",
+      "postCode": "PSČ",
+      "street": "Ulice",
+      "building": "Číslo domu",
+      "flat": "Byt (nepovinné)",
+      "submit": "Spočítat doručení"
+    },
+    "quote": {
+      "label": "Doručení",
+      "estimate": "Odhad",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Počítá se…",
+      "error": "Cenu doručení se nepodařilo spočítat.",
+      "tbd": "TBD",
+      "unavailable": "Momentálně nedostupné",
+      "deliveryDate": "Předpokládané doručení: {date}",
+      "estimateNote": "Paušální sazba pro cílovou zónu; konečná cena se může lišit.",
+      "tbdNote": "Sazba doručení pro tuto zónu zatím nebyla stanovena."
+    },
+    "customsNotice": "Při doručení může příjemce platit dovozní DPH a clo."
   }
 }
