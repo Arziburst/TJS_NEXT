@@ -125,7 +125,9 @@ across `main` and every open PR (rules in `docs/standards.md` §7). `npm run che
 (`scripts/ci/check-migration-versions.mjs`) fails on a bad name, a duplicate version, an edited or deleted
 migration that exists on the base branch, a version already used on the base branch or claimed by another
 open PR, and warns on a version older than the latest on the base branch. Open PRs are read with `gh`;
-without `gh` that step is a warning locally and an error in CI. Base: `--base <ref>`, else
+without `gh` that step is a warning locally and an error in CI. The branch's own PR is no conflict: the one
+named by `--pr <n>`, else the PR whose head ref is the current branch or whose head commit HEAD is or contains
+(a verifier's worktree, an integration branch). Base: `--base <ref>`, else
 `$MIGRATIONS_BASE_REF`, else `origin/$GITHUB_BASE_REF`, else `origin/main` (run `git fetch origin main`
 first). The remote migration history stays a manual check.
 
