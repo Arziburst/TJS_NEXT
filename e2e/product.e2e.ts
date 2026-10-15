@@ -45,6 +45,10 @@ test.describe("product page HTML (no JavaScript)", () => {
       "x-default": "/en/product/coral-drop-earrings",
     });
 
+    expect(html).toContain('<meta property="og:locale" content="de_DE"/>');
+    const ogAlternates = [...html.matchAll(/<meta property="og:locale:alternate" content="([^"]+)"/g)].map(([, l]) => l);
+    expect(ogAlternates.sort()).toEqual(["en_US", "pl_PL", "uk_UA"]);
+
     const [product, breadcrumbs] = jsonLd(html)["@graph"];
     expect(product).toMatchObject({ "@type": "Product", name: "Korallen-Tropfenohrringe", sku: "TEST-001" });
     expect(product.image).toHaveLength(3);
@@ -67,6 +71,9 @@ test.describe("product page HTML (no JavaScript)", () => {
     expect(html).toContain(fr.page.untranslated);
     expect(html).toMatch(/<link rel="canonical" href="[^"]*\/en\/product\/pearl-stud-earrings"/);
     expect(html).not.toContain('hrefLang="fr"');
+    // the en page states the product; this URL must not give it a second Offer in EUR
+    expect(html).not.toContain("application/ld+json");
+    expect(html).toContain('<meta property="og:locale" content="en_US"/>');
   });
 
   test("redirects another locale's slug to the locale's slug", async ({ request }) => {

@@ -47,6 +47,10 @@ export async function findSlugMatches(slug: string): Promise<CatalogResult<SlugM
   }
 }
 
+// generateStaticParams reads once per locale at build time; a build without a reachable database (CI builds
+// before its stack starts) gives up at once instead of waiting through the client's retries per locale
+const BUILD_READ_TIMEOUT_MS = 5_000;
+
 /** The URL slug in `locale` of every published product: its own translation's, else the fallback's. */
 export async function getProductSlugs(locale: Locale): Promise<CatalogResult<string[]>> {
   if (!isLocale(locale)) return { ok: false, reason: "invalid" };
@@ -57,7 +61,9 @@ export async function getProductSlugs(locale: Locale): Promise<CatalogResult<str
       .eq("status", "published")
       .is("deleted_at", null)
       .in("product_translations.locale", localesFor(locale))
-      .order("id");
+      .order("id")
+      .retry(false)
+      .abortSignal(AbortSignal.timeout(BUILD_READ_TIMEOUT_MS));
     if (error) return { ok: false, reason: "unexpectedError" };
     const slugs = data
       .map((row) => productSlugFor(row.product_translations, locale))

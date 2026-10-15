@@ -11,7 +11,13 @@ import { getPathname, redirect } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { getProductPage, getProductSlugs } from "@/lib/catalog/product";
 import { getJsonLdPrice } from "@/lib/money/prices";
-import { productAlternates, productJsonLd, productPath, serializeJsonLd } from "@/lib/seo/product";
+import {
+  productAlternates,
+  productJsonLd,
+  productOpenGraphLocales,
+  productPath,
+  serializeJsonLd,
+} from "@/lib/seo/product";
 
 /*
  * Unknown and unpublished slugs answer 404 in the proxy (src/proxy/product-not-found.ts) before this page
@@ -51,7 +57,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/product/
       title: translation.metaTitle ?? translation.title,
       description,
       url: productPath(translation.locale, translation.slug),
-      locale,
+      ...productOpenGraphLocales(page.translations, translation.locale),
       images: product.images.slice(0, 1).map((image) => ({
         url: image.url,
         width: image.width,
@@ -81,7 +87,9 @@ async function ProductContent({ params }: { params: PageProps<"/[locale]/product
 
   return (
     <>
-      <ProductJsonLd locale={locale} page={page} />
+      {/* only the canonical page states the product: a fallback page (canonical = the en page) would give
+          the same URL a second Offer in another currency */}
+      {!page.product.translation.isFallback && <ProductJsonLd locale={locale} page={page} />}
       <ProductDetails
         product={page.product}
         categoryName={page.categoryName}

@@ -28,6 +28,32 @@ export function productAlternates(
   return { canonical: productPath(shown.locale, shown.slug), languages };
 }
 
+// Open Graph names a locale as language_TERRITORY: each language in the territory of its main market (D2, D5)
+const OG_LOCALES: Record<Locale, string> = {
+  uk: "uk_UA",
+  en: "en_US",
+  de: "de_DE",
+  fr: "fr_FR",
+  es: "es_ES",
+  it: "it_IT",
+  pl: "pl_PL",
+  nl: "nl_NL",
+  cs: "cs_CZ",
+  pt: "pt_PT",
+  ro: "ro_RO",
+};
+
+/** og:locale of the content shown and og:locale:alternate of the product's other translations. */
+export function productOpenGraphLocales(
+  translations: readonly TranslationSlug[],
+  shownLocale: Locale,
+): { locale: string; alternateLocale: string[] } {
+  const alternateLocale = locales
+    .filter((l) => l !== shownLocale && translations.some((t) => t.locale === l))
+    .map((l) => OG_LOCALES[l]);
+  return { locale: OG_LOCALES[shownLocale], alternateLocale };
+}
+
 const SCHEMA = "https://schema.org";
 
 /**

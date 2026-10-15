@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   productAlternates,
+  productOpenGraphLocales,
   productJsonLd,
   schemaAvailability,
   serializeJsonLd,
@@ -34,6 +35,13 @@ describe("productAlternates", () => {
   it("has no x-default without an en translation", () => {
     const alternates = productAlternates([{ locale: "uk", slug: "lyshe" }], { locale: "uk", slug: "lyshe" });
     expect(alternates.languages).toEqual({ uk: "/uk/product/lyshe" });
+  });
+});
+
+describe("productOpenGraphLocales", () => {
+  it("names the shown content's locale as language_TERRITORY and the other translations as alternates", () => {
+    expect(productOpenGraphLocales(translations, "de")).toEqual({ locale: "de_DE", alternateLocale: ["uk_UA", "en_US"] });
+    expect(productOpenGraphLocales(translations, "uk")).toEqual({ locale: "uk_UA", alternateLocale: ["en_US", "de_DE"] });
   });
 });
 
