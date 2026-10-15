@@ -1,0 +1,2 @@
+-- Local and CI seed data, loaded by `npm run db:reset` after the migrations ([db.seed] in config.toml).
+-- Dev/QA data only: never production data, and never reference data the app needs (that goes in a migration).
