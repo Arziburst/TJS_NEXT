@@ -14,6 +14,65 @@
     "grandTotal": "Suma całkowita",
     "continueShopping": "Kontynuuj zakupy"
   },
+  "request": {
+    "title": "Zapytanie o zamówienie",
+    "intro": "Na stronie nic nie jest płatne: wyślij zapytanie, a sklep skontaktuje się z Tobą, aby potwierdzić zamówienie i uzgodnić płatność.",
+    "loadError": "Nie udało się wczytać zamówienia. Spróbuj ponownie później.",
+    "empty": "W koszyku nie ma niczego, co można zamówić.",
+    "backToCart": "Wróć do koszyka",
+    "contact": {
+      "firstName": "Imię",
+      "lastName": "Nazwisko (opcjonalnie)",
+      "phone": "Telefon",
+      "phoneHint": "Z numerem kierunkowym kraju, na przykład +48 512 345 678",
+      "email": "E-mail"
+    },
+    "commentHint": "Opcjonalnie",
+    "summary": {
+      "lines": "Produkty w zamówieniu",
+      "quantity": "Ilość: {quantity}",
+      "goodsTotal": "Razem za produkty",
+      "pieces": "{count, plural, one {# sztuka} few {# sztuki} many {# sztuk} other {# sztuki}}",
+      "deliveryNote": "Dostawa nie jest wliczona: płacisz za nią przewoźnikowi przy odbiorze (szacunkowy koszt znajdziesz w szczegółach dostawy).",
+      "unavailableNote": "Produkty, których nie można już zamówić, zostają w koszyku i nie są częścią tego zapytania.",
+      "editCart": "Zmień koszyk"
+    },
+    "submit": "Wyślij zapytanie o zamówienie",
+    "sending": "Wysyłanie…",
+    "errors": {
+      "title": "Sprawdź formularz",
+      "firstName": "Podaj swoje imię.",
+      "lastName": "Nazwisko jest za długie.",
+      "phone": "Podaj numer telefonu z numerem kierunkowym kraju, na przykład +48512345678.",
+      "email": "Podaj prawidłowy adres e-mail.",
+      "delivery": "Wybierz, gdzie dostarczyć zamówienie.",
+      "deliveryAddress": "Kliknij „Oblicz dostawę”, aby potwierdzić adres dostawy.",
+      "comment": "Komentarz jest za długi.",
+      "rateLimited": "Zbyt wiele zapytań. Odczekaj kilka minut i spróbuj ponownie.",
+      "unavailable": "Niestety te produkty właśnie zamówił ktoś inny: {titles}. Nic nie zostało wysłane. Usuń je z koszyka i wyślij zapytanie ponownie.",
+      "cartChanged": "W międzyczasie Twój koszyk się zmienił. Sprawdź zamówienie i wyślij je ponownie.",
+      "emptyCart": "W koszyku nie ma niczego, co można zamówić.",
+      "pricesUnavailable": "Nie można teraz obliczyć cen. Spróbuj ponownie później.",
+      "unexpected": "Nie udało się wysłać zapytania. Spróbuj ponownie."
+    }
+  },
+  "done": {
+    "title": "Zapytanie o zamówienie wysłane",
+    "thanks": "Dziękujemy, {name}! Twoje zapytanie o zamówienie zostało przyjęte.",
+    "number": "Numer zamówienia",
+    "next": "Sklep skontaktuje się z Tobą, aby potwierdzić zamówienie oraz uzgodnić płatność i dostawę. Na stronie nie są przyjmowane płatności.",
+    "contactTitle": "Kontakt ze sklepem",
+    "contactTbd": "Kanały kontaktu: TBD",
+    "lines": "Zamówione produkty",
+    "quantity": "Ilość: {quantity}",
+    "goodsTotal": "Razem za produkty",
+    "delivery": "Dostawa (szacunkowo)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "oblicza przewoźnik",
+    "deliveryNote": "Rzeczywisty koszt dostawy płacisz przewoźnikowi przy odbiorze.",
+    "notAvailable": "Tego zamówienia nie można tu wyświetlić.",
+    "notAvailableHint": "Potwierdzenie otwiera się tylko w przeglądarce, z której wysłano zapytanie, albo po zalogowaniu się na konto, z którego je wysłano."
+  },
   "delivery": {
     "title": "Dostawa na Ukrainie",
     "city": {
@@ -93,7 +152,8 @@
       "street": "Ulica",
       "building": "Numer domu",
       "flat": "Mieszkanie (opcjonalnie)",
-      "submit": "Oblicz dostawę"
+      "submit": "Oblicz dostawę",
+      "changed": "Adres się zmienił: kliknij ponownie „Oblicz dostawę”."
     },
     "quote": {
       "label": "Dostawa",

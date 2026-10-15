@@ -126,7 +126,6 @@
     "status": "Status",
     "position": "Position",
     "positionHint": "Eine Zahl für die manuelle Reihenfolge; standardmäßig 0.",
-    "photosReadOnly": "Fotos werden hier nur angezeigt; Hinzufügen und Sortieren folgt in einer späteren Version.",
     "noPhotos": "Noch keine Fotos.",
     "photoAlt": "Foto {index}",
     "delete": "Produkt löschen",
@@ -182,6 +181,41 @@
       "leadTimeOrder": "Darf nicht kleiner als „Von“ sein",
       "titleRequired": "Geben Sie einen Titel in dieser Sprache ein oder leeren Sie ihre anderen Texte",
       "requiredToPublish": "Zum Veröffentlichen ist ein ukrainischer Titel nötig"
+    }
+  },
+  "images": {
+    "hint": "JPEG, PNG oder WebP, jeweils bis {maxMb} MB. Das erste Foto ist das Hauptfoto im Shop. Standort- und Kameradaten werden beim Hochladen entfernt.",
+    "saveFirst": "Speichern Sie zuerst das Produkt und fügen Sie dann hier seine Fotos hinzu.",
+    "add": "Fotos hinzufügen",
+    "orderHint": "Ziehen Sie ein Foto, um es zu verschieben, oder nutzen Sie seine Pfeiltasten.",
+    "orderHintButtons": "Verschieben Sie ein Foto mit seinen Pfeiltasten.",
+    "main": "Hauptfoto",
+    "makeMain": "Zum Hauptfoto machen",
+    "moveEarlier": "Foto {index} nach vorne verschieben",
+    "moveLater": "Foto {index} nach hinten verschieben",
+    "altTextsOf": "Alternativtexte von Foto {index}",
+    "altHint": "Eine kurze Beschreibung des Fotos für Screenreader und Suchmaschinen. Ein leeres Feld verwendet den darin angezeigten Text.",
+    "altSave": "Alternativtexte speichern",
+    "altSaved": "Alternativtexte gespeichert",
+    "deleteOf": "Foto {index} löschen",
+    "deleteTitle": "Dieses Foto löschen?",
+    "deleteDescription": "Foto {index} verschwindet sofort aus dem Produkt und dem Shop.",
+    "deleteConfirm": "Löschen",
+    "deleted": "Foto gelöscht",
+    "uploading": "{name} wird hochgeladen…",
+    "uploaded": "{name} hinzugefügt",
+    "progress": "Hinzugefügt: {done} von {total}",
+    "uploadErrors": {
+      "tooLarge": "{name}: größer als {maxMb} MB.",
+      "unsupportedType": "{name}: kein JPEG-, PNG- oder WebP-Foto.",
+      "invalidImage": "{name}: Die Datei ist beschädigt oder hat zu viele Pixel.",
+      "failed": "{name}: Das Hochladen ist fehlgeschlagen. Prüfen Sie die Verbindung und versuchen Sie es erneut."
+    },
+    "errors": {
+      "notAuthorized": "Das kann nur ein Administrator. Melden Sie sich erneut an.",
+      "notFound": "Dieses Produkt oder Foto existiert nicht mehr.",
+      "conflict": "Die Fotos wurden in einem anderen Fenster geändert; jetzt werden die aktuellen angezeigt.",
+      "unexpectedError": "Das hat nicht geklappt. Versuchen Sie es erneut."
     }
   },
   "settings": {

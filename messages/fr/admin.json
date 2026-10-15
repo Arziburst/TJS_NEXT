@@ -126,7 +126,6 @@
     "status": "Statut",
     "position": "Position",
     "positionHint": "Un nombre pour l’ordre manuel ; 0 par défaut.",
-    "photosReadOnly": "Les photos sont affichées ici en lecture seule ; l’ajout et le tri arrivent dans une prochaine version.",
     "noPhotos": "Pas encore de photos.",
     "photoAlt": "Photo {index}",
     "delete": "Supprimer le produit",
@@ -182,6 +181,41 @@
       "leadTimeOrder": "Ne doit pas être inférieur à « De »",
       "titleRequired": "Saisissez un titre dans cette langue ou videz ses autres textes",
       "requiredToPublish": "Un titre ukrainien est requis pour publier"
+    }
+  },
+  "images": {
+    "hint": "JPEG, PNG ou WebP, jusqu’à {maxMb} Mo chacune. La première photo est la photo principale de la boutique. Les données de lieu et d’appareil sont supprimées à l’envoi.",
+    "saveFirst": "Enregistrez d’abord le produit, puis ajoutez ses photos ici.",
+    "add": "Ajouter des photos",
+    "orderHint": "Faites glisser une photo pour la déplacer, ou utilisez ses boutons fléchés.",
+    "orderHintButtons": "Utilisez les boutons fléchés d’une photo pour la déplacer.",
+    "main": "Photo principale",
+    "makeMain": "Définir comme principale",
+    "moveEarlier": "Avancer la photo {index}",
+    "moveLater": "Reculer la photo {index}",
+    "altTextsOf": "Textes alternatifs de la photo {index}",
+    "altHint": "Une courte description de la photo pour les lecteurs d’écran et les moteurs de recherche. Un champ vide utilise le texte qui y est affiché.",
+    "altSave": "Enregistrer les textes",
+    "altSaved": "Textes alternatifs enregistrés",
+    "deleteOf": "Supprimer la photo {index}",
+    "deleteTitle": "Supprimer cette photo ?",
+    "deleteDescription": "La photo {index} disparaît immédiatement du produit et de la boutique.",
+    "deleteConfirm": "Supprimer",
+    "deleted": "Photo supprimée",
+    "uploading": "Envoi de {name}…",
+    "uploaded": "{name} ajoutée",
+    "progress": "Ajoutées : {done} sur {total}",
+    "uploadErrors": {
+      "tooLarge": "{name} : plus de {maxMb} Mo.",
+      "unsupportedType": "{name} : ce n’est pas une photo JPEG, PNG ou WebP.",
+      "invalidImage": "{name} : le fichier est endommagé ou compte trop de pixels.",
+      "failed": "{name} : l’envoi a échoué. Vérifiez la connexion et réessayez."
+    },
+    "errors": {
+      "notAuthorized": "Seul un administrateur peut faire cela. Reconnectez-vous.",
+      "notFound": "Ce produit ou cette photo n’existe plus.",
+      "conflict": "Les photos ont été modifiées dans une autre fenêtre ; les photos actuelles sont maintenant affichées.",
+      "unexpectedError": "Cela n’a pas fonctionné. Réessayez."
     }
   },
   "settings": {

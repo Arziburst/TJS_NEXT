@@ -126,7 +126,6 @@
     "status": "Stare",
     "position": "Poziție",
     "positionHint": "Un număr pentru ordonarea manuală; implicit 0.",
-    "photosReadOnly": "Fotografiile sunt afișate aici doar pentru vizualizare; adăugarea și ordonarea vin într-o versiune ulterioară.",
     "noPhotos": "Încă nu există fotografii.",
     "photoAlt": "Fotografia {index}",
     "delete": "Șterge produsul",
@@ -182,6 +181,41 @@
       "leadTimeOrder": "Nu poate fi mai mic decât „De la”",
       "titleRequired": "Introduceți un titlu în această limbă sau goliți celelalte texte ale ei",
       "requiredToPublish": "Pentru publicare este necesar un titlu în ucraineană"
+    }
+  },
+  "images": {
+    "hint": "JPEG, PNG sau WebP, fiecare de până la {maxMb} MB. Prima fotografie este cea principală în magazin. Datele despre loc și cameră sunt eliminate la încărcare.",
+    "saveFirst": "Salvați mai întâi produsul, apoi adăugați aici fotografiile lui.",
+    "add": "Adăugați fotografii",
+    "orderHint": "Trageți o fotografie pentru a o muta sau folosiți butoanele cu săgeți.",
+    "orderHintButtons": "Folosiți butoanele cu săgeți ale unei fotografii pentru a o muta.",
+    "main": "Fotografia principală",
+    "makeMain": "Setați ca principală",
+    "moveEarlier": "Mutați fotografia {index} mai în față",
+    "moveLater": "Mutați fotografia {index} mai în spate",
+    "altTextsOf": "Textele alternative ale fotografiei {index}",
+    "altHint": "O scurtă descriere a fotografiei pentru cititoarele de ecran și motoarele de căutare. Un câmp gol folosește textul afișat în el.",
+    "altSave": "Salvați textele",
+    "altSaved": "Textele alternative au fost salvate",
+    "deleteOf": "Ștergeți fotografia {index}",
+    "deleteTitle": "Ștergeți această fotografie?",
+    "deleteDescription": "Fotografia {index} dispare imediat din produs și din magazin.",
+    "deleteConfirm": "Ștergeți",
+    "deleted": "Fotografia a fost ștearsă",
+    "uploading": "Se încarcă {name}…",
+    "uploaded": "{name} a fost adăugată",
+    "progress": "Adăugate: {done} din {total}",
+    "uploadErrors": {
+      "tooLarge": "{name}: mai mare de {maxMb} MB.",
+      "unsupportedType": "{name}: nu este o fotografie JPEG, PNG sau WebP.",
+      "invalidImage": "{name}: fișierul este deteriorat sau are prea mulți pixeli.",
+      "failed": "{name}: încărcarea a eșuat. Verificați conexiunea și încercați din nou."
+    },
+    "errors": {
+      "notAuthorized": "Doar un administrator poate face asta. Conectați-vă din nou.",
+      "notFound": "Acest produs sau această fotografie nu mai există.",
+      "conflict": "Fotografiile au fost schimbate în altă fereastră; acum sunt afișate cele actuale.",
+      "unexpectedError": "Nu a funcționat. Încercați din nou."
     }
   },
   "settings": {

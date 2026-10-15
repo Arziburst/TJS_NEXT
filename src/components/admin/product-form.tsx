@@ -26,7 +26,7 @@ type ProductFormProps = {
   product: AdminProduct | null;
   categories: { id: string; name: string }[];
   saveProduct: (previous: SaveProductState, formData: FormData) => Promise<SaveProductState>;
-  /** Read-only photos (upload comes with #18), rendered by the page. */
+  /** The photos section, rendered by the page (it saves on its own, outside this form's save). */
   photos?: ReactNode;
   /** The delete button of an existing product, rendered by the page. */
   deleteButton?: ReactNode;

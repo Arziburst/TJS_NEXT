@@ -33,6 +33,9 @@ area (`admin.shell.*`, `admin.status.*`, `admin.fulfillment.*`, `admin.availabil
 page's `product.page.clasp`, `dimensions`, `dimension.*`, `leadTimeRange` — written in en, **uk and the other 9
 locales by machine (LLM), unreviewed**; from #22 `checkout.delivery.*` (Nova Poshta city, branch, address and
 price; the legacy app had no such texts beyond `errors.form.chooseCity` / `chooseWarehouse`), uk and the other 9
+locales by machine, unreviewed; from #18 the admin's photo editor `admin.images.*` (`admin.form.photosReadOnly`
+removed), written in en, uk and the other 9 locales by machine, unreviewed; from #24 `checkout.request.*` (the
+order request form and its errors) and `checkout.done.*` (its confirmation), written in en, uk and the other 9
 locales by machine, unreviewed; from #21 the settings pages (`admin.shell.settings`, `admin.settings.*`), the
 footer's channel names (`common.contact.instagram`, `telegram`, `viber`, `whatsapp`: brand names, the same in
 every locale) and the About page's `common.about.tbd` and `fallbackNote` — written in en, uk and the other 9

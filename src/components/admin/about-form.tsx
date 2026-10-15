@@ -152,6 +152,15 @@ export function AboutForm({ content, saveAbout }: AboutFormProps) {
                     describedBy={[`${id}-hint`, bodyError ? `${id}-error` : null].filter(Boolean).join(" ")}
                     invalid={!!bodyError}
                     lang={locale}
+                    onTextChange={(hasText) =>
+                      setFilled((current) => {
+                        if (current.has(locale) === hasText) return current;
+                        const next = new Set(current);
+                        if (hasText) next.add(locale);
+                        else next.delete(locale);
+                        return next;
+                      })
+                    }
                   />
                   <p id={`${id}-hint`} className="font-input text-xs">
                     {t("editorHint")}

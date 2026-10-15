@@ -16,6 +16,8 @@ type RichTextEditorProps = {
   describedBy?: string;
   invalid?: boolean;
   lang?: string;
+  // whether the editor holds any text now, saved or not (the locale's status in the form)
+  onTextChange?: (hasText: boolean) => void;
 };
 
 type Command = {
@@ -41,7 +43,16 @@ const SAFE_LINK = /^(https?:\/\/|mailto:|tel:|\/(?!\/))/i;
  * handles); a paste comes in as plain text, so no foreign formatting enters. What it submits is cleaned again
  * on the server.
  */
-export function RichTextEditor({ id, name, initialHtml, labelledBy, describedBy, invalid, lang }: RichTextEditorProps) {
+export function RichTextEditor({
+  id,
+  name,
+  initialHtml,
+  labelledBy,
+  describedBy,
+  invalid,
+  lang,
+  onTextChange,
+}: RichTextEditorProps) {
   const t = useTranslations("admin.settings.about.toolbar");
   const editorRef = useRef<HTMLDivElement>(null);
   // the editor owns its DOM after the first render; React never rewrites it
@@ -50,6 +61,7 @@ export function RichTextEditor({ id, name, initialHtml, labelledBy, describedBy,
 
   function sync() {
     setHtml(editorRef.current?.innerHTML ?? "");
+    onTextChange?.((editorRef.current?.textContent ?? "").trim() !== "");
   }
 
   function run(command: Command["key"]) {

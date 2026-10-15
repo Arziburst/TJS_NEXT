@@ -1,4 +1,4 @@
--- Storage bucket product-images: public, image types only, 5 MiB, writes by admins only.
+-- Storage bucket product-images: public, image types only, 15 MiB (#18), writes by admins only.
 -- Storage forbids direct DELETE on its tables, so deletes, MIME types and size are checked over HTTP in
 -- tests/catalog/storage.integration.test.ts.
 begin;
@@ -12,8 +12,8 @@ update public.profiles set role = 'admin' where id = '22222222-2222-4222-8222-22
 
 select results_eq(
   $$select public, file_size_limit, allowed_mime_types from storage.buckets where id = 'product-images'$$,
-  $$values (true, 5242880::bigint, array['image/jpeg', 'image/png', 'image/webp', 'image/avif'])$$,
-  'product-images is public, 5 MiB, raster image types only'
+  $$values (true, 15728640::bigint, array['image/jpeg', 'image/png', 'image/webp', 'image/avif'])$$,
+  'product-images is public, 15 MiB, raster image types only'
 );
 
 -- Anon

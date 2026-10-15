@@ -30,9 +30,18 @@ export function FooterContacts() {
   );
 }
 
-async function ContactList() {
+/** The same links anywhere else (the order confirmation, #24), with that place's own text while there are none. */
+export function ShopContactLinks({ fallback }: { fallback: string }) {
+  return (
+    <Suspense fallback={null}>
+      <ContactList fallback={fallback} />
+    </Suspense>
+  );
+}
+
+async function ContactList({ fallback }: { fallback?: string }) {
   const [contacts, t] = await Promise.all([getShopContacts(), getTranslations("common")]);
-  if (!contacts || contacts.channels.length === 0) return t("footer.contactsTbd");
+  if (!contacts || contacts.channels.length === 0) return fallback ?? t("footer.contactsTbd");
 
   return contacts.channels.map((channel) => {
     const Icon = ICONS[channel.kind];

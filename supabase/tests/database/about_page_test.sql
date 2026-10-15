@@ -2,7 +2,7 @@
 -- writes through admin_save_about (uk required to publish), negative tests for anon and a customer.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(25);
+select plan(30);
 
 insert into auth.users (id, email) values
   ('00000000-0000-4000-8000-0000000021c2', 'customer-' || gen_random_uuid() || '@example.test'),
@@ -34,6 +34,11 @@ select lives_ok(
   'the admin saves a draft without uk'
 );
 select is((select count(*)::int from public.about_translations), 1, 'the admin reads the draft');
+-- the rule holds for any write, not only the save function (checked at commit; forced here)
+select throws_ok(
+  $$update public.about_page set published = true; set constraints all immediate$$,
+  '23514', null, 'the page cannot be published through the API without its uk text'
+);
 reset role;
 
 -- An unpublished draft is invisible to everyone else ---------------------------------------------------------------
@@ -48,6 +53,19 @@ select lives_ok(
   $$select public.admin_save_about(true, '[{"locale": "uk", "body_html": "<p>Історія</p>", "meta_description": "Про нас"},
       {"locale": "en", "body_html": "<p>Story</p>"}]'::jsonb)$$,
   'the admin publishes with uk and en'
+);
+select throws_ok(
+  $$delete from public.about_translations where locale = 'uk'; set constraints all immediate$$,
+  '23514', null, 'the uk text of a published page cannot be deleted'
+);
+select lives_ok(
+  $$delete from public.about_translations where locale = 'en'; set constraints all immediate$$,
+  'another locale''s text can be deleted from a published page'
+);
+select lives_ok(
+  $$select public.admin_save_about(true, '[{"locale": "uk", "body_html": "<p>Історія</p>", "meta_description": "Про нас"},
+      {"locale": "en", "body_html": "<p>Story</p>"}]'::jsonb)$$,
+  'the admin saves both texts again'
 );
 reset role;
 select is(
@@ -103,6 +121,9 @@ select lives_ok(
 );
 reset role;
 select is((select array_agg(locale::text) from public.about_translations), array['uk']::text[], 'the en text was removed');
+
+-- every save above leaves a consistent page: the deferred checks pass
+select lives_ok($$set constraints all immediate$$, 'every pending check passes');
 
 select * from finish();
 rollback;

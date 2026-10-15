@@ -83,6 +83,36 @@ create policy "admins delete about texts"
   on public.about_translations for delete to authenticated
   using ((select public.is_admin()));
 
+-- A published page always has its uk text, whoever writes (the save function, the API, a script): publishing
+-- without it and deleting it from a published page are refused. Checked at commit (deferred), so one
+-- transaction may write the text and publish in either order.
+create function private.about_page_requires_uk()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if exists (select 1 from public.about_page where published)
+     and not exists (select 1 from public.about_translations where locale = 'uk') then
+    raise exception 'a published about page needs its uk text' using errcode = '23514';
+  end if;
+  return null;
+end;
+$$;
+
+revoke all on function private.about_page_requires_uk() from public;
+
+create constraint trigger about_page_published_needs_uk
+  after insert or update on public.about_page
+  deferrable initially deferred
+  for each row execute function private.about_page_requires_uk();
+
+create constraint trigger about_uk_text_kept_while_published
+  after delete or update on public.about_translations
+  deferrable initially deferred
+  for each row execute function private.about_page_requires_uk();
+
 -- Saves the texts and the published state in one transaction. Security invoker: RLS, the grants and the audit
 -- trigger apply as for any other write. p_translations: [{locale, body_html, meta_description}] — every locale
 -- with a text; a locale left out loses its text. A text saved here is written by a person (source human).

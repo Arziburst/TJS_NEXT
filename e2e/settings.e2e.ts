@@ -96,11 +96,37 @@ const contactsForm = (page: Page) => page.getByRole("form", { name: settingsText
 const pricesForm = (page: Page) => page.getByRole("form", { name: settingsText.prices.title });
 const footerContacts = (page: Page) => page.locator("footer").last().locator("[data-slot=footer-contacts]");
 
+// a seeded product (supabase/seed.sql) and its category: pages under a second dynamic segment, prerendered by
+// the build, besides a page under [locale] only (docs/standards.md §3, "No build-time shell after an admin save")
+const SEED_PRODUCT_PATH = "/uk/product/serezhky-krapli-z-koralom";
+const FOOTER_PAGES = ["/uk/shop", "/uk/shop/rings", SEED_PRODUCT_PATH] as const;
+
 async function footerAt(browser: Browser, width: number, height: number, path: string) {
   const context = await browser.newContext({ viewport: { width, height } });
   const page = await context.newPage();
   await page.goto(path);
   return { context, page };
+}
+
+/** Requests each page twice from a context of its own, so the server has them cached before a save. */
+async function warm(browser: Browser, paths: readonly string[]) {
+  const context = await browser.newContext();
+  for (const path of paths) {
+    for (let i = 0; i < 2; i++) expect((await context.request.get(path)).ok(), path).toBe(true);
+  }
+  await context.close();
+}
+
+/** The product page's shown price and its JSON-LD price, from a context of its own: one request. */
+async function productPagePrices(browser: Browser): Promise<{ shown: number; jsonLd: number }> {
+  const { context, page } = await footerAt(browser, 1440, 900, SEED_PRODUCT_PATH);
+  const shown = page.getByRole("main").locator("[data-slot=price]").first();
+  await expect(shown).toHaveAttribute("data-currency", "UAH");
+  const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
+  const ldPrice = jsonLd.map((text) => /"price":"([0-9.]+)"/.exec(text)?.[1]).find(Boolean);
+  const result = { shown: Number(await shown.getAttribute("value")), jsonLd: Number(ldPrice) };
+  await context.close();
+  return result;
 }
 
 test.describe("shop settings on the local stack", () => {
@@ -163,8 +189,10 @@ test.describe("shop settings on the local stack", () => {
       product = await insertDraftProduct();
     });
 
-    test("contacts: the footer links the new Instagram at 1440 and 390, the chat id stays private", async ({ page, browser }) => {
+    test("contacts: every page's footer links the new Instagram on its first request after the save, the chat id stays private", async ({ page, browser }) => {
       const errors = collectErrors(page);
+      // pages already served (and cached) before the save, as on a live shop
+      await warm(browser, FOOTER_PAGES);
       await signIn(page, admin, SETTINGS_PATH);
       const form = contactsForm(page);
       await form.getByLabel(settingsText.contacts.instagram).fill(`https://www.instagram.com/${handle}/`);
@@ -177,21 +205,26 @@ test.describe("shop settings on the local stack", () => {
       await expect(form.getByLabel(settingsText.contacts.telegram)).toHaveValue("https://t.me/tjs_shop_e2e");
       expect(errors).toEqual([]);
 
+      // the first request of each page after the save (1440), then the same pages at 390
       for (const [width, height] of [[1440, 900], [390, 844]] as const) {
-        const { context, page: visitor } = await footerAt(browser, width, height, "/uk/shop");
-        const contacts = footerContacts(visitor);
-        await expect(contacts.getByRole("link", { name: ukCommon.contact.instagram })).toHaveAttribute(
-          "href",
-          `https://www.instagram.com/${handle}/`,
-        );
-        await expect(contacts.getByRole("link", { name: ukCommon.contact.telegram })).toHaveAttribute("href", "https://t.me/tjs_shop_e2e");
-        await expect(contacts).not.toContainText(ukCommon.footer.contactsTbd);
-        await context.close();
+        for (const path of FOOTER_PAGES) {
+          const { context, page: visitor } = await footerAt(browser, width, height, path);
+          const contacts = footerContacts(visitor);
+          await expect(contacts.getByRole("link", { name: ukCommon.contact.instagram }), `${path} at ${width}`).toHaveAttribute(
+            "href",
+            `https://www.instagram.com/${handle}/`,
+          );
+          await expect(contacts.getByRole("link", { name: ukCommon.contact.telegram })).toHaveAttribute("href", "https://t.me/tjs_shop_e2e");
+          await expect(contacts).not.toContainText(ukCommon.footer.contactsTbd);
+          await context.close();
+        }
       }
 
-      // the chat id reaches no page and no RSC payload
-      for (const headers of [{}, { RSC: "1" }] as Record<string, string>[]) {
-        expect(await (await page.request.get("/uk/shop", { headers })).text()).not.toContain(chatId);
+      // the chat id reaches no storefront page and no RSC payload (the admin's own form shows it)
+      for (const path of FOOTER_PAGES) {
+        for (const headers of [{}, { RSC: "1" }] as Record<string, string>[]) {
+          expect(await (await page.request.get(path, { headers })).text(), path).not.toContain(chatId);
+        }
       }
     });
 
@@ -236,10 +269,9 @@ test.describe("shop settings on the local stack", () => {
       await customerContext.close();
     });
 
-    // The price on the product's card in its category listing. (The product page itself shows the new price from
-    // the second request on: its prerendered shell carries the JSON-LD price and is regenerated in the background,
-    // a known gap of the product route reported with #21.)
-    test("markup: a product's price follows each change on the next request, without a rebuild", async ({ page }) => {
+    // A product page (prerendered, already served) and a product's card in its listing, each on the first request
+    // after each save: the shown price, and on the product page its JSON-LD price too.
+    test("markup: product prices follow each change on the first request, without a rebuild", async ({ page, browser }) => {
       const errors = collectErrors(page);
       await signIn(page, admin, "/uk/admin");
       await page.goto(`/uk/admin?q=${product.sku}`);
@@ -247,22 +279,27 @@ test.describe("shop settings on the local stack", () => {
       await expect
         .poll(async () => (await db!.from("products").select("status").eq("sku", product.sku).single()).data?.status)
         .toBe("published");
+      await warm(browser, [SEED_PRODUCT_PATH, "/uk/shop/rings"]);
 
       const cardPrice = page.getByTestId("product-card").filter({ hasText: product.title }).locator("[data-slot=price]");
-      async function priceAtMarkup(percent: string): Promise<number> {
+      async function pricesAtMarkup(percent: string) {
         await page.goto(SETTINGS_PATH);
         const form = pricesForm(page);
         await form.getByLabel(settingsText.prices.markup).fill(percent);
         await form.getByRole("button", { name: settingsText.save }).click();
         await expect(page.getByText(settingsText.saved)).toBeVisible();
+        const productPage = await productPagePrices(browser);
         await page.goto("/uk/shop/rings");
         await expect(cardPrice).toHaveAttribute("data-currency", "UAH");
-        return Number(await cardPrice.getAttribute("value"));
+        return { productPage, card: Number(await cardPrice.getAttribute("value")) };
       }
 
-      const atTen = await priceAtMarkup("10");
-      const atForty = await priceAtMarkup("40");
-      expect(atForty).toBeGreaterThan(atTen);
+      const atTen = await pricesAtMarkup("10");
+      const atForty = await pricesAtMarkup("40");
+      expect(atTen.productPage.jsonLd).toBe(atTen.productPage.shown);
+      expect(atForty.productPage.jsonLd).toBe(atForty.productPage.shown);
+      expect(atForty.productPage.shown).toBeGreaterThan(atTen.productPage.shown);
+      expect(atForty.card).toBeGreaterThan(atTen.card);
       expect(errors).toEqual([]);
     });
 

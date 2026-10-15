@@ -10,7 +10,7 @@ const serverScript = process.env.E2E_SERVER === "start" ? "start" : "dev";
 const novaPostMockPort = Number(process.env.NOVA_POST_MOCK_PORT || port + 1000);
 const novaPostMockKey = "e2e-fixture-key";
 // e2e files that write products of their own to the catalog (see the projects below)
-const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts", "**/favorites.e2e.ts"];
+const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts", "**/favorites.e2e.ts", "**/checkout.e2e.ts"];
 // e2e files that change the shop-wide settings (every footer, every price): alone, after everything else
 const SETTINGS_WRITERS = ["**/settings.e2e.ts"];
 
