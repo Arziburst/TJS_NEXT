@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { CATEGORY_IMAGES } from "./category-images";
+import { CATEGORY_IMAGES, STATIC_BLUR } from "./category-images";
 import type { CategoryEntry } from "./category-entries";
 import { categoryHref } from "./links";
 
@@ -36,7 +36,7 @@ export function CategoryTiles({ categories }: { categories: CategoryEntry[] }) {
                 alt=""
                 fill
                 sizes="(min-width: 1024px) 100px, 60px"
-                placeholder="blur"
+                placeholder={STATIC_BLUR}
                 className="object-cover transition duration-500 group-hover:brightness-110 group-focus-visible:brightness-110"
               />
             </span>

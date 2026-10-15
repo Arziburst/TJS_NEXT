@@ -1,6 +1,8 @@
+import { isRouteEnabled, routes } from "@/config/routes";
+
 // Locale-less paths of the catalog; the next-intl Link adds the locale prefix.
 
-export const SHOP_HREF = "/shop";
+export const SHOP_HREF = routes.shop.path;
 
 export function categoryHref(slug: string): string {
   return `${SHOP_HREF}/${slug}`;
@@ -8,5 +10,8 @@ export function categoryHref(slug: string): string {
 
 /** The product page (task #16) by the product's slug in the current locale. */
 export function productHref(slug: string): string {
-  return `/product/${slug}`;
+  return `${routes.product.path}/${slug}`;
 }
+
+/** Until the product page exists its links are not prefetched: every prefetch would answer 404. */
+export const PRODUCT_PREFETCH: false | undefined = isRouteEnabled("product") ? undefined : false;

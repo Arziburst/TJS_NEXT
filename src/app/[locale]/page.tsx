@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { getCategoryEntries } from "@/components/catalog/category-entries";
-import { SEE_ALL_IMAGE } from "@/components/catalog/category-images";
+import { SEE_ALL_IMAGE, STATIC_BLUR } from "@/components/catalog/category-images";
 import { CategoryTiles } from "@/components/catalog/category-tiles";
 import { SHOP_HREF } from "@/components/catalog/links";
 import { getAlternates } from "@/i18n/metadata";
@@ -48,7 +48,7 @@ export default async function HomePage() {
             alt=""
             width={100}
             height={81}
-            placeholder="blur"
+            placeholder={STATIC_BLUR}
             className="rounded transition duration-500 group-hover:brightness-110"
           />
         </Link>

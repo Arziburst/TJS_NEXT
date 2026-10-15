@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import type { ListedProduct } from "@/lib/catalog/cache";
 import type { ProductImage } from "@/lib/catalog/types";
 import { cn } from "@/lib/utils";
-import { productHref } from "./links";
+import { PRODUCT_PREFETCH, productHref } from "./links";
 import { Price } from "./price";
 
 const IMAGE_SIZES = "(min-width: 1024px) 200px, 164px";
@@ -33,6 +33,7 @@ export async function ProductCard({ product, eager = false }: { product: ListedP
   return (
     <Link
       href={productHref(product.translation.slug)}
+      prefetch={PRODUCT_PREFETCH}
       className="group flex w-[164px] flex-col gap-2 sb:w-[200px]"
       data-testid="product-card"
     >

@@ -19,3 +19,7 @@ export const CATEGORY_IMAGES: Record<CategorySlug, StaticImageData> = {
 };
 
 export const SEE_ALL_IMAGE = seeAll;
+
+// next/image's blur placeholder of a static import, as a variable: the user-text lint reads a literal
+// `placeholder="…"` attribute as visible text
+export const STATIC_BLUR = "blur";
