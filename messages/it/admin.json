@@ -128,7 +128,6 @@
     "status": "Stato",
     "position": "Posizione",
     "positionHint": "Un numero per l’ordine manuale; 0 per impostazione predefinita.",
-    "photosReadOnly": "Le foto sono mostrate qui in sola lettura; aggiunta e ordinamento arriveranno in una versione successiva.",
     "noPhotos": "Ancora nessuna foto.",
     "photoAlt": "Foto {index}",
     "delete": "Elimina prodotto",
@@ -229,6 +228,41 @@
       "invalid": "Questa richiesta non è valida.",
       "unexpectedError": "Qualcosa è andato storto. Riprova.",
       "inUse": "Alcuni prodotti lo usano: togli prima la spunta nei loro moduli."
+    }
+  },
+  "images": {
+    "hint": "JPEG, PNG o WebP, fino a {maxMb} MB ciascuna. La prima foto è quella principale nel negozio. I dati sul luogo e sulla fotocamera vengono rimossi al caricamento.",
+    "saveFirst": "Salva prima il prodotto, poi aggiungi qui le sue foto.",
+    "add": "Aggiungi foto",
+    "orderHint": "Trascina una foto per spostarla oppure usa i suoi pulsanti a freccia.",
+    "orderHintButtons": "Usa i pulsanti a freccia di una foto per spostarla.",
+    "main": "Foto principale",
+    "makeMain": "Rendi principale",
+    "moveEarlier": "Sposta la foto {index} in avanti",
+    "moveLater": "Sposta la foto {index} indietro",
+    "altTextsOf": "Testi alternativi della foto {index}",
+    "altHint": "Una breve descrizione della foto per i lettori di schermo e i motori di ricerca. Un campo vuoto usa il testo mostrato al suo interno.",
+    "altSave": "Salva i testi",
+    "altSaved": "Testi alternativi salvati",
+    "deleteOf": "Elimina la foto {index}",
+    "deleteTitle": "Eliminare questa foto?",
+    "deleteDescription": "La foto {index} scompare subito dal prodotto e dal negozio.",
+    "deleteConfirm": "Elimina",
+    "deleted": "Foto eliminata",
+    "uploading": "Caricamento di {name}…",
+    "uploaded": "{name} aggiunta",
+    "progress": "Aggiunte: {done} di {total}",
+    "uploadErrors": {
+      "tooLarge": "{name}: più grande di {maxMb} MB.",
+      "unsupportedType": "{name}: non è una foto JPEG, PNG o WebP.",
+      "invalidImage": "{name}: il file è danneggiato o ha troppi pixel.",
+      "failed": "{name}: caricamento non riuscito. Controlla la connessione e riprova."
+    },
+    "errors": {
+      "notAuthorized": "Solo un amministratore può farlo. Accedi di nuovo.",
+      "notFound": "Questo prodotto o questa foto non esiste più.",
+      "conflict": "Le foto sono state modificate in un'altra finestra; ora sono mostrate quelle attuali.",
+      "unexpectedError": "Non è andata a buon fine. Riprova."
     }
   }
 }

@@ -1,11 +1,13 @@
 // The admin area on the local Supabase stack: the guard (guest, customer, admin), the refusal of an admin
 // action called directly, and the product flow from creation to deletion with the storefront following each
-// save. It publishes products, which changes the storefront listings, so it runs in its own projects after
+// save, and a product's photos (upload, order, alt text, delete). It publishes products, which changes the
+// storefront listings, so it runs in its own projects after
 // the storefront tests (playwright.config.ts).
 import { randomInt, randomUUID } from "node:crypto";
-import { existsSync } from "node:fs";
+import { existsSync, writeFileSync } from "node:fs";
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
+import sharp from "sharp";
 import type { Database } from "../src/lib/supabase/database.types";
 import ukAdmin from "../messages/uk/admin.json" with { type: "json" };
 import ukErrors from "../messages/uk/errors.json" with { type: "json" };
@@ -389,6 +391,163 @@ test.describe("admin on the local stack", () => {
       expect(deleted?.deleted_at).not.toBeNull();
       await page.goto(productPath);
       await expect(page.getByRole("heading", { name: ukErrors.notFound.title })).toBeVisible();
+      expect(errors).toEqual([]);
+    });
+  });
+
+  // #18: the photos of a published product, each change visible on its product page at the next request.
+  test.describe.serial("the photos of a product: upload, order, alt text, delete", () => {
+    let admin: Credentials;
+    let productId: string;
+    let productPath: string;
+    let title: string;
+
+    type PhotoRow = { id: string; storage_path: string; position: number; width: number; height: number };
+
+    async function photoRows(): Promise<PhotoRow[]> {
+      const { data, error } = await db!
+        .from("product_images")
+        .select("id, storage_path, position, width, height")
+        .eq("product_id", productId)
+        .order("position");
+      if (error) throw error;
+      return data;
+    }
+
+    /** The storage file names (the uuid part) of the product page's gallery photos, in their order. */
+    async function galleryFiles(page: Page): Promise<string[]> {
+      await page.goto(productPath);
+      const gallery = page.getByRole("region", { name: ukProduct.page.gallery.label, exact: true });
+      await expect(gallery.getByRole("img").first()).toBeVisible();
+      const sources = await gallery.getByRole("img").evaluateAll((images) => images.map((i) => i.getAttribute("src") ?? ""));
+      return sources.map((src) => decodeURIComponent(src).match(/products\/[0-9a-f-]{36}\/([0-9a-f-]{36})\.jpg/)?.[1] ?? src);
+    }
+
+    const fileOf = (row: PhotoRow) => row.storage_path.split("/").pop()!.replace(/\.jpg$/, "");
+
+    async function openPhotos(page: Page) {
+      await signIn(page, admin, `/uk/admin/products/${productId}`);
+      await page.waitForLoadState("networkidle");
+      return page.getByRole("region", { name: ukAdmin.form.sections.photos, exact: true });
+    }
+
+    test.beforeAll(async () => {
+      admin = await createUser("admin");
+      title = `Фото тест ${randomUUID().slice(0, 8)}`;
+      const draft = await insertDraft(title);
+      productId = draft.id;
+      const { data } = await db!.from("product_translations").select("slug").eq("product_id", productId).single();
+      productPath = `/uk/product/${data!.slug}`;
+      const published = await db!.from("products").update({ status: "published" }).eq("id", productId);
+      if (published.error) throw published.error;
+    });
+
+    test.afterAll(async () => {
+      const folder = `products/${productId}`;
+      const { data } = await db!.storage.from("product-images").list(folder);
+      if (data?.length) await db!.storage.from("product-images").remove(data.map((f) => `${folder}/${f.name}`));
+    });
+
+    test("upload two phone photos at once; a renamed executable is refused on the server", async ({ page }, testInfo) => {
+      const errors = collectErrors(page);
+      // a sideways phone photo (EXIF orientation 6) with a GPS position, and a plain one
+      const sideways = testInfo.outputPath("sideways.jpg");
+      await sharp({ create: { width: 64, height: 32, channels: 3, background: { r: 230, g: 120, b: 90 } } })
+        .jpeg()
+        .withExif({ IFD3: { GPSLatitudeRef: "N", GPSLatitude: "50/1 27/1 0/1" } })
+        .withMetadata({ orientation: 6 })
+        .toFile(sideways);
+      const plain = testInfo.outputPath("plain.jpg");
+      await sharp({ create: { width: 48, height: 48, channels: 3, background: { r: 90, g: 120, b: 200 } } }).jpeg().toFile(plain);
+      const exe = testInfo.outputPath("invoice.jpg");
+      writeFileSync(exe, Buffer.concat([Buffer.from("MZ\x90\x00\x03\x00\x00\x00", "latin1"), Buffer.alloc(2048)]));
+
+      const photos = await openPhotos(page);
+      await expect(photos.getByText(ukAdmin.form.noPhotos)).toBeVisible();
+      await photos.locator('input[type="file"]').setInputFiles([sideways, plain, exe]);
+      await expect(photos.getByText("Додано: 2 з 3")).toBeVisible({ timeout: 30_000 });
+      await expect(photos.getByText(ukAdmin.images.uploadErrors.unsupportedType.replace("{name}", "invoice.jpg"))).toBeVisible();
+      await expect(photos.getByRole("listitem").filter({ has: page.getByRole("img") })).toHaveCount(2);
+
+      const rows = await photoRows();
+      expect(rows.map((r) => [r.position, r.width, r.height])).toEqual([
+        [0, 32, 64],
+        [1, 48, 48],
+      ]);
+      expect(await galleryFiles(page)).toEqual(rows.map(fileOf));
+      expect(errors).toEqual([]);
+    });
+
+    test("make the second photo the main one, and move it back with the arrows: the product page follows", async ({ page }) => {
+      const errors = collectErrors(page);
+      const [first, second] = await photoRows();
+      const photos = await openPhotos(page);
+      await photos.getByRole("button", { name: ukAdmin.images.makeMain }).click();
+      await expect.poll(async () => (await photoRows()).map((r) => r.id)).toEqual([second!.id, first!.id]);
+      expect(await galleryFiles(page)).toEqual([fileOf(second!), fileOf(first!)]);
+
+      await page.goto(`/uk/admin/products/${productId}`);
+      await page.waitForLoadState("networkidle");
+      await photos.getByRole("button", { name: ukAdmin.images.moveEarlier.replace("{index}", "2") }).click();
+      await expect.poll(async () => (await photoRows()).map((r) => r.id)).toEqual([first!.id, second!.id]);
+      expect(await galleryFiles(page)).toEqual([fileOf(first!), fileOf(second!)]);
+      expect(errors).toEqual([]);
+    });
+
+    test("drag a photo to the front on desktop", async ({ page, isMobile }) => {
+      test.skip(isMobile, "dragging is the desktop way; phones use the arrow buttons");
+      const errors = collectErrors(page);
+      const [first, second] = await photoRows();
+      const photos = await openPhotos(page);
+      const cards = photos.getByTestId("admin-photo");
+      await cards.nth(1).dragTo(cards.nth(0));
+      await expect.poll(async () => (await photoRows()).map((r) => r.id)).toEqual([second!.id, first!.id]);
+      expect(await galleryFiles(page)).toEqual([fileOf(second!), fileOf(first!)]);
+      expect(errors).toEqual([]);
+    });
+
+    test("edit the main photo's alt text: the product page reads it", async ({ page }) => {
+      const errors = collectErrors(page);
+      const photos = await openPhotos(page);
+      await photos.getByRole("button", { name: ukAdmin.images.altTextsOf.replace("{index}", "1") }).click();
+      const dialog = page.getByRole("dialog");
+      const uk = dialog.getByRole("textbox", { name: "Українська" });
+      // empty, it shows the storefront's fallback: the product's title
+      await expect(uk).toHaveAttribute("placeholder", title);
+      const alt = `Каблучка збоку ${randomUUID().slice(0, 6)}`;
+      await uk.fill(alt);
+      await dialog.getByRole("button", { name: ukAdmin.images.altSave }).click();
+      await expect(page.getByText(ukAdmin.images.altSaved)).toBeVisible();
+      await expect(dialog).toHaveCount(0);
+      // the product form was not submitted with it
+      await expect(page.getByText(ukAdmin.form.saved)).toHaveCount(0);
+
+      await page.goto(productPath);
+      const gallery = page.getByRole("region", { name: ukProduct.page.gallery.label, exact: true });
+      await expect(gallery.getByRole("img").first()).toHaveAttribute("alt", alt);
+      expect(errors).toEqual([]);
+    });
+
+    test("delete a photo after a confirmation: its row and file are gone, the product page shows the rest", async ({ page }) => {
+      const errors = collectErrors(page);
+      const [main, other] = await photoRows();
+      const photos = await openPhotos(page);
+      await photos.getByRole("button", { name: ukAdmin.images.deleteOf.replace("{index}", "1") }).click();
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toContainText(ukAdmin.images.deleteTitle);
+      // cancel keeps it
+      await dialog.getByRole("button", { name: ukAdmin.form.cancel }).click();
+      await expect(dialog).toHaveCount(0);
+      expect(await photoRows()).toHaveLength(2);
+
+      await photos.getByRole("button", { name: ukAdmin.images.deleteOf.replace("{index}", "1") }).click();
+      await page.getByRole("dialog").getByRole("button", { name: ukAdmin.images.deleteConfirm, exact: true }).click();
+      await expect(page.getByText(ukAdmin.images.deleted)).toBeVisible();
+      await expect.poll(async () => (await photoRows()).map((r) => r.id)).toEqual([other!.id]);
+      const { data: files } = await db!.storage.from("product-images").list(`products/${productId}`);
+      expect(files?.map((f) => f.name)).toEqual([other!.storage_path.split("/").pop()]);
+      expect(await galleryFiles(page)).toEqual([fileOf(other!)]);
+      expect(main).toBeDefined();
       expect(errors).toEqual([]);
     });
   });

@@ -128,7 +128,6 @@
     "status": "Estado",
     "position": "Posição",
     "positionHint": "Um número para a ordem manual; 0 por predefinição.",
-    "photosReadOnly": "As fotos são mostradas aqui só para consulta; adicionar e ordenar chegará numa versão posterior.",
     "noPhotos": "Ainda não há fotos.",
     "photoAlt": "Foto {index}",
     "delete": "Eliminar produto",
@@ -229,6 +228,41 @@
       "invalid": "Este pedido não é válido.",
       "unexpectedError": "Algo correu mal. Tente novamente.",
       "inUse": "Há produtos que o usam: desmarque-o primeiro nos respetivos formulários."
+    }
+  },
+  "images": {
+    "hint": "JPEG, PNG ou WebP, até {maxMb} MB cada. A primeira foto é a principal na loja. Os dados de localização e da câmara são removidos no envio.",
+    "saveFirst": "Guarde primeiro o produto e depois adicione aqui as suas fotos.",
+    "add": "Adicionar fotos",
+    "orderHint": "Arraste uma foto para a mover ou use os botões de seta.",
+    "orderHintButtons": "Use os botões de seta de uma foto para a mover.",
+    "main": "Foto principal",
+    "makeMain": "Tornar principal",
+    "moveEarlier": "Mover a foto {index} para a frente",
+    "moveLater": "Mover a foto {index} para trás",
+    "altTextsOf": "Textos alternativos da foto {index}",
+    "altHint": "Uma breve descrição da foto para leitores de ecrã e motores de busca. Um campo vazio usa o texto nele apresentado.",
+    "altSave": "Guardar textos",
+    "altSaved": "Textos alternativos guardados",
+    "deleteOf": "Eliminar a foto {index}",
+    "deleteTitle": "Eliminar esta foto?",
+    "deleteDescription": "A foto {index} desaparece de imediato do produto e da loja.",
+    "deleteConfirm": "Eliminar",
+    "deleted": "Foto eliminada",
+    "uploading": "A enviar {name}…",
+    "uploaded": "{name} adicionada",
+    "progress": "Adicionadas: {done} de {total}",
+    "uploadErrors": {
+      "tooLarge": "{name}: maior do que {maxMb} MB.",
+      "unsupportedType": "{name}: não é uma foto JPEG, PNG ou WebP.",
+      "invalidImage": "{name}: o ficheiro está danificado ou tem demasiados píxeis.",
+      "failed": "{name}: o envio falhou. Verifique a ligação e tente novamente."
+    },
+    "errors": {
+      "notAuthorized": "Só um administrador pode fazer isto. Inicie sessão novamente.",
+      "notFound": "Este produto ou esta foto já não existe.",
+      "conflict": "As fotos foram alteradas noutra janela; agora são mostradas as atuais.",
+      "unexpectedError": "Não resultou. Tente novamente."
     }
   }
 }

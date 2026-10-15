@@ -7,6 +7,7 @@ import { saveProduct } from "@/app/[locale]/admin/actions";
 import { AdminPending, AdminShell } from "@/components/admin/admin-shell";
 import { NEW_PRODUCT_HREF } from "@/components/admin/paths";
 import { ProductForm } from "@/components/admin/product-form";
+import { PhotosAfterSave } from "@/components/admin/product-photos";
 import { ProductTermsFields } from "@/components/admin/product-terms-fields";
 import { listAdminTerms } from "@/lib/admin/taxonomy";
 import { routing } from "@/i18n/routing";
@@ -46,6 +47,7 @@ async function NewProduct({ params }: PageProps<"/[locale]/admin/products/new">)
             product={null}
             categories={categories.data.map((c) => ({ id: c.id, name: c.name }))}
             saveProduct={saveProduct}
+            photos={<PhotosAfterSave />}
             taxonomy={<ProductTermsFields terms={terms.ok ? terms.data : null} selected={[]} />}
           />
         ) : (

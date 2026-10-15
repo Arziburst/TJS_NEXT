@@ -133,8 +133,13 @@ Business values (prices, markets, locales, statuses …) are not here — they l
 - Every user-visible change is walked in the browser on desktop 1440 and mobile 390: no console errors,
   no hydration warnings, keyboard focus visible; screenshots in the PR.
 - **Images (#53): `next/image` through the Vercel image optimizer**, never `unoptimized`, never a raw
-  `<img>` for a photo. Storage keeps the uploaded original; `/_next/image` resizes it and serves AVIF, or
-  WebP to browsers without AVIF. Supabase image transformations need the Pro plan and are not used.
+  `<img>` for a photo. Storage keeps the original pixels, re-encoded without metadata (#18: turned upright by
+  the EXIF orientation, EXIF / XMP / IPTC dropped, so a phone's GPS position never becomes public;
+  `src/lib/images/encode.ts`); `/_next/image` resizes it and serves AVIF, or WebP to browsers without AVIF.
+  Supabase image transformations need the Pro plan and are not used.
+  - Uploads (#18) go from the browser straight to the private `product-image-uploads` bucket through a signed
+    URL only an admin action creates (a Vercel function accepts at most 4.5 MB); the server checks the staged
+    file (15 MiB, PNG / JPEG / WebP by magic bytes), re-encodes it and only then writes it to the public bucket.
   - `next.config.ts` allows only the public `product-images` bucket of the production project and of the
     configured stack (`remotePatterns`), the qualities `75` (cards, category tiles) and `85` (product
     gallery) — a `quality` outside that list is coerced, a direct request with another one is a 400 —

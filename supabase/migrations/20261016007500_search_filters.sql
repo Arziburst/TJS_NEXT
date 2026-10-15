@@ -163,8 +163,9 @@ end;
 $$;
 
 -- 'deleted', 'in_use' (a product that is not deleted has the term) or 'not_found'. Security definer: "in use"
--- needs products.deleted_at, which the API roles cannot read; the admin check comes first. The links of
--- soft-deleted products go with the term.
+-- needs products.deleted_at, which the API roles cannot read; so the admin check (the caller's JWT) comes
+-- first and is the only way in: inside a definer function current_user is the owner, so there is no
+-- service-role branch and no service-role grant. The links of soft-deleted products go with the term.
 create function public.admin_delete_taxonomy_term(p_id uuid)
 returns text
 language plpgsql
@@ -172,7 +173,7 @@ security definer
 set search_path = ''
 as $$
 begin
-  if not (current_user = 'service_role' or (select public.is_admin())) then
+  if not (select public.is_admin()) then
     raise exception 'only admins change the lists' using errcode = '42501';
   end if;
   if exists (
@@ -212,7 +213,8 @@ revoke all on function public.admin_save_taxonomy_term(uuid, public.taxonomy_kin
 revoke all on function public.admin_delete_taxonomy_term(uuid) from public, anon;
 revoke all on function public.admin_save_product_with_terms(uuid, jsonb, jsonb, uuid[]) from public, anon;
 grant execute on function public.admin_save_taxonomy_term(uuid, public.taxonomy_kind, text, jsonb) to authenticated, service_role;
-grant execute on function public.admin_delete_taxonomy_term(uuid) to authenticated, service_role;
+grant execute on function public.admin_delete_taxonomy_term(uuid) to authenticated;
+revoke all on function public.admin_delete_taxonomy_term(uuid) from service_role;
 grant execute on function public.admin_save_product_with_terms(uuid, jsonb, jsonb, uuid[]) to authenticated, service_role;
 
 -- Search and filters ---------------------------------------------------------------------------------------
@@ -303,7 +305,9 @@ begin
   return query
   with matched as (
     -- the visitor's locale and the fallback en: a product matches through either translation, its own
-    -- locale ranking higher; the three conditions each use an index (search vector, title trigrams)
+    -- locale ranking higher; the three conditions each use an index (search vector, title trigrams). The
+    -- rank adds the full-text rank to the title's word similarity, so a typo match (trigrams only, no
+    -- full-text rank, similarity below 1) ranks below a match of the words themselves
     select t.product_id,
       max(
         -- ts_rank_cd is strict: no rank without a query (every term a stop word)

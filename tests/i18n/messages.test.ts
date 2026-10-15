@@ -94,9 +94,11 @@ describe("message catalogs", () => {
       kg: 30,
       price: "96,45 ₴",
       query: "coral",
-      name: "Brass",
       language: "English",
       slug: "brass",
+      maxMb: 15,
+      name: "IMG_0042.jpg",
+      done: 3,
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

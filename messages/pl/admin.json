@@ -128,7 +128,6 @@
     "status": "Status",
     "position": "Pozycja",
     "positionHint": "Liczba do ręcznego porządkowania; domyślnie 0.",
-    "photosReadOnly": "Zdjęcia są tu tylko do podglądu; dodawanie i porządkowanie pojawi się w kolejnej wersji.",
     "noPhotos": "Nie ma jeszcze zdjęć.",
     "photoAlt": "Zdjęcie {index}",
     "delete": "Usuń produkt",
@@ -229,6 +228,41 @@
       "invalid": "To żądanie jest nieprawidłowe.",
       "unexpectedError": "Coś poszło nie tak. Spróbuj ponownie.",
       "inUse": "Produkty go używają: najpierw odznacz go w ich formularzach."
+    }
+  },
+  "images": {
+    "hint": "JPEG, PNG lub WebP, każde do {maxMb} MB. Pierwsze zdjęcie jest głównym zdjęciem w sklepie. Dane o miejscu i aparacie są usuwane podczas przesyłania.",
+    "saveFirst": "Najpierw zapisz produkt, potem dodaj tutaj jego zdjęcia.",
+    "add": "Dodaj zdjęcia",
+    "orderHint": "Przeciągnij zdjęcie, aby je przenieść, albo użyj jego przycisków ze strzałkami.",
+    "orderHintButtons": "Aby przenieść zdjęcie, użyj jego przycisków ze strzałkami.",
+    "main": "Zdjęcie główne",
+    "makeMain": "Ustaw jako główne",
+    "moveEarlier": "Przesuń zdjęcie {index} wcześniej",
+    "moveLater": "Przesuń zdjęcie {index} później",
+    "altTextsOf": "Teksty alternatywne zdjęcia {index}",
+    "altHint": "Krótki opis zdjęcia dla czytników ekranu i wyszukiwarek. Puste pole używa wyświetlonego w nim tekstu.",
+    "altSave": "Zapisz teksty",
+    "altSaved": "Teksty alternatywne zapisane",
+    "deleteOf": "Usuń zdjęcie {index}",
+    "deleteTitle": "Usunąć to zdjęcie?",
+    "deleteDescription": "Zdjęcie {index} od razu zniknie z produktu i ze sklepu.",
+    "deleteConfirm": "Usuń",
+    "deleted": "Zdjęcie usunięte",
+    "uploading": "Przesyłanie {name}…",
+    "uploaded": "Dodano {name}",
+    "progress": "Dodano: {done} z {total}",
+    "uploadErrors": {
+      "tooLarge": "{name}: większe niż {maxMb} MB.",
+      "unsupportedType": "{name}: to nie jest zdjęcie JPEG, PNG ani WebP.",
+      "invalidImage": "{name}: plik jest uszkodzony lub ma zbyt wiele pikseli.",
+      "failed": "{name}: przesyłanie nie powiodło się. Sprawdź połączenie i spróbuj ponownie."
+    },
+    "errors": {
+      "notAuthorized": "Może to zrobić tylko administrator. Zaloguj się ponownie.",
+      "notFound": "Ten produkt lub to zdjęcie już nie istnieje.",
+      "conflict": "Zdjęcia zmieniono w innym oknie; teraz widać aktualne.",
+      "unexpectedError": "Nie udało się. Spróbuj ponownie."
     }
   }
 }

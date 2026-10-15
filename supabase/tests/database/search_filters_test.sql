@@ -5,7 +5,7 @@
 -- TEST-013 archived, TEST-014 soft-deleted; seven terms and their links.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(59);
+select plan(61);
 
 -- Fixtures (as the database owner) -------------------------------------------------------------------
 insert into auth.users (id, email) values
@@ -33,6 +33,13 @@ select ok((select relrowsecurity from pg_class where oid = 'public.taxonomy_term
 select ok((select relrowsecurity from pg_class where oid = 'public.product_taxonomy_terms'::regclass), 'RLS is enabled on product_taxonomy_terms');
 select ok(not has_function_privilege('anon', 'public.admin_save_taxonomy_term(uuid, public.taxonomy_kind, text, jsonb)', 'execute'), 'anon cannot execute admin_save_taxonomy_term');
 select ok(not has_function_privilege('anon', 'public.admin_delete_taxonomy_term(uuid)', 'execute'), 'anon cannot execute admin_delete_taxonomy_term');
+-- security definer: only an admin's JWT gets in, so the service role (no JWT) has no grant either
+select ok(not has_function_privilege('service_role', 'public.admin_delete_taxonomy_term(uuid)', 'execute'), 'the service role cannot execute admin_delete_taxonomy_term');
+select is(
+  (select prosecdef from pg_proc where oid = 'public.admin_delete_taxonomy_term(uuid)'::regprocedure),
+  true,
+  'admin_delete_taxonomy_term is security definer (it reads products.deleted_at)'
+);
 select ok(not has_function_privilege('anon', 'public.admin_save_product_with_terms(uuid, jsonb, jsonb, uuid[])', 'execute'), 'anon cannot execute admin_save_product_with_terms');
 select ok(has_function_privilege('anon', 'public.shop_search(public.locale, text, text[], text[], text[], bigint, bigint, text[], text, integer, integer)', 'execute'), 'anon may search');
 
