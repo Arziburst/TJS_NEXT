@@ -3,6 +3,8 @@
   "aboutUs": "Über uns",
   "contacts": "Kontakt",
   "cart": "Warenkorb",
+  "cartCount": "Warenkorb, {count, plural, =0 {leer} one {# Stück} other {# Stück}}",
+  "closeCart": "Warenkorb schließen",
   "settings": "Einstellungen",
   "addProduct": "Produkt hinzufügen",
   "orders": "Bestellungen",

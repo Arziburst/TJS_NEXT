@@ -1,0 +1,230 @@
+{
+  "current_page": 1,
+  "last_page": 1,
+  "per_page": 100,
+  "total": 2,
+  "from": 1,
+  "to": 2,
+  "items": [
+    {
+      "id": 41001,
+      "name": "BERLIN 1",
+      "shortName": "BERLIN 1",
+      "externalId": "00000000-0000-4000-8000-000000041001",
+      "source": "NPAX",
+      "countryCode": "DE",
+      "settlement": {
+        "id": 40101,
+        "name": "Berlin",
+        "region": {
+          "id": 40108,
+          "name": "Berlin",
+          "parent": {
+            "id": 40110,
+            "name": "Berlin"
+          }
+        }
+      },
+      "address": "10115, Deutschland, Berlin, Invalidenstraße, 50",
+      "number": "10/1",
+      "status": "Working",
+      "customerServiceAvailable": true,
+      "divisionCategory": "PostBranch",
+      "publicPhones": [],
+      "internalPhones": [],
+      "responsiblePerson": null,
+      "partner": null,
+      "ownerDivision": null,
+      "latitude": null,
+      "longitude": null,
+      "distance": null,
+      "maxWeightPlaceSender": 30000,
+      "maxLengthPlaceSender": 1200,
+      "maxWidthPlaceSender": 700,
+      "maxHeightPlaceSender": 700,
+      "maxWeightPlaceRecipient": 30000,
+      "maxLengthPlaceRecipient": 1200,
+      "maxWidthPlaceRecipient": 700,
+      "maxHeightPlaceRecipient": 700,
+      "prohibitedSending": false,
+      "prohibitedIssuance": false,
+      "maxCostPlace": 999999,
+      "maxDeclaredCostPlace": 999999,
+      "workSchedule": [
+        {
+          "day": "sunday",
+          "from": "10:00",
+          "to": "16:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "monday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "tuesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "wednesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "thursday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "friday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "saturday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        }
+      ],
+      "settings": [],
+      "logisticsCode": null,
+      "attributes": {},
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null,
+      "fullAddress": {
+        "country": "Germany",
+        "settlement": "Berlin",
+        "street": "Invalidenstraße",
+        "building": "50",
+        "note": "",
+        "zipcode": "10115"
+      }
+    },
+    {
+      "id": 41002,
+      "name": "Paketshop Berlin Mitte",
+      "shortName": "Paketshop Berlin Mitte",
+      "externalId": "00000000-0000-4000-8000-000000041002",
+      "source": "NPAX",
+      "countryCode": "DE",
+      "settlement": {
+        "id": 40101,
+        "name": "Berlin",
+        "region": {
+          "id": 40108,
+          "name": "Berlin",
+          "parent": {
+            "id": 40110,
+            "name": "Berlin"
+          }
+        }
+      },
+      "address": "10117, Deutschland, Berlin, Friedrichstraße, 101",
+      "number": "10/PUDO-3",
+      "status": "Working",
+      "customerServiceAvailable": false,
+      "divisionCategory": "PUDO",
+      "publicPhones": [],
+      "internalPhones": [],
+      "responsiblePerson": null,
+      "partner": null,
+      "ownerDivision": null,
+      "latitude": null,
+      "longitude": null,
+      "distance": null,
+      "maxWeightPlaceSender": 30000,
+      "maxLengthPlaceSender": 1200,
+      "maxWidthPlaceSender": 700,
+      "maxHeightPlaceSender": 700,
+      "maxWeightPlaceRecipient": 30000,
+      "maxLengthPlaceRecipient": 1200,
+      "maxWidthPlaceRecipient": 700,
+      "maxHeightPlaceRecipient": 700,
+      "prohibitedSending": false,
+      "prohibitedIssuance": false,
+      "maxCostPlace": 999999,
+      "maxDeclaredCostPlace": 999999,
+      "workSchedule": [
+        {
+          "day": "sunday",
+          "from": "10:00",
+          "to": "16:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "monday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "tuesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "wednesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "thursday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "friday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "saturday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        }
+      ],
+      "settings": [],
+      "logisticsCode": null,
+      "attributes": {},
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null,
+      "fullAddress": {
+        "country": "Germany",
+        "settlement": "Berlin",
+        "street": "Friedrichstraße",
+        "building": "101",
+        "note": "",
+        "zipcode": "10117"
+      }
+    }
+  ]
+}

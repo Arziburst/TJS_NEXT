@@ -1,7 +1,38 @@
 {
   "title": "Carrello",
   "empty": "Il tuo carrello è vuoto",
+  "emptyHint": "Sfoglia il negozio e aggiungi i pezzi che ti piacciono.",
   "yourOrder": "Il tuo ordine",
   "continueToCheckout": "Procedi al checkout",
-  "total": "Totale"
+  "total": "Totale",
+  "subtotal": "Subtotale",
+  "pieces": "{count, plural, one {# pezzo} other {# pezzi}}",
+  "lines": "Pezzi nel carrello",
+  "each": "{quantity} ×",
+  "oneOfAKind": "Pezzo unico",
+  "madeToOrder": "Su ordinazione",
+  "singlePiece": "Questo pezzo esiste in un solo esemplare.",
+  "quantityOf": "Quantità di {title}",
+  "decrease": "Uno in meno di {title}",
+  "increase": "Uno in più di {title}",
+  "removeLine": "Rimuovi {title}",
+  "maxQuantity": "Al massimo {max} per prodotto",
+  "unavailablePiece": "Un pezzo non più disponibile",
+  "status": {
+    "sold": "Venduto",
+    "reserved": "Riservato",
+    "unavailable": "Non più disponibile"
+  },
+  "unavailableNote": "I pezzi che non possono più essere ordinati non rientrano nel subtotale e non verranno ordinati. Puoi rimuoverli.",
+  "orderRequest": "Continua con la richiesta d’ordine",
+  "orderRequestTbd": "Richiesta d’ordine: TBD",
+  "nothingToOrder": "Nel carrello non c’è nulla che si possa ordinare.",
+  "continueShopping": "Continua lo shopping",
+  "viewCart": "Vedi il carrello",
+  "loadError": "Impossibile caricare il carrello. Ricarica la pagina.",
+  "errors": {
+    "rateLimited": "Troppe modifiche in poco tempo. Attendi un momento e riprova.",
+    "unavailable": "Questo pezzo non può più essere ordinato.",
+    "unexpectedError": "Impossibile aggiornare il carrello. Riprova."
+  }
 }

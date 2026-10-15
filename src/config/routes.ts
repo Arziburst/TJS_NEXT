@@ -12,9 +12,13 @@ export const routes = {
   // #21
   aboutUs: { path: "/about-us", enabled: false },
   // #20
-  cart: { path: "/cart", enabled: false },
+  cart: { path: "/cart", enabled: true },
+  // #24: the order request; the cart's next step links here once it exists
+  orderRequest: { path: "/checkout", enabled: false },
   // #13
   signIn: { path: "/sign-in-and-up", enabled: true },
+  // #17: admins only (noindex); the account menu links here for an admin, the shell does not
+  admin: { path: "/admin", enabled: true },
 } as const satisfies Record<string, { path: string; enabled: boolean }>;
 
 export type RouteKey = keyof typeof routes;

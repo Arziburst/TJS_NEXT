@@ -1,4 +1,5 @@
 import { Suspense, type ReactNode } from "react";
+import { CartHeaderSlot } from "@/components/cart/cart-header-slot";
 import { Toaster } from "@/components/ui/sonner";
 import { AccountMenu } from "./account-menu";
 import { Footer } from "./footer";
@@ -10,6 +11,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
   return (
     <>
       <Header
+        cart={<CartHeaderSlot />}
         account={
           <Suspense fallback={<AccountSlot />}>
             <AccountMenu />

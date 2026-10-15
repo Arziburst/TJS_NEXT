@@ -10,6 +10,10 @@
     {
       "path": "/api/cron/fx-rates",
       "schedule": "15 14 * * *"
+    },
+    {
+      "path": "/api/cron/nova-poshta",
+      "schedule": "30 2 * * *"
     }
   ]
 }

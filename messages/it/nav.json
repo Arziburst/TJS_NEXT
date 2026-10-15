@@ -3,6 +3,8 @@
   "aboutUs": "Chi siamo",
   "contacts": "Contatti",
   "cart": "Carrello",
+  "cartCount": "Carrello, {count, plural, =0 {vuoto} one {# pezzo} other {# pezzi}}",
+  "closeCart": "Chiudi il carrello",
   "settings": "Impostazioni",
   "addProduct": "Aggiungi prodotto",
   "orders": "Ordini",

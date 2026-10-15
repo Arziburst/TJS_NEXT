@@ -1,7 +1,38 @@
 {
   "title": "Coș",
   "empty": "Coșul tău este gol",
+  "emptyHint": "Răsfoiește magazinul și adaugă piesele care îți plac.",
   "yourOrder": "Comanda ta",
   "continueToCheckout": "Continuă spre finalizarea comenzii",
-  "total": "Total"
+  "total": "Total",
+  "subtotal": "Subtotal",
+  "pieces": "{count, plural, one {# piesă} few {# piese} other {# de piese}}",
+  "lines": "Piese în coș",
+  "each": "{quantity} ×",
+  "oneOfAKind": "Piesă unică",
+  "madeToOrder": "Se face la comandă",
+  "singlePiece": "Această piesă există într-un singur exemplar.",
+  "quantityOf": "Cantitatea pentru {title}",
+  "decrease": "Cu una mai puțin: {title}",
+  "increase": "Cu una mai mult: {title}",
+  "removeLine": "Elimină {title}",
+  "maxQuantity": "Cel mult {max} per produs",
+  "unavailablePiece": "O piesă care nu mai este disponibilă",
+  "status": {
+    "sold": "Vândut",
+    "reserved": "Rezervat",
+    "unavailable": "Nu mai este disponibil"
+  },
+  "unavailableNote": "Piesele care nu mai pot fi comandate nu intră în subtotal și nu vor fi comandate. Le poți elimina.",
+  "orderRequest": "Continuă spre cererea de comandă",
+  "orderRequestTbd": "Cerere de comandă: TBD",
+  "nothingToOrder": "Nu există nimic în coș care să poată fi comandat.",
+  "continueShopping": "Continuă cumpărăturile",
+  "viewCart": "Vezi coșul",
+  "loadError": "Coșul nu a putut fi încărcat. Reîncarcă pagina.",
+  "errors": {
+    "rateLimited": "Prea multe modificări într-un timp scurt. Așteaptă puțin și încearcă din nou.",
+    "unavailable": "Această piesă nu mai poate fi comandată.",
+    "unexpectedError": "Coșul nu a putut fi actualizat. Încearcă din nou."
+  }
 }

@@ -13,5 +13,102 @@
     "success": "Encomenda concluída com sucesso",
     "grandTotal": "Total geral",
     "continueShopping": "Continuar a comprar"
+  },
+  "delivery": {
+    "title": "Entrega na Ucrânia",
+    "city": {
+      "label": "Cidade",
+      "placeholder": "Comece a escrever o nome da cidade"
+    },
+    "search": {
+      "searching": "A pesquisar…",
+      "typeMore": "Escreva pelo menos {min} letras",
+      "empty": "Nada encontrado",
+      "ukrainianOnly": "Escreva o nome em ucraniano",
+      "unavailable": "A pesquisa não está disponível agora. Tente novamente mais tarde.",
+      "clear": "Limpar",
+      "open": "Mostrar a lista"
+    },
+    "method": {
+      "label": "Como receber a encomenda",
+      "warehouse": "Numa agência ou num cacifo",
+      "address": "Por estafeta na morada",
+      "addressUnavailable": "A Nova Poshta não entrega na morada nesta localidade"
+    },
+    "warehouse": {
+      "label": "Agência ou cacifo",
+      "placeholder": "Número ou rua",
+      "filter": "Mostrar",
+      "all": "Todos",
+      "branch": "Agências",
+      "postomat": "Cacifos",
+      "maxWeight": "até {kg} kg"
+    },
+    "address": {
+      "street": "Rua",
+      "streetPlaceholder": "Comece a escrever o nome da rua",
+      "house": "Número",
+      "flat": "Apartamento (opcional)"
+    },
+    "quote": {
+      "label": "Entrega pela Nova Poshta",
+      "calculating": "A calcular…",
+      "estimate": "≈ {price}",
+      "note": "Uma estimativa pela tarifa da Nova Poshta para uma caixa pequena: paga o preço real nos correios ao receber.",
+      "noteOnReceipt": "Uma estimativa pela tarifa da Nova Poshta para uma caixa pequena: paga o preço real ao receber.",
+      "unavailable": "O preço não está disponível agora: a Nova Poshta calcula-o na entrega.",
+      "choose": "Escolha onde entregar para ver o preço"
+    }
+  },
+  "internationalDelivery": {
+    "country": "País",
+    "countryPlaceholder": "Escolha um país",
+    "method": "Método de entrega",
+    "methods": {
+      "division": "Numa agência, cacifo ou ponto de recolha Nova Post",
+      "address": "Por estafeta na morada"
+    },
+    "courierOnly": "{country}: a Nova Post entrega por estafeta na morada.",
+    "settlement": "Cidade ou localidade",
+    "settlementPlaceholder": "Comece a escrever o nome",
+    "settlementHint": "Escreva pelo menos 2 letras",
+    "searching": "A pesquisar…",
+    "nothingFound": "Nada encontrado",
+    "loadError": "Não foi possível carregar a lista. Tente novamente mais tarde.",
+    "clear": "Limpar",
+    "showList": "Mostrar a lista",
+    "division": "Local de recolha",
+    "divisionTypeFilter": "Tipo de ponto",
+    "divisionTypes": {
+      "all": "Todos",
+      "PostBranch": "Agência",
+      "Postomat": "Cacifo",
+      "PUDO": "Ponto de recolha"
+    },
+    "loading": "A carregar…",
+    "noDivisions": "Não há pontos deste tipo aqui.",
+    "address": {
+      "city": "Cidade",
+      "postCode": "Código postal",
+      "street": "Rua",
+      "building": "Número",
+      "flat": "Andar/fração (opcional)",
+      "submit": "Calcular a entrega"
+    },
+    "quote": {
+      "label": "Entrega",
+      "estimate": "Estimativa",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "A calcular…",
+      "error": "Não foi possível calcular o custo da entrega.",
+      "tbd": "TBD",
+      "unavailable": "Indisponível de momento",
+      "deliveryDate": "Entrega prevista: {date}",
+      "estimateNote": "Tarifa fixa da zona de destino: paga o preço real ao receber.",
+      "tbdNote": "A tarifa de entrega desta zona ainda não foi definida.",
+      "carrierNote": "Uma estimativa pela tarifa da Nova Post para uma caixa pequena (10 × 10 × 5 cm): paga o preço real ao receber."
+    },
+    "customsNotice": "O destinatário poderá ter de pagar o IVA de importação e os direitos aduaneiros na entrega."
   }
 }

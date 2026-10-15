@@ -1,0 +1,5 @@
+{
+  "errors": {
+    "recipient.divisionId": "The selected recipient.division id is invalid."
+  }
+}

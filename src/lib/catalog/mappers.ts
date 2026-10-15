@@ -1,6 +1,7 @@
 import { defaultLocale, locales, type Locale } from "@/i18n/routing";
 import type {
   Category,
+  LeadTime,
   Product,
   ProductImage,
   ProductSummary,
@@ -53,6 +54,8 @@ export type TranslationRow = {
   description: string | null;
   materials: string | null;
   care: string | null;
+  clasp: string | null;
+  lead_time_note: string | null;
   alt_text: string | null;
   meta_title: string | null;
   meta_description: string | null;
@@ -75,7 +78,11 @@ export type ProductRow = {
   sku: string | null;
   fulfillment: ProductSummary["fulfillment"];
   availability: ProductSummary["availability"];
-  lead_time_days: number | null;
+  lead_time_min_days: number | null;
+  lead_time_max_days: number | null;
+  length_mm: number | null;
+  width_mm: number | null;
+  height_mm: number | null;
   price_usd_text: string;
   weight_g: number;
   created_at: string;
@@ -115,6 +122,11 @@ function mapImage(row: ImageRow, locale: Locale, t: TranslationRow, publicUrlFor
   };
 }
 
+function leadTimeOf(row: ProductRow): LeadTime | null {
+  const { lead_time_min_days: minDays, lead_time_max_days: maxDays } = row;
+  return minDays !== null && maxDays !== null ? { minDays, maxDays } : null;
+}
+
 /** Null when the row cannot be shown: no translation in the locale or the fallback, or a broken price. */
 export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: PublicUrlFor): Product | null {
   const t = pickByLocale(row.product_translations, locale);
@@ -129,7 +141,7 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
     category: { id: row.category.id, slug: row.category.slug },
     fulfillment: row.fulfillment,
     availability: row.availability,
-    leadTimeDays: row.lead_time_days,
+    leadTime: leadTimeOf(row),
     priceUsdMinor,
     weightG: row.weight_g,
     createdAt: row.created_at,
@@ -138,6 +150,9 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
     images,
     materials: t.materials,
     care: t.care,
+    clasp: t.clasp,
+    leadTimeNote: t.lead_time_note,
+    dimensions: { lengthMm: row.length_mm, widthMm: row.width_mm, heightMm: row.height_mm },
   };
 }
 
@@ -148,7 +163,7 @@ export function toSummary(product: Product): ProductSummary {
     category: product.category,
     fulfillment: product.fulfillment,
     availability: product.availability,
-    leadTimeDays: product.leadTimeDays,
+    leadTime: product.leadTime,
     priceUsdMinor: product.priceUsdMinor,
     weightG: product.weightG,
     createdAt: product.createdAt,

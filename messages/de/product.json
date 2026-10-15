@@ -2,6 +2,17 @@
   "sizeGuide": "Größentabelle",
   "addToCart": "In den Warenkorb",
   "addedToCart": "Das Produkt wurde dem Warenkorb hinzugefügt",
+  "cart": {
+    "added": "In den Warenkorb gelegt",
+    "quantityRaised": "Hinzugefügt: {count} im Warenkorb",
+    "alreadyInCart": "Dieses Unikat liegt bereits in Ihrem Warenkorb.",
+    "maxQuantity": "Höchstens {max} pro Produkt",
+    "cartFull": "Ihr Warenkorb ist voll. Entfernen Sie ein Stück, um ein anderes hinzuzufügen.",
+    "unavailable": "Dieses Stück kann nicht mehr bestellt werden.",
+    "rateLimited": "Zu viele Änderungen in kurzer Zeit. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+    "inCart": "Im Warenkorb: {count}",
+    "viewCart": "Warenkorb ansehen"
+  },
   "card": {
     "onlyOrder": "Auf Bestellung gefertigt",
     "firstImageAlt": "Erstes Bild des Produkts",
@@ -15,8 +26,16 @@
   "page": {
     "materials": "Materialien",
     "care": "Pflege",
+    "clasp": "Verschluss",
     "weight": "Gewicht",
+    "dimensions": "Maße",
+    "dimension": {
+      "length": "Länge {value}",
+      "width": "Breite {value}",
+      "height": "Höhe {value}"
+    },
     "leadTime": "Gefertigt in {days, plural, one {# Tag} other {# Tagen}}",
+    "leadTimeRange": "Gefertigt in {min}–{max, plural, one {# Tag} other {# Tagen}}",
     "oneOfAKind": "Unikat",
     "reserved": "Reserviert",
     "sold": "Verkauft",

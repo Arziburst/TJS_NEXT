@@ -1,12 +1,11 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
-import { addToCart } from "@/app/[locale]/product/[slug]/actions";
+import { AddToCartSlot } from "@/components/cart/add-to-cart-slot";
 import { categoryHref } from "@/components/catalog/links";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 import type { Product } from "@/lib/catalog/types";
-import { AddToCartButton } from "./add-to-cart-button";
 import { GoBackButton } from "./go-back-button";
 import { ProductGallery } from "./product-gallery";
 
@@ -33,6 +32,14 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
   const contentLang = translation.isFallback ? translation.locale : undefined;
   const status = availabilityStatus(product);
   const canOrder = status === null || status === "oneOfAKind";
+  const { leadTime } = product;
+  const mm = (value: number) => format.number(value, { style: "unit", unit: "millimeter" });
+  const { lengthMm, widthMm, heightMm } = product.dimensions;
+  const dimensions = [
+    lengthMm !== null ? t("dimension.length", { value: mm(lengthMm) }) : null,
+    widthMm !== null ? t("dimension.width", { value: mm(widthMm) }) : null,
+    heightMm !== null ? t("dimension.height", { value: mm(heightMm) }) : null,
+  ].filter((text): text is string => text !== null);
 
   return (
     <NextIntlClientProvider messages={{ common: { actions: messages.common.actions }, product: messages.product }}>
@@ -62,10 +69,23 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
             {status && <Badge variant="secondary">{t(status)}</Badge>}
           </div>
           {product.fulfillment === "made_to_order" && (
-            <p className="flex flex-wrap gap-x-3 text-sm">
-              <span>{tProduct("card.onlyOrder")}</span>
-              {product.leadTimeDays !== null && <span>{t("leadTime", { days: product.leadTimeDays })}</span>}
-            </p>
+            <div className="grid gap-1 text-sm">
+              <p className="flex flex-wrap gap-x-3">
+                <span>{tProduct("card.onlyOrder")}</span>
+                {leadTime && (
+                  <span>
+                    {leadTime.minDays === leadTime.maxDays
+                      ? t("leadTime", { days: leadTime.maxDays })
+                      : t("leadTimeRange", { min: leadTime.minDays, max: leadTime.maxDays })}
+                  </span>
+                )}
+              </p>
+              {product.leadTimeNote && (
+                <p className="whitespace-pre-line" lang={contentLang}>
+                  {product.leadTimeNote}
+                </p>
+              )}
+            </div>
           )}
           {translation.description && (
             <p className="whitespace-pre-line" lang={contentLang}>
@@ -85,6 +105,18 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
                 <dd lang={contentLang}>{product.care}</dd>
               </>
             )}
+            {product.clasp && (
+              <>
+                <dt className="font-semibold">{t("clasp")}</dt>
+                <dd lang={contentLang}>{product.clasp}</dd>
+              </>
+            )}
+            {dimensions.length > 0 && (
+              <>
+                <dt className="font-semibold">{t("dimensions")}</dt>
+                <dd>{format.list(dimensions, { type: "unit" })}</dd>
+              </>
+            )}
             {product.weightG > 0 && (
               <>
                 <dt className="font-semibold">{t("weight")}</dt>
@@ -92,7 +124,7 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
               </>
             )}
           </dl>
-          {canOrder && <AddToCartButton productId={product.id} addToCart={addToCart} className="sb:self-start" />}
+          {canOrder && <AddToCartSlot productId={product.id} fulfillment={product.fulfillment} />}
         </div>
       </div>
     </NextIntlClientProvider>

@@ -1,0 +1,66 @@
+{
+  "current_page": 1,
+  "last_page": 1,
+  "per_page": 20,
+  "total": 2,
+  "from": null,
+  "to": null,
+  "items": [
+    {
+      "id": 40101,
+      "name": "Berlin",
+      "country": {
+        "name": "Germany",
+        "code": "DE"
+      },
+      "region": {
+        "id": 40108,
+        "name": "Berlin",
+        "parent": {
+          "id": 40110,
+          "name": "Berlin"
+        }
+      },
+      "latitude": null,
+      "longitude": null,
+      "postCode1": "10115",
+      "postCode2": null,
+      "alternativeNames": [],
+      "externalId": null,
+      "boost": 0,
+      "prohibitedIssuance": false,
+      "prohibitedSending": false,
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null
+    },
+    {
+      "id": 40102,
+      "name": "Bergisch Gladbach",
+      "country": {
+        "name": "Germany",
+        "code": "DE"
+      },
+      "region": {
+        "id": 40109,
+        "name": "Rheinisch-Bergischer Kreis",
+        "parent": {
+          "id": 40111,
+          "name": "North Rhine-Westphalia"
+        }
+      },
+      "latitude": null,
+      "longitude": null,
+      "postCode1": "51427",
+      "postCode2": null,
+      "alternativeNames": [],
+      "externalId": null,
+      "boost": 0,
+      "prohibitedIssuance": false,
+      "prohibitedSending": false,
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null
+    }
+  ]
+}

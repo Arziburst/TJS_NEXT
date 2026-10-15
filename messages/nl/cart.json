@@ -1,7 +1,38 @@
 {
   "title": "Winkelwagen",
   "empty": "Je winkelwagen is leeg",
+  "emptyHint": "Kijk rond in de winkel en voeg de stukken toe die je mooi vindt.",
   "yourOrder": "Je bestelling",
   "continueToCheckout": "Doorgaan naar afrekenen",
-  "total": "Totaal"
+  "total": "Totaal",
+  "subtotal": "Subtotaal",
+  "pieces": "{count, plural, one {# stuk} other {# stuks}}",
+  "lines": "Stukken in de winkelwagen",
+  "each": "{quantity} ×",
+  "oneOfAKind": "Uniek exemplaar",
+  "madeToOrder": "Op bestelling gemaakt",
+  "singlePiece": "Dit stuk bestaat maar één keer.",
+  "quantityOf": "Aantal van {title}",
+  "decrease": "Eén minder van {title}",
+  "increase": "Eén meer van {title}",
+  "removeLine": "{title} verwijderen",
+  "maxQuantity": "Hoogstens {max} per product",
+  "unavailablePiece": "Een stuk dat niet meer beschikbaar is",
+  "status": {
+    "sold": "Verkocht",
+    "reserved": "Gereserveerd",
+    "unavailable": "Niet meer beschikbaar"
+  },
+  "unavailableNote": "Stukken die niet meer kunnen worden besteld, tellen niet mee in het subtotaal en worden niet besteld. Je kunt ze verwijderen.",
+  "orderRequest": "Verder naar de bestelaanvraag",
+  "orderRequestTbd": "Bestelaanvraag: TBD",
+  "nothingToOrder": "Er zit niets in de winkelwagen dat kan worden besteld.",
+  "continueShopping": "Verder winkelen",
+  "viewCart": "Winkelwagen bekijken",
+  "loadError": "De winkelwagen kon niet worden geladen. Laad de pagina opnieuw.",
+  "errors": {
+    "rateLimited": "Te veel wijzigingen in korte tijd. Wacht even en probeer het opnieuw.",
+    "unavailable": "Dit stuk kan niet meer worden besteld.",
+    "unexpectedError": "De winkelwagen kon niet worden bijgewerkt. Probeer het opnieuw."
+  }
 }
