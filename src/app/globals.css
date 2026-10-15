@@ -170,7 +170,8 @@
   }
   &:hover,
   &:focus-visible {
-    color: var(--accent);
+    /* the text in the darker coral (D26); the bars keep the coral fill */
+    color: var(--accent-text);
   }
   &:hover::after,
   &:focus-visible::after {

@@ -68,6 +68,19 @@ test("uk names the necklace category «Намиста» on the home tile, in the
   await expect(page).toHaveTitle("Намиста | TJS");
 });
 
+// D26: on hover the text turns the darker coral, the sliding underline bars keep the coral fill
+test("a hovered shop link has darker coral text over a coral underline", async ({ page, isMobile }) => {
+  test.skip(isMobile, "the side nav and hover exist from 1024px only");
+  await page.goto("/en/shop");
+  const link = page.locator("aside").getByRole("link", { name: enCatalog.categories.earrings });
+  await link.hover();
+  await expect(link).toHaveCSS("color", "rgb(185, 59, 39)");
+  for (const pseudo of ["::before", "::after"]) {
+    const bar = await link.evaluate((el, p) => getComputedStyle(el, p).backgroundColor, pseudo);
+    expect(bar, pseudo).toBe("rgb(255, 97, 74)");
+  }
+});
+
 test("the home page and a category page carry localized metadata and hreflang", async ({ request }) => {
   const html = await (await request.get("/de/shop/rings")).text();
   expect(html).toContain("<title>Ringe | TJS</title>");
