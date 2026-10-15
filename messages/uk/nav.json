@@ -1,0 +1,25 @@
+{
+  "shop": "Магазин",
+  "aboutUs": "Про нас",
+  "contacts": "Контакти",
+  "cart": "Кошик",
+  "settings": "Налаштування",
+  "addProduct": "Додати товар",
+  "orders": "Замовлення",
+  "logout": "Вихід",
+  "signInUp": "Увійти або зареєструватися",
+  "language": "Мова",
+  "localeNames": {
+    "uk": "Українська",
+    "en": "English",
+    "de": "Deutsch",
+    "fr": "Français",
+    "es": "Español",
+    "it": "Italiano",
+    "pl": "Polski",
+    "nl": "Nederlands",
+    "cs": "Čeština",
+    "pt": "Português",
+    "ro": "Română"
+  }
+}

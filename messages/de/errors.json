@@ -1,0 +1,19 @@
+{
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die gesuchte Seite existiert nicht.",
+    "home": "Zur Startseite"
+  },
+  "form": {
+    "required": "Dieses Feld ist erforderlich",
+    "invalidEmail": "Ungültiges E-Mail-Format",
+    "invalidPhone": "Ungültiges Telefonnummernformat. Zum Beispiel +380946826242",
+    "nameMinLength": "Der Name muss mindestens {min} Zeichen lang sein",
+    "priceMin": "Der Preis muss mindestens {min} {currency} betragen.",
+    "passwordMinLength": "Das Passwort muss mindestens {min} Zeichen lang sein",
+    "minItems": "Das Feld muss mindestens {min} Einträge enthalten",
+    "chooseCity": "Sie müssen die richtige Stadt eingeben und Ihre Stadt auswählen",
+    "chooseWarehouse": "Sie müssen Ihre Postfiliale auswählen",
+    "chooseWarehouseNumber": "Sie müssen die Nummer der Postfiliale eingeben oder auswählen"
+  }
+}

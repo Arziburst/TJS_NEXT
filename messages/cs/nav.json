@@ -1,0 +1,25 @@
+{
+  "shop": "Obchod",
+  "aboutUs": "O nás",
+  "contacts": "Kontakty",
+  "cart": "Košík",
+  "settings": "Nastavení",
+  "addProduct": "Přidat produkt",
+  "orders": "Objednávky",
+  "logout": "Odhlásit se",
+  "signInUp": "Přihlášení a registrace",
+  "language": "Jazyk",
+  "localeNames": {
+    "uk": "Українська",
+    "en": "English",
+    "de": "Deutsch",
+    "fr": "Français",
+    "es": "Español",
+    "it": "Italiano",
+    "pl": "Polski",
+    "nl": "Nederlands",
+    "cs": "Čeština",
+    "pt": "Português",
+    "ro": "Română"
+  }
+}

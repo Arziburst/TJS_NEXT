@@ -1,0 +1,42 @@
+{
+  "brand": "TJS",
+  "noData": "No data",
+  "total": "Total",
+  "pagination": {
+    "of": "of"
+  },
+  "actions": {
+    "submit": "Submit",
+    "remove": "Remove",
+    "create": "Create",
+    "edit": "Edit",
+    "goBack": "Go back"
+  },
+  "fields": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "fullName": "Name and surname",
+    "email": "Email",
+    "phone": "Phone",
+    "password": "Password",
+    "passwordAgain": "Password again",
+    "city": "City",
+    "someData": "Enter some data..."
+  },
+  "contact": {
+    "phone": "Phone",
+    "email": "Email"
+  },
+  "cookieConsent": {
+    "text": "We use cookies to provide you the best experience on our website. By continuing to use our site, we will assume you are happy with it.",
+    "accept": "Got it"
+  },
+  "about": {
+    "title": "About us",
+    "intro": "My name is Elena, I follow the news and trends, have extensive experience working with jewelry.",
+    "imageAlt": "Main image of the \"About us\" page",
+    "missionStart": "love my work and want to bring joy and beauty to our world.",
+    "motto": "Affordable luxury is my motto!",
+    "customOrders": "I also create custom jewelry. And always take into account the wishes of customers."
+  }
+}

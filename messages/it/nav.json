@@ -1,0 +1,25 @@
+{
+  "shop": "Negozio",
+  "aboutUs": "Chi siamo",
+  "contacts": "Contatti",
+  "cart": "Carrello",
+  "settings": "Impostazioni",
+  "addProduct": "Aggiungi prodotto",
+  "orders": "Ordini",
+  "logout": "Esci",
+  "signInUp": "Accedi e registrati",
+  "language": "Lingua",
+  "localeNames": {
+    "uk": "Українська",
+    "en": "English",
+    "de": "Deutsch",
+    "fr": "Français",
+    "es": "Español",
+    "it": "Italiano",
+    "pl": "Polski",
+    "nl": "Nederlands",
+    "cs": "Čeština",
+    "pt": "Português",
+    "ro": "Română"
+  }
+}

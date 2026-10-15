@@ -1,0 +1,19 @@
+{
+  "notFound": {
+    "title": "Nie znaleziono strony",
+    "description": "Strona, której szukasz, nie istnieje.",
+    "home": "Przejdź do strony głównej"
+  },
+  "form": {
+    "required": "To pole jest wymagane",
+    "invalidEmail": "Nieprawidłowy format adresu e-mail",
+    "invalidPhone": "Nieprawidłowy format numeru telefonu. Na przykład +380946826242",
+    "nameMinLength": "Imię musi mieć co najmniej {min} znaków",
+    "priceMin": "Cena musi wynosić co najmniej {min} {currency}.",
+    "passwordMinLength": "Hasło musi mieć co najmniej {min} znaków",
+    "minItems": "Pole musi zawierać co najmniej {min} elementów",
+    "chooseCity": "Musisz wpisać poprawną nazwę miasta i wybrać swoje miasto",
+    "chooseWarehouse": "Musisz wybrać swój urząd pocztowy",
+    "chooseWarehouseNumber": "Musisz wpisać lub wybrać numer urzędu pocztowego"
+  }
+}

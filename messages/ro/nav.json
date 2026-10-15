@@ -1,0 +1,25 @@
+{
+  "shop": "Magazin",
+  "aboutUs": "Despre noi",
+  "contacts": "Contacte",
+  "cart": "Coș",
+  "settings": "Setări",
+  "addProduct": "Adaugă produs",
+  "orders": "Comenzi",
+  "logout": "Deconectare",
+  "signInUp": "Autentificare și înregistrare",
+  "language": "Limbă",
+  "localeNames": {
+    "uk": "Українська",
+    "en": "English",
+    "de": "Deutsch",
+    "fr": "Français",
+    "es": "Español",
+    "it": "Italiano",
+    "pl": "Polski",
+    "nl": "Nederlands",
+    "cs": "Čeština",
+    "pt": "Português",
+    "ro": "Română"
+  }
+}

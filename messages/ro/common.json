@@ -1,0 +1,42 @@
+{
+  "brand": "TJS",
+  "noData": "Nu există date",
+  "total": "Total",
+  "pagination": {
+    "of": "din"
+  },
+  "actions": {
+    "submit": "Trimite",
+    "remove": "Elimină",
+    "create": "Creează",
+    "edit": "Editează",
+    "goBack": "Înapoi"
+  },
+  "fields": {
+    "firstName": "Prenume",
+    "lastName": "Nume",
+    "fullName": "Nume și prenume",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "password": "Parolă",
+    "passwordAgain": "Repetă parola",
+    "city": "Oraș",
+    "someData": "Introdu niște date..."
+  },
+  "contact": {
+    "phone": "Telefon",
+    "email": "E-mail"
+  },
+  "cookieConsent": {
+    "text": "Folosim cookie-uri pentru a-ți oferi cea mai bună experiență pe site-ul nostru. Continuând să folosești site-ul, considerăm că ești de acord cu acest lucru.",
+    "accept": "Am înțeles"
+  },
+  "about": {
+    "title": "Despre noi",
+    "intro": "Mă numesc Elena, urmăresc noutățile și tendințele și am o vastă experiență în lucrul cu bijuterii fantezie.",
+    "imageAlt": "Imaginea principală a paginii „Despre noi”",
+    "missionStart": "îmi iubesc munca și vreau să aduc bucurie și frumusețe în lumea noastră.",
+    "motto": "Lux accesibil este deviza mea!",
+    "customOrders": "Creez și bijuterii la comandă și țin mereu cont de dorințele clienților."
+  }
+}

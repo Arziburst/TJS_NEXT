@@ -1,0 +1,8 @@
+{
+  "orderStatus": {
+    "canceled": "Zrušeno",
+    "inProcessing": "Zpracovává se",
+    "accepted": "Přijato",
+    "closed": "Uzavřeno"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Магазин",
+  "filterShopBy": "Каталог",
+  "filterBy": "Фільтр",
+  "showMore": "Показати більше",
+  "shownCount": "Показано {shown} з {total} товарів",
+  "categories": {
+    "all": "Усі",
+    "earrings": "Сережки",
+    "necklaces": "Намисто",
+    "bracelets": "Браслети",
+    "corals": "Корали",
+    "rings": "Каблучки",
+    "brooches": "Брошки"
+  },
+  "sort": {
+    "placeholder": "Вибрати",
+    "priceAsc": "Ціна (від низької до високої)",
+    "priceDesc": "Ціна (від високої до низької)"
+  }
+}

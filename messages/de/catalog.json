@@ -1,0 +1,21 @@
+{
+  "title": "Shop",
+  "filterShopBy": "Einkaufen nach",
+  "filterBy": "Filtern nach",
+  "showMore": "Mehr anzeigen",
+  "shownCount": "{shown} von {total} Produkten angezeigt",
+  "categories": {
+    "all": "Alle ansehen",
+    "earrings": "Ohrringe",
+    "necklaces": "Halsketten",
+    "bracelets": "Armbänder",
+    "corals": "Korallen",
+    "rings": "Ringe",
+    "brooches": "Broschen"
+  },
+  "sort": {
+    "placeholder": "Sortierung wählen",
+    "priceAsc": "Preis (aufsteigend)",
+    "priceDesc": "Preis (absteigend)"
+  }
+}

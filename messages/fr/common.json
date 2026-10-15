@@ -1,0 +1,42 @@
+{
+  "brand": "TJS",
+  "noData": "Aucune donnée",
+  "total": "Total",
+  "pagination": {
+    "of": "sur"
+  },
+  "actions": {
+    "submit": "Envoyer",
+    "remove": "Supprimer",
+    "create": "Créer",
+    "edit": "Modifier",
+    "goBack": "Retour"
+  },
+  "fields": {
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "fullName": "Nom et prénom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "password": "Mot de passe",
+    "passwordAgain": "Confirmer le mot de passe",
+    "city": "Ville",
+    "someData": "Saisissez des données..."
+  },
+  "contact": {
+    "phone": "Téléphone",
+    "email": "E-mail"
+  },
+  "cookieConsent": {
+    "text": "Nous utilisons des cookies afin de vous offrir la meilleure expérience sur notre site. En continuant à naviguer, vous acceptez leur utilisation.",
+    "accept": "J’ai compris"
+  },
+  "about": {
+    "title": "À propos de nous",
+    "intro": "Je m’appelle Elena, je suis l’actualité et les tendances, et j’ai une grande expérience dans le travail de la bijouterie fantaisie.",
+    "imageAlt": "Image principale de la page « À propos de nous »",
+    "missionStart": "aime mon travail et je veux apporter de la joie et de la beauté à notre monde.",
+    "motto": "Le luxe abordable est ma devise !",
+    "customOrders": "Je crée aussi des bijoux sur mesure, en tenant toujours compte des souhaits de mes clients."
+  }
+}

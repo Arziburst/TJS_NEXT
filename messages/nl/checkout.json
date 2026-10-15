@@ -1,0 +1,17 @@
+{
+  "title": "Winkelwagen",
+  "contactDetails": "Contactgegevens",
+  "shippingDetails": "Verzendgegevens",
+  "yourOrder": "Je bestelling",
+  "placeOrder": "Bestelling plaatsen",
+  "fields": {
+    "choosePostOffice": "Kies een postkantoor",
+    "comment": "Informatie die kan helpen bij het uitvoeren van de bestelling"
+  },
+  "payment": {
+    "failed": "De betaling is mislukt!",
+    "success": "Bestelling geslaagd",
+    "grandTotal": "Eindtotaal",
+    "continueShopping": "Verder winkelen"
+  }
+}

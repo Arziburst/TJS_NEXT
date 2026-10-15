@@ -1,0 +1,42 @@
+{
+  "brand": "TJS",
+  "noData": "Brak danych",
+  "total": "Razem",
+  "pagination": {
+    "of": "z"
+  },
+  "actions": {
+    "submit": "Wyślij",
+    "remove": "Usuń",
+    "create": "Utwórz",
+    "edit": "Edytuj",
+    "goBack": "Wróć"
+  },
+  "fields": {
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "fullName": "Imię i nazwisko",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "password": "Hasło",
+    "passwordAgain": "Powtórz hasło",
+    "city": "Miasto",
+    "someData": "Wprowadź dane..."
+  },
+  "contact": {
+    "phone": "Telefon",
+    "email": "E-mail"
+  },
+  "cookieConsent": {
+    "text": "Używamy plików cookie, aby zapewnić Ci jak najlepsze wrażenia podczas korzystania z naszej strony. Kontynuując korzystanie z witryny, zakładamy, że to Ci odpowiada.",
+    "accept": "Rozumiem"
+  },
+  "about": {
+    "title": "O nas",
+    "intro": "Mam na imię Elena, śledzę nowości i trendy oraz mam duże doświadczenie w pracy z biżuterią.",
+    "imageAlt": "Główne zdjęcie strony \"O nas\"",
+    "missionStart": "kocham swoją pracę i chcę wnosić radość i piękno do naszego świata.",
+    "motto": "Przystępny luksus to moje motto!",
+    "customOrders": "Tworzę też biżuterię na zamówienie i zawsze uwzględniam życzenia klientów."
+  }
+}

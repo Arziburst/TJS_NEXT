@@ -1,0 +1,17 @@
+{
+  "title": "Carrito",
+  "contactDetails": "Datos de contacto",
+  "shippingDetails": "Datos de envío",
+  "yourOrder": "Tu pedido",
+  "placeOrder": "Realizar pedido",
+  "fields": {
+    "choosePostOffice": "Elige una oficina de correos",
+    "comment": "Información que puede ayudar a gestionar el pedido"
+  },
+  "payment": {
+    "failed": "¡El pago ha fallado!",
+    "success": "Pedido realizado con éxito",
+    "grandTotal": "Total general",
+    "continueShopping": "Seguir comprando"
+  }
+}

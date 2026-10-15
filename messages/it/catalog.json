@@ -1,0 +1,21 @@
+{
+  "title": "Negozio",
+  "filterShopBy": "Acquista per",
+  "filterBy": "Filtra per",
+  "showMore": "Mostra altro",
+  "shownCount": "Visualizzati {shown} di {total} prodotti",
+  "categories": {
+    "all": "Vedi tutto",
+    "earrings": "Orecchini",
+    "necklaces": "Collane",
+    "bracelets": "Bracciali",
+    "corals": "Coralli",
+    "rings": "Anelli",
+    "brooches": "Spille"
+  },
+  "sort": {
+    "placeholder": "Seleziona un filtro",
+    "priceAsc": "Prezzo (dal più basso al più alto)",
+    "priceDesc": "Prezzo (dal più alto al più basso)"
+  }
+}
