@@ -33,7 +33,8 @@ area (`admin.shell.*`, `admin.status.*`, `admin.fulfillment.*`, `admin.availabil
 page's `product.page.clasp`, `dimensions`, `dimension.*`, `leadTimeRange` — written in en, **uk and the other 9
 locales by machine (LLM), unreviewed**; from #22 `checkout.delivery.*` (Nova Poshta city, branch, address and
 price; the legacy app had no such texts beyond `errors.form.chooseCity` / `chooseWarehouse`), uk and the other 9
-locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
+locales by machine, unreviewed; from #24 `checkout.request.*` (the order request form and its errors) and
+`checkout.done.*` (its confirmation), written in en, uk and the other 9 locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the
 admin enters USD).
 
