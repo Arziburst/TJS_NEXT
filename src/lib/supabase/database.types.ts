@@ -159,6 +159,75 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"order_items": {
+                  Row: {
+                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id": string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id": string | null,"quantity": number,"sku": string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id": string | null
+                  }
+                  Insert: {
+                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id"?: string | null,"quantity": number,"sku"?: string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id"?: string | null
+                  }
+                  Update: {
+                    "fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor"?: number,"line_total_usd_minor"?: number,"order_id"?: string,"position"?: number,"product_id"?: string | null,"quantity"?: number,"sku"?: string | null,"title"?: string,"title_locale"?: string,"unit_price_minor"?: number,"unit_price_usd_minor"?: number,"variant_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "order_items_order_id_fkey"
+      columns: ["order_id"]
+isOneToOne: false
+      referencedRelation: "orders"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "order_items_product_id_fkey"
+      columns: ["product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"orders": {
+                  Row: {
+                    "comment": string | null,"country": string,"created_at": string,"currency": string,"currency_decimals": number,"delivery_carrier": string,"delivery_destination": NonNullable<Json>,"delivery_estimate_currency": string | null,"delivery_estimate_minor": number | null,"delivery_estimate_source": string | null,"delivery_estimate_state": string,"delivery_method": string,"email": string,"first_name": string,"fx_rate": number,"fx_rate_date": string | null,"guest_access_hash": string | null,"id": string,"idempotency_key": string,"items_total_minor": number,"items_total_usd_minor": number,"last_name": string | null,"locale": string,"markup_bps": number,"number": number,"phone": string,"status": Database["public"]['Enums']["order_status"],"updated_at": string,"user_id": string | null
+                  }
+                  Insert: {
+                    "comment"?: string | null,"country": string,"created_at"?: string,"currency": string,"currency_decimals": number,"delivery_carrier": string,"delivery_destination": NonNullable<Json>,"delivery_estimate_currency"?: string | null,"delivery_estimate_minor"?: number | null,"delivery_estimate_source"?: string | null,"delivery_estimate_state": string,"delivery_method": string,"email": string,"first_name": string,"fx_rate": number,"fx_rate_date"?: string | null,"guest_access_hash"?: string | null,"id"?: string,"idempotency_key": string,"items_total_minor": number,"items_total_usd_minor": number,"last_name"?: string | null,"locale": string,"markup_bps": number,"number"?: never,"phone": string,"status"?: Database["public"]['Enums']["order_status"],"updated_at"?: string,"user_id"?: string | null
+                  }
+                  Update: {
+                    "comment"?: string | null,"country"?: string,"created_at"?: string,"currency"?: string,"currency_decimals"?: number,"delivery_carrier"?: string,"delivery_destination"?: NonNullable<Json>,"delivery_estimate_currency"?: string | null,"delivery_estimate_minor"?: number | null,"delivery_estimate_source"?: string | null,"delivery_estimate_state"?: string,"delivery_method"?: string,"email"?: string,"first_name"?: string,"fx_rate"?: number,"fx_rate_date"?: string | null,"guest_access_hash"?: string | null,"id"?: string,"idempotency_key"?: string,"items_total_minor"?: number,"items_total_usd_minor"?: number,"last_name"?: string | null,"locale"?: string,"markup_bps"?: number,"number"?: never,"phone"?: string,"status"?: Database["public"]['Enums']["order_status"],"updated_at"?: string,"user_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "orders_currency_fkey"
+      columns: ["currency"]
+isOneToOne: false
+      referencedRelation: "currency_settings"
+      referencedColumns: ["currency"]
+    },{
+      foreignKeyName: "orders_delivery_estimate_currency_fkey"
+      columns: ["delivery_estimate_currency"]
+isOneToOne: false
+      referencedRelation: "currency_settings"
+      referencedColumns: ["currency"]
+    }
+                  ]
+                },"outbox_events": {
+                  Row: {
+                    "attempts": number,"created_at": string,"event": string,"id": string,"last_error": string | null,"next_attempt_at": string,"order_id": string,"payload": NonNullable<Json>,"processed_at": string | null
+                  }
+                  Insert: {
+                    "attempts"?: number,"created_at"?: string,"event": string,"id"?: string,"last_error"?: string | null,"next_attempt_at"?: string,"order_id": string,"payload"?: NonNullable<Json>,"processed_at"?: string | null
+                  }
+                  Update: {
+                    "attempts"?: number,"created_at"?: string,"event"?: string,"id"?: string,"last_error"?: string | null,"next_attempt_at"?: string,"order_id"?: string,"payload"?: NonNullable<Json>,"processed_at"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "outbox_events_order_id_fkey"
+      columns: ["order_id"]
+isOneToOne: false
+      referencedRelation: "orders"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"product_image_alts": {
                   Row: {
                     "alt": string,"image_id": string,"locale": string
@@ -266,6 +335,9 @@ isOneToOne: false
 "consume_rate_limit":
 { Args: { "p_key": string,"p_max": number,"p_window_seconds": number }; Returns: boolean
                            },
+"create_order_request":
+{ Args: { "p_items": Json,"p_order": Json }; Returns: Json
+                           },
 "is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
@@ -276,7 +348,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "product_availability": "available"|"reserved"|"sold","product_fulfillment": "made_to_order"|"one_of_a_kind","product_status": "draft"|"published"|"archived","translation_source": "human"|"machine","user_role": "customer"|"admin"
+            "order_status": "new"|"pending_payment"|"paid"|"in_processing"|"accepted"|"closed"|"canceled"|"refunded","product_availability": "available"|"reserved"|"sold","product_fulfillment": "made_to_order"|"one_of_a_kind","product_status": "draft"|"published"|"archived","translation_source": "human"|"machine","user_role": "customer"|"admin"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -392,7 +464,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "product_availability": ["available", "reserved", "sold"],"product_fulfillment": ["made_to_order", "one_of_a_kind"],"product_status": ["draft", "published", "archived"],"translation_source": ["human", "machine"],"user_role": ["customer", "admin"]
+            "order_status": ["new", "pending_payment", "paid", "in_processing", "accepted", "closed", "canceled", "refunded"],"product_availability": ["available", "reserved", "sold"],"product_fulfillment": ["made_to_order", "one_of_a_kind"],"product_status": ["draft", "published", "archived"],"translation_source": ["human", "machine"],"user_role": ["customer", "admin"]
           }
         }
 } as const
