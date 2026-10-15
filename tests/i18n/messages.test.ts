@@ -81,6 +81,8 @@ describe("message catalogs", () => {
       days: 3,
       page: 2,
       category: "Rings",
+      quantity: 2,
+      title: "Coral drop earrings",
       url: "https://example.com/a.jpg",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
