@@ -1,0 +1,46 @@
+name: Bug
+description: Something does not work as expected
+title: "fix: <what is wrong>"
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: The observed behaviour, with exact error text.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: What should happen, and the decision (D-number) or legacy behaviour that says so.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1.
+        2.
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: URL or route, locale, device / viewport, browser, environment (local, production), commit.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Screenshots, console output, logs, request IDs. No secrets, no customer personal data.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How the fix is proven, including the regression test that would have caught it.
+      value: |
+        - [ ] a test reproduces the bug and passes after the fix

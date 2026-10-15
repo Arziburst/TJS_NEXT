@@ -1,0 +1,69 @@
+name: Task
+description: An agent-ready task with acceptance criteria
+title: "<short imperative title>"
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What the user or the business gets when this is done, and why it matters.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and read first
+      description: Decisions (D-numbers in docs/decisions.md), legacy behaviour to keep, the legacy workaround not to copy (D20), links.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What to build or change.
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+    validations:
+      required: true
+  - type: textarea
+    id: do-not-decide
+    attributes:
+      label: Do not decide
+      description: Open questions the implementer must not resolve — stop at the smallest safe boundary, render TBD, raise the question.
+      value: "- any business value not in docs/decisions.md (render TBD)"
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: One checkable line each, with how it is checked (test, command, browser walk, review).
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: Commands and walks that prove the criteria.
+      value: |
+        - npm run lint && npm run typecheck && npm run test:unit && npm run build
+        - npm run test:e2e (changed flows)
+        - browser walk on desktop 1440 and mobile 390, screenshots in the PR
+    validations:
+      required: true
+  - type: input
+    id: depends-on
+    attributes:
+      label: Depends on
+      placeholder: "#8, #9 or none"
+  - type: input
+    id: epic
+    attributes:
+      label: Epic
+      placeholder: "#1"
