@@ -8,6 +8,7 @@ import { createClient } from "@supabase/supabase-js";
 import enCart from "../messages/en/cart.json" with { type: "json" };
 import en from "../messages/en/checkout.json" with { type: "json" };
 import enNotifications from "../messages/en/notifications.json" with { type: "json" };
+import ukNotifications from "../messages/uk/notifications.json" with { type: "json" };
 import type { Database } from "../src/lib/supabase/database.types";
 import { sentFor } from "./notifications";
 
@@ -223,7 +224,8 @@ test.describe("order request on the local stack", () => {
       .toEqual([1, 1]);
     const sent = await sentFor(number);
     expect(sent.telegram[0]).toMatchObject({ chatId: "-1001234567890", parseMode: "HTML" });
-    expect(sent.telegram[0].text).toContain(`<b>${enNotifications.telegram.newOrder.replace("{number}", String(number))}</b>`);
+    // the owner reads the group in Ukrainian, whatever the customer's language
+    expect(sent.telegram[0].text).toContain(`<b>${ukNotifications.telegram.newOrder.replace("{number}", String(number))}</b>`);
     expect(sent.telegram[0].text).toContain(ordered.title);
     expect(sent.telegram[0].text).toContain("Gift wrapping, please");
     expect(sent.telegram[0].text).toContain(`/admin/orders/${number}"`);
