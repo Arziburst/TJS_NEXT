@@ -1,0 +1,23 @@
+# commit 583a367, npm run build + npx next start -p 3053, npm run seed:images
+$ curl -sD - -o a.avif -H 'Accept: image/avif,image/webp,*/*' 'http://localhost:3053/_next/image?url=http%3A%2F%2F127.0.0.1%3A41531%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fproduct-images%2Fseed%2Fa0000000-0000-4000-8000-000000000001%2F1.png&w=384&q=75'
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=2678400, must-revalidate
+Content-Type: image/avif
+Content-Length: 1452
+$ node ispe.cjs a.avif   # width x height from the AVIF ispe box
+avif ispe 384x384
+$ curl -sD - -o a.webp -H 'Accept: image/webp,*/*' 'http://localhost:3053/_next/image?url=http%3A%2F%2F127.0.0.1%3A41531%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fproduct-images%2Fseed%2Fa0000000-0000-4000-8000-000000000001%2F1.png&w=384&q=75'
+HTTP/1.1 200 OK
+Content-Type: image/webp
+Content-Length: 1522
+RIFF (little-endian) data, WebP image, VP8 encoding, 384x384, Scaling: [none]x[none], YUV color, decoders should clamp
+$ the original PNG from Storage:
+image/png 41743 bytes
+$ a quality outside images.qualities:
+HTTP 400
+
+# built CSS: @font-face rules (subsets: ["latin"] only changes what is preloaded)
+total @font-face: 30
+cyrillic faces (unicode-range U+301,U+400-45F,...): 5
+latin-ext faces (unicode-range U+100-2BA,...): 5
+woff2 preloads in the /de/shop Link header: 2 (Raleway latin normal + italic; before #53: 9)
