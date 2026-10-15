@@ -67,9 +67,9 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   no `tailwind.config`.
 - **Responsive layout in CSS only** — Tailwind breakpoints, container queries, `hidden sm:block`.
   Never branch rendering on `window.innerWidth`, `matchMedia` or a user-agent check.
-- **All user-visible text through next-intl** (from task #9): messages per locale, no hard-coded strings
-  in components, metadata or emails. The placeholder page of task #7 is the only exception and is replaced
-  by #9.
+- **All user-visible text through next-intl** (from task #10): messages per locale, no hard-coded strings
+  in components, metadata or emails. The placeholder page of task #7 was moved into messages by #10;
+  ESLint `react/jsx-no-literals` fails on literal JSX text.
 - Every user-visible change is walked in the browser on desktop 1440 and mobile 390: no console errors,
   no hydration warnings, keyboard focus visible; screenshots in the PR.
 
