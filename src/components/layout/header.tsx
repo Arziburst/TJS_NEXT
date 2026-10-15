@@ -21,7 +21,8 @@ type HeaderProps = {
 };
 
 /*
- * Below 1024px: menu button, logo, cart. From 1024px: logo, inline nav, language and currency, cart over account.
+ * Below 1024px: menu button, logo, cart. From 1024px: logo, inline nav, language and currency, cart and account
+ * side by side on the nav's row (stacked, they made the header taller: #80).
  * The switch is CSS only (sb:hidden / hidden sb:flex); both variants are always in the markup.
  */
 export function Header({
@@ -64,7 +65,7 @@ export function Header({
             <div data-slot="currency-switcher">{currencySwitcher}</div>
           </div>
         </nav>
-        <ul className="flex min-w-11 items-center sb:flex-col sb:items-end">
+        <ul className="flex min-w-11 items-center">
           {cart && <li data-slot="cart">{cart}</li>}
           {account && (
             <li data-slot="account" className="hidden sb:block">

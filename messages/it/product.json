@@ -26,8 +26,16 @@
   "page": {
     "materials": "Materiali",
     "care": "Cura",
+    "clasp": "Chiusura",
     "weight": "Peso",
+    "dimensions": "Dimensioni",
+    "dimension": {
+      "length": "lunghezza {value}",
+      "width": "larghezza {value}",
+      "height": "altezza {value}"
+    },
     "leadTime": "Realizzato in {days, plural, one {# giorno} other {# giorni}}",
+    "leadTimeRange": "Realizzato in {min}–{max, plural, one {# giorno} other {# giorni}}",
     "oneOfAKind": "Pezzo unico",
     "reserved": "Riservato",
     "sold": "Venduto",

@@ -24,9 +24,23 @@ export async function getCurrencyChoice(): Promise<CurrencyChoice> {
   return (await visitorContext()).choice;
 }
 
+/**
+ * The visitor's currency (D5) for a known locale. For callers without a route locale: a Server Action has no
+ * root params, so getCurrencyChoice() (which reads them through getLocale()) fails there; the action takes
+ * the locale as validated input and calls this instead.
+ */
+export async function getCurrencyChoiceFor(locale: Locale): Promise<CurrencyChoice & { tables: MoneyTables | null }> {
+  const { choice, tables } = await contextFor(Promise.resolve(locale));
+  return { ...choice, tables };
+}
+
 async function visitorContext() {
+  return contextFor(getLocale());
+}
+
+async function contextFor(requestedLocale: Promise<string>) {
   // request data first: a prerender stops here, so the build never reads the database
-  const [cookieStore, headerList, requested] = await Promise.all([cookies(), headers(), getLocale()]);
+  const [cookieStore, headerList, requested] = await Promise.all([cookies(), headers(), requestedLocale]);
   const tables = await getMoneyTables();
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   const options = enabledCurrencies(tables);

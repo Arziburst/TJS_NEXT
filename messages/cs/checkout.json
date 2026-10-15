@@ -13,5 +13,102 @@
     "success": "Objednávka byla úspěšně odeslána",
     "grandTotal": "Celková částka",
     "continueShopping": "Pokračovat v nákupu"
+  },
+  "delivery": {
+    "title": "Doručení na Ukrajině",
+    "city": {
+      "label": "Město",
+      "placeholder": "Začněte psát název města"
+    },
+    "search": {
+      "searching": "Hledání…",
+      "typeMore": "Zadejte alespoň {min} písmena",
+      "empty": "Nic nenalezeno",
+      "ukrainianOnly": "Zadejte název ukrajinsky",
+      "unavailable": "Vyhledávání teď není k dispozici. Zkuste to prosím později.",
+      "clear": "Vymazat",
+      "open": "Zobrazit seznam"
+    },
+    "method": {
+      "label": "Jak převzít zásilku",
+      "warehouse": "Na pobočce nebo ve výdejním boxu",
+      "address": "Kurýrem na adresu",
+      "addressUnavailable": "Nova Poshta do této obce nedoručuje na adresu"
+    },
+    "warehouse": {
+      "label": "Pobočka nebo výdejní box",
+      "placeholder": "Číslo nebo ulice",
+      "filter": "Zobrazit",
+      "all": "Vše",
+      "branch": "Pobočky",
+      "postomat": "Výdejní boxy",
+      "maxWeight": "do {kg} kg"
+    },
+    "address": {
+      "street": "Ulice",
+      "streetPlaceholder": "Začněte psát název ulice",
+      "house": "Číslo domu",
+      "flat": "Byt (nepovinné)"
+    },
+    "quote": {
+      "label": "Doručení přes Nova Poshta",
+      "calculating": "Počítáme…",
+      "estimate": "≈ {price}",
+      "note": "Odhad podle tarifu Nova Poshta pro malou krabičku: skutečnou cenu zaplatíte při převzetí na poště.",
+      "noteOnReceipt": "Odhad podle tarifu Nova Poshta pro malou krabičku: skutečnou cenu zaplatíte při převzetí.",
+      "unavailable": "Cena teď není k dispozici: Nova Poshta ji spočítá při převzetí.",
+      "choose": "Vyberte místo doručení, abyste viděli cenu"
+    }
+  },
+  "internationalDelivery": {
+    "country": "Země",
+    "countryPlaceholder": "Vyberte zemi",
+    "method": "Způsob doručení",
+    "methods": {
+      "division": "Na pobočku, do výdejního boxu nebo na výdejní místo Nova Post",
+      "address": "Kurýrem na adresu"
+    },
+    "courierOnly": "Nova Post doručuje do země {country} kurýrem na adresu.",
+    "settlement": "Město nebo obec",
+    "settlementPlaceholder": "Začněte psát název",
+    "settlementHint": "Napište alespoň 2 písmena",
+    "searching": "Hledání…",
+    "nothingFound": "Nic nenalezeno",
+    "loadError": "Seznam se nepodařilo načíst. Zkuste to prosím později.",
+    "clear": "Vymazat",
+    "showList": "Zobrazit seznam",
+    "division": "Místo vyzvednutí",
+    "divisionTypeFilter": "Typ místa",
+    "divisionTypes": {
+      "all": "Vše",
+      "PostBranch": "Pobočka",
+      "Postomat": "Výdejní box",
+      "PUDO": "Výdejní místo"
+    },
+    "loading": "Načítání…",
+    "noDivisions": "Zde nejsou žádná místa tohoto typu.",
+    "address": {
+      "city": "Město",
+      "postCode": "PSČ",
+      "street": "Ulice",
+      "building": "Číslo domu",
+      "flat": "Byt (nepovinné)",
+      "submit": "Spočítat doručení"
+    },
+    "quote": {
+      "label": "Doručení",
+      "estimate": "Odhad",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Počítá se…",
+      "error": "Cenu doručení se nepodařilo spočítat.",
+      "tbd": "TBD",
+      "unavailable": "Momentálně nedostupné",
+      "deliveryDate": "Předpokládané doručení: {date}",
+      "estimateNote": "Paušální sazba pro cílovou zónu: skutečnou cenu zaplatíte při převzetí.",
+      "tbdNote": "Sazba doručení pro tuto zónu zatím nebyla stanovena.",
+      "carrierNote": "Odhad podle tarifu Nova Post pro malou krabičku (10 × 10 × 5 cm): skutečnou cenu zaplatíte při převzetí."
+    },
+    "customsNotice": "Při doručení může příjemce platit dovozní DPH a clo."
   }
 }

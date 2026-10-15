@@ -2,7 +2,7 @@ import "server-only";
 
 import { PRODUCT_IMAGES_BUCKET } from "@/lib/catalog";
 import { isLocale, localesFor, pickByLocale, usdTextToMinor } from "@/lib/catalog/mappers";
-import type { ProductAvailability, ProductFulfillment } from "@/lib/catalog/types";
+import type { LeadTime, ProductAvailability, ProductFulfillment } from "@/lib/catalog/types";
 import type { Locale } from "@/i18n/routing";
 import { createPublicServerClient } from "@/lib/supabase/server";
 
@@ -11,7 +11,8 @@ export type CartProduct = {
   id: string;
   fulfillment: ProductFulfillment;
   availability: ProductAvailability;
-  leadTimeDays: number | null;
+  /** Made-to-order work only: how many days making it takes. */
+  leadTime: LeadTime | null;
   priceUsdMinor: number;
   slug: string;
   title: string;
@@ -38,7 +39,7 @@ export async function getCartProducts(ids: readonly string[], locale: Locale): P
     const { data, error } = await client
       .from("products")
       .select(
-        `id, fulfillment, availability, lead_time_days, price_usd_text:price_usd::text,
+        `id, fulfillment, availability, lead_time_min_days, lead_time_max_days, price_usd_text:price_usd::text,
          product_translations!inner(locale, slug, title),
          product_images(storage_path, position, width, height, blur_data_url)`,
       )
@@ -59,7 +60,10 @@ export async function getCartProducts(ids: readonly string[], locale: Locale): P
         id: row.id,
         fulfillment: row.fulfillment,
         availability: row.availability,
-        leadTimeDays: row.lead_time_days,
+        leadTime:
+          row.lead_time_min_days !== null && row.lead_time_max_days !== null
+            ? { minDays: row.lead_time_min_days, maxDays: row.lead_time_max_days }
+            : null,
         priceUsdMinor,
         slug: translation.slug,
         title: translation.title,

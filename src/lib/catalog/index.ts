@@ -35,10 +35,11 @@ const SORTS: readonly ProductSort[] = ["newest", "price_asc", "price_desc"];
 // and the column grants hide the internal columns (hs_code, deleted_at, created_by, updated_by), so
 // they are neither selected nor filtered on here. The explicit status filter keeps it a storefront view for any client.
 const PRODUCT_COLUMNS = `
-  id, sku, fulfillment, availability, lead_time_days, price_usd_text:price_usd::text, weight_g,
+  id, sku, fulfillment, availability, lead_time_min_days, lead_time_max_days, price_usd_text:price_usd::text, weight_g,
+  length_mm, width_mm, height_mm,
   created_at, published_at,
   category:categories!inner(id, slug),
-  product_translations!inner(locale, slug, title, description, materials, care, alt_text, meta_title, meta_description, source, reviewed_at),
+  product_translations!inner(locale, slug, title, description, materials, care, clasp, lead_time_note, alt_text, meta_title, meta_description, source, reviewed_at),
   product_images(id, storage_path, position, width, height, blur_data_url, product_image_alts(locale, alt))
 `;
 

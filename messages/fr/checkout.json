@@ -13,5 +13,102 @@
     "success": "Commande réussie",
     "grandTotal": "Total général",
     "continueShopping": "Continuer mes achats"
+  },
+  "delivery": {
+    "title": "Livraison en Ukraine",
+    "city": {
+      "label": "Ville",
+      "placeholder": "Commencez à saisir le nom de la ville"
+    },
+    "search": {
+      "searching": "Recherche…",
+      "typeMore": "Saisissez au moins {min} lettres",
+      "empty": "Aucun résultat",
+      "ukrainianOnly": "Saisissez le nom en ukrainien",
+      "unavailable": "La recherche est indisponible pour le moment. Veuillez réessayer plus tard.",
+      "clear": "Effacer",
+      "open": "Afficher la liste"
+    },
+    "method": {
+      "label": "Comment recevoir le colis",
+      "warehouse": "En agence ou en consigne automatique",
+      "address": "Par coursier à l'adresse",
+      "addressUnavailable": "Nova Poshta ne livre pas à domicile dans cette localité"
+    },
+    "warehouse": {
+      "label": "Agence ou consigne automatique",
+      "placeholder": "Numéro ou rue",
+      "filter": "Afficher",
+      "all": "Tout",
+      "branch": "Agences",
+      "postomat": "Consignes",
+      "maxWeight": "jusqu'à {kg} kg"
+    },
+    "address": {
+      "street": "Rue",
+      "streetPlaceholder": "Commencez à saisir le nom de la rue",
+      "house": "Numéro",
+      "flat": "Appartement (facultatif)"
+    },
+    "quote": {
+      "label": "Livraison par Nova Poshta",
+      "calculating": "Calcul en cours…",
+      "estimate": "≈ {price}",
+      "note": "Une estimation selon le tarif de Nova Poshta pour une petite boîte : vous payez le prix réel au bureau de poste à la réception.",
+      "noteOnReceipt": "Une estimation selon le tarif de Nova Poshta pour une petite boîte : vous payez le prix réel à la réception.",
+      "unavailable": "Le prix est indisponible pour le moment : Nova Poshta le calcule à la réception.",
+      "choose": "Choisissez le lieu de livraison pour voir le prix"
+    }
+  },
+  "internationalDelivery": {
+    "country": "Pays",
+    "countryPlaceholder": "Choisissez un pays",
+    "method": "Mode de livraison",
+    "methods": {
+      "division": "En agence, consigne ou point relais Nova Post",
+      "address": "Par coursier à l’adresse"
+    },
+    "courierOnly": "{country} : Nova Post livre par coursier à l’adresse.",
+    "settlement": "Ville ou localité",
+    "settlementPlaceholder": "Commencez à saisir le nom",
+    "settlementHint": "Saisissez au moins 2 lettres",
+    "searching": "Recherche…",
+    "nothingFound": "Aucun résultat",
+    "loadError": "Impossible de charger la liste. Veuillez réessayer plus tard.",
+    "clear": "Effacer",
+    "showList": "Afficher la liste",
+    "division": "Point de retrait",
+    "divisionTypeFilter": "Type de point",
+    "divisionTypes": {
+      "all": "Tous",
+      "PostBranch": "Agence",
+      "Postomat": "Consigne",
+      "PUDO": "Point relais"
+    },
+    "loading": "Chargement…",
+    "noDivisions": "Il n’y a pas de point de ce type ici.",
+    "address": {
+      "city": "Ville",
+      "postCode": "Code postal",
+      "street": "Rue",
+      "building": "Numéro",
+      "flat": "Appartement (facultatif)",
+      "submit": "Calculer la livraison"
+    },
+    "quote": {
+      "label": "Livraison",
+      "estimate": "Estimation",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Calcul en cours…",
+      "error": "Impossible de calculer le coût de la livraison.",
+      "tbd": "TBD",
+      "unavailable": "Indisponible pour le moment",
+      "deliveryDate": "Livraison prévue : {date}",
+      "estimateNote": "Tarif forfaitaire de la zone de destination : vous payez le prix réel à la réception.",
+      "tbdNote": "Le tarif de livraison de cette zone n’est pas encore fixé.",
+      "carrierNote": "Une estimation selon le tarif de Nova Post pour une petite boîte (10 × 10 × 5 cm) : vous payez le prix réel à la réception."
+    },
+    "customsNotice": "La TVA à l’importation et les droits de douane peuvent être à la charge du destinataire à la livraison."
   }
 }

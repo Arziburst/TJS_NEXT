@@ -246,6 +246,75 @@ Supabase Auth with email/password and Google (D12); the app side is `src/lib/aut
   gets the not-found page); actions call `getAdmin()`. The API roles cannot read the internal catalog columns
   (`hs_code`, `deleted_at`, `created_by`, `updated_by`; `sku` is public): admin screens read them on the server with the
   service-role client after `requireAdmin()`.
+- **Admin area (#17).** `/<locale>/admin` (products), `/<locale>/admin/products/new` and
+  `/<locale>/admin/products/<id>`; an admin finds them in the account menu. Each page checks the admin inside its
+  own Suspense boundary, so the HTML of a guest or customer holds no admin text: a guest gets status 200 with a
+  redirect to the sign-in page (meta refresh and client redirect), a customer status 200 with the not-found page.
+  Writes go through `public.admin_save_product`, `admin_set_product_status` and `admin_delete_product` (security
+  invoker: RLS and the audit trigger apply; the service role may call them too, e.g. an import script, then
+  `created_by` / `updated_by` stay null), and expire the storefront caches by tag (`src/lib/admin/revalidate.ts`).
+  A product is published only with its uk translation (checked in those functions, not by a table constraint).
+  To try it locally, create a user (sign up, or the Auth admin API of the stack), make it admin with the SQL above
+  through `MSYS_NO_PATHCONV=1 docker exec -i supabase_db_tjs-<n> psql -U postgres`, and sign in on
+  `127.0.0.1:3000+n`. `e2e/admin.e2e.ts` creates its own admin and customer; it runs in the
+  `desktop-catalog-writers` and `mobile-catalog-writers` projects after the storefront tests, because it publishes
+  products the listings count.
+
+## Nova Poshta (delivery in Ukraine)
+
+The server-only client is `src/lib/delivery/nova-poshta/` (API 2.0, `https://api.novaposhta.ua/v2.0/json/`); the
+UI pieces for the checkout are `src/components/delivery/`, shown on the dev showcase `/<locale>/delivery-demo`
+(on only with `TJS_UI_KIT=true`, like `/ui-kit`).
+
+- **Key.** `NOVA_POSHTA_API_KEY`, server-only, from the owner's Nova Poshta business cabinet. Optional: the
+  dictionary methods and `getDocumentPrice` also answer without a key, so the app calls the API without one
+  when it is unset. Never put it in a `NEXT_PUBLIC_*` name; the legacy app's key leaked in its client bundle and
+  must never be used. `tests/delivery/client-bundle.integration.test.ts` scans the production build's client
+  bundle (`.next/static`) for the key and the client's code (CI integration step, after the build).
+- **Fixtures.** `NOVA_POSHTA_FIXTURES=true` answers from the recorded API answers
+  (`src/lib/delivery/nova-poshta/fixtures/recordings.json`: Kyiv, Lviv, Odesa, Brovary, their branches, streets
+  and tariffs) instead of the network: for walks without a network and for the e2e run (`playwright.config.ts`
+  sets it for the web server). The fixture transport refuses to serve when `VERCEL_ENV=production`. Re-record
+  with `node tests/delivery/record-nova-poshta-fixtures.mjs` (always without a key).
+- **Cache.** The settlements and branches customers looked up are cached in `np_lookups`, `np_settlements` and
+  `np_warehouses` (service role only, no policy for anon or authenticated). A lookup is served from the cache
+  for a day, then fetched again on its next use; when the API fails the stale answer is served. Vercel Cron
+  calls `/api/cron/nova-poshta` daily at 02:30 UTC (`Authorization: Bearer $CRON_SECRET`, else 401): it refreshes
+  the lookups used within a week, drops those unused for 30 days and the rows no lookup names.
+- **Parcel parameters** (`src/lib/delivery/nova-poshta/parcel.ts`): sender city Kyiv, the recipient pays,
+  declared value = the order total (D35); handed in at a branch, quotes are estimates on a 10 × 10 × 5 cm box
+  that adds 100 g (D37).
+- **Rate limits** (`src/lib/delivery/rate-limit.ts`): the public search actions 60 and the quote 20 per minute per
+  client IP, counted by `public.consume_rate_limit` like the auth actions (fails closed); the e2e tests send
+  their own `x-forwarded-for` per test.
+
+## Delivery abroad: Nova Post
+
+The Nova Post international client (`src/lib/delivery/nova-post/`, #23) reads `NOVA_POST_API_KEY` and
+`NOVA_POST_API_URL` on the server at request time. Without a key (today: no contract yet) nothing is
+searched and every estimate is the zone flat rate of `nova_post_zone_rates` (TBD until an admin sets it).
+
+- **Fixture server.** `e2e/nova-post-mock.ts` answers `/clients/authorization`, `/settlements`, `/divisions`
+  and `/shipments/calculations` from `tests/delivery/fixtures/nova-post/` (shaped after the public OpenAPI
+  spec, no real traffic). Playwright starts it on `E2E_PORT + 1000` (CI: 4000) and gives the app
+  `NOVA_POST_API_KEY=e2e-fixture-key` and its URL. For a dev walk of the demo page
+  (`/<locale>/delivery-demo/nova-post`, needs `TJS_UI_KIT=true`), from Git Bash:
+
+  ```sh
+  NOVA_POST_MOCK_PORT=4023 node e2e/nova-post-mock.ts &
+  TJS_UI_KIT=true NOVA_POST_API_KEY=e2e-fixture-key NOVA_POST_API_URL=http://127.0.0.1:4023/v.1.0 npx next dev -p 3023
+  ```
+
+  Towns with points in the fixtures: Wrocław (PL), Berlin (DE), Paris (FR).
+- **Sandbox.** `NOVA_POST_API_URL=https://api-stage.novapost.com/v.1.0` with a sandbox key
+  (`POST /test-api-keys` for a phone registered in the Nova Post client portal). Never commit a key.
+- **Live calculation.** With a key, the price is asked for the D37 estimate box (10 × 10 × 5 cm, the goods'
+  weight + 100 g), declared and insured at the order total in UAH (`parcelForOrder`, D35), with the recipient as
+  the payer (D38: the customer pays the actual price on receipt); without goods of any value the flat rate stands
+  in. Every price is shown as an estimate.
+- **Rate limits.** The same per-client budget as Nova Poshta (`src/lib/delivery/rate-limit.ts`, shared): town and
+  point searches count as `search`, quotes as `quote`; over the budget the shop's "too many attempts" text
+  (`auth.errors.rateLimited`) is shown.
 
 ## Vercel
 
@@ -269,15 +338,19 @@ production deployment in the dashboard; the database is not rolled back with it.
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | the browser and server Supabase clients (public by design, RLS guards the data) |
 | `SUPABASE_SERVICE_ROLE_KEY` | server only: the auth rate limits, admin reads, the rates job |
 | `NEXT_PUBLIC_SITE_URL` | the shop's public origin for canonical and hreflang URLs; unset → `VERCEL_PROJECT_PRODUCTION_URL` |
-| `CRON_SECRET` | the cron route; Vercel Cron sends it as `Authorization: Bearer …` |
+| `CRON_SECRET` | the cron routes; Vercel Cron sends it as `Authorization: Bearer …` |
+| `NOVA_POSHTA_API_KEY` | server only: the Nova Poshta client (optional, see Nova Poshta above) |
+| `NOVA_POST_API_KEY` | server only: Nova Post international delivery (#23); unset → zone flat rates only. `NOVA_POST_API_URL` stays unset in production |
 
 Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
-`VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` is never set on Vercel (the `/ui-kit` showcase stays a 404).
+`VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`
+and `/delivery-demo` showcases stay a 404; the fixture transport refuses under `VERCEL_ENV=production`).
 
 **Cron.** `vercel.json` `crons` calls `GET /api/cron/fx-rates` daily at `15 14 * * *` (UTC) on the
 production deployment only, with `CRON_SECRET`; without the secret the route answers 401. On Hobby, Vercel
-fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv. Runs and their
-logs: the project's *Cron Jobs* settings and the function logs.
+fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv.
+`GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), with the same
+secret. Runs and their logs: the project's *Cron Jobs* settings and the function logs.
 
 **Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`
 renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the document of every page only when

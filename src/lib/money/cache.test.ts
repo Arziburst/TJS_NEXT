@@ -28,11 +28,11 @@ describe("getMoneyTables", () => {
     expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
   });
 
-  it("keeps the rates for days, tagged for the daily rates job", async () => {
+  it("keeps the rates for a day without a stale window, tagged for the daily rates job", async () => {
     const tables: MoneyTables = { settings: {}, displayRates: {} };
     readMoneyTables.mockResolvedValue(tables);
     expect(await getMoneyTables()).toBe(tables);
-    expect(cacheLife.mock.calls).toEqual([["days"]]);
+    expect(cacheLife.mock.calls).toEqual([["daysNoSwr"]]);
     expect(cacheTag).toHaveBeenCalledWith(FX_CACHE_TAG);
   });
 });

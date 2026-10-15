@@ -10,7 +10,7 @@ import { Link } from "@/i18n/navigation";
 import { getCartView, orderableLines, type CartItem, type CartView } from "@/lib/cart";
 import { cn } from "@/lib/utils";
 import { CartIcon } from "./cart-icon";
-import { CART_PRODUCT_PREFETCH, CartItemImage } from "./cart-item-image";
+import { CartItemImage } from "./cart-item-image";
 import { MergeGuestCart } from "./merge-guest-cart";
 import { MiniCartSheet } from "./mini-cart-sheet";
 import { OrderRequestLink } from "./order-request-link";
@@ -111,7 +111,6 @@ async function MiniCartRow({ item }: { item: CartItem }) {
       <div className="flex min-w-0 grow flex-col">
         <Link
           href={productHref(product.slug)}
-          prefetch={CART_PRODUCT_PREFETCH}
           lang={product.locale !== locale ? product.locale : undefined}
           className="font-sans font-semibold break-words hover:text-accent-text"
         >

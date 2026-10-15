@@ -60,6 +60,8 @@ const translation = (locale: string, slug: string, title: string) => ({
   description: null,
   materials: null,
   care: null,
+  clasp: null,
+  lead_time_note: null,
   alt_text: null,
   meta_title: null,
   meta_description: null,
@@ -72,7 +74,15 @@ const productRow = {
   sku: "TEST-001",
   fulfillment: "made_to_order",
   availability: "available",
-  lead_time_days: 14,
+  lead_time_min_days: 14,
+
+  lead_time_max_days: 14,
+
+  length_mm: null,
+
+  width_mm: null,
+
+  height_mm: null,
   price_usd_text: "24.90",
   weight_g: 6,
   created_at: "2026-10-14T00:00:00Z",
@@ -192,11 +202,11 @@ describe("getProductPage", () => {
     expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
   });
 
-  it("keeps a complete page for days, tagged with its product", async () => {
+  it("keeps a complete page for a day without a stale window, tagged with its product", async () => {
     productReads();
     responses.categories = [categoryRows];
     expect(await getProductPage("de", "korallen-ohrringe")).toMatchObject({ kind: "ok", categoryName: "Ohrringe" });
-    expect(cacheLife.mock.calls).toEqual([["days"]]);
+    expect(cacheLife.mock.calls).toEqual([["daysNoSwr"]]);
     expect(cacheTag).toHaveBeenCalledWith("product:p1");
   });
 });

@@ -1,0 +1,230 @@
+{
+  "current_page": 1,
+  "last_page": 1,
+  "per_page": 100,
+  "total": 2,
+  "from": 1,
+  "to": 2,
+  "items": [
+    {
+      "id": 51001,
+      "name": "PARIS 1",
+      "shortName": "PARIS 1",
+      "externalId": "00000000-0000-4000-8000-000000051001",
+      "source": "NPAX",
+      "countryCode": "FR",
+      "settlement": {
+        "id": 50101,
+        "name": "Paris",
+        "region": {
+          "id": 50108,
+          "name": "Paris",
+          "parent": {
+            "id": 50110,
+            "name": "Île-de-France"
+          }
+        }
+      },
+      "address": "75011, France, Paris, Rue de la Roquette, 40",
+      "number": "75/1",
+      "status": "Working",
+      "customerServiceAvailable": true,
+      "divisionCategory": "PostBranch",
+      "publicPhones": [],
+      "internalPhones": [],
+      "responsiblePerson": null,
+      "partner": null,
+      "ownerDivision": null,
+      "latitude": null,
+      "longitude": null,
+      "distance": null,
+      "maxWeightPlaceSender": 30000,
+      "maxLengthPlaceSender": 1200,
+      "maxWidthPlaceSender": 700,
+      "maxHeightPlaceSender": 700,
+      "maxWeightPlaceRecipient": 30000,
+      "maxLengthPlaceRecipient": 1200,
+      "maxWidthPlaceRecipient": 700,
+      "maxHeightPlaceRecipient": 700,
+      "prohibitedSending": false,
+      "prohibitedIssuance": false,
+      "maxCostPlace": 999999,
+      "maxDeclaredCostPlace": 999999,
+      "workSchedule": [
+        {
+          "day": "sunday",
+          "from": "10:00",
+          "to": "16:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "monday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "tuesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "wednesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "thursday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "friday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "saturday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        }
+      ],
+      "settings": [],
+      "logisticsCode": null,
+      "attributes": {},
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null,
+      "fullAddress": {
+        "country": "France",
+        "settlement": "Paris",
+        "street": "Rue de la Roquette",
+        "building": "40",
+        "note": "",
+        "zipcode": "75011"
+      }
+    },
+    {
+      "id": 51002,
+      "name": "Consigne Paris 11",
+      "shortName": "Consigne Paris 11",
+      "externalId": "00000000-0000-4000-8000-000000051002",
+      "source": "NPAX",
+      "countryCode": "FR",
+      "settlement": {
+        "id": 50101,
+        "name": "Paris",
+        "region": {
+          "id": 50108,
+          "name": "Paris",
+          "parent": {
+            "id": 50110,
+            "name": "Île-de-France"
+          }
+        }
+      },
+      "address": "75011, France, Paris, Boulevard Voltaire, 12",
+      "number": "75/PM-11",
+      "status": "Working",
+      "customerServiceAvailable": false,
+      "divisionCategory": "Postomat",
+      "publicPhones": [],
+      "internalPhones": [],
+      "responsiblePerson": null,
+      "partner": null,
+      "ownerDivision": null,
+      "latitude": null,
+      "longitude": null,
+      "distance": null,
+      "maxWeightPlaceSender": 30000,
+      "maxLengthPlaceSender": 1200,
+      "maxWidthPlaceSender": 700,
+      "maxHeightPlaceSender": 700,
+      "maxWeightPlaceRecipient": 30000,
+      "maxLengthPlaceRecipient": 1200,
+      "maxWidthPlaceRecipient": 700,
+      "maxHeightPlaceRecipient": 700,
+      "prohibitedSending": false,
+      "prohibitedIssuance": false,
+      "maxCostPlace": 999999,
+      "maxDeclaredCostPlace": 999999,
+      "workSchedule": [
+        {
+          "day": "sunday",
+          "from": "10:00",
+          "to": "16:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "monday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "tuesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "wednesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "thursday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "friday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "saturday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        }
+      ],
+      "settings": [],
+      "logisticsCode": null,
+      "attributes": {},
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null,
+      "fullAddress": {
+        "country": "France",
+        "settlement": "Paris",
+        "street": "Boulevard Voltaire",
+        "building": "12",
+        "note": "",
+        "zipcode": "75011"
+      }
+    }
+  ]
+}

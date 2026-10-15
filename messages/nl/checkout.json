@@ -13,5 +13,102 @@
     "success": "Bestelling geslaagd",
     "grandTotal": "Eindtotaal",
     "continueShopping": "Verder winkelen"
+  },
+  "delivery": {
+    "title": "Bezorging in Oekraïne",
+    "city": {
+      "label": "Plaats",
+      "placeholder": "Begin met het typen van de plaatsnaam"
+    },
+    "search": {
+      "searching": "Zoeken…",
+      "typeMore": "Typ minstens {min} letters",
+      "empty": "Niets gevonden",
+      "ukrainianOnly": "Typ de naam in het Oekraïens",
+      "unavailable": "Zoeken is nu niet beschikbaar. Probeer het later opnieuw.",
+      "clear": "Wissen",
+      "open": "Lijst tonen"
+    },
+    "method": {
+      "label": "Hoe u het pakket ontvangt",
+      "warehouse": "Bij een filiaal of pakketautomaat",
+      "address": "Per koerier op het adres",
+      "addressUnavailable": "Nova Poshta bezorgt in deze plaats niet aan huis"
+    },
+    "warehouse": {
+      "label": "Filiaal of pakketautomaat",
+      "placeholder": "Nummer of straat",
+      "filter": "Tonen",
+      "all": "Alle",
+      "branch": "Filialen",
+      "postomat": "Pakketautomaten",
+      "maxWeight": "tot {kg} kg"
+    },
+    "address": {
+      "street": "Straat",
+      "streetPlaceholder": "Begin met het typen van de straatnaam",
+      "house": "Huisnummer",
+      "flat": "Appartement (optioneel)"
+    },
+    "quote": {
+      "label": "Bezorging door Nova Poshta",
+      "calculating": "Berekenen…",
+      "estimate": "≈ {price}",
+      "note": "Een schatting volgens het tarief van Nova Poshta voor een kleine doos: u betaalt de werkelijke prijs bij ontvangst op het postkantoor.",
+      "noteOnReceipt": "Een schatting volgens het tarief van Nova Poshta voor een kleine doos: u betaalt de werkelijke prijs bij ontvangst.",
+      "unavailable": "De prijs is nu niet beschikbaar: Nova Poshta berekent hem bij ontvangst.",
+      "choose": "Kies waar u wilt laten bezorgen om de prijs te zien"
+    }
+  },
+  "internationalDelivery": {
+    "country": "Land",
+    "countryPlaceholder": "Kies een land",
+    "method": "Verzendmethode",
+    "methods": {
+      "division": "Naar een Nova Post-filiaal, pakketautomaat of afhaalpunt",
+      "address": "Per koerier naar het adres"
+    },
+    "courierOnly": "Nova Post bezorgt in {country} per koerier op het adres.",
+    "settlement": "Stad of plaats",
+    "settlementPlaceholder": "Begin de naam te typen",
+    "settlementHint": "Typ minstens 2 letters",
+    "searching": "Zoeken…",
+    "nothingFound": "Niets gevonden",
+    "loadError": "De lijst kon niet worden geladen. Probeer het later opnieuw.",
+    "clear": "Wissen",
+    "showList": "Lijst tonen",
+    "division": "Afhaallocatie",
+    "divisionTypeFilter": "Soort afhaalpunt",
+    "divisionTypes": {
+      "all": "Alle",
+      "PostBranch": "Filiaal",
+      "Postomat": "Pakketautomaat",
+      "PUDO": "Afhaalpunt"
+    },
+    "loading": "Laden…",
+    "noDivisions": "Hier zijn geen afhaalpunten van dit soort.",
+    "address": {
+      "city": "Plaats",
+      "postCode": "Postcode",
+      "street": "Straat",
+      "building": "Huisnummer",
+      "flat": "Toevoeging (optioneel)",
+      "submit": "Verzending berekenen"
+    },
+    "quote": {
+      "label": "Verzending",
+      "estimate": "Schatting",
+      "approx": "≈ ",
+      "none": "—",
+      "calculating": "Berekenen…",
+      "error": "De verzendkosten konden niet worden berekend.",
+      "tbd": "TBD",
+      "unavailable": "Momenteel niet beschikbaar",
+      "deliveryDate": "Verwachte bezorging: {date}",
+      "estimateNote": "Vast tarief voor de bestemmingszone: u betaalt de werkelijke prijs bij ontvangst.",
+      "tbdNote": "Het verzendtarief voor deze zone is nog niet vastgesteld.",
+      "carrierNote": "Een schatting volgens het tarief van Nova Post voor een kleine doos (10 × 10 × 5 cm): u betaalt de werkelijke prijs bij ontvangst."
+    },
+    "customsNotice": "Bij bezorging moet de ontvanger mogelijk invoer-btw en douanerechten betalen."
   }
 }

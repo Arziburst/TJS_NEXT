@@ -21,6 +21,14 @@ export function productCacheTag(productId: string): string {
 }
 
 /**
+ * The cache tag of a product page URL's slug, whatever it resolved to: a slug that matched nothing yet (a
+ * draft) carries no product tag, so the admin revalidates the slugs a save adds or removes by this tag.
+ */
+export function productSlugTag(slug: string): string {
+  return `product-slug:${slug}`;
+}
+
+/**
  * Every published product that has a translation with `slug` (in any locale), with all its translations'
  * slugs. Read as `anon`, so RLS hides drafts, archived and deleted products; the API roles cannot name deleted_at
  * (column grants), so only the status is filtered here.
@@ -97,6 +105,7 @@ export async function getProductPage(locale: Locale, slug: string): Promise<Prod
     cacheLife("max");
     return { kind: "notFound" };
   }
+  cacheTag(productSlugTag(slug));
 
   const matches = await findSlugMatches(slug);
   if (!matches.ok) return failed();
@@ -121,7 +130,8 @@ export async function getProductPage(locale: Locale, slug: string): Promise<Prod
   const translations = matches.data.find((m) => m.productId === resolution.productId)?.productSlugs ?? [];
   const category = categories.ok ? categories.data.find((c) => c.id === product.data.category.id) : undefined;
   // a page without its category name (no breadcrumb) is an incomplete read: never kept, never prerendered
-  if (categories.ok) cacheLife("days");
+  // the product route's shell: no stale window, see daysNoSwr in next.config.ts
+  if (categories.ok) cacheLife("daysNoSwr");
   else cacheLife(FAILED_READ_LIFE);
 
   return { kind: "ok", product: product.data, categoryName: category?.name ?? null, translations };

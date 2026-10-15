@@ -6,26 +6,29 @@
 -- Made-to-order and one-of-a-kind pieces, the latter available, reserved and sold. Hidden from the public:
 -- 11 (draft), 13 (archived), 14 (soft-deleted). No images: the files would have to be uploaded to Storage.
 insert into public.products
-  (id, category_id, sku, status, fulfillment, availability, lead_time_days, price_usd, weight_g, created_at, deleted_at)
+  (id, category_id, sku, status, fulfillment, availability, lead_time_min_days, lead_time_max_days, price_usd, weight_g,
+   length_mm, width_mm, height_mm, created_at, deleted_at)
 select p.id::uuid, c.id, p.sku, p.status::public.product_status, p.fulfillment::public.product_fulfillment,
-  p.availability::public.product_availability, p.lead_time_days, p.price_usd, p.weight_g,
+  p.availability::public.product_availability, p.lead_time_min_days, p.lead_time_max_days, p.price_usd, p.weight_g,
+  p.length_mm, p.width_mm, p.height_mm,
   now() - p.age, now() - p.deleted_ago
 from (values
-  ('a0000000-0000-4000-8000-000000000001', 'earrings', 'TEST-001', 'published', 'made_to_order', 'available', null::int, 24.90, 6, interval '1 day', null::interval),
-  ('a0000000-0000-4000-8000-000000000002', 'earrings', 'TEST-002', 'published', 'made_to_order', 'available', null, 18.50, 4, interval '3 days', null),
-  ('a0000000-0000-4000-8000-000000000003', 'earrings', 'TEST-003', 'published', 'one_of_a_kind', 'available', null, 32.00, 9, interval '12 days', null),
-  ('a0000000-0000-4000-8000-000000000004', 'necklaces', 'TEST-004', 'published', 'made_to_order', 'available', null, 39.90, 18, interval '2 days', null),
-  ('a0000000-0000-4000-8000-000000000005', 'necklaces', 'TEST-005', 'published', 'one_of_a_kind', 'reserved', null, 45.00, 22, interval '20 days', null),
-  ('a0000000-0000-4000-8000-000000000006', 'bracelets', 'TEST-006', 'published', 'made_to_order', 'available', null, 21.00, 10, interval '25 days', null),
-  ('a0000000-0000-4000-8000-000000000007', 'bracelets', 'TEST-007', 'published', 'made_to_order', 'available', 10, 27.50, 12, interval '30 days', null),
-  ('a0000000-0000-4000-8000-000000000008', 'corals', 'TEST-008', 'published', 'one_of_a_kind', 'sold', null, 54.90, 30, interval '5 days', null),
-  ('a0000000-0000-4000-8000-000000000009', 'corals', 'TEST-009', 'published', 'one_of_a_kind', 'available', null, 29.90, 8, interval '40 days', null),
-  ('a0000000-0000-4000-8000-000000000010', 'rings', 'TEST-010', 'published', 'made_to_order', 'available', 14, 16.90, 3, interval '45 days', null),
-  ('a0000000-0000-4000-8000-000000000011', 'rings', 'TEST-011', 'draft', 'made_to_order', 'available', null, 22.40, 4, interval '50 days', null),
-  ('a0000000-0000-4000-8000-000000000012', 'brooches', 'TEST-012', 'published', 'made_to_order', 'available', null, 19.90, 7, interval '60 days', null),
-  ('a0000000-0000-4000-8000-000000000013', 'brooches', 'TEST-013', 'archived', 'one_of_a_kind', 'sold', null, 26.00, 6, interval '90 days', null),
-  ('a0000000-0000-4000-8000-000000000014', 'bracelets', 'TEST-014', 'published', 'made_to_order', 'available', null, 23.00, 9, interval '70 days', interval '1 day')
-) as p (id, category, sku, status, fulfillment, availability, lead_time_days, price_usd, weight_g, age, deleted_ago)
+  ('a0000000-0000-4000-8000-000000000001', 'earrings', 'TEST-001', 'published', 'made_to_order', 'available', null::int, null::int, 24.90, 6, 32.0::numeric, 9.0::numeric, 4.5::numeric, interval '1 day', null::interval),
+  ('a0000000-0000-4000-8000-000000000002', 'earrings', 'TEST-002', 'published', 'made_to_order', 'available', null, null, 18.50, 4, null, null, null, interval '3 days', null),
+  ('a0000000-0000-4000-8000-000000000003', 'earrings', 'TEST-003', 'published', 'one_of_a_kind', 'available', null, null, 32.00, 9, null, null, null, interval '12 days', null),
+  ('a0000000-0000-4000-8000-000000000004', 'necklaces', 'TEST-004', 'published', 'made_to_order', 'available', null, null, 39.90, 18, null, null, null, interval '2 days', null),
+  ('a0000000-0000-4000-8000-000000000005', 'necklaces', 'TEST-005', 'published', 'one_of_a_kind', 'reserved', null, null, 45.00, 22, null, null, null, interval '20 days', null),
+  ('a0000000-0000-4000-8000-000000000006', 'bracelets', 'TEST-006', 'published', 'made_to_order', 'available', null, null, 21.00, 10, null, null, null, interval '25 days', null),
+  ('a0000000-0000-4000-8000-000000000007', 'bracelets', 'TEST-007', 'published', 'made_to_order', 'available', 10, 10, 27.50, 12, null, null, null, interval '30 days', null),
+  ('a0000000-0000-4000-8000-000000000008', 'corals', 'TEST-008', 'published', 'one_of_a_kind', 'sold', null, null, 54.90, 30, null, null, null, interval '5 days', null),
+  ('a0000000-0000-4000-8000-000000000009', 'corals', 'TEST-009', 'published', 'one_of_a_kind', 'available', null, null, 29.90, 8, null, null, null, interval '40 days', null),
+  ('a0000000-0000-4000-8000-000000000010', 'rings', 'TEST-010', 'published', 'made_to_order', 'available', 7, 14, 16.90, 3, null, null, null, interval '45 days', null),
+  ('a0000000-0000-4000-8000-000000000011', 'rings', 'TEST-011', 'draft', 'made_to_order', 'available', null, null, 22.40, 4, null, null, null, interval '50 days', null),
+  ('a0000000-0000-4000-8000-000000000012', 'brooches', 'TEST-012', 'published', 'made_to_order', 'available', null, null, 19.90, 7, null, null, null, interval '60 days', null),
+  ('a0000000-0000-4000-8000-000000000013', 'brooches', 'TEST-013', 'archived', 'one_of_a_kind', 'sold', null, null, 26.00, 6, null, null, null, interval '90 days', null),
+  ('a0000000-0000-4000-8000-000000000014', 'bracelets', 'TEST-014', 'published', 'made_to_order', 'available', null, null, 23.00, 9, null, null, null, interval '70 days', interval '1 day')
+) as p (id, category, sku, status, fulfillment, availability, lead_time_min_days, lead_time_max_days, price_usd, weight_g,
+  length_mm, width_mm, height_mm, age, deleted_ago)
 join public.categories c on c.slug = p.category;
 
 -- en and uk for every product (entered by hand: human); a few machine translations in other locales,
@@ -152,6 +155,19 @@ from (values
   ('TEST-014', 'en', 'Stainless steel', 'Wipe with a soft cloth'),
   ('TEST-014', 'uk', 'Нержавна сталь', 'Протирати м''якою тканиною')
 ) as v (sku, locale, materials, care)
+join public.products p on p.sku = v.sku
+where t.product_id = p.id and t.locale = v.locale;
+
+-- The fields of #17: a clasp (TEST-001, which also has dimensions) and a lead time note (TEST-010, made in
+-- 7–14 days), in en and uk.
+update public.product_translations t
+set clasp = v.clasp, lead_time_note = v.lead_time_note
+from (values
+  ('TEST-001', 'en', 'Lever-back hooks', null),
+  ('TEST-001', 'uk', 'Англійський замок', null),
+  ('TEST-010', 'en', null, 'Made after your order; longer in December.'),
+  ('TEST-010', 'uk', null, 'Виготовляється після замовлення; у грудні довше.')
+) as v (sku, locale, clasp, lead_time_note)
 join public.products p on p.sku = v.sku
 where t.product_id = p.id and t.locale = v.locale;
 

@@ -1,0 +1,340 @@
+{
+  "current_page": 1,
+  "last_page": 2,
+  "per_page": 100,
+  "total": 4,
+  "from": 1,
+  "to": 3,
+  "items": [
+    {
+      "id": 1,
+      "name": "WROCŁAW 1",
+      "shortName": "WROCŁAW 1",
+      "externalId": "00000000-0000-4000-8000-000000000001",
+      "source": "NPAX",
+      "countryCode": "PL",
+      "settlement": {
+        "id": 26061,
+        "name": "Wroclaw",
+        "region": {
+          "id": 344,
+          "name": "Wrocław County",
+          "parent": {
+            "id": 2,
+            "name": "Lower Silesian voivodeship"
+          }
+        }
+      },
+      "address": "50-231, Polska, Województwo dolnośląskie, Wrocław County, Wrocław, Trzebnicka, 50/1A",
+      "number": "50/1",
+      "status": "Working",
+      "customerServiceAvailable": true,
+      "divisionCategory": "PostBranch",
+      "publicPhones": [],
+      "internalPhones": [],
+      "responsiblePerson": null,
+      "partner": null,
+      "ownerDivision": null,
+      "latitude": 51.11,
+      "longitude": 17.03,
+      "distance": null,
+      "maxWeightPlaceSender": 30000,
+      "maxLengthPlaceSender": 1200,
+      "maxWidthPlaceSender": 700,
+      "maxHeightPlaceSender": 700,
+      "maxWeightPlaceRecipient": 30000,
+      "maxLengthPlaceRecipient": 1200,
+      "maxWidthPlaceRecipient": 700,
+      "maxHeightPlaceRecipient": 700,
+      "prohibitedSending": false,
+      "prohibitedIssuance": false,
+      "maxCostPlace": 999999,
+      "maxDeclaredCostPlace": 999999,
+      "workSchedule": [
+        {
+          "day": "sunday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "monday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "tuesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "wednesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "thursday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "friday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "saturday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        }
+      ],
+      "settings": [],
+      "logisticsCode": null,
+      "attributes": {},
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null,
+      "fullAddress": {
+        "country": "Poland",
+        "settlement": "Wrocław",
+        "street": "Trzebnicka",
+        "building": "50/1A",
+        "note": "",
+        "zipcode": "50-231"
+      }
+    },
+    {
+      "id": 1834946,
+      "name": "Paczkomat WRO01M",
+      "shortName": "Paczkomat WRO01M",
+      "externalId": "00000000-0000-4000-8000-000001834946",
+      "source": "InPost",
+      "countryCode": "PL",
+      "settlement": {
+        "id": 26061,
+        "name": "Wroclaw",
+        "region": {
+          "id": 344,
+          "name": "Wrocław County",
+          "parent": {
+            "id": 2,
+            "name": "Lower Silesian voivodeship"
+          }
+        }
+      },
+      "address": "54-204, Polska, Województwo dolnośląskie, Wrocław County, Wrocław, Legnicka, 58",
+      "number": "WRO01M",
+      "status": "Working",
+      "customerServiceAvailable": false,
+      "divisionCategory": "Postomat",
+      "publicPhones": [],
+      "internalPhones": [],
+      "responsiblePerson": null,
+      "partner": null,
+      "ownerDivision": null,
+      "latitude": 51.11,
+      "longitude": 17.03,
+      "distance": null,
+      "maxWeightPlaceSender": 30000,
+      "maxLengthPlaceSender": 1200,
+      "maxWidthPlaceSender": 700,
+      "maxHeightPlaceSender": 700,
+      "maxWeightPlaceRecipient": 30000,
+      "maxLengthPlaceRecipient": 1200,
+      "maxWidthPlaceRecipient": 700,
+      "maxHeightPlaceRecipient": 700,
+      "prohibitedSending": false,
+      "prohibitedIssuance": false,
+      "maxCostPlace": 999999,
+      "maxDeclaredCostPlace": 999999,
+      "workSchedule": [
+        {
+          "day": "sunday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "monday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "tuesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "wednesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "thursday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "friday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "saturday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        }
+      ],
+      "settings": [],
+      "logisticsCode": null,
+      "attributes": {},
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null,
+      "fullAddress": {
+        "country": "Poland",
+        "settlement": "Wrocław",
+        "street": "Legnicka",
+        "building": "58",
+        "note": "",
+        "zipcode": "54-204"
+      }
+    },
+    {
+      "id": 2201,
+      "name": "WROCŁAW 7",
+      "shortName": "WROCŁAW 7",
+      "externalId": "00000000-0000-4000-8000-000000002201",
+      "source": "NPAX",
+      "countryCode": "PL",
+      "settlement": {
+        "id": 26061,
+        "name": "Wroclaw",
+        "region": {
+          "id": 344,
+          "name": "Wrocław County",
+          "parent": {
+            "id": 2,
+            "name": "Lower Silesian voivodeship"
+          }
+        }
+      },
+      "address": "52-015, Polska, Województwo dolnośląskie, Wrocław County, Wrocław, Krakowska, 180",
+      "number": "50/7",
+      "status": "Working",
+      "customerServiceAvailable": false,
+      "divisionCategory": "CargoBranch",
+      "publicPhones": [],
+      "internalPhones": [],
+      "responsiblePerson": null,
+      "partner": null,
+      "ownerDivision": null,
+      "latitude": 51.11,
+      "longitude": 17.03,
+      "distance": null,
+      "maxWeightPlaceSender": 30000,
+      "maxLengthPlaceSender": 1200,
+      "maxWidthPlaceSender": 700,
+      "maxHeightPlaceSender": 700,
+      "maxWeightPlaceRecipient": 30000,
+      "maxLengthPlaceRecipient": 1200,
+      "maxWidthPlaceRecipient": 700,
+      "maxHeightPlaceRecipient": 700,
+      "prohibitedSending": false,
+      "prohibitedIssuance": false,
+      "maxCostPlace": 999999,
+      "maxDeclaredCostPlace": 999999,
+      "workSchedule": [
+        {
+          "day": "sunday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "monday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "tuesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "wednesday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "thursday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "friday",
+          "from": "08:00",
+          "to": "20:00",
+          "breakFrom": null,
+          "breakTo": null
+        },
+        {
+          "day": "saturday",
+          "from": "09:00",
+          "to": "18:00",
+          "breakFrom": null,
+          "breakTo": null
+        }
+      ],
+      "settings": [],
+      "logisticsCode": null,
+      "attributes": {},
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null,
+      "fullAddress": {
+        "country": "Poland",
+        "settlement": "Wrocław",
+        "street": "Krakowska",
+        "building": "180",
+        "note": "",
+        "zipcode": "52-015"
+      }
+    }
+  ]
+}
