@@ -316,6 +316,57 @@ searched and every estimate is the zone flat rate of `nova_post_zone_rates` (TBD
   point searches count as `search`, quotes as `quote`; over the budget the shop's "too many attempts" text
   (`auth.errors.rateLimited`) is shown.
 
+## Machine translation (Vercel AI Gateway)
+
+The admin translates a product's texts (title, description, materials, care, clasp, lead-time note, meta
+title/description, alt texts) from one locale into the others in one structured-output call per product
+(`src/lib/translate/`, #19): AI SDK 7 through the Vercel AI Gateway, model `TRANSLATION_MODEL` in
+`src/lib/translate/core.ts` (`anthropic/claude-sonnet-5-5`, a gateway "provider/model" id; change it there), the
+jewellery glossary in `src/lib/translate/glossary.ts` (data, corrected by PR; not yet checked by native speakers).
+Machine rows are saved as `source = machine`, `reviewed_at = null`: the shop shows them, but the product page is
+`noindex` and left out of hreflang (and of the sitemap, #30) until the admin marks the locale reviewed
+(`src/lib/seo/indexing.ts`). Everything runs on the server; `tests/translate/client-bundle.integration.test.ts`
+checks that no key, prompt or glossary reaches the client bundle.
+
+- **Credentials.** Translation is on when the server has one: `AI_GATEWAY_API_KEY` (local development; a key from
+  the Vercel dashboard, *AI Gateway → API keys*, in `.env.local`, never committed), or `AI_GATEWAY_OIDC=true` on
+  Vercel, where the gateway authenticates with the deployment's OIDC token (no key stored). Neither set: the
+  admin shows "machine translation is not configured" and calls nothing. Turning it on in production (billing
+  of the AI Gateway) is the owner's and the coordinator's decision.
+- **Stand-in gateway.** `e2e/ai-gateway-mock.ts` answers the gateway's `/language-model` endpoint and
+  "translates" by prefixing `[de] ` etc.; a source title containing `[omit:cs]` leaves cs out (a partial
+  result). Playwright starts it on `E2E_PORT + 1500` (CI: 4500) and gives the app `AI_GATEWAY_API_KEY` and
+  `AI_GATEWAY_BASE_URL`. For a dev walk, from Git Bash:
+
+  ```sh
+  AI_GATEWAY_MOCK_PORT=4519 node e2e/ai-gateway-mock.ts &
+  AI_GATEWAY_API_KEY=e2e-gateway-key AI_GATEWAY_BASE_URL=http://127.0.0.1:4519/v4/ai npx next dev -p 3019
+  ```
+
+  `AI_GATEWAY_BASE_URL` is ignored when `VERCEL_ENV=production`.
+- **Limits.** One attempt times out after 90 s in the app (three attempts with backoff stay under a function's
+  300 s); a gateway 429/5xx or an unusable answer is retried, a refused key is not. A locale that comes back
+  missing or over a column limit fails alone, the others are saved. Per admin: 120 translations an hour and 300
+  review changes per 10 minutes (`src/lib/admin/rate-limit.ts`).
+- **Cost.** About **$0.015 per product** for the 9–10 missing locales of a short legacy text: ~2 400 input tokens
+  (the prompt with the glossary) + ~1 000 output tokens at Sonnet 5.5's list price of $2 / $10 per million tokens
+  (`TRANSLATION_MODEL_PRICE`; the gateway bills the provider's list price). The whole legacy catalogue (167
+  products) is a few dollars; the batch script's dry run prints the estimate for the actual catalogue.
+- **Batch.** `scripts/translate/missing.mjs` fills the missing locales of every product with the same code:
+
+  ```sh
+  node scripts/translate/missing.mjs                       # dry run: what it would translate, token/cost estimate
+  node scripts/translate/missing.mjs --apply --limit 5     # translate five products (needs AI_GATEWAY_API_KEY)
+  node scripts/translate/missing.mjs --production          # dry run against production (a non-loopback URL)
+  ```
+
+  Options: `--product <id>`, `--source <locale>` (default uk, else en), `--limit <n>`. It reads
+  `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` from the environment, else `.env.local`, and refuses a
+  non-loopback URL without `--production`. It only inserts missing locales (an existing text is never replaced)
+  and writes as the service role, so `created_by` stays empty. The shop shows the new texts within a day (the
+  product pages' cache life) or at once after the next admin save of that product. Running it on production is
+  the coordinator's, after the owner's go.
+
 ## Vercel
 
 The shop runs on the Vercel project `tjs-next` in the team `arzibursts-projects`, production
@@ -341,6 +392,7 @@ production deployment in the dashboard; the database is not rolled back with it.
 | `CRON_SECRET` | the cron routes; Vercel Cron sends it as `Authorization: Bearer …` |
 | `NOVA_POSHTA_API_KEY` | server only: the Nova Poshta client (optional, see Nova Poshta above) |
 | `NOVA_POST_API_KEY` | server only: Nova Post international delivery (#23); unset → zone flat rates only. `NOVA_POST_API_URL` stays unset in production |
+| `AI_GATEWAY_OIDC` | server only: `true` turns on the admin's machine translation through the AI Gateway with the deployment's OIDC token (#19); unset → "not configured". Not set yet: the owner decides on the gateway billing. `AI_GATEWAY_API_KEY` / `AI_GATEWAY_BASE_URL` stay unset in production |
 
 Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
 `VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`

@@ -9,8 +9,11 @@ const serverScript = process.env.E2E_SERVER === "start" ? "start" : "dev";
 // The Nova Post fixture server (e2e/nova-post-mock.ts) the app's delivery client talks to instead of the real API
 const novaPostMockPort = Number(process.env.NOVA_POST_MOCK_PORT || port + 1000);
 const novaPostMockKey = "e2e-fixture-key";
+// The AI Gateway stand-in (e2e/ai-gateway-mock.ts) the admin's machine translation talks to
+const aiGatewayMockPort = Number(process.env.AI_GATEWAY_MOCK_PORT || port + 1500);
+const aiGatewayMockKey = "e2e-gateway-key";
 // e2e files that write products of their own to the catalog (see the projects below)
-const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts", "**/favorites.e2e.ts"];
+const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts", "**/favorites.e2e.ts", "**/translation.e2e.ts"];
 
 export default defineConfig({
   testDir: "./e2e",
@@ -66,18 +69,28 @@ export default defineConfig({
           env: { NOVA_POST_MOCK_PORT: String(novaPostMockPort), NOVA_POST_MOCK_KEY: novaPostMockKey },
         },
         {
+          command: "node e2e/ai-gateway-mock.ts",
+          url: `http://127.0.0.1:${aiGatewayMockPort}/health`,
+          reuseExistingServer: false,
+          timeout: 30_000,
+          env: { AI_GATEWAY_MOCK_PORT: String(aiGatewayMockPort), AI_GATEWAY_MOCK_KEY: aiGatewayMockKey },
+        },
+        {
           command: `npm run ${serverScript} -- --port ${port}`,
           url: baseURL,
           reuseExistingServer: false,
           timeout: 120_000,
           // the shell tests use the /ui-kit showcase; a production build needs the flag at build time too (CI).
           // The delivery tests answer Nova Poshta from the recorded fixtures (server-side, read at run time), and
-          // Nova Post from the fixture server above (key and URL read at request time).
+          // Nova Post from the fixture server above (key and URL read at request time), and the machine translation
+          // from the AI Gateway stand-in (read at request time too).
           env: {
             TJS_UI_KIT: "true",
             NOVA_POSHTA_FIXTURES: "true",
             NOVA_POST_API_KEY: novaPostMockKey,
             NOVA_POST_API_URL: `http://127.0.0.1:${novaPostMockPort}/v.1.0`,
+            AI_GATEWAY_API_KEY: aiGatewayMockKey,
+            AI_GATEWAY_BASE_URL: `http://127.0.0.1:${aiGatewayMockPort}/v4/ai`,
           },
         },
       ],
