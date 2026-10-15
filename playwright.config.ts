@@ -4,6 +4,8 @@ const isCI = !!process.env.CI;
 const port = Number(process.env.E2E_PORT || 3000);
 const externalBaseURL = process.env.E2E_BASE_URL || undefined;
 const baseURL = externalBaseURL ?? `http://localhost:${port}`;
+// E2E_SERVER=start serves the production build (`npm run build` first), as CI does; default `next dev`.
+const serverScript = process.env.E2E_SERVER === "start" ? "start" : "dev";
 
 export default defineConfig({
   testDir: "./e2e",
@@ -23,7 +25,7 @@ export default defineConfig({
   webServer: externalBaseURL
     ? undefined
     : {
-        command: `npm run dev -- --port ${port}`,
+        command: `npm run ${serverScript} -- --port ${port}`,
         url: baseURL,
         reuseExistingServer: false,
         timeout: 120_000,
