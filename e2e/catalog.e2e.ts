@@ -52,6 +52,22 @@ for (const [locale, catalog] of [
   });
 }
 
+// D31: the Ukrainian necklace category is plural, like the others
+test("uk names the necklace category «Намиста» on the home tile, in the shop and in the metadata", async ({ page, isMobile }) => {
+  await page.goto("/uk");
+  await expect(page.getByTestId("category-tile").nth(1)).toContainText("Намиста", { ignoreCase: true });
+
+  await page.goto("/uk/shop");
+  const filter = isMobile
+    ? page.getByTestId("mobile-filters").getByRole("option", { name: "Намиста" })
+    : page.locator("aside").getByRole("link", { name: "Намиста" });
+  await expect(filter).toHaveCount(1);
+
+  await page.goto("/uk/shop/necklaces");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Намиста", { ignoreCase: true });
+  await expect(page).toHaveTitle("Намиста | TJS");
+});
+
 test("the home page and a category page carry localized metadata and hreflang", async ({ request }) => {
   const html = await (await request.get("/de/shop/rings")).text();
   expect(html).toContain("<title>Ringe | TJS</title>");
