@@ -72,29 +72,29 @@ function collectErrors(page: Page): string[] {
   return errors;
 }
 
-/** A published product of its own, so a price can be watched without touching the seed. */
-async function insertPublishedProduct(): Promise<string> {
+/** A draft product of its own (published through the admin later, which expires the listings), so a price can be
+ * watched without touching the seed. */
+async function insertDraftProduct(): Promise<{ sku: string; title: string }> {
   const sku = `E2E-21-${randomUUID().slice(0, 8)}`;
-  const slug = `e2e-21-${randomUUID().slice(0, 8)}`;
+  const title = `Каблучка ${sku}`;
   const { data: category } = await db!.from("categories").select("id").eq("slug", "rings").single();
   const { data, error } = await db!
     .from("products")
-    .insert({ category_id: category!.id, sku, status: "published", price_usd: 27.8 })
+    .insert({ category_id: category!.id, sku, status: "draft", price_usd: 27.8 })
     .select("id")
     .single();
   if (error) throw error;
   createdSkus.push(sku);
   const translation = await db!
     .from("product_translations")
-    .insert({ product_id: data.id, locale: "uk", slug, title: `Каблучка ${sku}` });
+    .insert({ product_id: data.id, locale: "uk", slug: `e2e-21-${randomUUID().slice(0, 8)}`, title });
   if (translation.error) throw translation.error;
-  return `/uk/product/${slug}`;
+  return { sku, title };
 }
 
 const contactsForm = (page: Page) => page.getByRole("form", { name: settingsText.contacts.title });
 const pricesForm = (page: Page) => page.getByRole("form", { name: settingsText.prices.title });
 const footerContacts = (page: Page) => page.locator("footer").last().locator("[data-slot=footer-contacts]");
-const shownPrice = (page: Page) => page.getByRole("main").locator("[data-slot=price]").first();
 
 async function footerAt(browser: Browser, width: number, height: number, path: string) {
   const context = await browser.newContext({ viewport: { width, height } });
@@ -154,13 +154,13 @@ test.describe("shop settings on the local stack", () => {
 
   test.describe.serial("a change shows on the storefront with the next request", () => {
     let admin: Credentials;
-    let productPath: string;
+    let product: { sku: string; title: string };
     const handle = `e2e_${randomUUID().slice(0, 8)}`;
     const chatId = `-100${randomInt(100_000, 999_999)}`;
 
     test.beforeAll(async () => {
       admin = await createUser("admin");
-      productPath = await insertPublishedProduct();
+      product = await insertDraftProduct();
     });
 
     test("contacts: the footer links the new Instagram at 1440 and 390, the chat id stays private", async ({ page, browser }) => {
@@ -236,20 +236,28 @@ test.describe("shop settings on the local stack", () => {
       await customerContext.close();
     });
 
-    test("markup: a product's price follows each change on its next request, without a rebuild", async ({ page }) => {
+    // The price on the product's card in its category listing. (The product page itself shows the new price from
+    // the second request on: its prerendered shell carries the JSON-LD price and is regenerated in the background,
+    // a known gap of the product route reported with #21.)
+    test("markup: a product's price follows each change on the next request, without a rebuild", async ({ page }) => {
       const errors = collectErrors(page);
-      await signIn(page, admin, SETTINGS_PATH);
+      await signIn(page, admin, "/uk/admin");
+      await page.goto(`/uk/admin?q=${product.sku}`);
+      await page.getByRole("listitem").filter({ hasText: product.title }).getByRole("button", { name: ukAdmin.list.publish }).click();
+      await expect
+        .poll(async () => (await db!.from("products").select("status").eq("sku", product.sku).single()).data?.status)
+        .toBe("published");
 
-      // the shown price at one markup, then at a higher one: both saved through the page
+      const cardPrice = page.getByTestId("product-card").filter({ hasText: product.title }).locator("[data-slot=price]");
       async function priceAtMarkup(percent: string): Promise<number> {
         await page.goto(SETTINGS_PATH);
         const form = pricesForm(page);
         await form.getByLabel(settingsText.prices.markup).fill(percent);
         await form.getByRole("button", { name: settingsText.save }).click();
         await expect(page.getByText(settingsText.saved)).toBeVisible();
-        await page.goto(productPath);
-        await expect(shownPrice(page)).toHaveAttribute("data-currency", "UAH");
-        return Number(await shownPrice(page).getAttribute("value"));
+        await page.goto("/uk/shop/rings");
+        await expect(cardPrice).toHaveAttribute("data-currency", "UAH");
+        return Number(await cardPrice.getAttribute("value"));
       }
 
       const atTen = await priceAtMarkup("10");

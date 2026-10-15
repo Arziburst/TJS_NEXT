@@ -12,8 +12,8 @@ import { PriceSettingsForm } from "@/components/admin/price-settings-form";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { getAdmin, requireAdmin } from "@/lib/auth/session";
-import { getMoneyTables } from "@/lib/money/cache";
 import type { Currency } from "@/lib/money/currencies";
+import { readMoneyTables } from "@/lib/money/store";
 import { contactFormValues } from "@/lib/settings/contacts";
 import { priceFormValues } from "@/lib/settings/price-settings";
 import { readAdminPriceSettings, readShopSettingsAsService } from "@/lib/settings/store";
@@ -43,7 +43,8 @@ async function AdminSettings({ params }: PageProps<"/[locale]/admin/settings">) 
     // the chat id is readable only by the service role: after requireAdmin() above
     readShopSettingsAsService(),
     readAdminPriceSettings(),
-    getMoneyTables(),
+    // today's display rates for the live example, read per request like the rest of this page
+    readMoneyTables().catch(() => null),
   ]);
 
   const displayRates: Partial<Record<Currency, string>> = {};
