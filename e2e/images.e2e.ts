@@ -145,8 +145,10 @@ const PAGES = [
 for (const { path, photos, count } of PAGES) {
   test(`photos of ${path} load optimized and shift nothing`, async ({ page }) => {
     await page.goto(path);
-    // the listing and the gallery stream in after the shell: wait for the page's photos first
+    // the listing and the gallery stream in after the shell (first into a hidden node, then swapped into
+    // place): wait until the page's photos are laid out
     await expect(photos(page)).toHaveCount(count);
+    for (const photo of await photos(page).all()) await expect(photo).toBeVisible();
     await recordShiftFromNow(page);
     const boxes = await photoBoxes(photos(page));
     await expectPhotosLoaded(photos(page));
