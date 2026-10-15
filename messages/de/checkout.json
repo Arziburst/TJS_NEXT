@@ -22,7 +22,7 @@
       "division": "An eine Nova Post Filiale, Paketstation oder Abholstelle",
       "address": "Per Kurier an die Adresse"
     },
-    "courierOnly": "Nova Post liefert nach {country} per Kurier an die Adresse.",
+    "courierOnly": "{country}: Nova Post liefert per Kurier an die Adresse.",
     "settlement": "Stadt oder Ort",
     "settlementPlaceholder": "Namen eingeben",
     "settlementHint": "Mindestens 2 Buchstaben eingeben",

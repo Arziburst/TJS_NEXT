@@ -31,7 +31,7 @@
     "loadError": "Seznam se nepodařilo načíst. Zkuste to prosím později.",
     "clear": "Vymazat",
     "showList": "Zobrazit seznam",
-    "division": "Výdejní místo",
+    "division": "Místo vyzvednutí",
     "divisionTypeFilter": "Typ místa",
     "divisionTypes": {
       "all": "Vše",

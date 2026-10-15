@@ -31,7 +31,7 @@
     "loadError": "The list could not be loaded. Please try again later.",
     "clear": "Clear",
     "showList": "Show the list",
-    "division": "Pick-up point",
+    "division": "Collection point",
     "divisionTypeFilter": "Point type",
     "divisionTypes": {
       "all": "All",

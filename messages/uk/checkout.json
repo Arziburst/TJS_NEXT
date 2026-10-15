@@ -22,7 +22,7 @@
       "division": "У відділення, поштомат або пункт видачі Nova Post",
       "address": "Курʼєром на адресу"
     },
-    "courierOnly": "Nova Post доставляє до країни {country} кур'єром на адресу.",
+    "courierOnly": "Nova Post доставляє до країни {country} курʼєром на адресу.",
     "settlement": "Місто або населений пункт",
     "settlementPlaceholder": "Почніть вводити назву",
     "settlementHint": "Введіть щонайменше 2 літери",

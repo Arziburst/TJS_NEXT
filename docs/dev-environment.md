@@ -188,6 +188,29 @@ Supabase Auth with email/password and Google (D12); the app side is `src/lib/aut
   (`hs_code`, `deleted_at`, `created_by`, `updated_by`; `sku` is public): admin screens read them on the server with the
   service-role client after `requireAdmin()`.
 
+## Delivery abroad: Nova Post
+
+The Nova Post international client (`src/lib/delivery/nova-post/`, #23) reads `NOVA_POST_API_KEY` and
+`NOVA_POST_API_URL` on the server at request time. Without a key (today: no contract yet) nothing is
+searched and every estimate is the zone flat rate of `nova_post_zone_rates` (TBD until an admin sets it).
+
+- **Fixture server.** `e2e/nova-post-mock.ts` answers `/clients/authorization`, `/settlements`, `/divisions`
+  and `/shipments/calculations` from `tests/delivery/fixtures/nova-post/` (shaped after the public OpenAPI
+  spec, no real traffic). Playwright starts it on `E2E_PORT + 1000` (CI: 4000) and gives the app
+  `NOVA_POST_API_KEY=e2e-fixture-key` and its URL. For a dev walk of the demo page
+  (`/<locale>/delivery-demo/nova-post`, needs `TJS_UI_KIT=true`), from Git Bash:
+
+  ```sh
+  NOVA_POST_MOCK_PORT=4023 node e2e/nova-post-mock.ts &
+  TJS_UI_KIT=true NOVA_POST_API_KEY=e2e-fixture-key NOVA_POST_API_URL=http://127.0.0.1:4023/v.1.0 npx next dev -p 3023
+  ```
+
+  Towns with points in the fixtures: Wrocław (PL), Berlin (DE), Paris (FR).
+- **Sandbox.** `NOVA_POST_API_URL=https://api-stage.novapost.com/v.1.0` with a sandbox key
+  (`POST /test-api-keys` for a phone registered in the Nova Post client portal). Never commit a key.
+- **Live calculation.** Even with a key the price is not asked yet: the parcel (packaging, weight, declared and
+  insured value) is the owner's decision and `parcelForOrder()` returns none, so the flat rate stands in.
+
 ## Windows traps
 
 - **Excluded ports.** Hyper-V / WinNAT reserve port ranges (today 46752–47251, 54320–54538 among others)

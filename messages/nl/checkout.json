@@ -31,7 +31,7 @@
     "loadError": "De lijst kon niet worden geladen. Probeer het later opnieuw.",
     "clear": "Wissen",
     "showList": "Lijst tonen",
-    "division": "Afhaalpunt",
+    "division": "Afhaallocatie",
     "divisionTypeFilter": "Soort afhaalpunt",
     "divisionTypes": {
       "all": "Alle",

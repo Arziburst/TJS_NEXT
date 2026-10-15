@@ -1,11 +1,13 @@
 "use server";
 
+import { cookies, headers } from "next/headers";
 import { z } from "zod";
-import { locales } from "@/i18n/routing";
+import { locales, type Locale } from "@/i18n/routing";
 import { BUSINESS_TIME_ZONE } from "@/lib/money/business-date";
 import { getMoneyTables } from "@/lib/money/cache";
+import { CURRENCY_COOKIE, currencies, resolveCurrency, type Currency } from "@/lib/money/currencies";
 import { decimalString, formatMoney } from "@/lib/money/format";
-import { getCurrencyChoice } from "@/lib/money/prices";
+import type { MoneyTables } from "@/lib/money/store";
 import { getNovaPostClient } from "./config";
 import { DELIVERY_COUNTRIES, hasDivisions } from "./countries";
 import { parcelForOrder } from "./parcel";
@@ -15,6 +17,9 @@ import { readZoneRates } from "./zone-rates";
 
 // Public entry points of the checkout's delivery step: any visitor, signed in or not, may call them, so
 // there is no user or role to check; every input is validated and the API key never leaves the server.
+
+// Vercel sets the visitor's country on every request (the same header src/lib/money/prices.ts reads)
+const COUNTRY_HEADER = "x-vercel-ip-country";
 
 const countrySchema = z.enum(DELIVERY_COUNTRIES);
 const localeSchema = z.enum(locales);
@@ -110,11 +115,28 @@ function dateView(isoDate: string | null, locale: string): string | null {
   return new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: BUSINESS_TIME_ZONE }).format(date);
 }
 
+/*
+ * The visitor's display currency by D5 (switcher cookie, Vercel geo, locale default), as the header shows it.
+ * getCurrencyChoice() cannot run here: it reads the route's locale, which a Server Action does not have, so
+ * the action takes the locale as validated input.
+ */
+async function displayCurrency(locale: Locale, tables: MoneyTables | null): Promise<Currency> {
+  const [cookieStore, headerList] = await Promise.all([cookies(), headers()]);
+  const enabled = tables ? currencies.filter((currency) => tables.settings[currency]?.enabled) : [...currencies];
+  return resolveCurrency({
+    cookie: cookieStore.get(CURRENCY_COOKIE)?.value,
+    country: headerList.get(COUNTRY_HEADER),
+    locale,
+    enabled,
+  });
+}
+
 export async function estimateNovaPostDelivery(input: unknown): Promise<EstimateResult> {
   const parsed = estimateInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
   const { country, destination, locale } = parsed.data;
-  const [{ current }, tables] = await Promise.all([getCurrencyChoice(), getMoneyTables()]);
+  const tables = await getMoneyTables();
+  const current = await displayCurrency(locale, tables);
   const estimate = await estimateDelivery(
     { country, destination, currency: current },
     { client: getNovaPostClient(), parcel: parcelForOrder(), zoneRates: readZoneRates, tables },

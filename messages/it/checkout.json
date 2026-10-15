@@ -22,7 +22,7 @@
       "division": "In una filiale, un locker o un punto di ritiro Nova Post",
       "address": "Con corriere all’indirizzo"
     },
-    "courierOnly": "Nova Post consegna in questo paese ({country}) con corriere all’indirizzo.",
+    "courierOnly": "{country}: Nova Post consegna con corriere all’indirizzo.",
     "settlement": "Città o località",
     "settlementPlaceholder": "Inizia a digitare il nome",
     "settlementHint": "Digita almeno 2 lettere",
@@ -31,7 +31,7 @@
     "loadError": "Impossibile caricare l’elenco. Riprova più tardi.",
     "clear": "Cancella",
     "showList": "Mostra l’elenco",
-    "division": "Punto di ritiro",
+    "division": "Luogo di ritiro",
     "divisionTypeFilter": "Tipo di punto",
     "divisionTypes": {
       "all": "Tutti",

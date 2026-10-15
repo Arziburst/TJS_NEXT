@@ -22,7 +22,7 @@
       "division": "Numa agência, cacifo ou ponto de recolha Nova Post",
       "address": "Por estafeta na morada"
     },
-    "courierOnly": "A Nova Post entrega em {country} por estafeta na morada.",
+    "courierOnly": "{country}: a Nova Post entrega por estafeta na morada.",
     "settlement": "Cidade ou localidade",
     "settlementPlaceholder": "Comece a escrever o nome",
     "settlementHint": "Escreva pelo menos 2 letras",
@@ -31,7 +31,7 @@
     "loadError": "Não foi possível carregar a lista. Tente novamente mais tarde.",
     "clear": "Limpar",
     "showList": "Mostrar a lista",
-    "division": "Ponto de recolha",
+    "division": "Local de recolha",
     "divisionTypeFilter": "Tipo de ponto",
     "divisionTypes": {
       "all": "Todos",

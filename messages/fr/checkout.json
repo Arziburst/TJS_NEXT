@@ -22,7 +22,7 @@
       "division": "En agence, consigne ou point relais Nova Post",
       "address": "Par coursier à l’adresse"
     },
-    "courierOnly": "Nova Post livre vers ce pays ({country}) par coursier à l’adresse.",
+    "courierOnly": "{country} : Nova Post livre par coursier à l’adresse.",
     "settlement": "Ville ou localité",
     "settlementPlaceholder": "Commencez à saisir le nom",
     "settlementHint": "Saisissez au moins 2 lettres",

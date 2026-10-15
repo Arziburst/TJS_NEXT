@@ -1,0 +1,66 @@
+{
+  "current_page": 1,
+  "last_page": 1,
+  "per_page": 20,
+  "total": 2,
+  "from": null,
+  "to": null,
+  "items": [
+    {
+      "id": 50101,
+      "name": "Paris",
+      "country": {
+        "name": "France",
+        "code": "FR"
+      },
+      "region": {
+        "id": 50108,
+        "name": "Paris",
+        "parent": {
+          "id": 50110,
+          "name": "Île-de-France"
+        }
+      },
+      "latitude": null,
+      "longitude": null,
+      "postCode1": "75001",
+      "postCode2": null,
+      "alternativeNames": [],
+      "externalId": null,
+      "boost": 0,
+      "prohibitedIssuance": false,
+      "prohibitedSending": false,
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null
+    },
+    {
+      "id": 50102,
+      "name": "Pau",
+      "country": {
+        "name": "France",
+        "code": "FR"
+      },
+      "region": {
+        "id": 50109,
+        "name": "Pyrénées-Atlantiques",
+        "parent": {
+          "id": 50111,
+          "name": "Nouvelle-Aquitaine"
+        }
+      },
+      "latitude": null,
+      "longitude": null,
+      "postCode1": "64000",
+      "postCode2": null,
+      "alternativeNames": [],
+      "externalId": null,
+      "boost": 0,
+      "prohibitedIssuance": false,
+      "prohibitedSending": false,
+      "createdAt": "2022-09-29T12:40:39.000000Z",
+      "updatedAt": "2025-03-01T08:00:00.000000Z",
+      "deletedAt": null
+    }
+  ]
+}
