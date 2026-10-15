@@ -65,6 +65,13 @@ Business values (prices, markets, locales, statuses …) are not here — they l
     (no JavaScript) and asserts the status 404, `<html lang="<locale>"`, the localized `<title>` and the
     message text in the raw HTML (see "the 404 under a locale is server-rendered …" in
     `e2e/i18n.e2e.ts`).
+- **Route registry (`src/config/routes.ts`).** Every shop route is listed once with its locale-less
+  `path` and an `enabled` flag; the shell (header nav, mobile menu, cart and account slots) links only to
+  enabled routes, because the client router prefetches every link and a link to a page that does not
+  exist yet answers 404 (console errors on the production build). The task that lands a page sets its
+  route to `enabled: true` in the same change and links to it via `routes.<key>.path`, never a
+  hard-coded path. The shell e2e (`expectOnlyEnabledRouteLinks` in `e2e/routes.ts`) assert that enabled
+  routes are linked and disabled ones are not; the dev-only `/ui-kit` showcase is not in the registry.
 
 ## 4. Data and security
 
