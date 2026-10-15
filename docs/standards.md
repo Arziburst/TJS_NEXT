@@ -80,7 +80,7 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   once more while it revalidates; a zero `revalidate` makes the entry a dynamic hole that the next request
   reads again. A known answer is data and keeps its lifetime (an unknown slug `minutes`, a malformed one
   `max`). Unit tests: `src/lib/catalog/cache.test.ts` (a failing client per wrapper),
-  `src/lib/money/cache.test.ts` (the rates).
+  `src/lib/money/cache.test.ts` (the rates), `tests/auth/providers.test.ts` (the Auth settings).
 - **Never rely on Next's implicit build-time fetch cache for Supabase reads (found in #59).** During
   `next build` every `fetch` without a `cache` option is stored in `.next/cache/fetch-cache` for a year and
   served to the *next* build (which Vercel also restores between deploys): a build then prerenders the
