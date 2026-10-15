@@ -7,6 +7,10 @@ import { useRef, useState } from "react";
 import type { ProductImage } from "@/lib/catalog/types";
 import { cn } from "@/lib/utils";
 
+// The rendered width: the full page width less its 16px gutters below `sb`; from `sb` on one of two grid
+// columns (56px gutters, 56px gap) of the page container, which stops growing at 2000px.
+const GALLERY_SIZES = "(min-width: 125rem) 916px, (min-width: 64rem) calc(50vw - 84px), calc(100vw - 32px)";
+
 /*
  * One list of photos, laid out by CSS only: a horizontal scroll-snap slider below `sb` (with arrows and
  * dots) and the photos stacked one under another from `sb` on. The controls only scroll the list.
@@ -52,12 +56,13 @@ export function ProductGallery({ images, className }: { images: ProductImage[]; 
               alt={image.alt}
               width={image.width}
               height={image.height}
-              // Storage serves the files as uploaded; resizing needs a decision on an image service
-              unoptimized
+              quality={85}
+              // the first photo is the page's LCP element on every viewport
               preload={index === 0}
+              fetchPriority={index === 0 ? "high" : undefined}
               placeholder={image.blurDataUrl ? "blur" : "empty"}
               blurDataURL={image.blurDataUrl ?? undefined}
-              sizes="(min-width: 64rem) 50vw, 100vw"
+              sizes={GALLERY_SIZES}
               className="aspect-square max-h-[60vh] w-full object-cover sb:max-h-none sb:rounded-lg"
             />
           </li>
