@@ -41,8 +41,9 @@ reservations; a change of the port base is a coordinator decision.
 | `npm run test:db` | pgTAP tests in `supabase/tests/` (`supabase test db`). |
 | `npm run db:types` | Regenerates `src/lib/supabase/database.types.ts` from the local schema; commit it with the migration. |
 | `npm run supabase:status` | URLs and keys of the stack this checkout points at. |
-| `npm run supabase:stop:worktree` | Stops `tjs-<n>` and removes its containers, volumes and network (data is not kept). |
-| `npm run supabase:cleanup` | Removes every `tjs-<n>` stack whose worktree no longer exists or that is older than 7 days. |
+| `npm run supabase:stop:worktree` | Stops the stack in this worktree's `config.toml` (`project_id`) and removes its containers, volumes and network (data is not kept). |
+| `npm run supabase:stop:worktree -- 207` | The same, but refuses unless `config.toml` says `tjs-207`. |
+| `npm run supabase:cleanup` | Removes every `tjs-<n>` stack that no existing worktree owns or that is older than 7 days. |
 | `npm run check:migrations` | Checks migration names and versions against `origin/main` and the open PRs. |
 | `npm run supabase:start` / `supabase:stop` | The main stack `tjs-main` — main checkout only. |
 
@@ -98,6 +99,18 @@ npm run supabase:start:worktree
 Keep every `port = …` line of `config.toml` unique: the script replaces each one by exact match and stops
 when a line is missing or doubled.
 
+## Which stack `supabase:stop:worktree` stops
+
+The stack id comes only from this worktree's `supabase/config.toml` `project_id`, the one
+`supabase:start:worktree` wrote — never from the folder name. A verifier in `15-verify` started with `-- 115`
+stops `tjs-115`, never the worker's `tjs-15`. The script refuses with `Refusing …` and exit code 1, touching
+no stack, when:
+
+- an explicit number differs from the configured `project_id` (`-- 15` in a worktree that runs `tjs-115`);
+- `config.toml` was not rewritten (`project_id = "tjs-main"`, as in the main checkout or after
+  `git checkout -- supabase/config.toml`). A stack started before the restore is then stopped by hand
+  (see Cleanup).
+
 ## The main-stack guard
 
 `scripts/dev/Assert-NotSharedMainFromWorktree.ps1` runs before `supabase:start`, `supabase:stop`,
@@ -111,8 +124,9 @@ when a line is missing or doubled.
 - When a task ends: `npm run supabase:stop:worktree` in its worktree, then remove the worktree.
 - Leftovers (a worktree removed with its stack still up, or a stack forgotten for a week):
   `npm run supabase:cleanup` from any checkout. It finds stacks by their Docker names
-  `supabase_<service>_tjs-<n>`, compares `n` with the folders of `git worktree list` (`-RepoPath`), and
-  stops the stale ones, then removes their volumes (the `edge_runtime` volume survives
+  `supabase_<service>_tjs-<n>`, keeps the stacks that the worktrees of `git worktree list` (`-RepoPath`)
+  own — each worktree's configured `project_id`, or `tjs-<folder number>` for a worktree whose `config.toml`
+  was not rewritten — and stops the stale ones, then removes their volumes (the `edge_runtime` volume survives
   `supabase stop --no-backup`) and network. Options (call the script directly, npm would swallow them):
   `pwsh -NoProfile -File scripts/dev/Remove-StaleSupabaseWorktrees.ps1 -RepoPath . -RetentionDays 7 -WhatIf`.
 - By hand for one stack: `npx supabase stop --project-id tjs-<n> --no-backup`, then
