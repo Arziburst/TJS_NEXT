@@ -22,10 +22,14 @@ async function CurrencySwitcherValue({ className, hideLabel }: CurrencySwitcherS
   return <CurrencySwitcher current={current} options={labelled} className={className} hideLabel={hideLabel} />;
 }
 
-// The header's currency switcher; the visitor's currency is request-time data, so it streams in
+/*
+ * The header's currency switcher; the visitor's currency is request-time data, so it streams in.
+ * The placeholder is a block exactly as tall as the select: an inline-block would sit on a text line and
+ * add the line's descent, so the header would shrink when the switcher arrives (#57).
+ */
 export function CurrencySwitcherSlot(props: CurrencySwitcherSlotProps) {
   return (
-    <Suspense fallback={<span aria-hidden className="inline-block h-11 w-20" />}>
+    <Suspense fallback={<span aria-hidden className="block h-11 w-20" />}>
       <CurrencySwitcherValue {...props} />
     </Suspense>
   );
