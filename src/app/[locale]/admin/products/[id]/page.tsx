@@ -4,7 +4,7 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { deleteProduct, saveProduct } from "@/app/[locale]/admin/actions";
+import { deleteProduct, saveProduct, setTranslationReviewed, translateProduct } from "@/app/[locale]/admin/actions";
 import { AdminPending, AdminShell } from "@/components/admin/admin-shell";
 import { DeleteProductButton } from "@/components/admin/delete-product-button";
 import { ADMIN_PRODUCTS_HREF, editProductHref } from "@/components/admin/paths";
@@ -19,6 +19,7 @@ import { getAdminProduct, type AdminProduct } from "@/lib/admin/products";
 import { getAdmin, requireAdmin } from "@/lib/auth/session";
 import { getCachedCategories } from "@/lib/catalog/cache";
 import { productSlugFor } from "@/lib/catalog/product-path";
+import { isTranslationConfigured } from "@/lib/translate/gateway";
 
 // No product is known at build time; one id no product has lets the build prerender the route's shell (the
 // shared header reads the pathname), every real id renders at request time behind the admin check.
@@ -89,6 +90,7 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
             saveProduct={saveProduct}
             photos={<ProductPhotos images={product.data.images} />}
             deleteButton={<DeleteProductButton productId={product.data.id} title={title ?? ""} deleteProduct={deleteProduct} />}
+            translation={{ configured: isTranslationConfigured(), translateProduct, setTranslationReviewed }}
           />
         ) : (
           <p role="alert" className="border-2 border-destructive p-3 font-input text-sm">
