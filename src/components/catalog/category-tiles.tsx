@@ -35,7 +35,8 @@ export function CategoryTiles({ categories }: { categories: CategoryEntry[] }) {
                 src={CATEGORY_IMAGES[category.slug]}
                 alt=""
                 fill
-                sizes="(min-width: 1024px) 100px, 60px"
+                sizes="(min-width: 64rem) 100px, 60px"
+                quality={75}
                 placeholder={STATIC_BLUR}
                 className="object-cover transition duration-500 group-hover:brightness-110 group-focus-visible:brightness-110"
               />

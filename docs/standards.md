@@ -105,6 +105,26 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   ESLint `react/jsx-no-literals` fails on literal JSX text.
 - Every user-visible change is walked in the browser on desktop 1440 and mobile 390: no console errors,
   no hydration warnings, keyboard focus visible; screenshots in the PR.
+- **Images (#53): `next/image` through the Vercel image optimizer**, never `unoptimized`, never a raw
+  `<img>` for a photo. Storage keeps the uploaded original; `/_next/image` resizes it and serves AVIF, or
+  WebP to browsers without AVIF. Supabase image transformations need the Pro plan and are not used.
+  - `next.config.ts` allows only the public `product-images` bucket of the production project and of the
+    configured stack (`remotePatterns`), the qualities `75` (cards, category tiles) and `85` (product
+    gallery) — a `quality` outside that list is coerced, a direct request with another one is a 400 —
+    and caches optimized photos for 31 days (`minimumCacheTTL`). The cache cannot be purged, so a changed
+    photo is uploaded under a new storage path, never over an existing one.
+  - Every photo sits in a box sized by CSS (`fill` in a fixed or `aspect-*` box, or `width`/`height`
+    with a CSS aspect) so it never shifts the layout, and has a `sizes` that matches its rendered width
+    at each breakpoint (a too-large `sizes` downloads a too-large file). `blur_data_url` is the
+    placeholder where present.
+  - Only the LCP candidates load at once: the first gallery photo (`preload` + `fetchPriority="high"`)
+    and the first-row card photos (`loading="eager"` + `fetchPriority="high"`); everything else is lazy,
+    a hidden hover photo also `fetchPriority="low"`.
+  - Cost: Vercel bills image optimization by transformations (one per source × width × quality × format
+    on a cache miss) and by cache reads and writes (see vercel.com/docs/image-optimization/limits-and-pricing).
+    The levers are the ones above: two qualities, two formats, `sizes` that pick small widths, the long
+    TTL, and no transformation of decorative or already-small images. Check the usage in the Vercel
+    dashboard after launch before adding a quality, a format or a width.
 
 ## 6. Testing
 

@@ -8,16 +8,26 @@ import type { ProductImage } from "@/lib/catalog/types";
 import { cn } from "@/lib/utils";
 import { PRODUCT_PREFETCH, productHref } from "./links";
 
-const IMAGE_SIZES = "(min-width: 1024px) 200px, 164px";
+// the card box: 164px wide, 200px from `sb` (64rem)
+const IMAGE_SIZES = "(min-width: 64rem) 200px, 164px";
 
-function CardImage({ image, eager, className }: { image: ProductImage; eager?: boolean; className?: string }) {
+type CardImageProps = {
+  image: ProductImage;
+  /** "high": a first-row photo (the LCP candidate), loaded at once; "low": the hidden hover photo. */
+  priority?: "high" | "low";
+  className?: string;
+};
+
+function CardImage({ image, priority, className }: CardImageProps) {
   return (
     <Image
       src={image.url}
       alt={image.alt}
       fill
       sizes={IMAGE_SIZES}
-      loading={eager ? "eager" : "lazy"}
+      quality={75}
+      loading={priority === "high" ? "eager" : "lazy"}
+      fetchPriority={priority}
       placeholder={image.blurDataUrl ? "blur" : "empty"}
       blurDataURL={image.blurDataUrl ?? undefined}
       className={cn("object-cover transition-opacity duration-500", className)}
@@ -42,13 +52,15 @@ export async function ProductCard({ product, eager = false }: { product: ListedP
         {first && (
           <CardImage
             image={first}
-            eager={eager}
+            priority={eager ? "high" : undefined}
             className={cn(second && "group-hover:opacity-0 group-focus-visible:opacity-0")}
           />
         )}
+        {/* hidden until hover: lazy, behind every visible photo even in the first row, no placeholder */}
         {second && (
           <CardImage
-            image={{ ...second, alt: "" }}
+            image={{ ...second, alt: "", blurDataUrl: null }}
+            priority="low"
             className="opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
           />
         )}
