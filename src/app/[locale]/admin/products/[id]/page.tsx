@@ -76,8 +76,6 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
           {shopSlug && (
             <Link
               href={productHref(shopSlug)}
-              // not prefetched: the admin rarely leaves for the shop, and a product page prefetch keeps a request open
-              prefetch={false}
               className={cn(buttonVariants({ variant: "outline", size: "sm", className: "min-h-11 justify-self-start" }))}>
               <ExternalLinkIcon aria-hidden />
               {t("viewInShop")}
