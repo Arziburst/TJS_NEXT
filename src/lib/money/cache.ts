@@ -1,5 +1,6 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
+import { FAILED_READ_LIFE } from "@/lib/failed-read";
 import { readMoneyTables, type MoneyTables } from "./store";
 
 // Revalidated by the daily rates job (src/app/api/cron/fx-rates); never fetched per request
@@ -16,9 +17,9 @@ export async function getMoneyTables(): Promise<MoneyTables | null> {
     return tables;
   } catch (error) {
     console.error("money: rates unavailable", error);
-    // a failure is retried within a minute instead of hiding prices for days; being short-lived it is
-    // also never baked into a prerender (a build without the database still succeeds)
-    cacheLife("seconds");
+    // a failure is read again by the next request instead of hiding prices for days, and is never baked into
+    // a prerender (a build without the database still succeeds)
+    cacheLife(FAILED_READ_LIFE);
     return null;
   }
 }

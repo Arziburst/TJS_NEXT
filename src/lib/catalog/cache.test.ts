@@ -42,7 +42,7 @@ vi.mock("@/lib/supabase/server", () => ({
   }),
 }));
 
-const { FAILED_READ_LIFE } = await import("./failed-read");
+const { FAILED_READ_LIFE } = await import("@/lib/failed-read");
 const { getCachedCategories, getCachedListingPage } = await import("./cache");
 const { getProductPage } = await import("./product");
 

@@ -73,12 +73,14 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   the messages).
 - **A failed read is never cached as data (Next 16.4.1, found in #59).** A `"use cache"` data function
   either throws on a failed read or gives its entry `cacheLife(FAILED_READ_LIFE)`
-  (`src/lib/catalog/failed-read.ts`: zero stale, revalidate and expire). That covers an *incomplete* read
+  (`src/lib/failed-read.ts`: zero stale, revalidate and expire). That covers an *incomplete* read
   too: a product page whose category could not be read (no breadcrumb), a listing without its category's
   tag. Any `cacheLife` profile, `minutes` included, puts the entry into the build's prerender, so the
-  incomplete page would be served as static HTML; a zero `revalidate` makes the entry a dynamic hole that
-  the next request reads again. A known answer is data and keeps its lifetime (an unknown slug `minutes`,
-  a malformed one `max`). Unit tests: `src/lib/catalog/cache.test.ts` (a failing client per wrapper).
+  incomplete page would be served as static HTML; `seconds` stays out of it but still serves the failure
+  once more while it revalidates; a zero `revalidate` makes the entry a dynamic hole that the next request
+  reads again. A known answer is data and keeps its lifetime (an unknown slug `minutes`, a malformed one
+  `max`). Unit tests: `src/lib/catalog/cache.test.ts` (a failing client per wrapper),
+  `src/lib/money/cache.test.ts` (the rates).
 - **Never rely on Next's implicit build-time fetch cache for Supabase reads (found in #59).** During
   `next build` every `fetch` without a `cache` option is stored in `.next/cache/fetch-cache` for a year and
   served to the *next* build (which Vercel also restores between deploys): a build then prerenders the

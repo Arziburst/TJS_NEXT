@@ -3,7 +3,7 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import type { Locale } from "@/i18n/routing";
 import { isNewProduct } from "./categories";
-import { FAILED_READ_LIFE } from "./failed-read";
+import { FAILED_READ_LIFE } from "@/lib/failed-read";
 import { getCategories, getProducts } from "./index";
 import type { CatalogResult, Category, ProductSort, ProductSummary } from "./types";
 

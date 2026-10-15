@@ -3,7 +3,7 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import type { Locale } from "@/i18n/routing";
 import { createPublicServerClient } from "@/lib/supabase/server";
-import { FAILED_READ_LIFE } from "./failed-read";
+import { FAILED_READ_LIFE } from "@/lib/failed-read";
 import { getCategories, getProductBySlug } from "./index";
 import { isLocale, localesFor } from "./mappers";
 import {
