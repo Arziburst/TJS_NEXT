@@ -3,6 +3,8 @@
   "aboutUs": "Over ons",
   "contacts": "Contact",
   "cart": "Winkelwagen",
+  "cartCount": "Winkelwagen, {count, plural, =0 {leeg} one {# stuk} other {# stuks}}",
+  "closeCart": "Winkelwagen sluiten",
   "settings": "Instellingen",
   "addProduct": "Product toevoegen",
   "orders": "Bestellingen",

@@ -246,6 +246,19 @@ Supabase Auth with email/password and Google (D12); the app side is `src/lib/aut
   gets the not-found page); actions call `getAdmin()`. The API roles cannot read the internal catalog columns
   (`hs_code`, `deleted_at`, `created_by`, `updated_by`; `sku` is public): admin screens read them on the server with the
   service-role client after `requireAdmin()`.
+- **Admin area (#17).** `/<locale>/admin` (products), `/<locale>/admin/products/new` and
+  `/<locale>/admin/products/<id>`; an admin finds them in the account menu. Each page checks the admin inside its
+  own Suspense boundary, so the HTML of a guest or customer holds no admin text: a guest gets status 200 with a
+  redirect to the sign-in page (meta refresh and client redirect), a customer status 200 with the not-found page.
+  Writes go through `public.admin_save_product`, `admin_set_product_status` and `admin_delete_product` (security
+  invoker: RLS and the audit trigger apply; the service role may call them too, e.g. an import script, then
+  `created_by` / `updated_by` stay null), and expire the storefront caches by tag (`src/lib/admin/revalidate.ts`).
+  A product is published only with its uk translation (checked in those functions, not by a table constraint).
+  To try it locally, create a user (sign up, or the Auth admin API of the stack), make it admin with the SQL above
+  through `MSYS_NO_PATHCONV=1 docker exec -i supabase_db_tjs-<n> psql -U postgres`, and sign in on
+  `127.0.0.1:3000+n`. `e2e/admin.e2e.ts` creates its own admin and customer; it runs in the
+  `desktop-catalog-writers` and `mobile-catalog-writers` projects after the storefront tests, because it publishes
+  products the listings count.
 
 ## Nova Poshta (delivery in Ukraine)
 

@@ -134,11 +134,12 @@ test("shows the product and adds it to the cart", async ({ page }, testInfo) => 
   await expect(page.getByText(uk.page.care, { exact: true })).toBeVisible();
   await expect(page.getByText(uk.page.weight, { exact: true })).toBeVisible();
 
+  // made to order: added, and it can be added again (one more piece each time)
+  await page.waitForLoadState("networkidle");
   const addToCart = page.getByRole("button", { name: uk.addToCart });
   await addToCart.click();
-  const added = page.getByRole("button", { name: uk.addedToCart });
-  await expect(added).toBeVisible();
-  await expect(added).toBeDisabled();
+  await expect(page.getByTestId("in-cart")).toContainText(uk.cart.inCart.replace("{count}", "1"));
+  await expect(addToCart).toBeEnabled();
   expect(errors).toEqual([]);
 });
 

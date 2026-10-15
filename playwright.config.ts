@@ -6,6 +6,8 @@ const externalBaseURL = process.env.E2E_BASE_URL || undefined;
 const baseURL = externalBaseURL ?? `http://localhost:${port}`;
 // E2E_SERVER=start serves the production build (`npm run build` first), as CI does; default `next dev`.
 const serverScript = process.env.E2E_SERVER === "start" ? "start" : "dev";
+// e2e files that write products of their own to the catalog (see the projects below)
+const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts"];
 
 export default defineConfig({
   testDir: "./e2e",
@@ -27,11 +29,27 @@ export default defineConfig({
       name: "desktop",
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
       dependencies: ["catalog-fixtures"],
+      testIgnore: CATALOG_WRITERS,
     },
     {
       name: "mobile",
       use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
       dependencies: ["catalog-fixtures"],
+      testIgnore: CATALOG_WRITERS,
+    },
+    // tests that publish, sell or unpublish products of their own run after the listings were checked, so the
+    // catalog tests always count exactly the seed and the catalog fixtures
+    {
+      name: "desktop-catalog-writers",
+      testMatch: CATALOG_WRITERS,
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
+      dependencies: ["desktop", "mobile"],
+    },
+    {
+      name: "mobile-catalog-writers",
+      testMatch: CATALOG_WRITERS,
+      use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
+      dependencies: ["desktop", "mobile"],
     },
   ],
   webServer: externalBaseURL
