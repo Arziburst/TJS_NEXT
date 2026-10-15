@@ -28,6 +28,11 @@ export function divideHalfUp(numerator: bigint, denominator: bigint): bigint {
   return (BigInt(2) * numerator + denominator) / (BigInt(2) * denominator);
 }
 
+// numerator / denominator for non-negative operands, rounded up
+export function divideUp(numerator: bigint, denominator: bigint): bigint {
+  return (numerator + denominator - BigInt(1)) / denominator;
+}
+
 // a / b rounded half up to `scale` places
 export function divideDecimals(a: Decimal, b: Decimal, scale: number): Decimal {
   if (b.units === BigInt(0)) throw new RangeError("division by zero");

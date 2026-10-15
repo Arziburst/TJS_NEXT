@@ -10,6 +10,8 @@
   --color-tjs-beige: #f4f0eb;
   --color-tjs-brown: #635a59;
   --color-tjs-coral: #ff614a;
+  /* D26: coral used as text; #ff614a is 2.62:1 on beige, this is 4.98:1 (WCAG AA). Fills, underlines, badges keep #ff614a */
+  --color-tjs-coral-text: #b93b27;
   --color-tjs-green: #00c853;
   --color-tjs-yellow: #ffd600;
   --color-tjs-slate: #36475c;
@@ -38,6 +40,7 @@
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -85,9 +88,11 @@
   --secondary-foreground: var(--color-tjs-brown);
   --muted: color-mix(in srgb, var(--color-tjs-brown) 10%, var(--color-tjs-beige));
   --muted-foreground: var(--color-tjs-brown);
-  /* the coral accent: links, prices, active nav, invalid borders */
+  /* the coral accent as a fill: underlines, badges, invalid borders */
   --accent: var(--color-tjs-coral);
   --accent-foreground: var(--color-tjs-brown);
+  /* the coral accent as text: prices, active nav and filter links, contacts */
+  --accent-text: var(--color-tjs-coral-text);
   --destructive: hsl(0 84.2% 60.2%);
   --success: var(--color-tjs-green);
   --warning: var(--color-tjs-yellow);
@@ -165,7 +170,8 @@
   }
   &:hover,
   &:focus-visible {
-    color: var(--accent);
+    /* the text in the darker coral (D26); the bars keep the coral fill */
+    color: var(--accent-text);
   }
   &:hover::after,
   &:focus-visible::after {

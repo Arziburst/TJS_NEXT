@@ -12,7 +12,7 @@ export const SORTS: readonly { sort: ProductSort; labelKey: "newest" | "priceAsc
   { sort: "price_desc", labelKey: "priceDesc" },
 ];
 
-const LINK = "move-underline font-sans text-sm font-semibold tracking-[1.6px] aria-[current=page]:text-accent";
+const LINK = "move-underline font-sans text-sm font-semibold tracking-[1.6px] aria-[current=page]:text-accent-text";
 
 /** Desktop "Shop by": all products and the six categories. */
 export async function CategoryNav({ categories, active }: { categories: CategoryEntry[]; active: string | null }) {
@@ -58,7 +58,7 @@ export async function SortNav({ pathname, current }: { pathname: string; current
             <Link
               href={{ pathname, query: toQuery({ sort, from: 1, page: 1 }) }}
               aria-current={sort === current ? "true" : undefined}
-              className={cn(LINK, "aria-[current=true]:text-accent")}
+              className={cn(LINK, "aria-[current=true]:text-accent-text")}
             >
               {t(`sort.${labelKey}`)}
             </Link>

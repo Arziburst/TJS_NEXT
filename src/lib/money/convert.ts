@@ -1,4 +1,4 @@
-import { divideDecimals, divideHalfUp, formatDecimal, parseDecimal, pow10, type Decimal } from "./decimal";
+import { divideDecimals, divideUp, formatDecimal, parseDecimal, pow10, type Decimal } from "./decimal";
 
 // Minor-unit exponent of USD, the currency every price is entered in
 export const USD_DECIMALS = 2;
@@ -30,8 +30,8 @@ function requireMinor(value: number, what: string): number {
 }
 
 /*
- * The converted price before charm rounding, exact to the minor unit:
- * usd × rate × (1 + markup), rounded half up to the target currency's minor unit.
+ * The converted price before charm rounding: usd × rate × (1 + markup), rounded up to the target
+ * currency's minor unit, so the markup is a minimum (D28) and no shown price falls below it.
  */
 export function rawMinor(usdMinor: number, rate: string, settings: Pick<CurrencySettings, "decimals" | "markupBps">): number {
   requireMinor(usdMinor, "usdMinor");
@@ -39,7 +39,7 @@ export function rawMinor(usdMinor: number, rate: string, settings: Pick<Currency
   const shift = settings.decimals - USD_DECIMALS;
   const numerator = BigInt(usdMinor) * units * BigInt(10_000 + settings.markupBps) * pow10(Math.max(shift, 0));
   const denominator = pow10(scale) * BigInt(10_000) * pow10(Math.max(-shift, 0));
-  return requireMinor(Number(divideHalfUp(numerator, denominator)), "converted price");
+  return requireMinor(Number(divideUp(numerator, denominator)), "converted price");
 }
 
 // The smallest k × increment + ending that is not below the price
