@@ -41,7 +41,6 @@ export type ProductImage = {
 
 export type ProductSummary = {
   id: string;
-  sku: string | null;
   category: { id: string; slug: string };
   fulfillment: ProductFulfillment;
   availability: ProductAvailability;

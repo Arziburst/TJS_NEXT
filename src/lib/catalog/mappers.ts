@@ -72,7 +72,6 @@ export type ImageRow = {
 
 export type ProductRow = {
   id: string;
-  sku: string | null;
   fulfillment: ProductSummary["fulfillment"];
   availability: ProductSummary["availability"];
   lead_time_days: number | null;
@@ -125,7 +124,6 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
     .map((img) => mapImage(img, locale, t, publicUrlFor));
   return {
     id: row.id,
-    sku: row.sku,
     category: { id: row.category.id, slug: row.category.slug },
     fulfillment: row.fulfillment,
     availability: row.availability,
@@ -144,7 +142,6 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
 export function toSummary(product: Product): ProductSummary {
   return {
     id: product.id,
-    sku: product.sku,
     category: product.category,
     fulfillment: product.fulfillment,
     availability: product.availability,

@@ -115,13 +115,13 @@ isOneToOne: false
                   ]
                 },"profiles": {
                   Row: {
-                    "created_at": string,"id": string,"role": Database["public"]['Enums']["user_role"]
+                    "created_at": string,"id": string,"name": string | null,"phone": string | null,"role": Database["public"]['Enums']["user_role"],"updated_at": string
                   }
                   Insert: {
-                    "created_at"?: string,"id": string,"role"?: Database["public"]['Enums']["user_role"]
+                    "created_at"?: string,"id": string,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"role"?: Database["public"]['Enums']["user_role"]
+                    "created_at"?: string,"id"?: string,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
                   }
                   Relationships: [
                     
@@ -132,7 +132,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "is_admin":
+            "consume_rate_limit":
+{ Args: { "p_key": string,"p_max": number,"p_window_seconds": number }; Returns: boolean
+                           },
+"is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            }
           }

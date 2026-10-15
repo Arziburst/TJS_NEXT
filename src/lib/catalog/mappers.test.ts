@@ -34,7 +34,6 @@ describe("localesFor / pickByLocale", () => {
 describe("mapProduct", () => {
   const row: ProductRow = {
     id: "p1",
-    sku: "S-1",
     fulfillment: "one_of_a_kind",
     availability: "sold",
     lead_time_days: null,
