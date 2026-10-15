@@ -96,7 +96,9 @@ describe("message catalogs", () => {
       query: "coral",
       language: "English",
       slug: "brass",
+      titles: "Coral drop earrings, Pearl ring",
       maxMb: 15,
+      // a file name (admin.images) and a person's first name (checkout.done) alike
       name: "IMG_0042.jpg",
       done: 3,
       link: (chunks: string) => `<a>${chunks}</a>`,

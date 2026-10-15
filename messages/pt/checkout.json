@@ -14,6 +14,65 @@
     "grandTotal": "Total geral",
     "continueShopping": "Continuar a comprar"
   },
+  "request": {
+    "title": "Pedido de encomenda",
+    "intro": "No site não se paga nada: envie o pedido e a loja entrará em contacto consigo para confirmar a encomenda e combinar o pagamento.",
+    "loadError": "Não foi possível carregar a encomenda. Tente novamente mais tarde.",
+    "empty": "Não há nada no carrinho que possa ser encomendado.",
+    "backToCart": "Voltar ao carrinho",
+    "contact": {
+      "firstName": "Nome",
+      "lastName": "Apelido (opcional)",
+      "phone": "Telefone",
+      "phoneHint": "Com o indicativo do país, por exemplo +351 912 345 678",
+      "email": "E-mail"
+    },
+    "commentHint": "Opcional",
+    "summary": {
+      "lines": "Peças da encomenda",
+      "quantity": "Quantidade: {quantity}",
+      "goodsTotal": "Total das peças",
+      "pieces": "{count, plural, one {# peça} other {# peças}}",
+      "deliveryNote": "O envio não está incluído: paga-o à transportadora na receção (veja a estimativa nos dados de envio).",
+      "unavailableNote": "As peças que já não podem ser encomendadas ficam no carrinho e não fazem parte deste pedido.",
+      "editCart": "Alterar o carrinho"
+    },
+    "submit": "Enviar o pedido de encomenda",
+    "sending": "A enviar…",
+    "errors": {
+      "title": "Verifique o formulário",
+      "firstName": "Indique o seu nome.",
+      "lastName": "O apelido é demasiado longo.",
+      "phone": "Indique o número de telefone com o indicativo do país, por exemplo +351912345678.",
+      "email": "Indique um endereço de e-mail válido.",
+      "delivery": "Escolha onde entregar a encomenda.",
+      "deliveryAddress": "Carregue em «Calcular a entrega» para confirmar a morada de entrega.",
+      "comment": "O comentário é demasiado longo.",
+      "rateLimited": "Demasiados pedidos. Aguarde alguns minutos e tente novamente.",
+      "unavailable": "Lamentamos, estas peças acabaram de ser encomendadas por outra pessoa: {titles}. Nada foi enviado. Retire-as do carrinho e envie o pedido novamente.",
+      "cartChanged": "Entretanto, o seu carrinho mudou. Verifique a encomenda e envie-a novamente.",
+      "emptyCart": "Não há nada no carrinho que possa ser encomendado.",
+      "pricesUnavailable": "De momento não é possível calcular os preços. Tente novamente mais tarde.",
+      "unexpected": "Não foi possível enviar o pedido. Tente novamente."
+    }
+  },
+  "done": {
+    "title": "Pedido de encomenda enviado",
+    "thanks": "Obrigado, {name}! Recebemos o seu pedido de encomenda.",
+    "number": "Número da encomenda",
+    "next": "A loja entrará em contacto consigo para confirmar a encomenda e combinar o pagamento e o envio. No site não é cobrado nenhum pagamento.",
+    "contactTitle": "Contactar a loja",
+    "contactTbd": "Canais de contacto: TBD",
+    "lines": "Peças encomendadas",
+    "quantity": "Quantidade: {quantity}",
+    "goodsTotal": "Total das peças",
+    "delivery": "Envio (estimativa)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "calculado pela transportadora",
+    "deliveryNote": "O preço real do envio é pago à transportadora na receção.",
+    "notAvailable": "Esta encomenda não pode ser mostrada aqui.",
+    "notAvailableHint": "A confirmação só abre no navegador que enviou o pedido ou quando tem sessão iniciada na conta a partir da qual foi enviado."
+  },
   "delivery": {
     "title": "Entrega na Ucrânia",
     "city": {
@@ -93,7 +152,8 @@
       "street": "Rua",
       "building": "Número",
       "flat": "Andar/fração (opcional)",
-      "submit": "Calcular a entrega"
+      "submit": "Calcular a entrega",
+      "changed": "A morada mudou: carregue novamente em «Calcular a entrega»."
     },
     "quote": {
       "label": "Entrega",

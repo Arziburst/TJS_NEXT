@@ -14,6 +14,65 @@
     "grandTotal": "Gesamtsumme",
     "continueShopping": "Weiter einkaufen"
   },
+  "request": {
+    "title": "Bestellanfrage",
+    "intro": "Auf der Website wird nichts bezahlt: Senden Sie die Anfrage, und der Shop meldet sich bei Ihnen, um die Bestellung zu bestätigen und die Zahlung zu vereinbaren.",
+    "loadError": "Die Bestellung konnte nicht geladen werden. Bitte versuchen Sie es später erneut.",
+    "empty": "Im Warenkorb ist nichts, was bestellt werden kann.",
+    "backToCart": "Zurück zum Warenkorb",
+    "contact": {
+      "firstName": "Vorname",
+      "lastName": "Nachname (optional)",
+      "phone": "Telefon",
+      "phoneHint": "Mit Ländervorwahl, zum Beispiel +49 30 1234567",
+      "email": "E-Mail"
+    },
+    "commentHint": "Optional",
+    "summary": {
+      "lines": "Stücke in der Bestellung",
+      "quantity": "Menge: {quantity}",
+      "goodsTotal": "Summe der Stücke",
+      "pieces": "{count, plural, one {# Stück} other {# Stück}}",
+      "deliveryNote": "Der Versand ist nicht enthalten: Sie bezahlen ihn beim Empfang an den Zusteller (siehe die Schätzung bei den Versanddetails).",
+      "unavailableNote": "Stücke, die nicht mehr bestellt werden können, bleiben im Warenkorb und gehören nicht zu dieser Anfrage.",
+      "editCart": "Warenkorb ändern"
+    },
+    "submit": "Bestellanfrage senden",
+    "sending": "Wird gesendet…",
+    "errors": {
+      "title": "Bitte prüfen Sie das Formular",
+      "firstName": "Geben Sie Ihren Vornamen ein.",
+      "lastName": "Der Nachname ist zu lang.",
+      "phone": "Geben Sie die Telefonnummer mit Ländervorwahl ein, zum Beispiel +49301234567.",
+      "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "delivery": "Wählen Sie, wohin die Bestellung geliefert werden soll.",
+      "deliveryAddress": "Klicken Sie auf „Versand berechnen“, um die Lieferadresse zu bestätigen.",
+      "comment": "Der Kommentar ist zu lang.",
+      "rateLimited": "Zu viele Anfragen. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      "unavailable": "Leider wurden diese Stücke gerade von jemand anderem bestellt: {titles}. Es wurde nichts gesendet. Entfernen Sie sie aus dem Warenkorb und senden Sie die Anfrage erneut.",
+      "cartChanged": "Ihr Warenkorb hat sich inzwischen geändert. Bitte prüfen Sie die Bestellung und senden Sie sie erneut.",
+      "emptyCart": "Im Warenkorb ist nichts, was bestellt werden kann.",
+      "pricesUnavailable": "Die Preise können gerade nicht berechnet werden. Bitte versuchen Sie es später erneut.",
+      "unexpected": "Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+    }
+  },
+  "done": {
+    "title": "Bestellanfrage gesendet",
+    "thanks": "Danke, {name}! Ihre Bestellanfrage ist eingegangen.",
+    "number": "Bestellnummer",
+    "next": "Der Shop meldet sich bei Ihnen, um die Bestellung zu bestätigen und Zahlung und Versand zu vereinbaren. Auf der Website wird keine Zahlung entgegengenommen.",
+    "contactTitle": "Den Shop kontaktieren",
+    "contactTbd": "Kontaktkanäle: TBD",
+    "lines": "Bestellte Stücke",
+    "quantity": "Menge: {quantity}",
+    "goodsTotal": "Summe der Stücke",
+    "delivery": "Versand (Schätzung)",
+    "deliveryTbd": "TBD",
+    "deliveryUnavailable": "wird vom Zusteller berechnet",
+    "deliveryNote": "Den tatsächlichen Versandpreis bezahlen Sie beim Empfang an den Zusteller.",
+    "notAvailable": "Diese Bestellung kann hier nicht angezeigt werden.",
+    "notAvailableHint": "Die Bestätigung öffnet sich nur in dem Browser, der die Anfrage gesendet hat, oder wenn Sie im Konto angemeldet sind, von dem sie gesendet wurde."
+  },
   "delivery": {
     "title": "Lieferung in der Ukraine",
     "city": {
@@ -93,7 +152,8 @@
       "street": "Straße",
       "building": "Hausnummer",
       "flat": "Wohnung (optional)",
-      "submit": "Versand berechnen"
+      "submit": "Versand berechnen",
+      "changed": "Die Adresse hat sich geändert: Klicken Sie erneut auf „Versand berechnen“."
     },
     "quote": {
       "label": "Versand",

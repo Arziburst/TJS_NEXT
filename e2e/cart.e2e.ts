@@ -168,8 +168,7 @@ test.describe("cart on the local stack", () => {
       await cart.click();
       const sheet = page.getByRole("dialog", { name: "Cart" });
       await expect(sheet.getByTestId("mini-cart-line")).toHaveCount(2);
-      await expect(sheet.getByRole("button", { name: enCart.orderRequest })).toBeDisabled();
-      await expect(sheet.getByText(enCart.orderRequestTbd)).toBeVisible();
+      await expect(sheet.getByRole("link", { name: enCart.orderRequest })).toHaveAttribute("href", "/en/checkout");
       await sheet.getByRole("link", { name: enCart.viewCart }).click();
       await expect(sheet).toBeHidden();
     } else {
@@ -179,9 +178,9 @@ test.describe("cart on the local stack", () => {
     await page.waitForLoadState("networkidle");
 
     await expect(page.getByTestId("cart-line")).toHaveCount(2);
-    // the next step links to the order request only once that page exists (#24); until then a visible TBD
+    // the next step: the order request (#24)
     await expectOnlyEnabledRouteLinks(page.locator("main"), "en", ["orderRequest", "shop"]);
-    await expect(page.getByRole("button", { name: enCart.orderRequest })).toBeDisabled();
+    await expect(page.getByRole("main").getByRole("link", { name: enCart.orderRequest })).toBeVisible();
     await expect(line(page, ordered.title).getByRole("status")).toHaveText("2");
     // a one-of-a-kind piece has no quantity control
     await expect(line(page, unique.title).getByRole("group")).toHaveCount(0);

@@ -14,6 +14,9 @@ export type CartProduct = {
   /** Made-to-order work only: how many days making it takes. */
   leadTime: LeadTime | null;
   priceUsdMinor: number;
+  /** products.weight_g: the parcel's weight at checkout (D37). */
+  weightGrams: number;
+  sku: string | null;
   slug: string;
   title: string;
   /** The locale of `slug` and `title`: the requested one, or the fallback. */
@@ -39,7 +42,7 @@ export async function getCartProducts(ids: readonly string[], locale: Locale): P
     const { data, error } = await client
       .from("products")
       .select(
-        `id, fulfillment, availability, lead_time_min_days, lead_time_max_days, price_usd_text:price_usd::text,
+        `id, sku, fulfillment, availability, weight_g, lead_time_min_days, lead_time_max_days, price_usd_text:price_usd::text,
          product_translations!inner(locale, slug, title),
          product_images(storage_path, position, width, height, blur_data_url)`,
       )
@@ -65,6 +68,8 @@ export async function getCartProducts(ids: readonly string[], locale: Locale): P
             ? { minDays: row.lead_time_min_days, maxDays: row.lead_time_max_days }
             : null,
         priceUsdMinor,
+        weightGrams: Number(row.weight_g),
+        sku: row.sku,
         slug: translation.slug,
         title: translation.title,
         locale: translation.locale,

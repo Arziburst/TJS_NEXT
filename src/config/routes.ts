@@ -17,8 +17,10 @@ export const routes = {
   cart: { path: "/cart", enabled: true },
   // #29
   favorites: { path: "/favorites", enabled: true },
-  // #24: the order request; the cart's next step links here once it exists
-  orderRequest: { path: "/checkout", enabled: false },
+  // #24: the order request, the cart's next step
+  orderRequest: { path: "/checkout", enabled: true },
+  // #24: its confirmation (?order=<number>); the checkout opens it, the shell does not link it
+  orderRequestDone: { path: "/checkout/done", enabled: true },
   // #13
   signIn: { path: "/sign-in-and-up", enabled: true },
   // #17: admins only (noindex); the account menu links here for an admin, the shell does not
