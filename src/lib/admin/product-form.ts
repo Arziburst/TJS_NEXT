@@ -37,6 +37,8 @@ export const TEXT_LIMITS: Record<TranslationField, number> = {
   metaDescription: 500,
 };
 export const SKU_MAX_LENGTH = 64;
+/** A photo's alt text per locale: a short description. */
+export const IMAGE_ALT_MAX_LENGTH = 300;
 export const LEAD_TIME_MAX_DAYS = 365;
 // numeric(10,2) for the price, numeric(6,1) for the dimensions
 const PRICE_MAX = 99_999_999.99;

@@ -7,6 +7,7 @@ import { saveProduct } from "@/app/[locale]/admin/actions";
 import { AdminPending, AdminShell } from "@/components/admin/admin-shell";
 import { NEW_PRODUCT_HREF } from "@/components/admin/paths";
 import { ProductForm } from "@/components/admin/product-form";
+import { PhotosAfterSave } from "@/components/admin/product-photos";
 import { routing } from "@/i18n/routing";
 import { getAdmin, requireAdmin } from "@/lib/auth/session";
 import { getCachedCategories } from "@/lib/catalog/cache";
@@ -40,6 +41,7 @@ async function NewProduct({ params }: PageProps<"/[locale]/admin/products/new">)
             product={null}
             categories={categories.data.map((c) => ({ id: c.id, name: c.name }))}
             saveProduct={saveProduct}
+            photos={<PhotosAfterSave />}
           />
         ) : (
           <p role="alert" className="border-2 border-destructive p-3 font-input text-sm">

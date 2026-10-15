@@ -5,17 +5,25 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { deleteProduct, saveProduct } from "@/app/[locale]/admin/actions";
+import {
+  createImageUpload,
+  deleteProductImage,
+  finishImageUpload,
+  reorderProductImages,
+  saveProductImageAlts,
+} from "@/app/[locale]/admin/image-actions";
 import { AdminPending, AdminShell } from "@/components/admin/admin-shell";
 import { DeleteProductButton } from "@/components/admin/delete-product-button";
 import { ADMIN_PRODUCTS_HREF, editProductHref } from "@/components/admin/paths";
 import { ProductForm } from "@/components/admin/product-form";
-import { ProductPhotos } from "@/components/admin/product-photos";
+import { ProductImages } from "@/components/admin/product-images";
 import { productHref } from "@/components/catalog/links";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { routing, type Locale } from "@/i18n/routing";
 import { getAdminProduct, type AdminProduct } from "@/lib/admin/products";
+import { MAX_IMAGE_BYTES } from "@/lib/images/encode";
 import { getAdmin, requireAdmin } from "@/lib/auth/session";
 import { getCachedCategories } from "@/lib/catalog/cache";
 import { productSlugFor } from "@/lib/catalog/product-path";
@@ -89,7 +97,15 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
             product={product.data}
             categories={categories.data.map((c) => ({ id: c.id, name: c.name }))}
             saveProduct={saveProduct}
-            photos={<ProductPhotos images={product.data.images} />}
+            photos={
+              <ProductImages
+                productId={product.data.id}
+                images={product.data.images}
+                altDefaults={product.data.imageAltDefaults}
+                maxBytes={MAX_IMAGE_BYTES}
+                actions={{ createImageUpload, finishImageUpload, deleteProductImage, reorderProductImages, saveProductImageAlts }}
+              />
+            }
             deleteButton={<DeleteProductButton productId={product.data.id} title={title ?? ""} deleteProduct={deleteProduct} />}
           />
         ) : (
