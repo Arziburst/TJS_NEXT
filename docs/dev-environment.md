@@ -260,6 +260,34 @@ Supabase Auth with email/password and Google (D12); the app side is `src/lib/aut
   `desktop-catalog-writers` and `mobile-catalog-writers` projects after the storefront tests, because it publishes
   products the listings count.
 
+## Nova Poshta (delivery in Ukraine)
+
+The server-only client is `src/lib/delivery/nova-poshta/` (API 2.0, `https://api.novaposhta.ua/v2.0/json/`); the
+UI pieces for the checkout are `src/components/delivery/`, shown on the dev showcase `/<locale>/delivery-demo`
+(on only with `TJS_UI_KIT=true`, like `/ui-kit`).
+
+- **Key.** `NOVA_POSHTA_API_KEY`, server-only, from the owner's Nova Poshta business cabinet. Optional: the
+  dictionary methods and `getDocumentPrice` also answer without a key, so the app calls the API without one
+  when it is unset. Never put it in a `NEXT_PUBLIC_*` name; the legacy app's key leaked in its client bundle and
+  must never be used. `tests/delivery/client-bundle.integration.test.ts` scans the production build's client
+  bundle (`.next/static`) for the key and the client's code (CI integration step, after the build).
+- **Fixtures.** `NOVA_POSHTA_FIXTURES=true` answers from the recorded API answers
+  (`src/lib/delivery/nova-poshta/fixtures/recordings.json`: Kyiv, Lviv, Odesa, Brovary, their branches, streets
+  and tariffs) instead of the network: for walks without a network and for the e2e run (`playwright.config.ts`
+  sets it for the web server). The fixture transport refuses to serve when `VERCEL_ENV=production`. Re-record
+  with `node tests/delivery/record-nova-poshta-fixtures.mjs` (always without a key).
+- **Cache.** The settlements and branches customers looked up are cached in `np_lookups`, `np_settlements` and
+  `np_warehouses` (service role only, no policy for anon or authenticated). A lookup is served from the cache
+  for a day, then fetched again on its next use; when the API fails the stale answer is served. Vercel Cron
+  calls `/api/cron/nova-poshta` daily at 02:30 UTC (`Authorization: Bearer $CRON_SECRET`, else 401): it refreshes
+  the lookups used within a week, drops those unused for 30 days and the rows no lookup names.
+- **Parcel parameters** (`src/lib/delivery/nova-poshta/parcel.ts`): sender city Kyiv, the recipient pays,
+  declared value = the order total (D35); handed in at a branch, quotes are estimates on a 10 × 10 × 5 cm box
+  that adds 100 g (D37).
+- **Rate limits** (`src/lib/delivery/rate-limit.ts`): the public search actions 60 and the quote 20 per minute per
+  client IP, counted by `public.consume_rate_limit` like the auth actions (fails closed); the e2e tests send
+  their own `x-forwarded-for` per test.
+
 ## Vercel
 
 The shop runs on the Vercel project `tjs-next` in the team `arzibursts-projects`, production
@@ -282,15 +310,18 @@ production deployment in the dashboard; the database is not rolled back with it.
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | the browser and server Supabase clients (public by design, RLS guards the data) |
 | `SUPABASE_SERVICE_ROLE_KEY` | server only: the auth rate limits, admin reads, the rates job |
 | `NEXT_PUBLIC_SITE_URL` | the shop's public origin for canonical and hreflang URLs; unset → `VERCEL_PROJECT_PRODUCTION_URL` |
-| `CRON_SECRET` | the cron route; Vercel Cron sends it as `Authorization: Bearer …` |
+| `CRON_SECRET` | the cron routes; Vercel Cron sends it as `Authorization: Bearer …` |
+| `NOVA_POSHTA_API_KEY` | server only: the Nova Poshta client (optional, see Nova Poshta above) |
 
 Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
-`VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` is never set on Vercel (the `/ui-kit` showcase stays a 404).
+`VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`
+and `/delivery-demo` showcases stay a 404; the fixture transport refuses under `VERCEL_ENV=production`).
 
 **Cron.** `vercel.json` `crons` calls `GET /api/cron/fx-rates` daily at `15 14 * * *` (UTC) on the
 production deployment only, with `CRON_SECRET`; without the secret the route answers 401. On Hobby, Vercel
-fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv. Runs and their
-logs: the project's *Cron Jobs* settings and the function logs.
+fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv.
+`GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), with the same
+secret. Runs and their logs: the project's *Cron Jobs* settings and the function logs.
 
 **Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`
 renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the document of every page only when

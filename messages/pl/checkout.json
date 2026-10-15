@@ -13,5 +13,51 @@
     "success": "Zamówienie złożone",
     "grandTotal": "Suma całkowita",
     "continueShopping": "Kontynuuj zakupy"
+  },
+  "delivery": {
+    "title": "Dostawa na Ukrainie",
+    "city": {
+      "label": "Miasto",
+      "placeholder": "Zacznij wpisywać nazwę miasta"
+    },
+    "search": {
+      "searching": "Wyszukiwanie…",
+      "typeMore": "Wpisz co najmniej {min} litery",
+      "empty": "Nic nie znaleziono",
+      "ukrainianOnly": "Wpisz nazwę po ukraińsku",
+      "unavailable": "Wyszukiwanie jest teraz niedostępne. Spróbuj ponownie później.",
+      "clear": "Wyczyść",
+      "open": "Pokaż listę"
+    },
+    "method": {
+      "label": "Jak odebrać przesyłkę",
+      "warehouse": "W oddziale lub paczkomacie",
+      "address": "Kurierem pod adres",
+      "addressUnavailable": "Nova Poshta nie dostarcza pod adres w tej miejscowości"
+    },
+    "warehouse": {
+      "label": "Oddział lub paczkomat",
+      "placeholder": "Numer lub ulica",
+      "filter": "Pokaż",
+      "all": "Wszystkie",
+      "branch": "Oddziały",
+      "postomat": "Paczkomaty",
+      "maxWeight": "do {kg} kg"
+    },
+    "address": {
+      "street": "Ulica",
+      "streetPlaceholder": "Zacznij wpisywać nazwę ulicy",
+      "house": "Numer domu",
+      "flat": "Mieszkanie (opcjonalnie)"
+    },
+    "quote": {
+      "label": "Dostawa przez Nova Poshta",
+      "calculating": "Obliczanie…",
+      "estimate": "≈ {price}",
+      "note": "Szacunek według taryfy Nova Poshta dla małego pudełka: rzeczywistą cenę płacisz w placówce przy odbiorze.",
+      "noteOnReceipt": "Szacunek według taryfy Nova Poshta dla małego pudełka: rzeczywistą cenę płacisz przy odbiorze.",
+      "unavailable": "Cena jest teraz niedostępna: Nova Poshta obliczy ją przy odbiorze.",
+      "choose": "Wybierz miejsce dostawy, aby zobaczyć cenę"
+    }
   }
 }

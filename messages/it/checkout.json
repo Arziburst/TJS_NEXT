@@ -13,5 +13,51 @@
     "success": "Ordine completato",
     "grandTotal": "Totale complessivo",
     "continueShopping": "Continua lo shopping"
+  },
+  "delivery": {
+    "title": "Consegna in Ucraina",
+    "city": {
+      "label": "Città",
+      "placeholder": "Inizia a digitare il nome della città"
+    },
+    "search": {
+      "searching": "Ricerca…",
+      "typeMore": "Digita almeno {min} lettere",
+      "empty": "Nessun risultato",
+      "ukrainianOnly": "Digita il nome in ucraino",
+      "unavailable": "La ricerca non è disponibile al momento. Riprova più tardi.",
+      "clear": "Cancella",
+      "open": "Mostra l'elenco"
+    },
+    "method": {
+      "label": "Come ricevere il pacco",
+      "warehouse": "In una filiale o in un armadietto",
+      "address": "Con corriere all'indirizzo",
+      "addressUnavailable": "Nova Poshta non consegna a domicilio in questa località"
+    },
+    "warehouse": {
+      "label": "Filiale o armadietto",
+      "placeholder": "Numero o via",
+      "filter": "Mostra",
+      "all": "Tutti",
+      "branch": "Filiali",
+      "postomat": "Armadietti",
+      "maxWeight": "fino a {kg} kg"
+    },
+    "address": {
+      "street": "Via",
+      "streetPlaceholder": "Inizia a digitare il nome della via",
+      "house": "Numero civico",
+      "flat": "Appartamento (facoltativo)"
+    },
+    "quote": {
+      "label": "Consegna con Nova Poshta",
+      "calculating": "Calcolo in corso…",
+      "estimate": "≈ {price}",
+      "note": "Una stima secondo la tariffa di Nova Poshta per una scatola piccola: paghi il prezzo effettivo all'ufficio postale al ritiro.",
+      "noteOnReceipt": "Una stima secondo la tariffa di Nova Poshta per una scatola piccola: paghi il prezzo effettivo alla consegna.",
+      "unavailable": "Il prezzo non è disponibile al momento: Nova Poshta lo calcola alla consegna.",
+      "choose": "Scegli dove consegnare per vedere il prezzo"
+    }
   }
 }

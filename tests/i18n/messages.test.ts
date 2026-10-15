@@ -89,6 +89,8 @@ describe("message catalogs", () => {
       error: "Enter a number",
       quantity: 2,
       url: "https://example.com/a.jpg",
+      kg: 30,
+      price: "96,45 ₴",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

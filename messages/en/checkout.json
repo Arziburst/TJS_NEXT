@@ -13,5 +13,51 @@
     "success": "Order success",
     "grandTotal": "Grand total",
     "continueShopping": "Continue shopping"
+  },
+  "delivery": {
+    "title": "Delivery in Ukraine",
+    "city": {
+      "label": "City",
+      "placeholder": "Start typing the city name"
+    },
+    "search": {
+      "searching": "Searching…",
+      "typeMore": "Type at least {min} letters",
+      "empty": "Nothing found",
+      "ukrainianOnly": "Type the name in Ukrainian",
+      "unavailable": "The search is not available right now. Please try again later.",
+      "clear": "Clear",
+      "open": "Show the list"
+    },
+    "method": {
+      "label": "How to receive the parcel",
+      "warehouse": "At a branch or a parcel locker",
+      "address": "By courier to the address",
+      "addressUnavailable": "Nova Poshta does not deliver to addresses in this place"
+    },
+    "warehouse": {
+      "label": "Branch or parcel locker",
+      "placeholder": "Number or street",
+      "filter": "Show",
+      "all": "All",
+      "branch": "Branches",
+      "postomat": "Parcel lockers",
+      "maxWeight": "up to {kg} kg"
+    },
+    "address": {
+      "street": "Street",
+      "streetPlaceholder": "Start typing the street name",
+      "house": "House",
+      "flat": "Flat (optional)"
+    },
+    "quote": {
+      "label": "Delivery by Nova Poshta",
+      "calculating": "Calculating…",
+      "estimate": "≈ {price}",
+      "note": "An estimate by the Nova Poshta tariff for a small box: you pay the actual price at the post office on receipt.",
+      "noteOnReceipt": "An estimate by the Nova Poshta tariff for a small box: you pay the actual price on receipt.",
+      "unavailable": "The price is not available right now: Nova Poshta calculates it on receipt.",
+      "choose": "Choose where to deliver to see the price"
+    }
   }
 }

@@ -31,7 +31,9 @@ now bolds its numbers with `<b>`, as the legacy text did), and from #16 `product
 area (`admin.shell.*`, `admin.status.*`, `admin.fulfillment.*`, `admin.availability.*`, `admin.list.*`,
 `admin.actionErrors.*`, `admin.form.*`; the form reuses the legacy `admin.product.*` labels) and the product
 page's `product.page.clasp`, `dimensions`, `dimension.*`, `leadTimeRange` — written in en, **uk and the other 9
-locales by machine (LLM), unreviewed**. Legacy `{{ index }}` arguments became named ICU
+locales by machine (LLM), unreviewed**; from #22 `checkout.delivery.*` (Nova Poshta city, branch, address and
+price; the legacy app had no such texts beyond `errors.form.chooseCity` / `chooseWarehouse`), uk and the other 9
+locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the
 admin enters USD).
 
