@@ -51,6 +51,8 @@ export type TranslationRow = {
   slug: string;
   title: string;
   description: string | null;
+  materials: string | null;
+  care: string | null;
   alt_text: string | null;
   meta_title: string | null;
   meta_description: string | null;
@@ -76,8 +78,6 @@ export type ProductRow = {
   lead_time_days: number | null;
   price_usd_text: string;
   weight_g: number;
-  materials: string | null;
-  care: string | null;
   created_at: string;
   published_at: string | null;
   category: { id: string; slug: string } | null;
@@ -136,8 +136,8 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
     publishedAt: row.published_at,
     translation: mapTranslation({ ...t, locale: t.locale }, locale),
     images,
-    materials: row.materials,
-    care: row.care,
+    materials: t.materials,
+    care: t.care,
   };
 }
 

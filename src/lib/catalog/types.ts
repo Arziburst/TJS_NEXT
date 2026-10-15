@@ -55,6 +55,7 @@ export type ProductSummary = {
   images: ProductImage[];
 };
 
+/** A product page's data; `materials` and `care` are in `translation.locale`, like the other texts. */
 export type Product = ProductSummary & {
   materials: string | null;
   care: string | null;

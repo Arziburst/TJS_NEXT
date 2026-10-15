@@ -111,7 +111,11 @@ describe.skipIf(!stack)("catalog data layer on the local stack", async () => {
       [600, 600, "Сережки-краплі з коралом на бежевому тлі"],
     ]);
     expect(result.data.images[0]?.url).toMatch(/\/storage\/v1\/object\/public\/product-images\/it\/.+\/1\.jpg$/);
-    expect(result.data).toMatchObject({ materials: "Brass, gold-tone plating, synthetic coral", sku: "TEST-001" });
+    expect(result.data).toMatchObject({
+      sku: "TEST-001",
+      materials: "Латунь, золотисте покриття, синтетичний корал",
+      care: "Берегти від вологи; зберігати окремо",
+    });
   });
 
   it("finds a product by slug, with en fallback and the localized slug for redirects", async () => {

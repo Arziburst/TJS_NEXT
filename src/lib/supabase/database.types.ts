@@ -77,13 +77,13 @@ isOneToOne: false
                   ]
                 },"product_translations": {
                   Row: {
-                    "alt_text": string | null,"created_at": string,"created_by": string | null,"description": string | null,"locale": string,"meta_description": string | null,"meta_title": string | null,"product_id": string,"reviewed_at": string | null,"search_vector": unknown,"slug": string,"source": Database["public"]['Enums']["translation_source"],"title": string,"updated_at": string,"updated_by": string | null
+                    "alt_text": string | null,"care": string | null,"created_at": string,"created_by": string | null,"description": string | null,"locale": string,"materials": string | null,"meta_description": string | null,"meta_title": string | null,"product_id": string,"reviewed_at": string | null,"search_vector": unknown,"slug": string,"source": Database["public"]['Enums']["translation_source"],"title": string,"updated_at": string,"updated_by": string | null
                   }
                   Insert: {
-                    "alt_text"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"locale": string,"meta_description"?: string | null,"meta_title"?: string | null,"product_id": string,"reviewed_at"?: string | null,"search_vector"?: never,"slug": string,"source"?: Database["public"]['Enums']["translation_source"],"title": string,"updated_at"?: string,"updated_by"?: string | null
+                    "alt_text"?: string | null,"care"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"locale": string,"materials"?: string | null,"meta_description"?: string | null,"meta_title"?: string | null,"product_id": string,"reviewed_at"?: string | null,"search_vector"?: never,"slug": string,"source"?: Database["public"]['Enums']["translation_source"],"title": string,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Update: {
-                    "alt_text"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"locale"?: string,"meta_description"?: string | null,"meta_title"?: string | null,"product_id"?: string,"reviewed_at"?: string | null,"search_vector"?: never,"slug"?: string,"source"?: Database["public"]['Enums']["translation_source"],"title"?: string,"updated_at"?: string,"updated_by"?: string | null
+                    "alt_text"?: string | null,"care"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"locale"?: string,"materials"?: string | null,"meta_description"?: string | null,"meta_title"?: string | null,"product_id"?: string,"reviewed_at"?: string | null,"search_vector"?: never,"slug"?: string,"source"?: Database["public"]['Enums']["translation_source"],"title"?: string,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Relationships: [
                     {
@@ -96,13 +96,13 @@ isOneToOne: false
                   ]
                 },"products": {
                   Row: {
-                    "availability": Database["public"]['Enums']["product_availability"],"care": string | null,"category_id": string,"created_at": string,"created_by": string | null,"deleted_at": string | null,"fulfillment": Database["public"]['Enums']["product_fulfillment"],"hs_code": string,"id": string,"lead_time_days": number | null,"materials": string | null,"position": number,"price_usd": number,"published_at": string | null,"sku": string | null,"status": Database["public"]['Enums']["product_status"],"updated_at": string,"updated_by": string | null,"weight_g": number
+                    "availability": Database["public"]['Enums']["product_availability"],"category_id": string,"created_at": string,"created_by": string | null,"deleted_at": string | null,"fulfillment": Database["public"]['Enums']["product_fulfillment"],"hs_code": string,"id": string,"lead_time_days": number | null,"position": number,"price_usd": number,"published_at": string | null,"sku": string | null,"status": Database["public"]['Enums']["product_status"],"updated_at": string,"updated_by": string | null,"weight_g": number
                   }
                   Insert: {
-                    "availability"?: Database["public"]['Enums']["product_availability"],"care"?: string | null,"category_id": string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"hs_code"?: string,"id"?: string,"lead_time_days"?: number | null,"materials"?: string | null,"position"?: number,"price_usd": number,"published_at"?: string | null,"sku"?: string | null,"status"?: Database["public"]['Enums']["product_status"],"updated_at"?: string,"updated_by"?: string | null,"weight_g"?: number
+                    "availability"?: Database["public"]['Enums']["product_availability"],"category_id": string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"hs_code"?: string,"id"?: string,"lead_time_days"?: number | null,"position"?: number,"price_usd": number,"published_at"?: string | null,"sku"?: string | null,"status"?: Database["public"]['Enums']["product_status"],"updated_at"?: string,"updated_by"?: string | null,"weight_g"?: number
                   }
                   Update: {
-                    "availability"?: Database["public"]['Enums']["product_availability"],"care"?: string | null,"category_id"?: string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"hs_code"?: string,"id"?: string,"lead_time_days"?: number | null,"materials"?: string | null,"position"?: number,"price_usd"?: number,"published_at"?: string | null,"sku"?: string | null,"status"?: Database["public"]['Enums']["product_status"],"updated_at"?: string,"updated_by"?: string | null,"weight_g"?: number
+                    "availability"?: Database["public"]['Enums']["product_availability"],"category_id"?: string,"created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"hs_code"?: string,"id"?: string,"lead_time_days"?: number | null,"position"?: number,"price_usd"?: number,"published_at"?: string | null,"sku"?: string | null,"status"?: Database["public"]['Enums']["product_status"],"updated_at"?: string,"updated_by"?: string | null,"weight_g"?: number
                   }
                   Relationships: [
                     {

@@ -35,9 +35,9 @@ const SORTS: readonly ProductSort[] = ["newest", "price_asc", "price_desc"];
 // products; the explicit status / deleted_at filters keep the storefront view the same for any client.
 const PRODUCT_COLUMNS = `
   id, sku, fulfillment, availability, lead_time_days, price_usd_text:price_usd::text, weight_g,
-  materials, care, created_at, published_at,
+  created_at, published_at,
   category:categories!inner(id, slug),
-  product_translations!inner(locale, slug, title, description, alt_text, meta_title, meta_description, source, reviewed_at),
+  product_translations!inner(locale, slug, title, description, materials, care, alt_text, meta_title, meta_description, source, reviewed_at),
   product_images(id, storage_path, position, width, height, blur_data_url, product_image_alts(locale, alt))
 `;
 

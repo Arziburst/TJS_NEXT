@@ -1,100 +1,32 @@
 -- Local and CI seed data, loaded by `npm run db:reset` after the migrations ([db.seed] in config.toml).
--- Dev/QA data only: never production data, and never reference data the app needs (that goes in a migration).
-
--- Categories of D9 in the legacy order. English names are the decision's own words (human); every other
--- locale is a machine translation that the owner has not reviewed yet.
-insert into public.categories (id, slug, position) values
-  ('c0000000-0000-4000-8000-000000000001', 'earrings', 1),
-  ('c0000000-0000-4000-8000-000000000002', 'necklaces', 2),
-  ('c0000000-0000-4000-8000-000000000003', 'bracelets', 3),
-  ('c0000000-0000-4000-8000-000000000004', 'corals', 4),
-  ('c0000000-0000-4000-8000-000000000005', 'rings', 5),
-  ('c0000000-0000-4000-8000-000000000006', 'brooches', 6);
-
-insert into public.category_translations (category_id, locale, name, source)
-select c.id, t.locale, t.name, (case when t.locale = 'en' then 'human' else 'machine' end)::public.translation_source
-from (values
-  ('earrings', 'en', 'Earrings'), ('earrings', 'uk', 'Сережки'), ('earrings', 'de', 'Ohrringe'),
-  ('earrings', 'fr', 'Boucles d''oreilles'), ('earrings', 'es', 'Pendientes'), ('earrings', 'it', 'Orecchini'),
-  ('earrings', 'pl', 'Kolczyki'), ('earrings', 'nl', 'Oorbellen'), ('earrings', 'cs', 'Náušnice'),
-  ('earrings', 'pt', 'Brincos'), ('earrings', 'ro', 'Cercei'),
-
-  ('necklaces', 'en', 'Necklaces'), ('necklaces', 'uk', 'Намиста'), ('necklaces', 'de', 'Halsketten'),
-  ('necklaces', 'fr', 'Colliers'), ('necklaces', 'es', 'Collares'), ('necklaces', 'it', 'Collane'),
-  ('necklaces', 'pl', 'Naszyjniki'), ('necklaces', 'nl', 'Kettingen'), ('necklaces', 'cs', 'Náhrdelníky'),
-  ('necklaces', 'pt', 'Colares'), ('necklaces', 'ro', 'Coliere'),
-
-  ('bracelets', 'en', 'Bracelets'), ('bracelets', 'uk', 'Браслети'), ('bracelets', 'de', 'Armbänder'),
-  ('bracelets', 'fr', 'Bracelets'), ('bracelets', 'es', 'Pulseras'), ('bracelets', 'it', 'Bracciali'),
-  ('bracelets', 'pl', 'Bransoletki'), ('bracelets', 'nl', 'Armbanden'), ('bracelets', 'cs', 'Náramky'),
-  ('bracelets', 'pt', 'Pulseiras'), ('bracelets', 'ro', 'Brățări'),
-
-  ('corals', 'en', 'Corals'), ('corals', 'uk', 'Корали'), ('corals', 'de', 'Korallen'),
-  ('corals', 'fr', 'Coraux'), ('corals', 'es', 'Corales'), ('corals', 'it', 'Coralli'),
-  ('corals', 'pl', 'Korale'), ('corals', 'nl', 'Koralen'), ('corals', 'cs', 'Korály'),
-  ('corals', 'pt', 'Corais'), ('corals', 'ro', 'Corali'),
-
-  ('rings', 'en', 'Rings'), ('rings', 'uk', 'Каблучки'), ('rings', 'de', 'Ringe'),
-  ('rings', 'fr', 'Bagues'), ('rings', 'es', 'Anillos'), ('rings', 'it', 'Anelli'),
-  ('rings', 'pl', 'Pierścionki'), ('rings', 'nl', 'Ringen'), ('rings', 'cs', 'Prsteny'),
-  ('rings', 'pt', 'Anéis'), ('rings', 'ro', 'Inele'),
-
-  ('brooches', 'en', 'Brooches'), ('brooches', 'uk', 'Брошки'), ('brooches', 'de', 'Broschen'),
-  ('brooches', 'fr', 'Broches'), ('brooches', 'es', 'Broches'), ('brooches', 'it', 'Spille'),
-  ('brooches', 'pl', 'Broszki'), ('brooches', 'nl', 'Broches'), ('brooches', 'cs', 'Brože'),
-  ('brooches', 'pt', 'Broches'), ('brooches', 'ro', 'Broșe')
-) as t (slug, locale, name)
-join public.categories c on c.slug = t.slug;
+-- Dev/QA data only: never production data, and never reference data the app needs (that goes in a migration;
+-- the six categories come from 20261016001202_catalog_categories.sql).
 
 -- Synthetic products (not the real catalog, D13 — SKUs, prices, lead times and texts are test values).
 -- Made-to-order and one-of-a-kind pieces, the latter available, reserved and sold. Hidden from the public:
 -- 11 (draft), 13 (archived), 14 (soft-deleted). No images: the files would have to be uploaded to Storage.
 insert into public.products
-  (id, category_id, sku, status, fulfillment, availability, lead_time_days, price_usd, weight_g, materials, care,
-   created_at, deleted_at)
-values
-  ('a0000000-0000-4000-8000-000000000001', 'c0000000-0000-4000-8000-000000000001', 'TEST-001', 'published',
-   'made_to_order', 'available', null, 24.90, 6, 'Brass, gold-tone plating, synthetic coral',
-   'Keep dry; store separately', now() - interval '1 day', null),
-  ('a0000000-0000-4000-8000-000000000002', 'c0000000-0000-4000-8000-000000000001', 'TEST-002', 'published',
-   'made_to_order', 'available', null, 18.50, 4, 'Stainless steel, glass pearl',
-   'Wipe with a soft cloth', now() - interval '3 days', null),
-  ('a0000000-0000-4000-8000-000000000003', 'c0000000-0000-4000-8000-000000000001', 'TEST-003', 'published',
-   'one_of_a_kind', 'available', null, 32.00, 9, 'Brass, gold-tone plating',
-   'Avoid perfume and water', now() - interval '12 days', null),
-  ('a0000000-0000-4000-8000-000000000004', 'c0000000-0000-4000-8000-000000000002', 'TEST-004', 'published',
-   'made_to_order', 'available', null, 39.90, 18, 'Brass, gold-tone plating',
-   'Keep dry; store flat', now() - interval '2 days', null),
-  ('a0000000-0000-4000-8000-000000000005', 'c0000000-0000-4000-8000-000000000002', 'TEST-005', 'published',
-   'one_of_a_kind', 'reserved', null, 45.00, 22, 'Zinc alloy, crystal',
-   'Wipe with a soft cloth', now() - interval '20 days', null),
-  ('a0000000-0000-4000-8000-000000000006', 'c0000000-0000-4000-8000-000000000003', 'TEST-006', 'published',
-   'made_to_order', 'available', null, 21.00, 10, 'Glass beads, elastic cord',
-   'Do not overstretch', now() - interval '25 days', null),
-  ('a0000000-0000-4000-8000-000000000007', 'c0000000-0000-4000-8000-000000000003', 'TEST-007', 'published',
-   'made_to_order', 'available', 10, 27.50, 12, 'Stainless steel',
-   'Wipe with a soft cloth', now() - interval '30 days', null),
-  ('a0000000-0000-4000-8000-000000000008', 'c0000000-0000-4000-8000-000000000004', 'TEST-008', 'published',
-   'one_of_a_kind', 'sold', null, 54.90, 30, 'Synthetic coral, silk thread',
-   'Keep away from water and cosmetics', now() - interval '5 days', null),
-  ('a0000000-0000-4000-8000-000000000009', 'c0000000-0000-4000-8000-000000000004', 'TEST-009', 'published',
-   'one_of_a_kind', 'available', null, 29.90, 8, 'Synthetic coral, elastic cord',
-   'Keep away from water and cosmetics', now() - interval '40 days', null),
-  ('a0000000-0000-4000-8000-000000000010', 'c0000000-0000-4000-8000-000000000005', 'TEST-010', 'published',
-   'made_to_order', 'available', 14, 16.90, 3, 'Brass, silver-tone plating',
-   'Remove before washing hands', now() - interval '45 days', null),
-  ('a0000000-0000-4000-8000-000000000011', 'c0000000-0000-4000-8000-000000000005', 'TEST-011', 'draft',
-   'made_to_order', 'available', null, 22.40, 4, 'Brass, glass stone',
-   'Remove before washing hands', now() - interval '50 days', null),
-  ('a0000000-0000-4000-8000-000000000012', 'c0000000-0000-4000-8000-000000000006', 'TEST-012', 'published',
-   'made_to_order', 'available', null, 19.90, 7, 'Zinc alloy, enamel',
-   'Store in a pouch', now() - interval '60 days', null),
-  ('a0000000-0000-4000-8000-000000000013', 'c0000000-0000-4000-8000-000000000006', 'TEST-013', 'archived',
-   'one_of_a_kind', 'sold', null, 26.00, 6, 'Brass, enamel',
-   'Store in a pouch', now() - interval '90 days', null),
-  ('a0000000-0000-4000-8000-000000000014', 'c0000000-0000-4000-8000-000000000003', 'TEST-014', 'published',
-   'made_to_order', 'available', null, 23.00, 9, 'Stainless steel',
-   'Wipe with a soft cloth', now() - interval '70 days', now() - interval '1 day');
+  (id, category_id, sku, status, fulfillment, availability, lead_time_days, price_usd, weight_g, created_at, deleted_at)
+select p.id::uuid, c.id, p.sku, p.status::public.product_status, p.fulfillment::public.product_fulfillment,
+  p.availability::public.product_availability, p.lead_time_days, p.price_usd, p.weight_g,
+  now() - p.age, now() - p.deleted_ago
+from (values
+  ('a0000000-0000-4000-8000-000000000001', 'earrings', 'TEST-001', 'published', 'made_to_order', 'available', null::int, 24.90, 6, interval '1 day', null::interval),
+  ('a0000000-0000-4000-8000-000000000002', 'earrings', 'TEST-002', 'published', 'made_to_order', 'available', null, 18.50, 4, interval '3 days', null),
+  ('a0000000-0000-4000-8000-000000000003', 'earrings', 'TEST-003', 'published', 'one_of_a_kind', 'available', null, 32.00, 9, interval '12 days', null),
+  ('a0000000-0000-4000-8000-000000000004', 'necklaces', 'TEST-004', 'published', 'made_to_order', 'available', null, 39.90, 18, interval '2 days', null),
+  ('a0000000-0000-4000-8000-000000000005', 'necklaces', 'TEST-005', 'published', 'one_of_a_kind', 'reserved', null, 45.00, 22, interval '20 days', null),
+  ('a0000000-0000-4000-8000-000000000006', 'bracelets', 'TEST-006', 'published', 'made_to_order', 'available', null, 21.00, 10, interval '25 days', null),
+  ('a0000000-0000-4000-8000-000000000007', 'bracelets', 'TEST-007', 'published', 'made_to_order', 'available', 10, 27.50, 12, interval '30 days', null),
+  ('a0000000-0000-4000-8000-000000000008', 'corals', 'TEST-008', 'published', 'one_of_a_kind', 'sold', null, 54.90, 30, interval '5 days', null),
+  ('a0000000-0000-4000-8000-000000000009', 'corals', 'TEST-009', 'published', 'one_of_a_kind', 'available', null, 29.90, 8, interval '40 days', null),
+  ('a0000000-0000-4000-8000-000000000010', 'rings', 'TEST-010', 'published', 'made_to_order', 'available', 14, 16.90, 3, interval '45 days', null),
+  ('a0000000-0000-4000-8000-000000000011', 'rings', 'TEST-011', 'draft', 'made_to_order', 'available', null, 22.40, 4, interval '50 days', null),
+  ('a0000000-0000-4000-8000-000000000012', 'brooches', 'TEST-012', 'published', 'made_to_order', 'available', null, 19.90, 7, interval '60 days', null),
+  ('a0000000-0000-4000-8000-000000000013', 'brooches', 'TEST-013', 'archived', 'one_of_a_kind', 'sold', null, 26.00, 6, interval '90 days', null),
+  ('a0000000-0000-4000-8000-000000000014', 'bracelets', 'TEST-014', 'published', 'made_to_order', 'available', null, 23.00, 9, interval '70 days', interval '1 day')
+) as p (id, category, sku, status, fulfillment, availability, lead_time_days, price_usd, weight_g, age, deleted_ago)
+join public.categories c on c.slug = p.category;
 
 -- en and uk for every product (entered by hand: human); a few machine translations in other locales,
 -- one of them already reviewed.
@@ -186,3 +118,39 @@ values
    'An open cuff in polished steel.', null, null, null, 'human', null),
   ('a0000000-0000-4000-8000-000000000014', 'uk', 'stalevyi-braslet-manzheta', 'Сталевий браслет-манжета',
    'Відкритий браслет-манжета з полірованої сталі.', null, null, null, 'human', null);
+
+-- Materials and care, per locale like every user-visible text (en and uk; the other locales have none).
+update public.product_translations t
+set materials = v.materials, care = v.care
+from (values
+  ('TEST-001', 'en', 'Brass, gold-tone plating, synthetic coral', 'Keep dry; store separately'),
+  ('TEST-001', 'uk', 'Латунь, золотисте покриття, синтетичний корал', 'Берегти від вологи; зберігати окремо'),
+  ('TEST-002', 'en', 'Stainless steel, glass pearl', 'Wipe with a soft cloth'),
+  ('TEST-002', 'uk', 'Нержавна сталь, скляна перлина', 'Протирати м''якою тканиною'),
+  ('TEST-003', 'en', 'Brass, gold-tone plating', 'Avoid perfume and water'),
+  ('TEST-003', 'uk', 'Латунь, золотисте покриття', 'Уникати парфумів і води'),
+  ('TEST-004', 'en', 'Brass, gold-tone plating', 'Keep dry; store flat'),
+  ('TEST-004', 'uk', 'Латунь, золотисте покриття', 'Берегти від вологи; зберігати розкладеним'),
+  ('TEST-005', 'en', 'Zinc alloy, crystal', 'Wipe with a soft cloth'),
+  ('TEST-005', 'uk', 'Цинковий сплав, кристал', 'Протирати м''якою тканиною'),
+  ('TEST-006', 'en', 'Glass beads, elastic cord', 'Do not overstretch'),
+  ('TEST-006', 'uk', 'Скляні намистини, еластичний шнур', 'Не розтягувати надмірно'),
+  ('TEST-007', 'en', 'Stainless steel', 'Wipe with a soft cloth'),
+  ('TEST-007', 'uk', 'Нержавна сталь', 'Протирати м''якою тканиною'),
+  ('TEST-008', 'en', 'Synthetic coral, silk thread', 'Keep away from water and cosmetics'),
+  ('TEST-008', 'uk', 'Синтетичний корал, шовкова нитка', 'Берегти від води та косметики'),
+  ('TEST-009', 'en', 'Synthetic coral, elastic cord', 'Keep away from water and cosmetics'),
+  ('TEST-009', 'uk', 'Синтетичний корал, еластичний шнур', 'Берегти від води та косметики'),
+  ('TEST-010', 'en', 'Brass, silver-tone plating', 'Remove before washing hands'),
+  ('TEST-010', 'uk', 'Латунь, сріблясте покриття', 'Знімати перед миттям рук'),
+  ('TEST-011', 'en', 'Brass, glass stone', 'Remove before washing hands'),
+  ('TEST-011', 'uk', 'Латунь, скляний камінь', 'Знімати перед миттям рук'),
+  ('TEST-012', 'en', 'Zinc alloy, enamel', 'Store in a pouch'),
+  ('TEST-012', 'uk', 'Цинковий сплав, емаль', 'Зберігати в мішечку'),
+  ('TEST-013', 'en', 'Brass, enamel', 'Store in a pouch'),
+  ('TEST-013', 'uk', 'Латунь, емаль', 'Зберігати в мішечку'),
+  ('TEST-014', 'en', 'Stainless steel', 'Wipe with a soft cloth'),
+  ('TEST-014', 'uk', 'Нержавна сталь', 'Протирати м''якою тканиною')
+) as v (sku, locale, materials, care)
+join public.products p on p.sku = v.sku
+where t.product_id = p.id and t.locale = v.locale;

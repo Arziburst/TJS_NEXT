@@ -52,8 +52,6 @@ function productRow(overrides: Record<string, unknown> = {}) {
     lead_time_days: 14,
     price_usd_text: "24.90",
     weight_g: 6,
-    materials: "Brass",
-    care: "Keep dry",
     created_at: "2026-10-14T00:00:00Z",
     published_at: "2026-10-14T00:00:00Z",
     category: { id: "c1", slug: "earrings" },
@@ -63,6 +61,8 @@ function productRow(overrides: Record<string, unknown> = {}) {
         slug: "coral-drop-earrings",
         title: "Coral drop earrings",
         description: null,
+        materials: "Brass",
+        care: "Keep dry",
         alt_text: null,
         meta_title: null,
         meta_description: null,
@@ -74,6 +74,8 @@ function productRow(overrides: Record<string, unknown> = {}) {
         slug: "korallen-ohrringe",
         title: "Korallen-Ohrringe",
         description: null,
+        materials: "Messing",
+        care: "Trocken aufbewahren",
         alt_text: null,
         meta_title: null,
         meta_description: null,
@@ -229,7 +231,11 @@ describe("getProductBySlug", () => {
     expect(calls.product_translations).toContainEqual(["eq", "slug", "korallen-ohrringe"]);
     expect(calls.products).toContainEqual(["eq", "id", "p1"]);
     expect(calls.products).toContainEqual(["eq", "status", "published"]);
-    expect(result.ok && result.data).toMatchObject({ materials: "Brass", care: "Keep dry", translation: { locale: "de" } });
+    expect(result.ok && result.data).toMatchObject({
+      materials: "Messing",
+      care: "Trocken aufbewahren",
+      translation: { locale: "de" },
+    });
   });
 
   it("returns the localized translation when reached by the en slug, so the caller can redirect", async () => {

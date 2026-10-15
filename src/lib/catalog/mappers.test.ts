@@ -40,8 +40,6 @@ describe("mapProduct", () => {
     lead_time_days: null,
     price_usd_text: "54.90",
     weight_g: 30,
-    materials: "Coral",
-    care: "Keep dry",
     created_at: "2026-10-01T00:00:00Z",
     published_at: "2026-10-02T00:00:00Z",
     category: { id: "c1", slug: "corals" },
@@ -51,6 +49,8 @@ describe("mapProduct", () => {
         slug: "red-coral",
         title: "Red coral",
         description: "A strand",
+        materials: "Coral",
+        care: "Keep dry",
         alt_text: "Red coral on beige",
         meta_title: null,
         meta_description: null,
@@ -78,6 +78,7 @@ describe("mapProduct", () => {
     expect(p?.translation).toMatchObject({ locale: "en", slug: "red-coral", isFallback: true });
     expect(p?.priceUsdMinor).toBe(5490);
     expect(p?.availability).toBe("sold");
+    expect([p?.materials, p?.care]).toEqual(["Coral", "Keep dry"]);
   });
 
   it("orders images by position and picks the alt per locale, then the product alt text", () => {
