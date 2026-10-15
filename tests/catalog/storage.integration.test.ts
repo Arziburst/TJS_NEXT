@@ -14,6 +14,8 @@ const PNG = Buffer.from(
 );
 
 describe.skipIf(!stack)("product-images bucket on the local stack", () => {
+  // a skipped describe still runs its body to collect the tests: nothing below may touch the stack
+  if (!stack) return;
   const service = createClient<Database>(stack!.url, stack!.serviceRoleKey, { auth: { persistSession: false } });
   const userIds: string[] = [];
   const prefix = `it-${crypto.randomUUID()}`;

@@ -87,6 +87,10 @@ jobs:
         # The names the app reads, by the same mapping as `npm run supabase:start:worktree` (public CLI demo keys).
         run: pwsh -NoProfile -File scripts/ci/Write-StackEnv.ps1
 
+      - name: Integration tests (local stack)
+        # The *.integration.test.ts files skip in the unit step (no stack yet) and run here against the stack.
+        run: npm run test:integration
+
       - name: Install the Playwright browser
         run: npx playwright install --with-deps chromium
 
