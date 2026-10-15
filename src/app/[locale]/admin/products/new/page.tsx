@@ -7,6 +7,8 @@ import { saveProduct } from "@/app/[locale]/admin/actions";
 import { AdminPending, AdminShell } from "@/components/admin/admin-shell";
 import { NEW_PRODUCT_HREF } from "@/components/admin/paths";
 import { ProductForm } from "@/components/admin/product-form";
+import { ProductTermsFields } from "@/components/admin/product-terms-fields";
+import { listAdminTerms } from "@/lib/admin/taxonomy";
 import { routing } from "@/i18n/routing";
 import { getAdmin, requireAdmin } from "@/lib/auth/session";
 import { getCachedCategories } from "@/lib/catalog/cache";
@@ -29,7 +31,11 @@ async function NewProduct({ params }: PageProps<"/[locale]/admin/products/new">)
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   await requireAdmin(locale, `/${locale}${NEW_PRODUCT_HREF}`);
-  const [t, categories] = await Promise.all([getTranslations("admin.form"), getCachedCategories(locale)]);
+  const [t, categories, terms] = await Promise.all([
+    getTranslations("admin.form"),
+    getCachedCategories(locale),
+    listAdminTerms(locale),
+  ]);
 
   return (
     <AdminShell>
@@ -40,6 +46,7 @@ async function NewProduct({ params }: PageProps<"/[locale]/admin/products/new">)
             product={null}
             categories={categories.data.map((c) => ({ id: c.id, name: c.name }))}
             saveProduct={saveProduct}
+            taxonomy={<ProductTermsFields terms={terms.ok ? terms.data : null} selected={[]} />}
           />
         ) : (
           <p role="alert" className="border-2 border-destructive p-3 font-input text-sm">

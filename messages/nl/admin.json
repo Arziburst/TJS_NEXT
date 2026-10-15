@@ -30,6 +30,7 @@
     "nav": "Beheer",
     "products": "Producten",
     "newProduct": "Toevoegen",
+    "attributes": "Materialen & kleuren",
     "viewShop": "Winkel"
   },
   "status": {
@@ -105,6 +106,7 @@
       "making": "Vervaardiging en beschikbaarheid",
       "dimensions": "Afmetingen",
       "translations": "Teksten in alle talen",
+      "taxonomy": "Materialen en kleuren",
       "photos": "Foto’s",
       "publication": "Publicatie"
     },
@@ -122,6 +124,7 @@
     "heightMm": "Hoogte, mm",
     "dimensionsHint": "Optioneel; in millimeters, hoogstens één decimaal.",
     "translationsHint": "Oekraïens is nodig om te publiceren; een taal zonder titel wordt niet getoond, de winkel toont dan de Engelse tekst.",
+    "manageTerms": "Lijsten van materialen en kleuren bewerken",
     "status": "Status",
     "position": "Positie",
     "positionHint": "Een getal voor handmatige volgorde; standaard 0.",
@@ -170,6 +173,7 @@
       "notAuthorized": "Alleen het beheer kan dit doen. Meld je opnieuw aan.",
       "notFound": "Dit product bestaat niet meer.",
       "conflict": "Een ander product heeft dit adres of artikelnummer net genomen. Controleer en sla opnieuw op.",
+      "termsChanged": "Een gekozen materiaal of kleur is zojuist verwijderd. Controleer de lijst en sla opnieuw op.",
       "unexpectedError": "Het product kon niet worden opgeslagen. Probeer het opnieuw.",
       "required": "Dit veld is verplicht",
       "tooLong": "Hoogstens {max} tekens",
@@ -181,6 +185,50 @@
       "leadTimeOrder": "Mag niet kleiner zijn dan ‘Van’",
       "titleRequired": "Voer een titel in deze taal in of maak de andere teksten ervan leeg",
       "requiredToPublish": "Om te publiceren is een Oekraïense titel nodig"
+    }
+  },
+  "taxonomy": {
+    "title": "Materialen en kleuren",
+    "intro": "De filters van de winkel tonen ze. Elk heeft een Oekraïense naam nodig; een taal zonder eigen naam toont de Engelse, anders de Oekraïense.",
+    "kinds": {
+      "material": "Materialen",
+      "colour": "Kleuren"
+    },
+    "add": {
+      "material": "Materiaal toevoegen",
+      "colour": "Kleur toevoegen"
+    },
+    "empty": {
+      "material": "Nog geen materialen.",
+      "colour": "Nog geen kleuren."
+    },
+    "nameIn": "Naam ({language})",
+    "required": "(verplicht)",
+    "otherLocales": "Andere talen",
+    "slug": "In winkellinks: {slug}",
+    "usedBy": "{count, plural, =0 {Niet gebruikt} one {Gebruikt door # product} other {Gebruikt door # producten}}",
+    "save": "Opslaan",
+    "saving": "Opslaan…",
+    "create": "Toevoegen",
+    "saved": "Opgeslagen",
+    "created": "Toegevoegd",
+    "delete": "Verwijderen",
+    "deleteTitle": "‘{name}’ verwijderen?",
+    "deleteDescription": "Het verdwijnt uit de filters van de winkel. Dit kan niet ongedaan worden gemaakt.",
+    "deleteConfirm": "Verwijderen",
+    "cancel": "Annuleren",
+    "deleted": "‘{name}’ verwijderd",
+    "inUseHint": "Producten gebruiken het: vink het uit in hun formulieren om het te verwijderen.",
+    "loadError": "De lijsten konden niet worden geladen. Probeer het opnieuw.",
+    "errors": {
+      "required": "Vul de Oekraïense naam in",
+      "tooLong": "Maximaal {max} tekens",
+      "notAuthorized": "Alleen de beheerder kan dit doen. Log opnieuw in.",
+      "notFound": "Dit item bestaat niet meer.",
+      "nameTaken": "Een ander item in deze lijst heeft deze naam al.",
+      "invalid": "Dit verzoek is ongeldig.",
+      "unexpectedError": "Er ging iets mis. Probeer het opnieuw.",
+      "inUse": "Producten gebruiken het: vink het eerst uit in hun formulieren."
     }
   }
 }

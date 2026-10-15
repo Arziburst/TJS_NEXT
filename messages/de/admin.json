@@ -30,6 +30,7 @@
     "nav": "Verwaltung",
     "products": "Produkte",
     "newProduct": "Neu",
+    "attributes": "Materialien & Farben",
     "viewShop": "Shop"
   },
   "status": {
@@ -105,6 +106,7 @@
       "making": "Fertigung und Verfügbarkeit",
       "dimensions": "Maße",
       "translations": "Texte in allen Sprachen",
+      "taxonomy": "Materialien und Farben",
       "photos": "Fotos",
       "publication": "Veröffentlichung"
     },
@@ -122,6 +124,7 @@
     "heightMm": "Höhe, mm",
     "dimensionsHint": "Optional; in Millimetern, bis zu einer Nachkommastelle.",
     "translationsHint": "Ukrainisch ist zum Veröffentlichen nötig; eine Sprache ohne Titel wird nicht gezeigt, der Shop zeigt dann den englischen Text.",
+    "manageTerms": "Listen der Materialien und Farben bearbeiten",
     "status": "Status",
     "position": "Position",
     "positionHint": "Eine Zahl für die manuelle Reihenfolge; standardmäßig 0.",
@@ -170,6 +173,7 @@
       "notAuthorized": "Nur die Verwaltung darf das. Bitte melden Sie sich erneut an.",
       "notFound": "Dieses Produkt existiert nicht mehr.",
       "conflict": "Ein anderes Produkt hat diese Adresse oder Artikelnummer gerade übernommen. Bitte prüfen und erneut speichern.",
+      "termsChanged": "Ein gewähltes Material oder eine gewählte Farbe wurde gerade gelöscht. Bitte prüfen Sie die Liste und speichern Sie erneut.",
       "unexpectedError": "Das Produkt konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
       "required": "Dieses Feld ist erforderlich",
       "tooLong": "Höchstens {max} Zeichen",
@@ -181,6 +185,50 @@
       "leadTimeOrder": "Darf nicht kleiner als „Von“ sein",
       "titleRequired": "Geben Sie einen Titel in dieser Sprache ein oder leeren Sie ihre anderen Texte",
       "requiredToPublish": "Zum Veröffentlichen ist ein ukrainischer Titel nötig"
+    }
+  },
+  "taxonomy": {
+    "title": "Materialien und Farben",
+    "intro": "Die Filter des Shops listen sie auf. Jeder Eintrag braucht seinen ukrainischen Namen; eine Sprache ohne eigenen Namen zeigt den englischen, sonst den ukrainischen.",
+    "kinds": {
+      "material": "Materialien",
+      "colour": "Farben"
+    },
+    "add": {
+      "material": "Material hinzufügen",
+      "colour": "Farbe hinzufügen"
+    },
+    "empty": {
+      "material": "Noch keine Materialien.",
+      "colour": "Noch keine Farben."
+    },
+    "nameIn": "Name ({language})",
+    "required": "(erforderlich)",
+    "otherLocales": "Weitere Sprachen",
+    "slug": "In Shop-Links: {slug}",
+    "usedBy": "{count, plural, =0 {Nicht verwendet} one {Bei # Produkt verwendet} other {Bei # Produkten verwendet}}",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "create": "Hinzufügen",
+    "saved": "Gespeichert",
+    "created": "Hinzugefügt",
+    "delete": "Löschen",
+    "deleteTitle": "„{name}“ löschen?",
+    "deleteDescription": "Der Eintrag verschwindet aus den Filtern des Shops. Das kann nicht rückgängig gemacht werden.",
+    "deleteConfirm": "Löschen",
+    "cancel": "Abbrechen",
+    "deleted": "„{name}“ gelöscht",
+    "inUseHint": "Produkte verwenden ihn: Entfernen Sie das Häkchen in deren Formularen, um ihn zu löschen.",
+    "loadError": "Die Listen konnten nicht geladen werden. Bitte versuchen Sie es erneut.",
+    "errors": {
+      "required": "Geben Sie den ukrainischen Namen ein",
+      "tooLong": "Höchstens {max} Zeichen",
+      "notAuthorized": "Nur der Admin kann das tun. Bitte melden Sie sich erneut an.",
+      "notFound": "Dieser Eintrag existiert nicht mehr.",
+      "nameTaken": "Ein anderer Eintrag dieser Liste hat bereits diesen Namen.",
+      "invalid": "Diese Anfrage ist ungültig.",
+      "unexpectedError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "inUse": "Produkte verwenden ihn: Entfernen Sie zuerst das Häkchen in deren Formularen."
     }
   }
 }

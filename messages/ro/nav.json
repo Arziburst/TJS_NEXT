@@ -1,5 +1,8 @@
 {
   "shop": "Magazin",
+  "search": "Căutare",
+  "searchLabel": "Caută în magazin",
+  "searchPlaceholder": "Caută…",
   "aboutUs": "Despre noi",
   "contacts": "Contacte",
   "favorites": "Favorite",

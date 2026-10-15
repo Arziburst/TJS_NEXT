@@ -30,6 +30,8 @@ type ProductFormProps = {
   photos?: ReactNode;
   /** The delete button of an existing product, rendered by the page. */
   deleteButton?: ReactNode;
+  /** The materials and colours to choose from, and the product's (#25), rendered by the page. */
+  taxonomy?: ReactNode;
 };
 
 const idle: SaveProductState = { status: "idle" };
@@ -44,7 +46,7 @@ function localesWithErrors(fields: FieldErrors | undefined): Locale[] {
  * tiles, the texts of every locale in disclosures, and a save bar that stays at the bottom of the screen.
  * The server action validates everything again; its field errors are listed on top and shown at each field.
  */
-export function ProductForm({ product, categories, saveProduct, photos, deleteButton }: ProductFormProps) {
+export function ProductForm({ product, categories, saveProduct, photos, deleteButton, taxonomy }: ProductFormProps) {
   const t = useTranslations("admin.form");
   const tAdmin = useTranslations("admin");
   const errorText = useFieldErrorText();
@@ -243,6 +245,8 @@ export function ProductForm({ product, categories, saveProduct, photos, deleteBu
           />
         ))}
       </section>
+
+      {taxonomy}
 
       {photos}
 

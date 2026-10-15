@@ -30,6 +30,7 @@
     "nav": "Administrare",
     "products": "Produse",
     "newProduct": "Adaugă",
+    "attributes": "Materiale și culori",
     "viewShop": "Magazin"
   },
   "status": {
@@ -105,6 +106,7 @@
       "making": "Realizare și disponibilitate",
       "dimensions": "Dimensiuni",
       "translations": "Texte în toate limbile",
+      "taxonomy": "Materiale și culori",
       "photos": "Fotografii",
       "publication": "Publicare"
     },
@@ -122,6 +124,7 @@
     "heightMm": "Înălțime, mm",
     "dimensionsHint": "Opțional; în milimetri, cel mult o zecimală.",
     "translationsHint": "Ucraineana este necesară pentru publicare; o limbă fără titlu nu este afișată, magazinul arată atunci textul în engleză.",
+    "manageTerms": "Editează listele de materiale și culori",
     "status": "Stare",
     "position": "Poziție",
     "positionHint": "Un număr pentru ordonarea manuală; implicit 0.",
@@ -170,6 +173,7 @@
       "notAuthorized": "Doar administrarea poate face asta. Conectați-vă din nou.",
       "notFound": "Acest produs nu mai există.",
       "conflict": "Alt produs tocmai a preluat această adresă sau acest cod. Verificați și salvați din nou.",
+      "termsChanged": "Un material sau o culoare aleasă tocmai a fost ștearsă. Verificați lista și salvați din nou.",
       "unexpectedError": "Produsul nu a putut fi salvat. Încercați din nou.",
       "required": "Acest câmp este obligatoriu",
       "tooLong": "Cel mult {max} caractere",
@@ -181,6 +185,50 @@
       "leadTimeOrder": "Nu poate fi mai mic decât „De la”",
       "titleRequired": "Introduceți un titlu în această limbă sau goliți celelalte texte ale ei",
       "requiredToPublish": "Pentru publicare este necesar un titlu în ucraineană"
+    }
+  },
+  "taxonomy": {
+    "title": "Materiale și culori",
+    "intro": "Filtrele magazinului le afișează. Fiecare are nevoie de numele în ucraineană; o limbă fără nume propriu îl arată pe cel englez, altfel pe cel ucrainean.",
+    "kinds": {
+      "material": "Materiale",
+      "colour": "Culori"
+    },
+    "add": {
+      "material": "Adaugă un material",
+      "colour": "Adaugă o culoare"
+    },
+    "empty": {
+      "material": "Încă nu există materiale.",
+      "colour": "Încă nu există culori."
+    },
+    "nameIn": "Nume ({language})",
+    "required": "(obligatoriu)",
+    "otherLocales": "Alte limbi",
+    "slug": "În linkurile magazinului: {slug}",
+    "usedBy": "{count, plural, =0 {Nefolosit} one {Folosit de # produs} few {Folosit de # produse} other {Folosit de # de produse}}",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "create": "Adaugă",
+    "saved": "Salvat",
+    "created": "Adăugat",
+    "delete": "Șterge",
+    "deleteTitle": "Ștergeți „{name}”?",
+    "deleteDescription": "Dispare din filtrele magazinului. Acțiunea nu poate fi anulată.",
+    "deleteConfirm": "Șterge",
+    "cancel": "Anulează",
+    "deleted": "„{name}” a fost șters",
+    "inUseHint": "Unele produse îl folosesc: debifați-l în formularele lor pentru a-l șterge.",
+    "loadError": "Listele nu au putut fi încărcate. Încercați din nou.",
+    "errors": {
+      "required": "Introduceți numele în ucraineană",
+      "tooLong": "Cel mult {max} caractere",
+      "notAuthorized": "Doar administratorul poate face asta. Autentificați-vă din nou.",
+      "notFound": "Această intrare nu mai există.",
+      "nameTaken": "O altă intrare din această listă are deja acest nume.",
+      "invalid": "Această cerere nu este validă.",
+      "unexpectedError": "Ceva nu a mers bine. Încercați din nou.",
+      "inUse": "Unele produse îl folosesc: debifați-l mai întâi în formularele lor."
     }
   }
 }

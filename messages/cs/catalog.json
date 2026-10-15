@@ -15,9 +15,42 @@
   },
   "sort": {
     "newest": "Nejnovější",
+    "relevance": "Relevance",
     "placeholder": "Vyberte filtr",
     "priceAsc": "Cena (od nejnižší)",
     "priceDesc": "Cena (od nejvyšší)"
+  },
+  "filters": {
+    "title": "Filtry",
+    "open": "{count, plural, =0 {Filtry} other {Filtry (#)}}",
+    "close": "Zavřít filtry",
+    "material": "Materiál",
+    "colour": "Barva",
+    "availability": "Dostupnost",
+    "availabilityOptions": {
+      "in_stock": "Skladem",
+      "made_to_order": "Na objednávku"
+    },
+    "price": "Cena, {currency}",
+    "priceMin": "Od",
+    "priceMax": "Do",
+    "priceUnavailable": "Ceny teď nejsou dostupné, proto se cenové rozpětí nepoužije.",
+    "apply": "Použít",
+    "showResults": "Zobrazit výsledky",
+    "clear": "Zrušit filtry",
+    "noMatch": "Těmto filtrům neodpovídá žádný produkt."
+  },
+  "search": {
+    "title": "Hledat",
+    "prompt": "Napište, co hledáte: šperk, materiál nebo barvu.",
+    "found": "{count, plural, =0 {Pro „{query}“ nebylo nic nalezeno} one {Pro „{query}“ nalezen # kus} few {Pro „{query}“ nalezeny # kusy} many {Pro „{query}“ nalezeno # kusu} other {Pro „{query}“ nalezeno # kusů}}",
+    "noResults": "Pro „{query}“ nebylo nic nalezeno.",
+    "noResultsHint": "Zkontrolujte pravopis nebo zkuste jiné slovo.",
+    "browseShop": "Přejít do obchodu",
+    "meta": {
+      "title": "Hledat",
+      "description": "Hledejte ručně vyráběné šperky TJS podle názvu, materiálu nebo barvy."
+    }
   },
   "newBadge": "Novinka",
   "loadError": "Produkty se nepodařilo načíst. Zkuste to prosím později.",

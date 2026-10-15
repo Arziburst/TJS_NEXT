@@ -4,6 +4,7 @@ import { refresh } from "next/cache";
 import { z } from "zod";
 import { parseProductForm, STATUSES, type FieldErrors } from "@/lib/admin/product-form";
 import { findSaveConflicts, getStoredProduct, sourceAfterSave } from "@/lib/admin/products";
+import { parseTermIds, PRODUCT_TERMS_FIELD } from "@/lib/admin/taxonomy-form";
 import { revalidateProduct } from "@/lib/admin/revalidate";
 import { getAdmin } from "@/lib/auth/session";
 import { createSessionClient } from "@/lib/supabase/server";
@@ -14,7 +15,7 @@ import { createSessionClient } from "@/lib/supabase/server";
  * the audit trigger apply: created_by / updated_by come from the JWT), then expires the storefront caches.
  */
 
-export type AdminFormError = "notAuthorized" | "notFound" | "conflict" | "unexpectedError";
+export type AdminFormError = "notAuthorized" | "notFound" | "conflict" | "termsChanged" | "unexpectedError";
 
 export type SaveProductState =
   | { status: "idle" }
@@ -38,6 +39,9 @@ export async function saveProduct(_previous: SaveProductState, formData: FormDat
   const parsed = parseProductForm(formValues(formData));
   if (!parsed.ok) return { status: "error", fields: parsed.fields };
   const { id, product, translations } = parsed.input;
+  // the materials and colours (#25), when the form showed their lists; else the product keeps its own
+  const termIds = formData.has(`${PRODUCT_TERMS_FIELD}-shown`) ? parseTermIds(formData.getAll(PRODUCT_TERMS_FIELD)) : undefined;
+  if (termIds === null) return failed("unexpectedError");
 
   const stored = id === null ? null : await getStoredProduct(id);
   if (stored === "notFound") return failed("notFound");
@@ -60,17 +64,23 @@ export async function saveProduct(_previous: SaveProductState, formData: FormDat
   let savedId: string;
   try {
     const supabase = await createSessionClient();
-    const { data, error } = await supabase.rpc("admin_save_product", {
+    const args = {
       // a new product has no id yet; the function inserts it
       p_id: id as string,
       p_product: product,
       p_translations: payload,
-    });
+    };
+    const { data, error } =
+      termIds === undefined
+        ? await supabase.rpc("admin_save_product", args)
+        : await supabase.rpc("admin_save_product_with_terms", { ...args, p_term_ids: termIds });
     if (error) {
       if (error.code === "42501") return failed("notAuthorized");
       if (error.code === "P0002") return failed("notFound");
       // a slug or SKU taken between the check and the save
       if (error.code === "23505") return failed("conflict");
+      // a ticked material or colour deleted meanwhile
+      if (error.code === "23503") return failed("termsChanged");
       return failed("unexpectedError");
     }
     savedId = data;

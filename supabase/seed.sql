@@ -171,6 +171,54 @@ from (values
 join public.products p on p.sku = v.sku
 where t.product_id = p.id and t.locale = v.locale;
 
+-- Materials and colours of the filters (#25): test values for local work and e2e, following the seed products'
+-- material texts. Production starts with empty lists; the owner enters the real ones in the admin.
+insert into public.taxonomy_terms (id, kind, slug, position) values
+  ('d2500000-0000-4000-8000-000000000001', 'material', 'brass', 0),
+  ('d2500000-0000-4000-8000-000000000002', 'material', 'synthetic-coral', 0),
+  ('d2500000-0000-4000-8000-000000000003', 'material', 'stainless-steel', 0),
+  ('d2500000-0000-4000-8000-000000000004', 'material', 'glass', 0),
+  ('d2500000-0000-4000-8000-000000000011', 'colour', 'red', 0),
+  ('d2500000-0000-4000-8000-000000000012', 'colour', 'gold-tone', 0),
+  ('d2500000-0000-4000-8000-000000000013', 'colour', 'silver-tone', 0);
+
+insert into public.taxonomy_term_translations (term_id, locale, name) values
+  ('d2500000-0000-4000-8000-000000000001', 'uk', 'Латунь'),
+  ('d2500000-0000-4000-8000-000000000001', 'en', 'Brass'),
+  ('d2500000-0000-4000-8000-000000000001', 'de', 'Messing'),
+  ('d2500000-0000-4000-8000-000000000002', 'uk', 'Синтетичний корал'),
+  ('d2500000-0000-4000-8000-000000000002', 'en', 'Synthetic coral'),
+  ('d2500000-0000-4000-8000-000000000003', 'uk', 'Нержавна сталь'),
+  ('d2500000-0000-4000-8000-000000000003', 'en', 'Stainless steel'),
+  ('d2500000-0000-4000-8000-000000000004', 'uk', 'Скло'),
+  ('d2500000-0000-4000-8000-000000000004', 'en', 'Glass'),
+  ('d2500000-0000-4000-8000-000000000011', 'uk', 'Червоний'),
+  ('d2500000-0000-4000-8000-000000000011', 'en', 'Red'),
+  ('d2500000-0000-4000-8000-000000000012', 'uk', 'Золотистий'),
+  ('d2500000-0000-4000-8000-000000000012', 'en', 'Gold-tone'),
+  ('d2500000-0000-4000-8000-000000000013', 'uk', 'Сріблястий'),
+  ('d2500000-0000-4000-8000-000000000013', 'en', 'Silver-tone');
+
+-- TEST-011 (a draft) keeps its glass stone: its link is hidden from the public with the product.
+insert into public.product_taxonomy_terms (product_id, term_id)
+select p.id, v.term_id::uuid
+from (values
+  ('TEST-001', 'd2500000-0000-4000-8000-000000000001'), ('TEST-001', 'd2500000-0000-4000-8000-000000000002'),
+  ('TEST-001', 'd2500000-0000-4000-8000-000000000012'), ('TEST-001', 'd2500000-0000-4000-8000-000000000011'),
+  ('TEST-002', 'd2500000-0000-4000-8000-000000000003'), ('TEST-002', 'd2500000-0000-4000-8000-000000000004'),
+  ('TEST-002', 'd2500000-0000-4000-8000-000000000013'),
+  ('TEST-003', 'd2500000-0000-4000-8000-000000000001'), ('TEST-003', 'd2500000-0000-4000-8000-000000000012'),
+  ('TEST-004', 'd2500000-0000-4000-8000-000000000001'), ('TEST-004', 'd2500000-0000-4000-8000-000000000012'),
+  ('TEST-006', 'd2500000-0000-4000-8000-000000000004'),
+  ('TEST-007', 'd2500000-0000-4000-8000-000000000003'), ('TEST-007', 'd2500000-0000-4000-8000-000000000013'),
+  ('TEST-008', 'd2500000-0000-4000-8000-000000000002'), ('TEST-008', 'd2500000-0000-4000-8000-000000000011'),
+  ('TEST-009', 'd2500000-0000-4000-8000-000000000002'), ('TEST-009', 'd2500000-0000-4000-8000-000000000011'),
+  ('TEST-010', 'd2500000-0000-4000-8000-000000000001'), ('TEST-010', 'd2500000-0000-4000-8000-000000000013'),
+  ('TEST-011', 'd2500000-0000-4000-8000-000000000004'),
+  ('TEST-014', 'd2500000-0000-4000-8000-000000000003')
+) as v (sku, term_id)
+join public.products p on p.sku = v.sku;
+
 -- Exchange rates for local work and e2e: the NBU rates of 2026-10-15 (UAH per unit), the USD→X cross rates
 -- derived from them as the daily job does (rounded to 10 places), and display rates equal to the cross rates.
 with nbu (currency, rate) as (

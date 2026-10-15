@@ -15,9 +15,42 @@
   },
   "sort": {
     "newest": "Nouveautés",
+    "relevance": "Pertinence",
     "placeholder": "Choisir un tri",
     "priceAsc": "Prix (croissant)",
     "priceDesc": "Prix (décroissant)"
+  },
+  "filters": {
+    "title": "Filtres",
+    "open": "{count, plural, =0 {Filtres} other {Filtres (#)}}",
+    "close": "Fermer les filtres",
+    "material": "Matière",
+    "colour": "Couleur",
+    "availability": "Disponibilité",
+    "availabilityOptions": {
+      "in_stock": "En stock",
+      "made_to_order": "Sur commande"
+    },
+    "price": "Prix, {currency}",
+    "priceMin": "De",
+    "priceMax": "À",
+    "priceUnavailable": "Les prix sont indisponibles pour le moment, la fourchette de prix n’est donc pas appliquée.",
+    "apply": "Appliquer",
+    "showResults": "Voir les résultats",
+    "clear": "Effacer les filtres",
+    "noMatch": "Aucun produit ne correspond à ces filtres."
+  },
+  "search": {
+    "title": "Recherche",
+    "prompt": "Saisissez ce que vous cherchez : un bijou, une matière ou une couleur.",
+    "found": "{count, plural, =0 {Aucun résultat pour « {query} »} one {# pièce trouvée pour « {query} »} other {# pièces trouvées pour « {query} »}}",
+    "noResults": "Aucun résultat pour « {query} ».",
+    "noResultsHint": "Vérifiez l’orthographe ou essayez un autre mot.",
+    "browseShop": "Voir la boutique",
+    "meta": {
+      "title": "Recherche",
+      "description": "Recherchez les bijoux faits main de TJS par nom, matière ou couleur."
+    }
   },
   "newBadge": "Nouveau",
   "loadError": "Impossible de charger les produits. Veuillez réessayer plus tard.",

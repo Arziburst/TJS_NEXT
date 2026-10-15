@@ -40,12 +40,15 @@ export async function AdminShell({ children }: { children: ReactNode }) {
           <p className="hidden px-3 pb-3 font-sans text-xs font-semibold tracking-[0.2em] uppercase sb:block">
             {t("title")}
           </p>
-          <ul className="grid grid-cols-3 sb:grid-cols-1 sb:gap-1">
+          <ul className="grid grid-cols-4 sb:grid-cols-1 sb:gap-1">
             <li>
               <AdminNavLink entry="products" label={t("products")} />
             </li>
             <li>
               <AdminNavLink entry="add" label={t("newProduct")} />
+            </li>
+            <li>
+              <AdminNavLink entry="attributes" label={t("attributes")} />
             </li>
             <li>
               <AdminNavLink entry="shop" label={t("viewShop")} />
