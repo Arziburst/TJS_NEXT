@@ -69,7 +69,6 @@ export function ProductForm({ product, categories, saveProduct, photos, deleteBu
     if (state.status === "saved") {
       toast.success(t(state.created ? "created" : "saved"));
       if (state.created) router.replace(editProductHref(state.id));
-      else router.refresh();
     }
   }, [state, t, router]);
 

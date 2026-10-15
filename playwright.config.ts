@@ -6,6 +6,7 @@ const externalBaseURL = process.env.E2E_BASE_URL || undefined;
 const baseURL = externalBaseURL ?? `http://localhost:${port}`;
 // E2E_SERVER=start serves the production build (`npm run build` first), as CI does; default `next dev`.
 const serverScript = process.env.E2E_SERVER === "start" ? "start" : "dev";
+const ADMIN_TESTS = "admin.e2e.ts";
 
 export default defineConfig({
   testDir: "./e2e",
@@ -27,11 +28,27 @@ export default defineConfig({
       name: "desktop",
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
       dependencies: ["catalog-fixtures"],
+      testIgnore: ADMIN_TESTS,
     },
     {
       name: "mobile",
       use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
       dependencies: ["catalog-fixtures"],
+      testIgnore: ADMIN_TESTS,
+    },
+    // the admin tests publish products, which changes the listings the storefront tests count: they run after
+    // them (a failed storefront test skips them; the failure is reported either way)
+    {
+      name: "admin-desktop",
+      testMatch: ADMIN_TESTS,
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
+      dependencies: ["desktop", "mobile"],
+    },
+    {
+      name: "admin-mobile",
+      testMatch: ADMIN_TESTS,
+      use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
+      dependencies: ["desktop", "mobile"],
     },
   ],
   webServer: externalBaseURL

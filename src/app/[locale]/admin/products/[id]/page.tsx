@@ -72,7 +72,11 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
           </Link>
           <h1 className="text-xl font-bold tracking-[0.2em] break-words uppercase sb:text-2xl">{title ?? t("editTitle")}</h1>
           {shopSlug && (
-            <Link href={productHref(shopSlug)} className={buttonVariants({ variant: "outline", size: "sm", className: "min-h-11 justify-self-start" })}>
+            <Link
+              href={productHref(shopSlug)}
+              // not prefetched: the admin rarely leaves for the shop, and a product page prefetch keeps a request open
+              prefetch={false}
+              className={buttonVariants({ variant: "outline", size: "sm", className: "min-h-11 justify-self-start" })}>
               <ExternalLinkIcon aria-hidden />
               {t("viewInShop")}
             </Link>
@@ -80,8 +84,6 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
         </header>
         {product.ok && categories.ok ? (
           <ProductForm
-            // a saved product re-renders with its stored values
-            key={product.data.updatedAt}
             product={product.data}
             categories={categories.data.map((c) => ({ id: c.id, name: c.name }))}
             saveProduct={saveProduct}
