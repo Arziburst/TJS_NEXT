@@ -3,10 +3,7 @@
     "title": "TJS : bijoux tendance et élégants",
     "description": "TJS est une boutique de bijoux tendance et élégants, que la créatrice fait naître."
   },
-  "placeholder": {
-    "text": "Page d’accueil provisoire. La boutique sera construite dans les prochaines tâches.",
-    "comingSoon": "Bientôt disponible"
-  },
+  "introBrand": "TJStore",
   "intro": "est une boutique de bijoux tendance et élégants, que la créatrice fait naître.",
   "seeAll": "Tout voir",
   "seeAllImageAlt": "Image « Tout voir »",

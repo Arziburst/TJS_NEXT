@@ -19,8 +19,19 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
-    { name: "mobile", use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } } },
+    // products for the catalog flows (e2e/catalog-fixtures.ts), written to the local stack and removed after
+    { name: "catalog-fixtures", testMatch: "catalog.setup.ts", teardown: "catalog-fixtures-teardown" },
+    { name: "catalog-fixtures-teardown", testMatch: "catalog.teardown.ts" },
+    {
+      name: "desktop",
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
+      dependencies: ["catalog-fixtures"],
+    },
+    {
+      name: "mobile",
+      use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
+      dependencies: ["catalog-fixtures"],
+    },
   ],
   webServer: externalBaseURL
     ? undefined

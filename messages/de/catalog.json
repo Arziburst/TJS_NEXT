@@ -3,7 +3,7 @@
   "filterShopBy": "Einkaufen nach",
   "filterBy": "Filtern nach",
   "showMore": "Mehr anzeigen",
-  "shownCount": "{shown} von {total} Produkten angezeigt",
+  "shownCount": "{total, plural, one {<b>{shown}</b> von <b>#</b> Produkt angezeigt} other {<b>{shown}</b> von <b>#</b> Produkten angezeigt}}",
   "categories": {
     "all": "Alle ansehen",
     "earrings": "Ohrringe",
@@ -14,8 +14,25 @@
     "brooches": "Broschen"
   },
   "sort": {
+    "newest": "Neueste",
     "placeholder": "Sortierung wählen",
     "priceAsc": "Preis (aufsteigend)",
     "priceDesc": "Preis (absteigend)"
+  },
+  "newBadge": "Neu",
+  "loadError": "Die Produkte konnten nicht geladen werden. Bitte versuchen Sie es später erneut.",
+  "meta": {
+    "title": "Shop",
+    "description": "Modischer und stilvoller Schmuck der Autorin und Designerin: Ohrringe, Halsketten, Armbänder, Korallen, Ringe und Broschen.",
+    "categoryDescription": "{category} von TJS: modischer und stilvoller Schmuck der Autorin und Designerin."
+  },
+  "pagination": {
+    "label": "Seiten",
+    "previous": "Vorherige Seite",
+    "next": "Nächste Seite",
+    "page": "Seite {page}",
+    "position": "<b>{page}</b> von {total}",
+    "gap": "…",
+    "first": "Zurück zur ersten Seite"
   }
 }

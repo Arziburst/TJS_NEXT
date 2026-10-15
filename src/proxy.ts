@@ -1,15 +1,16 @@
 import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
-import { refreshSession } from "./lib/supabase/proxy";
 import { routing } from "./i18n/routing";
+import { rewriteUnknownCategory } from "./lib/catalog/unknown-category";
+import { refreshSession } from "./lib/supabase/proxy";
 
 const intl = createMiddleware(routing);
 
-// Session refresh first (it updates the request cookies the locale middleware forwards), then locale
-// routing; the refreshed cookies are set on whatever response the locale middleware returns.
+// Session refresh first (it updates the request cookies the next steps forward), then the unknown-category
+// rewrite or locale routing; the refreshed cookies are set on whichever response that returns.
 export default async function proxy(request: NextRequest) {
   const applySession = await refreshSession(request);
-  return applySession(intl(request));
+  return applySession(rewriteUnknownCategory(request) ?? intl(request));
 }
 
 export const config = {

@@ -3,10 +3,7 @@
     "title": "TJS: modna i stylowa biżuteria",
     "description": "TJS to sklep z modną i stylową biżuterią, którą ożywia autorka-projektantka."
   },
-  "placeholder": {
-    "text": "Tymczasowa strona główna. Witryna sklepu powstanie w kolejnych zadaniach.",
-    "comingSoon": "Wkrótce"
-  },
+  "introBrand": "TJStore",
   "intro": "to sklep z modną i stylową biżuterią, którą ożywia autorka-projektantka.",
   "seeAll": "Zobacz wszystko",
   "seeAllImageAlt": "Obraz \"Zobacz wszystko\"",

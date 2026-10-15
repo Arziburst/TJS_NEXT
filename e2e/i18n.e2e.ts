@@ -51,7 +51,7 @@ test("/fr renders French with lang=fr", async ({ page }) => {
   const response = await page.goto("/fr");
   expect(response?.status()).toBe(200);
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-  await expect(page.getByText(fr.placeholder.text)).toBeVisible();
+  await expect(page.getByText(fr.intro)).toBeVisible();
   await expect(page).toHaveTitle(fr.meta.title);
 });
 
@@ -133,12 +133,12 @@ test("the switcher changes the locale, keeps the path and sets NEXT_LOCALE", asy
   await switchLocale(page, isMobile, enNav, "de");
   await expect(page).toHaveURL(/\/de$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "de");
-  await expect(page.getByText(de.placeholder.text)).toBeVisible();
+  await expect(page.getByText(de.intro)).toBeVisible();
 
   await switchLocale(page, isMobile, deNav, "uk");
   await expect(page).toHaveURL(/\/uk$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "uk");
-  await expect(page.getByText(uk.placeholder.text)).toBeVisible();
+  await expect(page.getByText(uk.intro)).toBeVisible();
 
   const cookie = (await context.cookies()).find((entry) => entry.name === "NEXT_LOCALE");
   expect(cookie?.value).toBe("uk");

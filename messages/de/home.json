@@ -3,10 +3,7 @@
     "title": "TJS: modischer und stilvoller Schmuck",
     "description": "TJS ist ein Shop für modischen und stilvollen Schmuck, den eine Designerin zum Leben erweckt."
   },
-  "placeholder": {
-    "text": "Platzhalter für die Startseite. Der Shop wird in den nächsten Aufgaben umgesetzt.",
-    "comingSoon": "Demnächst"
-  },
+  "introBrand": "TJStore",
   "intro": "ist ein Shop für modischen und stilvollen Schmuck, den eine Designerin zum Leben erweckt.",
   "seeAll": "Alle ansehen",
   "seeAllImageAlt": "Bild „Alle ansehen“",

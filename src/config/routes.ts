@@ -6,7 +6,9 @@
 export const routes = {
   home: { path: "/", enabled: true },
   // #15
-  shop: { path: "/shop", enabled: false },
+  shop: { path: "/shop", enabled: true },
+  // #16: product cards link here (/product/<slug>), without prefetching while it is off
+  product: { path: "/product", enabled: false },
   // #21
   aboutUs: { path: "/about-us", enabled: false },
   // #20

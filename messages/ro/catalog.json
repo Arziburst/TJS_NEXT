@@ -3,7 +3,7 @@
   "filterShopBy": "Cumpără după",
   "filterBy": "Filtrează după",
   "showMore": "Arată mai multe",
-  "shownCount": "Se afișează {shown} din {total} produse",
+  "shownCount": "{total, plural, one {Se afișează <b>{shown}</b> din <b>#</b> produs} few {Se afișează <b>{shown}</b> din <b>#</b> produse} other {Se afișează <b>{shown}</b> din <b>#</b> de produse}}",
   "categories": {
     "all": "Vezi tot",
     "earrings": "Cercei",
@@ -14,8 +14,25 @@
     "brooches": "Broșe"
   },
   "sort": {
+    "newest": "Cele mai noi",
     "placeholder": "Selectează filtrul",
     "priceAsc": "Preț (crescător)",
     "priceDesc": "Preț (descrescător)"
+  },
+  "newBadge": "Nou",
+  "loadError": "Produsele nu au putut fi încărcate. Încercați din nou mai târziu.",
+  "meta": {
+    "title": "Magazin",
+    "description": "Bijuterii la modă și elegante de la autoarea-designer: cercei, coliere, brățări, corali, inele și broșe.",
+    "categoryDescription": "{category} de la TJS: bijuterii la modă și elegante de la autoarea-designer."
+  },
+  "pagination": {
+    "label": "Pagini",
+    "previous": "Pagina anterioară",
+    "next": "Pagina următoare",
+    "page": "Pagina {page}",
+    "position": "<b>{page}</b> din {total}",
+    "gap": "…",
+    "first": "Înapoi la prima pagină"
   }
 }

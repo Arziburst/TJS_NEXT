@@ -3,10 +3,7 @@
     "title": "TJS: fashionable and stylish jewelry",
     "description": "TJS is a store of fashionable and stylish jewelry, which the author-designer brings to life."
   },
-  "placeholder": {
-    "text": "Placeholder home page. The storefront is built in the next tasks.",
-    "comingSoon": "Coming soon"
-  },
+  "introBrand": "TJStore",
   "intro": "is a store of fashionable and stylish jewelry, which the author-designer brings to life.",
   "seeAll": "See all",
   "seeAllImageAlt": "Image \"See all\"",
