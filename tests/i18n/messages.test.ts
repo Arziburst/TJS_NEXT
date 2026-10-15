@@ -70,6 +70,8 @@ describe("message catalogs", () => {
       shown: 12,
       total: 40,
       index: 1,
+      count: 5,
+      days: 3,
       url: "https://example.com/a.jpg",
       link: (chunks: string) => `<a>${chunks}</a>`,
     };

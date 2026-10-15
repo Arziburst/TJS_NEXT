@@ -11,5 +11,23 @@
     "alt": "Zdjęcie produktu",
     "numberedAlt": "Zdjęcie {index} produktu",
     "byUrlAlt": "Zdjęcie z adresu URL {url}"
+  },
+  "page": {
+    "materials": "Materiały",
+    "care": "Pielęgnacja",
+    "weight": "Waga",
+    "leadTime": "Wykonanie w {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}",
+    "oneOfAKind": "Jedyny egzemplarz",
+    "reserved": "Zarezerwowane",
+    "sold": "Sprzedane",
+    "addToCartFailed": "Nie udało się dodać produktu do koszyka. Spróbuj ponownie.",
+    "untranslated": "Ten produkt nie jest jeszcze przetłumaczony na Twój język; jest wyświetlany po angielsku.",
+    "gallery": {
+      "label": "Zdjęcia produktu",
+      "previous": "Poprzednie zdjęcie",
+      "next": "Następne zdjęcie",
+      "goTo": "Pokaż zdjęcie {index} z {count}",
+      "empty": "Brak zdjęć"
+    }
   }
 }

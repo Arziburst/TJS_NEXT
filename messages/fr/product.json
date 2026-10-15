@@ -11,5 +11,23 @@
     "alt": "Image du produit",
     "numberedAlt": "Image {index} du produit",
     "byUrlAlt": "Image depuis l’URL {url}"
+  },
+  "page": {
+    "materials": "Matériaux",
+    "care": "Entretien",
+    "weight": "Poids",
+    "leadTime": "Fabriqué en {days, plural, one {# jour} other {# jours}}",
+    "oneOfAKind": "Pièce unique",
+    "reserved": "Réservé",
+    "sold": "Vendu",
+    "addToCartFailed": "Le produit n’a pas pu être ajouté au panier. Veuillez réessayer.",
+    "untranslated": "Ce produit n’est pas encore traduit dans votre langue ; il est affiché en anglais.",
+    "gallery": {
+      "label": "Photos du produit",
+      "previous": "Photo précédente",
+      "next": "Photo suivante",
+      "goTo": "Afficher la photo {index} sur {count}",
+      "empty": "Pas encore de photos"
+    }
   }
 }

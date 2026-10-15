@@ -11,5 +11,23 @@
     "alt": "Image of the product",
     "numberedAlt": "Image {index} of the product",
     "byUrlAlt": "Image by URL {url}"
+  },
+  "page": {
+    "materials": "Materials",
+    "care": "Care",
+    "weight": "Weight",
+    "leadTime": "Made in {days, plural, one {# day} other {# days}}",
+    "oneOfAKind": "One of a kind",
+    "reserved": "Reserved",
+    "sold": "Sold",
+    "addToCartFailed": "The product could not be added to the cart. Please try again.",
+    "untranslated": "This product is not translated into your language yet; it is shown in English.",
+    "gallery": {
+      "label": "Product photos",
+      "previous": "Previous photo",
+      "next": "Next photo",
+      "goTo": "Show photo {index} of {count}",
+      "empty": "No photos yet"
+    }
   }
 }

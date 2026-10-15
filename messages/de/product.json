@@ -11,5 +11,23 @@
     "alt": "Bild des Produkts",
     "numberedAlt": "Bild {index} des Produkts",
     "byUrlAlt": "Bild von URL {url}"
+  },
+  "page": {
+    "materials": "Materialien",
+    "care": "Pflege",
+    "weight": "Gewicht",
+    "leadTime": "Gefertigt in {days, plural, one {# Tag} other {# Tagen}}",
+    "oneOfAKind": "Unikat",
+    "reserved": "Reserviert",
+    "sold": "Verkauft",
+    "addToCartFailed": "Das Produkt konnte nicht in den Warenkorb gelegt werden. Bitte versuchen Sie es erneut.",
+    "untranslated": "Dieses Produkt ist noch nicht in Ihre Sprache übersetzt; es wird auf Englisch angezeigt.",
+    "gallery": {
+      "label": "Produktfotos",
+      "previous": "Vorheriges Foto",
+      "next": "Nächstes Foto",
+      "goTo": "Foto {index} von {count} anzeigen",
+      "empty": "Noch keine Fotos"
+    }
   }
 }

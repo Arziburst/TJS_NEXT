@@ -11,5 +11,23 @@
     "alt": "Afbeelding van het product",
     "numberedAlt": "Afbeelding {index} van het product",
     "byUrlAlt": "Afbeelding via URL {url}"
+  },
+  "page": {
+    "materials": "Materialen",
+    "care": "Onderhoud",
+    "weight": "Gewicht",
+    "leadTime": "Gemaakt in {days, plural, one {# dag} other {# dagen}}",
+    "oneOfAKind": "Uniek exemplaar",
+    "reserved": "Gereserveerd",
+    "sold": "Verkocht",
+    "addToCartFailed": "Het product kon niet aan de winkelwagen worden toegevoegd. Probeer het opnieuw.",
+    "untranslated": "Dit product is nog niet in uw taal vertaald; het wordt in het Engels getoond.",
+    "gallery": {
+      "label": "Productfoto’s",
+      "previous": "Vorige foto",
+      "next": "Volgende foto",
+      "goTo": "Foto {index} van {count} tonen",
+      "empty": "Nog geen foto’s"
+    }
   }
 }

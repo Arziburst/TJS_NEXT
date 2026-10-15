@@ -11,5 +11,23 @@
     "alt": "Obrázek produktu",
     "numberedAlt": "Obrázek {index} produktu",
     "byUrlAlt": "Obrázek podle URL {url}"
+  },
+  "page": {
+    "materials": "Materiály",
+    "care": "Péče",
+    "weight": "Hmotnost",
+    "leadTime": "Výroba za {days, plural, one {# den} few {# dny} many {# dne} other {# dní}}",
+    "oneOfAKind": "Jediný kus",
+    "reserved": "Rezervováno",
+    "sold": "Prodáno",
+    "addToCartFailed": "Produkt se nepodařilo přidat do košíku. Zkuste to prosím znovu.",
+    "untranslated": "Tento produkt zatím není přeložen do vašeho jazyka; zobrazuje se v angličtině.",
+    "gallery": {
+      "label": "Fotografie produktu",
+      "previous": "Předchozí fotografie",
+      "next": "Další fotografie",
+      "goTo": "Zobrazit fotografii {index} z {count}",
+      "empty": "Zatím žádné fotografie"
+    }
   }
 }
