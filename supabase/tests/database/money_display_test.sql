@@ -1,7 +1,7 @@
 -- Money display tables: structure, seeded settings, public read, admin-only write (negative tests included).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(25);
+select plan(27);
 
 -- Fixtures: a customer and an admin (the role is granted here, as the database owner; D12)
 insert into auth.users (id, email) values
@@ -49,6 +49,7 @@ select throws_ok(
 );
 
 -- Anonymous visitor: reads, never writes -----------------------------------------------------------------
+create temporary table fx_rates_before on commit drop as select count(*)::int as n from public.fx_rates;
 set local role anon;
 select is((select count(*)::int from public.currency_settings), 7, 'anon reads currency_settings');
 select ok((select count(*) from public.fx_rates) > 0, 'anon reads fx_rates');
@@ -56,9 +57,15 @@ select throws_ok(
   $$insert into public.fx_rates (rate_date, base, quote, rate, source) values ('2030-01-01', 'USD', 'EUR', 0.9, 'nbu')$$,
   '42501', null, 'anon cannot insert a rate'
 );
+select throws_ok(
+  $$insert into public.currency_settings (currency, decimals, round_increment, ending) values ('GBP', 2, 100, 0)$$,
+  '42501', null, 'anon cannot add a currency'
+);
 update public.currency_settings set markup_bps = 0;
+delete from public.fx_rates;
 reset role;
 select is((select count(*)::int from public.currency_settings where markup_bps = 300), 7, 'anon update changes nothing');
+select is((select count(*)::int from public.fx_rates), (select n from fx_rates_before), 'anon delete removes nothing');
 
 -- Signed-in customer: reads, never writes ----------------------------------------------------------------
 select set_config('request.jwt.claims', '{"sub": "00000000-0000-4000-8000-0000000000c1", "role": "authenticated"}', true);

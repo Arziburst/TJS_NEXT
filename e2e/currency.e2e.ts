@@ -64,12 +64,17 @@ test("the visitor's country picks the currency, the cookie overrides it", async 
   await expect(prices(page).first()).toHaveAttribute("data-currency", "CZK");
 });
 
-test("a forged currency cookie falls back to the locale default", async ({ page }) => {
-  await page.goto("/uk/ui-kit");
-  await page.context().addCookies([{ name: "TJS_CURRENCY", value: "GBP", url: page.url() }]);
-  await page.reload();
-  await expect(prices(page).first()).toHaveAttribute("data-currency", "UAH");
-});
+// /de: its default (EUR) is neither the first enabled currency (UAH) nor what an unvalidated cookie would give
+for (const forged of ["GBP", "uah", "<script>"]) {
+  test(`a forged currency cookie (${forged}) falls back to the locale default`, async ({ page }) => {
+    await page.goto("/de/ui-kit");
+    await page.context().addCookies([{ name: "TJS_CURRENCY", value: forged, url: page.url() }]);
+    await page.reload();
+    await expect(prices(page)).toHaveCount(7);
+    for (const price of await prices(page).all()) await expect(price).toHaveAttribute("data-currency", "EUR");
+    await expect(prices(page).nth(1)).toHaveText(/^25,90\s€$/);
+  });
+}
 
 test("the rates job refuses a call without the cron secret", async ({ request }) => {
   const response = await request.get("/api/cron/fx-rates");
