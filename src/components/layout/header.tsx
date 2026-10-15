@@ -1,0 +1,63 @@
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import { AccountSlot, CartSlot, LanguageSwitcherSlot } from "./header-slots";
+import { Logo } from "./logo";
+import { MobileMenu } from "./mobile-menu";
+import { NAV_LEFT, NAV_RIGHT } from "./nav-items";
+import { NavLink } from "./nav-link";
+
+type HeaderProps = {
+  className?: string;
+  cart?: ReactNode;
+  account?: ReactNode;
+  languageSwitcher?: ReactNode;
+  // rendered at the bottom of the mobile menu
+  menuFooter?: ReactNode;
+};
+
+/*
+ * Below 1024px: menu button, logo, cart. From 1024px: logo, inline nav, language, cart over account.
+ * The switch is CSS only (sb:hidden / hidden sb:flex); both variants are always in the markup.
+ */
+export function Header({
+  className,
+  cart = <CartSlot />,
+  account = <AccountSlot />,
+  languageSwitcher = <LanguageSwitcherSlot />,
+  menuFooter,
+}: HeaderProps) {
+  return (
+    <header className={cn("sticky top-0 z-40 bg-background", className)}>
+      <div className="page-container flex items-center justify-between gap-4 py-4 sb:items-start sb:gap-x-[70px] sb:pt-6 sb:pb-3">
+        <MobileMenu
+          className="sb:hidden"
+          languageSwitcher={languageSwitcher}
+          account={account}
+          footer={menuFooter}
+        />
+        <Logo className="sb:flex sb:h-11 sb:items-center" />
+        <nav aria-label="Main" className="hidden grow items-start gap-x-[70px] sb:flex">
+          <ul className="flex h-11 w-full items-center justify-between">
+            {NAV_LEFT.map((item) => (
+              <li key={item.href}>
+                <NavLink {...item} />
+              </li>
+            ))}
+            {NAV_RIGHT.map((item) => (
+              <li key={item.href} className="text-right">
+                <NavLink {...item} />
+              </li>
+            ))}
+          </ul>
+          <div data-slot="language-switcher">{languageSwitcher}</div>
+        </nav>
+        <ul className="flex items-center sb:flex-col sb:items-end">
+          <li data-slot="cart">{cart}</li>
+          <li data-slot="account" className="hidden sb:block">
+            {account}
+          </li>
+        </ul>
+      </div>
+    </header>
+  );
+}
