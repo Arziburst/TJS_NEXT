@@ -15,8 +15,16 @@
   "page": {
     "materials": "Materialen",
     "care": "Onderhoud",
+    "clasp": "Sluiting",
     "weight": "Gewicht",
+    "dimensions": "Afmetingen",
+    "dimension": {
+      "length": "lengte {value}",
+      "width": "breedte {value}",
+      "height": "hoogte {value}"
+    },
     "leadTime": "Gemaakt in {days, plural, one {# dag} other {# dagen}}",
+    "leadTimeRange": "Gemaakt in {min}–{max, plural, one {# dag} other {# dagen}}",
     "oneOfAKind": "Uniek exemplaar",
     "reserved": "Gereserveerd",
     "sold": "Verkocht",

@@ -81,6 +81,7 @@ describe("message catalogs", () => {
       days: 3,
       page: 2,
       category: "Rings",
+      value: "30 mm",
       url: "https://example.com/a.jpg",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,

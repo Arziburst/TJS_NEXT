@@ -15,8 +15,16 @@
   "page": {
     "materials": "Materiais",
     "care": "Cuidados",
+    "clasp": "Fecho",
     "weight": "Peso",
+    "dimensions": "Dimensões",
+    "dimension": {
+      "length": "comprimento {value}",
+      "width": "largura {value}",
+      "height": "altura {value}"
+    },
     "leadTime": "Feito em {days, plural, one {# dia} other {# dias}}",
+    "leadTimeRange": "Feito em {min}–{max, plural, one {# dia} other {# dias}}",
     "oneOfAKind": "Peça única",
     "reserved": "Reservado",
     "sold": "Vendido",

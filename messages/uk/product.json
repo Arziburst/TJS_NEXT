@@ -15,8 +15,16 @@
   "page": {
     "materials": "Матеріали",
     "care": "Догляд",
+    "clasp": "Застібка",
     "weight": "Вага",
+    "dimensions": "Розміри",
+    "dimension": {
+      "length": "довжина {value}",
+      "width": "ширина {value}",
+      "height": "висота {value}"
+    },
     "leadTime": "Виготовлення {days, plural, one {# день} few {# дні} many {# днів} other {# дня}}",
+    "leadTimeRange": "Виготовлення {min}–{max, plural, one {# день} few {# дні} many {# днів} other {# дня}}",
     "oneOfAKind": "Єдиний екземпляр",
     "reserved": "Заброньовано",
     "sold": "Продано",

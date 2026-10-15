@@ -15,8 +15,16 @@
   "page": {
     "materials": "Materials",
     "care": "Care",
+    "clasp": "Clasp",
     "weight": "Weight",
+    "dimensions": "Dimensions",
+    "dimension": {
+      "length": "length {value}",
+      "width": "width {value}",
+      "height": "height {value}"
+    },
     "leadTime": "Made in {days, plural, one {# day} other {# days}}",
+    "leadTimeRange": "Made in {min}–{max, plural, one {# day} other {# days}}",
     "oneOfAKind": "One of a kind",
     "reserved": "Reserved",
     "sold": "Sold",

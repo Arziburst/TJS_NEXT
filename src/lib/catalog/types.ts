@@ -39,13 +39,19 @@ export type ProductImage = {
   alt: string;
 };
 
+export type LeadTime = { minDays: number; maxDays: number };
+
+/** In millimetres; each one optional. */
+export type ProductDimensions = { lengthMm: number | null; widthMm: number | null; heightMm: number | null };
+
 export type ProductSummary = {
   id: string;
   sku: string | null;
   category: { id: string; slug: string };
   fulfillment: ProductFulfillment;
   availability: ProductAvailability;
-  leadTimeDays: number | null;
+  /** Made-to-order work only: how many days making it takes (a fixed time has minDays = maxDays). */
+  leadTime: LeadTime | null;
   /** USD in cents (minor units); the database keeps numeric(10,2). */
   priceUsdMinor: number;
   weightG: number;
@@ -55,10 +61,13 @@ export type ProductSummary = {
   images: ProductImage[];
 };
 
-/** A product page's data; `materials` and `care` are in `translation.locale`, like the other texts. */
+/** A product page's data; its texts (`materials`, `care`, `clasp`, `leadTimeNote`) are in `translation.locale`. */
 export type Product = ProductSummary & {
   materials: string | null;
   care: string | null;
+  clasp: string | null;
+  leadTimeNote: string | null;
+  dimensions: ProductDimensions;
 };
 
 export type ProductFilters = {

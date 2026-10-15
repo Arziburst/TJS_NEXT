@@ -15,8 +15,16 @@
   "page": {
     "materials": "Materiály",
     "care": "Péče",
+    "clasp": "Zapínání",
     "weight": "Hmotnost",
+    "dimensions": "Rozměry",
+    "dimension": {
+      "length": "délka {value}",
+      "width": "šířka {value}",
+      "height": "výška {value}"
+    },
     "leadTime": "Výroba za {days, plural, one {# den} few {# dny} many {# dne} other {# dní}}",
+    "leadTimeRange": "Výroba za {min}–{max, plural, one {# den} few {# dny} many {# dne} other {# dní}}",
     "oneOfAKind": "Jediný kus",
     "reserved": "Rezervováno",
     "sold": "Prodáno",

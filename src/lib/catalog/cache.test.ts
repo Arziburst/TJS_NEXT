@@ -60,6 +60,8 @@ const translation = (locale: string, slug: string, title: string) => ({
   description: null,
   materials: null,
   care: null,
+  clasp: null,
+  lead_time_note: null,
   alt_text: null,
   meta_title: null,
   meta_description: null,
@@ -72,7 +74,15 @@ const productRow = {
   sku: "TEST-001",
   fulfillment: "made_to_order",
   availability: "available",
-  lead_time_days: 14,
+  lead_time_min_days: 14,
+
+  lead_time_max_days: 14,
+
+  length_mm: null,
+
+  width_mm: null,
+
+  height_mm: null,
   price_usd_text: "24.90",
   weight_g: 6,
   created_at: "2026-10-14T00:00:00Z",

@@ -15,8 +15,16 @@
   "page": {
     "materials": "Materiale",
     "care": "Îngrijire",
+    "clasp": "Închizătoare",
     "weight": "Greutate",
+    "dimensions": "Dimensiuni",
+    "dimension": {
+      "length": "lungime {value}",
+      "width": "lățime {value}",
+      "height": "înălțime {value}"
+    },
     "leadTime": "Realizat în {days, plural, one {# zi} few {# zile} other {# de zile}}",
+    "leadTimeRange": "Realizat în {min}–{max, plural, one {# zi} few {# zile} other {# de zile}}",
     "oneOfAKind": "Piesă unică",
     "reserved": "Rezervat",
     "sold": "Vândut",

@@ -49,7 +49,15 @@ function productRow(overrides: Record<string, unknown> = {}) {
     sku: null,
     fulfillment: "made_to_order",
     availability: "available",
-    lead_time_days: 14,
+    lead_time_min_days: 14,
+
+    lead_time_max_days: 14,
+
+    length_mm: null,
+
+    width_mm: null,
+
+    height_mm: null,
     price_usd_text: "24.90",
     weight_g: 6,
     created_at: "2026-10-14T00:00:00Z",
@@ -63,6 +71,8 @@ function productRow(overrides: Record<string, unknown> = {}) {
         description: null,
         materials: "Brass",
         care: "Keep dry",
+        clasp: null,
+        lead_time_note: null,
         alt_text: null,
         meta_title: null,
         meta_description: null,
@@ -76,6 +86,8 @@ function productRow(overrides: Record<string, unknown> = {}) {
         description: null,
         materials: "Messing",
         care: "Trocken aufbewahren",
+        clasp: null,
+        lead_time_note: null,
         alt_text: null,
         meta_title: null,
         meta_description: null,
@@ -166,7 +178,7 @@ describe("getProducts", () => {
     expect(item).toMatchObject({
       id: "p1",
       priceUsdMinor: 2490,
-      leadTimeDays: 14,
+      leadTime: { minDays: 14, maxDays: 14 },
       translation: { locale: "de", slug: "korallen-ohrringe", isFallback: false, source: "machine" },
       images: [{ url: "https://storage.test/product-images/p1/a.jpg", alt: "Korallen-Ohrringe", width: 800, height: 1000 }],
     });

@@ -15,8 +15,16 @@
   "page": {
     "materials": "Matériaux",
     "care": "Entretien",
+    "clasp": "Fermoir",
     "weight": "Poids",
+    "dimensions": "Dimensions",
+    "dimension": {
+      "length": "longueur {value}",
+      "width": "largeur {value}",
+      "height": "hauteur {value}"
+    },
     "leadTime": "Fabriqué en {days, plural, one {# jour} other {# jours}}",
+    "leadTimeRange": "Fabriqué en {min} à {max, plural, one {# jour} other {# jours}}",
     "oneOfAKind": "Pièce unique",
     "reserved": "Réservé",
     "sold": "Vendu",
