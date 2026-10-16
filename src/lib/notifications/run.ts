@@ -2,6 +2,7 @@ import "server-only";
 
 import { routes } from "@/config/routes";
 import { renderOrderConfirmation } from "@/emails/order-confirmation";
+import { renderOrderStatusChange } from "@/emails/order-status";
 import { getMetadataBase } from "@/i18n/metadata";
 import { createServiceClient } from "@/lib/supabase/server";
 import { notificationConfig, type NotificationConfig } from "./config";
@@ -9,10 +10,11 @@ import { readShopContacts } from "./contacts";
 import { processOutbox, type ProcessorDeps, type ProcessReport } from "./processor";
 import { sendEmail } from "./resend";
 import { claimOutboxEvents, completeOutboxEvent, readNotificationOrder } from "./store";
-import { renderTelegramOrder, sendTelegram, TELEGRAM_LOCALE } from "./telegram";
+import { statusChangeOf } from "./events";
+import { renderTelegramOrder, renderTelegramStatusChange, sendTelegram, TELEGRAM_LOCALE } from "./telegram";
 import { notificationsTranslator } from "./texts";
 
-/** The admin's page of order `number` (its path is reserved for the orders admin, #27), on the shop's origin. */
+/** The admin's page of order `number` (the orders admin, #27), on the shop's origin. */
 export function adminOrderUrl(number: number): string {
   return new URL(`/${TELEGRAM_LOCALE}${routes.admin.path}/orders/${number}`, getMetadataBase()).toString();
 }
@@ -29,10 +31,15 @@ export function channelSenders(
   now: () => Date = () => new Date(),
 ): ProcessorDeps["send"] {
   return {
-    telegram: async (_event, order) => {
+    telegram: async (event, order) => {
       if (!config.telegram.ok) return { status: "skipped_unconfigured", reason: config.telegram.reason };
+      const change = event.event === "order_status_changed" ? statusChangeOf(event.payload) : null;
+      if (event.event === "order_status_changed" && !change) return { status: "error", error: "the status change has no statuses" };
       const t = await notificationsTranslator(TELEGRAM_LOCALE);
-      const text = renderTelegramOrder(order, { t, locale: TELEGRAM_LOCALE, adminUrl: adminOrderUrl(order.number) });
+      const adminUrl = adminOrderUrl(order.number);
+      const text = change
+        ? renderTelegramStatusChange(order, change, { t, adminUrl })
+        : renderTelegramOrder(order, { t, locale: TELEGRAM_LOCALE, adminUrl });
       const sent = await sendTelegram(config.telegram.config, text, fetchImpl);
       if (sent.ok) return { status: "sent" };
       return sent.retryAfterSeconds === undefined
@@ -41,11 +48,17 @@ export function channelSenders(
     },
     email: async (event, order) => {
       if (!config.email.ok) return { status: "skipped_unconfigured", reason: config.email.reason };
+      const change = event.event === "order_status_changed" ? statusChangeOf(event.payload) : null;
+      if (event.event === "order_status_changed" && !change) return { status: "error", error: "the status change has no statuses" };
       if (now().getTime() - new Date(event.createdAt).getTime() > CONFIRMATION_EMAIL_MAX_AGE_MS) {
-        return { status: "skipped_expired", reason: "the order is older than 24 hours: no late confirmation" };
+        return change
+          ? { status: "skipped_expired", reason: "the status change is older than 24 hours: no late email" }
+          : { status: "skipped_expired", reason: "the order is older than 24 hours: no late confirmation" };
       }
       const [t, contacts] = await Promise.all([notificationsTranslator(order.locale), readShopContacts()]);
-      const email = renderOrderConfirmation(order, { t, contacts, siteUrl: getMetadataBase() });
+      const options = { t, contacts, siteUrl: getMetadataBase() };
+      // a status change tells the status of that change, whatever the order's status is when it goes out
+      const email = change ? renderOrderStatusChange(order, change.to, options) : renderOrderConfirmation(order, options);
       const sent = await sendEmail(config.email.config, { to: order.email, ...email, idempotencyKey: `${event.id}/email` }, fetchImpl);
       return sent.ok ? { status: "sent" } : { status: "error", error: sent.error };
     },

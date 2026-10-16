@@ -1,6 +1,7 @@
 {
   "telegram": {
     "newOrder": "Nueva solicitud de pedido n.º {number}",
+    "statusChange": "Pedido n.º {number}: {from} → {to}",
     "placed": "Recibida: {date}",
     "customer": "Cliente",
     "phone": "Teléfono",

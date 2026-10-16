@@ -31,7 +31,9 @@
     "products": "Produkty",
     "newProduct": "Přidat",
     "attributes": "Materiály a barvy",
-    "viewShop": "Obchod"
+    "viewShop": "Obchod",
+    "orders": "Objednávky",
+    "ordersWithNew": "Objednávky, {count, plural, one {# nová žádost} few {# nové žádosti} many {# nové žádosti} other {# nových žádostí}}"
   },
   "status": {
     "draft": "Koncept",
@@ -376,6 +378,151 @@
       "priceNotPositive": "Cena velikosti musí zůstat nad nulou",
       "invalidSuffix": "Latinková písmena a číslice, mezi nimi tečky nebo pomlčky",
       "suffixTaken": "Jiná velikost tohoto produktu má tuto příponu"
+    }
+  },
+  "orderStatus": {
+    "new": "Nová",
+    "pending_payment": "Čeká na platbu",
+    "paid": "Zaplaceno",
+    "in_processing": "Zpracovává se",
+    "accepted": "Přijato",
+    "closed": "Uzavřeno",
+    "canceled": "Zrušeno",
+    "refunded": "Vráceno"
+  },
+  "orders": {
+    "title": "Objednávky",
+    "count": "{count, plural, one {# objednávka} few {# objednávky} many {# objednávky} other {# objednávek}}",
+    "newCount": "{count, plural, =0 {Žádné nové žádosti} one {# nová žádost} few {# nové žádosti} many {# nové žádosti} other {# nových žádostí}}",
+    "searchLabel": "Hledat",
+    "searchPlaceholder": "Číslo, jméno, telefon nebo e-mail",
+    "status": "Stav",
+    "allStatuses": "Všechny stavy",
+    "country": "Země",
+    "allCountries": "Všechny země",
+    "dateFrom": "Od",
+    "dateTo": "Do",
+    "apply": "Použít",
+    "reset": "Zrušit filtry",
+    "loadError": "Objednávky se nepodařilo načíst. Načtěte stránku znovu.",
+    "noMatch": "Filtrům neodpovídá žádná objednávka.",
+    "empty": "Zatím žádné objednávky. Nové žádosti z obchodu se objeví zde.",
+    "number": "č. {number}",
+    "pieces": "{count, plural, one {# kus} few {# kusy} many {# kusu} other {# kusů}}",
+    "call": "Zavolat: {name}",
+    "open": "Otevřít objednávku č. {number}, {name}",
+    "columns": {
+      "number": "Číslo",
+      "date": "Datum",
+      "customer": "Zákazník",
+      "country": "Země",
+      "total": "Celkem",
+      "status": "Stav",
+      "open": "Otevřít"
+    },
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "Pobočka",
+      "postomat": "Výdejní box",
+      "doors": "Kurýr na adresu",
+      "division": "Pobočka nebo výdejní místo",
+      "address": "Kurýr na adresu"
+    },
+    "destination": {
+      "city": "Město",
+      "warehouse": "Pobočka",
+      "postomat": "Výdejní box",
+      "division": "Výdejní místo",
+      "address": "Adresa",
+      "street": "{street} {house}",
+      "flat": "Byt {flat}",
+      "postCity": "{postCode} {city}",
+      "raw": "Cíl"
+    },
+    "actions": {
+      "changed": "Objednávka č. {number}: {status}",
+      "final": "Tato objednávka má stav „{status}“; její stav se už nemění.",
+      "to": {
+        "in_processing": "Převzít ke zpracování",
+        "accepted": "Přijmout",
+        "closed": "Uzavřít",
+        "canceled": "Zrušit objednávku"
+      },
+      "hint": {
+        "in_processing": "Převezměte žádost ke zpracování, jakmile se domluvíte se zákazníkem. Zákazník dostane e-mail o každé změně stavu.",
+        "accepted": "Přijetím se prodají originály z objednávky: obchod je ukáže jako prodané.",
+        "closed": "Uzavřete objednávku, až ji zákazník obdrží."
+      },
+      "cancelTitle": "Zrušit objednávku č. {number}?",
+      "cancelDescription": "Objednávka bude zrušena natrvalo, její originály se vrátí do prodeje a zákazník dostane e-mail.",
+      "keep": "Ponechat objednávku",
+      "cancelConfirm": "Zrušit objednávku"
+    },
+    "errors": {
+      "notAuthorized": "To smí jen administrátor. Přihlaste se znovu.",
+      "invalid": "Tento požadavek není platný.",
+      "tooManyRequests": "Příliš mnoho změn v krátkém čase. Počkejte několik minut.",
+      "notFound": "Tato objednávka už neexistuje.",
+      "stale": "Objednávka se mezitím změnila; stránka nyní ukazuje její aktuální stav.",
+      "illegal": "Tato změna stavu není možná.",
+      "conflict": "Originál z této objednávky už byl prodán s jinou objednávkou.",
+      "unexpectedError": "Nepovedlo se. Zkuste to znovu."
+    },
+    "detail": {
+      "back": "Všechny objednávky",
+      "title": "Objednávka č. {number}",
+      "placed": "Odesláno {date}",
+      "loadError": "Objednávku se nepodařilo načíst. Načtěte stránku znovu.",
+      "notFoundTitle": "Objednávka nenalezena",
+      "notFound": "Objednávka č. {number} neexistuje.",
+      "status": "Stav",
+      "customer": "Zákazník",
+      "contact": "Kontaktovat zákazníka",
+      "contactAction": {
+        "phone": "Zavolat",
+        "email": "Napsat e-mail",
+        "instagram": "Instagram",
+        "telegram": "Telegram",
+        "viber": "Viber",
+        "whatsapp": "WhatsApp"
+      },
+      "name": "Jméno",
+      "phone": "Telefon",
+      "email": "E-mail",
+      "account": "Účet",
+      "registered": "Registrovaný zákazník",
+      "guest": "Host",
+      "language": "Jazyk",
+      "comment": "Komentář",
+      "noComment": "Bez komentáře",
+      "lines": "Položky",
+      "sku": "Kód {sku}",
+      "productGone": "Produkt byl smazán",
+      "quantity": "{quantity} × {price}",
+      "goodsTotal": "Celkem za zboží",
+      "usdTotal": "V USD (ceny administrátora)",
+      "rate": "Kurz {rate} ze dne {date}, přirážka {markup}",
+      "delivery": "Doprava",
+      "country": "Země",
+      "carrier": "Dopravce",
+      "method": "Způsob",
+      "estimate": "Odhad",
+      "estimateNote": "Skutečnou cenu dopravy zákazník platí dopravci při převzetí.",
+      "notes": "Interní poznámky",
+      "notesHint": "Tyto poznámky vidí jen administrátoři, zákazník nikdy.",
+      "noNotes": "Zatím žádné poznámky.",
+      "noteLabel": "Nová poznámka",
+      "addNote": "Přidat poznámku",
+      "noteAdded": "Poznámka přidána",
+      "noteBy": "{author}, {date}",
+      "unknownAuthor": "Bývalý administrátor",
+      "history": "Historie stavů",
+      "historyPlaced": "Žádost odeslána",
+      "historyChange": "{from} → {to}",
+      "historyBy": "{date}, {name}"
     }
   }
 }

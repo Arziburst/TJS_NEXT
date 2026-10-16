@@ -24,3 +24,13 @@ export function revalidateProduct({
   for (const id of new Set(categoryIds)) updateTag(categoryTag(id));
   for (const slug of new Set(slugs)) updateTag(productSlugTag(slug));
 }
+
+/**
+ * Expires the storefront entries that show the availability of these one-of-a-kind pieces (sold or back on sale
+ * after an order's status change): the listings and their product pages, which every slug of a product shares.
+ */
+export function revalidatePieces(productIds: readonly string[]): void {
+  if (productIds.length === 0) return;
+  updateTag(CATALOG_TAG);
+  for (const id of new Set(productIds)) updateTag(productCacheTag(id));
+}

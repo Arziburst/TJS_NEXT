@@ -2,6 +2,7 @@ import { lineTitle } from "@/lib/cart/lines";
 import type { Locale } from "@/i18n/routing";
 import { formatMoney } from "@/lib/money/format";
 import { escapeHtml, truncate } from "./escape";
+import type { StatusChange } from "./events";
 import type { NotificationOrder } from "./order";
 import { deliveryMethodText, destinationLines, estimateText, orderMoney, placedAt, type NotificationsTranslator } from "./texts";
 
@@ -66,6 +67,21 @@ export function renderTelegramOrder(
     .filter((block) => block.length > 0)
     .map((block) => block.join("\n"))
     .join("\n\n");
+}
+
+/** The owner's message about a status change of order `order` (D11), made in the admin (#27). */
+export function renderTelegramStatusChange(
+  order: NotificationOrder,
+  change: StatusChange,
+  { t, adminUrl }: { t: NotificationsTranslator; adminUrl: string },
+): string {
+  const e = escapeHtml;
+  const name = [order.firstName, order.lastName].filter(Boolean).join(" ");
+  return [
+    `<b>${e(t("telegram.statusChange", { number: order.number, from: t(`status.${change.from}`), to: t(`status.${change.to}`) }))}</b>`,
+    `${e(t("telegram.customer"))}: ${e(name)}`,
+    `<a href="${e(adminUrl)}">${e(t("telegram.openAdmin"))}</a>`,
+  ].join("\n");
 }
 
 const TIMEOUT_MS = 10_000;
