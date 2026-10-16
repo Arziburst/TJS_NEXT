@@ -68,5 +68,11 @@
     "position": "<b>{page}</b> din {total}",
     "gap": "…",
     "first": "Înapoi la prima pagină"
+  },
+  "collections": {
+    "title": "Colecții",
+    "option": "Colecția: {name}",
+    "untranslated": "Această colecție nu este încă tradusă în limba dvs.",
+    "metaDescription": "{name}: o colecție de bijuterii lucrate manual de autoarea și designerul TJS."
   }
 }

@@ -11,6 +11,8 @@ export const routes = {
   search: { path: "/search", enabled: true },
   // #16: /product/<slug>; product cards link here, the shell does not
   product: { path: "/product", enabled: true },
+  // #67: /collections/<slug>; the home page and the shop's navigation link the published ones
+  collections: { path: "/collections", enabled: true },
   // #21
   aboutUs: { path: "/about-us", enabled: false },
   // #20

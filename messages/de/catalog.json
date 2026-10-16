@@ -68,5 +68,11 @@
     "position": "<b>{page}</b> von {total}",
     "gap": "…",
     "first": "Zurück zur ersten Seite"
+  },
+  "collections": {
+    "title": "Kollektionen",
+    "option": "Kollektion: {name}",
+    "untranslated": "Diese Kollektion ist noch nicht in Ihre Sprache übersetzt.",
+    "metaDescription": "{name}: eine Kollektion handgefertigten Schmucks der Autorin und Designerin von TJS."
   }
 }

@@ -68,5 +68,11 @@
     "position": "<b>{page}</b> z {total}",
     "gap": "…",
     "first": "Wróć do pierwszej strony"
+  },
+  "collections": {
+    "title": "Kolekcje",
+    "option": "Kolekcja: {name}",
+    "untranslated": "Ta kolekcja nie została jeszcze przetłumaczona na Twój język.",
+    "metaDescription": "{name}: kolekcja ręcznie robionej biżuterii od autorki i projektantki TJS."
   }
 }

@@ -10,6 +10,11 @@ export function categoryHref(slug: string): string {
   return `${SHOP_HREF}/${slug}`;
 }
 
+/** A collection's page (#67) by its slug in the current locale. */
+export function collectionHref(slug: string): string {
+  return `${routes.collections.path}/${slug}`;
+}
+
 /** The product page (task #16) by the product's slug in the current locale. */
 export function productHref(slug: string): string {
   return `${routes.product.path}/${slug}`;

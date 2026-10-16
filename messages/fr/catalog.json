@@ -68,5 +68,11 @@
     "position": "<b>{page}</b> sur {total}",
     "gap": "…",
     "first": "Revenir à la première page"
+  },
+  "collections": {
+    "title": "Collections",
+    "option": "Collection : {name}",
+    "untranslated": "Cette collection n’est pas encore traduite dans votre langue.",
+    "metaDescription": "{name} : une collection de bijoux faits main par la créatrice de TJS."
   }
 }
