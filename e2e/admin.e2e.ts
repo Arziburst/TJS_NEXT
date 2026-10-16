@@ -5,7 +5,7 @@
 // the storefront tests (playwright.config.ts).
 import { randomInt, randomUUID } from "node:crypto";
 import { existsSync, writeFileSync } from "node:fs";
-import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Locator, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import sharp from "sharp";
 import type { Database } from "../src/lib/supabase/database.types";
@@ -69,6 +69,32 @@ function collectErrors(page: Page): string[] {
     if (message.type() === "error") errors.push(`console: ${message.text()}`);
   });
   return errors;
+}
+
+/** A control's colours and opacity once its transitions have settled, at rest or hovered. */
+async function lookOf(control: Locator, hovered: boolean) {
+  if (hovered) await control.hover();
+  else await control.page().mouse.move(0, 0);
+  await expect.poll(() => control.evaluate((el) => el.getAnimations().length)).toBe(0);
+  return control.evaluate((el) => {
+    const style = getComputedStyle(el);
+    return { background: style.backgroundColor, color: style.color, opacity: style.opacity, transform: style.transform };
+  });
+}
+
+/** A button disabled but focusable (aria-disabled, no `disabled`) looks disabled and keeps that look on hover (#126). */
+async function expectLooksDisabled(button: Locator) {
+  await expect(button).toHaveAttribute("aria-disabled", "true");
+  await expect(button).toHaveCSS("opacity", "0.5");
+  await expect(button).toHaveCSS("cursor", "not-allowed");
+  const resting = await lookOf(button, false);
+  expect(await lookOf(button, true)).toEqual(resting);
+}
+
+async function expectLooksEnabled(button: Locator) {
+  await expect(button).not.toHaveAttribute("aria-disabled", "true");
+  await expect(button).toHaveCSS("opacity", "1");
+  await expect(button).not.toHaveCSS("cursor", "not-allowed");
 }
 
 /** The document and its RSC payload (what a client navigation fetches) contain none of the admin's texts. */
@@ -510,6 +536,17 @@ test.describe("admin on the local stack", () => {
       expect(errors).toEqual([]);
     });
 
+    test("the arrows at the start and the end of the photos look disabled (#126)", async ({ page }) => {
+      const errors = collectErrors(page);
+      const photos = await openPhotos(page);
+      const button = (label: string, index: number) => photos.getByRole("button", { name: label.replace("{index}", String(index)) });
+      await expectLooksDisabled(button(ukAdmin.images.moveEarlier, 1));
+      await expectLooksDisabled(button(ukAdmin.images.moveLater, 2));
+      await expectLooksEnabled(button(ukAdmin.images.moveLater, 1));
+      await expectLooksEnabled(button(ukAdmin.images.moveEarlier, 2));
+      expect(errors).toEqual([]);
+    });
+
     test("a keyboard move keeps the focus on the moved photo and announces its new position", async ({ page }) => {
       const errors = collectErrors(page);
       const [first, second] = await photoRows();
@@ -740,6 +777,22 @@ test.describe("admin on the local stack", () => {
       expect(errors).toEqual([]);
     });
 
+    test("the arrows at the start and the end of the sizes look disabled (#126)", async ({ page, isMobile }) => {
+      const errors = collectErrors(page);
+      const sizes = await openSizes(page);
+      const button = (label: string, size: string) => sizes.getByRole("button", { name: label.replace("{label}", size) });
+      await expectLooksDisabled(button(ukAdmin.variants.moveEarlier, "16"));
+      await expectLooksDisabled(button(ukAdmin.variants.moveLater, "18"));
+      await expectLooksEnabled(button(ukAdmin.variants.moveLater, "16"));
+      await expectLooksEnabled(button(ukAdmin.variants.moveEarlier, "18"));
+      // the hover probe sees a hover where there is one (a phone has none)
+      if (!isMobile) {
+        const enabled = button(ukAdmin.variants.moveEarlier, "18");
+        expect(await lookOf(enabled, true)).not.toEqual(await lookOf(enabled, false));
+      }
+      expect(errors).toEqual([]);
+    });
+
     test("adding to the cart needs a size, and each size is its own line", async ({ page }) => {
       const errors = collectErrors(page);
       await page.context().setExtraHTTPHeaders({ "x-forwarded-for": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}` });
@@ -852,11 +905,9 @@ test.describe("admin on the local stack", () => {
         await expect(remove).toHaveAccessibleDescription(ukAdmin.variants.ordered);
         await expect(sizes.getByText(ukAdmin.variants.ordered)).toBeVisible();
         await expect(remove).toHaveAttribute("title", ukAdmin.variants.ordered);
-        // it looks disabled: reduced contrast and a not-allowed cursor, unlike the edit button next to it
-        await expect(remove).toHaveCSS("opacity", "0.5");
-        await expect(remove).toHaveCSS("cursor", "not-allowed");
-        const edit = sizes.getByRole("button", { name: ukAdmin.variants.edit.replace("{label}", "18") });
-        await expect(edit).toHaveCSS("opacity", "1");
+        // it looks disabled: reduced contrast, a not-allowed cursor and no hover change, unlike the edit button next to it
+        await expectLooksDisabled(remove);
+        await expectLooksEnabled(sizes.getByRole("button", { name: ukAdmin.variants.edit.replace("{label}", "18") }));
         // a click opens nothing
         await remove.click({ force: true });
         await expect(page.getByRole("dialog")).toHaveCount(0);
