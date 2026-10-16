@@ -115,11 +115,6 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
           {shopSlug && (
             <Link
               href={productHref(shopSlug)}
-              // stopgap until https://github.com/Arziburst/TJS_NEXT/issues/93 is fixed: every photo action refresh()es
-              // this page, which re-prefetched the product page;
-              // a prefetch render that started before the next write's updateTag and was stored after it kept the
-              // old photos in the route cache (a render race, not the stale-while-revalidate of #79)
-              prefetch={false}
               className={cn(buttonVariants({ variant: "outline", size: "sm", className: "min-h-11 justify-self-start" }))}>
               <ExternalLinkIcon aria-hidden />
               {t("viewInShop")}

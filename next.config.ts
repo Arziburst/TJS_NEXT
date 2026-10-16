@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
@@ -33,6 +34,9 @@ const nextConfig: NextConfig = {
     // optimized photos stay cached for 31 days: a changed photo gets a new storage path, never an overwrite
     minimumCacheTTL: 2_678_400,
   },
+  // a self-hosted server (`next start`, the CI e2e) never stores a page whose tags were expired while it
+  // rendered (#93, docs/standards.md §3); on Vercel the platform's cache serves the pages, so Next's stays
+  cacheHandler: process.env.VERCEL ? undefined : fileURLToPath(new URL("./src/lib/catalog/route-cache-handler.ts", import.meta.url)),
   cacheComponents: true,
   cacheLife: {
     // `days` without its stale window (expire = revalidate) for entries in a prerendered route shell: a
