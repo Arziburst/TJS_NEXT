@@ -102,6 +102,8 @@ describe("message catalogs", () => {
       name: "IMG_0042.jpg",
       done: 3,
       position: 2,
+      current: 3,
+      failed: 1,
       // an order number and the page count of the order history (account)
       number: 10001,
       pages: 3,

@@ -40,6 +40,8 @@ export type AdminProductListItem = {
   title: { text: string; locale: Locale } | null;
   /** Locales without a translation, in the editor's order; uk first when it is missing. */
   missingLocales: Locale[];
+  /** Locales with a machine translation not reviewed yet (shown in the shop, kept out of search engines). */
+  unreviewedLocales: Locale[];
   image: AdminImage | null;
   updatedAt: string;
 };
@@ -52,6 +54,8 @@ export type AdminTranslation = Record<Exclude<TranslationField, "title" | "slug"
   slug: string;
   source: Enums["translation_source"];
   reviewedAt: string | null;
+  /** Changes with every write of the row: the form re-reads a locale's fields when it changed (a translation). */
+  updatedAt: string;
 };
 
 export type AdminProduct = {
@@ -126,7 +130,7 @@ export async function listAdminProducts(
         .from("products")
         .select(
           `id, sku, category_id, status, fulfillment, availability, price_usd_text:price_usd::text, updated_at,
-           product_translations(locale, title)`,
+           product_translations(locale, title, source, reviewed_at)`,
         )
         .is("deleted_at", null);
       if (filters.categoryId) query = query.eq("category_id", filters.categoryId);
@@ -180,6 +184,9 @@ export async function listAdminProducts(
         priceUsdMinor: usdTextToMinor(row.price_usd_text),
         title: titleFor(row.product_translations, filters.locale),
         missingLocales: EDITOR_LOCALES.filter((l) => !translated.has(l)),
+        unreviewedLocales: EDITOR_LOCALES.filter((l) =>
+          row.product_translations.some((t) => t.locale === l && t.source === "machine" && t.reviewed_at === null),
+        ),
         image: images.get(row.id) ?? null,
         updatedAt: row.updated_at,
       };
@@ -203,7 +210,7 @@ export async function getAdminProduct(id: string): Promise<AdminResult<AdminProd
          price_usd_text:price_usd::text, weight_g_text:weight_g::text, length_mm_text:length_mm::text,
          width_mm_text:width_mm::text, height_mm_text:height_mm::text, position, published_at, created_at, updated_at,
          product_translations(locale, title, slug, description, materials, care, clasp, lead_time_note,
-           meta_title, meta_description, alt_text, source, reviewed_at),
+           meta_title, meta_description, alt_text, source, reviewed_at, updated_at),
          product_images(id, storage_path, position, width, height, blur_data_url, product_image_alts(locale, alt))`,
       )
       .eq("id", id)
@@ -229,6 +236,7 @@ export async function getAdminProduct(id: string): Promise<AdminResult<AdminProd
           metaDescription: t.meta_description,
           source: t.source,
           reviewedAt: t.reviewed_at,
+          updatedAt: t.updated_at,
         }),
       )
       .toSorted((a, b) => EDITOR_LOCALES.indexOf(a.locale) - EDITOR_LOCALES.indexOf(b.locale));

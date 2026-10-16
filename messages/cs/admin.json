@@ -79,7 +79,8 @@
       "previous": "Předchozí stránka",
       "next": "Další stránka",
       "page": "Stránka {page} z {count}"
-    }
+    },
+    "unreviewed": "{count, plural, one {# strojový překlad nezkontrolován} few {# strojové překlady nezkontrolovány} many {# strojového překladu nezkontrolováno} other {# strojových překladů nezkontrolováno}}: {locales}"
   },
   "actionErrors": {
     "notAuthorized": "To může udělat jen správce. Přihlaste se znovu.",
@@ -184,6 +185,64 @@
       "leadTimeOrder": "Nesmí být menší než „Od“",
       "titleRequired": "Zadejte název v tomto jazyce, nebo vymažte jeho ostatní texty",
       "requiredToPublish": "Ke zveřejnění je nutný ukrajinský název"
+    },
+    "translateAfterSave": "Nejprve produkt uložte; potom jej lze strojově přeložit do ostatních jazyků."
+  },
+  "translate": {
+    "title": "Strojový překlad",
+    "hint": "Vyplní ostatní jazyky z jednoho textu najednou. Strojové texty se v obchodě zobrazují, ale vyhledávače je neindexují, dokud je neoznačíte jako zkontrolované.",
+    "notConfigured": "Strojový překlad není na tomto serveru nastaven. Vyplňte jazyky ručně nebo požádejte vývojáře o připojení AI Gateway.",
+    "saveFirst": "Nejprve uložte změny: překlad vychází z uloženého textu.",
+    "source": "Přeložit z",
+    "noSourceOption": "Zatím bez textu",
+    "targets": "Do",
+    "existing": "má text",
+    "overwrite": "Nahradit i existující texty",
+    "submit": "{count, plural, =0 {Přeložit} one {Přeložit do # jazyka} few {Přeložit do # jazyků} many {Přeložit do # jazyka} other {Přeložit do # jazyků}}",
+    "running": "Překládáme do {count, plural, one {# jazyka} few {# jazyků} many {# jazyka} other {# jazyků}}… Trvá to minutu až dvě.",
+    "done": "Přeloženo do: {locales}.",
+    "doneToast": "{count, plural, one {Přeloženo do # jazyka} few {Přeloženo do # jazyků} many {Přeloženo do # jazyka} other {Přeloženo do # jazyků}}",
+    "partial": "Nepřeloženo: {locales}. Zkuste to znovu.",
+    "review": {
+      "title": "Kontrola",
+      "hint": "Přečtěte každý strojový text a označte jej jako zkontrolovaný: teprve pak vyhledávače indexují stránku v tomto jazyce.",
+      "none": "Žádný strojový překlad ke kontrole.",
+      "reviewed": "Zkontrolováno",
+      "notReviewed": "Nezkontrolováno",
+      "label": "{language}: zkontrolováno",
+      "markedToast": "{language}: označeno jako zkontrolované",
+      "unmarkedToast": "{language}: opět nezkontrolováno"
+    },
+    "errors": {
+      "notAuthorized": "To může udělat jen administrátor. Přihlaste se prosím znovu.",
+      "invalid": "Tento požadavek není platný.",
+      "notConfigured": "Strojový překlad není na tomto serveru nastaven.",
+      "tooManyRequests": "Příliš mnoho překladů za krátkou dobu. Chvíli počkejte a zkuste to znovu.",
+      "notFound": "Tento produkt již neexistuje.",
+      "noSource": "Zvolený jazyk nemá text, ze kterého by se dalo překládat.",
+      "nothingToTranslate": "Není co překládat: každý zvolený jazyk už text má.",
+      "conflict": "Jiný produkt mezitím obsadil jednu z nových adres stránky. Zkuste to znovu.",
+      "authFailed": "Překladová služba odmítla přístupový klíč. Požádejte vývojáře, ať jej zkontroluje.",
+      "rateLimited": "Překladová služba je přetížená. Zkuste to znovu za pár minut.",
+      "timeout": "Překlad trval příliš dlouho. Zkuste to znovu nebo zvolte méně jazyků.",
+      "unavailable": "Překladová služba teď není dostupná. Zkuste to později.",
+      "rejected": "Překladová služba požadavek odmítla. Požádejte vývojáře o kontrolu logů.",
+      "invalidOutput": "Překlad se vrátil nepoužitelný. Zkuste to znovu.",
+      "unexpectedError": "Něco se pokazilo. Zkuste to znovu."
+    },
+    "bulk": {
+      "label": "Překlad vybraných produktů",
+      "selectAll": "Vybrat vše na této stránce",
+      "select": "Vybrat {title}",
+      "selected": "{count, plural, =0 {Nic nevybráno} one {Vybrán #} few {Vybrány #} many {Vybráno #} other {Vybráno #}}",
+      "translate": "{count, plural, =0 {Přeložit chybějící jazyky} other {Přeložit chybějící jazyky (#)}}",
+      "markReviewed": "{count, plural, =0 {Označit překlady jako zkontrolované} other {Označit překlady jako zkontrolované (#)}}",
+      "stop": "Zastavit po tomto produktu",
+      "progress": "Překládáme {current} z {total}: {title}",
+      "report": "Výsledky překladu",
+      "translatedLine": "{count, plural, one {přeložen # jazyk} few {přeloženy # jazyky} many {přeloženo # jazyka} other {přeloženo # jazyků}}, nepřeloženo: {failed}",
+      "summary": "{done, plural, one {Přeložen # produkt} few {Přeloženy # produkty} many {Přeloženo # produktu} other {Přeloženo # produktů}}, {failed, plural, =0 {bez chyb} one {# chyba} few {# chyby} many {# chyby} other {# chyb}}",
+      "reviewedToast": "{count, plural, =0 {Žádný překlad nečekal na kontrolu} one {# překlad označen jako zkontrolovaný} few {# překlady označeny jako zkontrolované} many {# překladu označeno jako zkontrolované} other {# překladů označeno jako zkontrolované}}"
     }
   },
   "taxonomy": {

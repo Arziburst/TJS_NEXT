@@ -5,24 +5,29 @@ import { locales, type Locale } from "@/i18n/routing";
 import type { ProductAvailability, ProductFulfillment, ProductTranslation } from "@/lib/catalog/types";
 import { fallbackLocale } from "@/lib/catalog/mappers";
 import type { TranslationSlug } from "@/lib/catalog/product-path";
+import { isIndexable, type TranslationReview } from "./indexing";
 
 export function productPath(locale: Locale, slug: string): string {
   return getPathname({ href: `${routes.product.path}/${slug}`, locale });
 }
 
+/** A product's translation as its hreflang alternates need it: its URL slug and whether it is indexable. */
+export type AlternateTranslation = TranslationSlug & TranslationReview;
+
 /**
- * canonical + hreflang of a product page: hreflang only for the locales the product is translated into,
- * x-default on the fallback locale's page. The canonical is the page of the translation `shown`: a page
- * showing fallback content (no translation in its own locale) is canonicalized to the fallback locale's.
+ * canonical + hreflang of a product page: hreflang only for the locales the product has an indexable
+ * translation in (an unreviewed machine translation stays out, see ./indexing.ts), x-default on the fallback
+ * locale's page. The canonical is the page of the translation `shown`: a page showing fallback content (no
+ * translation in its own locale) is canonicalized to the fallback locale's.
  */
 export function productAlternates(
-  translations: readonly TranslationSlug[],
+  translations: readonly AlternateTranslation[],
   shown: Pick<ProductTranslation, "locale" | "slug">,
 ): NonNullable<Metadata["alternates"]> {
   const languages: Record<string, string> = {};
   for (const alternate of locales) {
     const translation = translations.find((t) => t.locale === alternate);
-    if (translation) languages[alternate] = productPath(alternate, translation.slug);
+    if (translation && isIndexable(translation)) languages[alternate] = productPath(alternate, translation.slug);
   }
   if (languages[fallbackLocale]) languages["x-default"] = languages[fallbackLocale];
 
