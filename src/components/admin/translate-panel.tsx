@@ -9,12 +9,17 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import type { Locale } from "@/i18n/routing";
 import { EDITOR_LOCALES } from "@/lib/admin/product-form";
-import type { AdminTranslation } from "@/lib/admin/products";
+import type { AdminProductImage, AdminTranslation } from "@/lib/admin/products";
+import { planNeeds } from "@/lib/translate/plan";
 import { labelClass, selectClass } from "./styles";
 
 export type TranslatePanelProps = {
   productId: string;
   translations: AdminTranslation[];
+  /** The photos with the locales of their alts. */
+  images: Pick<AdminProductImage, "id" | "alts">[];
+  /** The live sizes with the locales they have a name in (#102). */
+  sizes: { id: string; locales: string[] }[];
   /** False when the server has no gateway credential: the panel explains instead of offering the action. */
   configured: boolean;
   /** The form has unsaved changes: translating (or reviewing) would re-read the saved texts over them. */
@@ -34,13 +39,16 @@ function defaultSource(existing: readonly Locale[]): Locale | null {
 }
 
 /**
- * The machine translation of a saved product: choose the source and the target languages (the missing ones
- * by default; existing ones only with "replace"), run it, see what came back; and the review switch of every
- * machine translation. Its controls have no `name`: they are not part of the product form's submission.
+ * The machine translation of a saved product: choose the source and the target languages (by default those that
+ * lack a text, a photo's alt or a size's name, and only what they lack; everything only with "replace"), run it,
+ * see what came back; and the review switch of every machine translation. Its controls have no `name`: they are
+ * not part of the product form's submission.
  */
 export function TranslatePanel({
   productId,
   translations,
+  images,
+  sizes,
   configured,
   dirty,
   translateProduct,
@@ -60,9 +68,20 @@ export function TranslatePanel({
 
   const names = (locales: readonly Locale[]) => format.list(locales.map((l) => tLocales(l)));
   const sourceLocale = source && existing.includes(source) ? source : defaultSource(existing);
-  const targets = EDITOR_LOCALES.filter(
-    (l) => l !== sourceLocale && chosen.has(l) && (overwrite || !existing.includes(l)),
-  );
+  // the server plans the run with the same rule (src/lib/translate/product.ts)
+  const needs = sourceLocale
+    ? planNeeds({
+        holdings: {
+          texts: existing,
+          images: images.map((image) => ({ id: image.id, locales: Object.keys(image.alts) })),
+          variants: sizes,
+        },
+        sourceLocale,
+        candidates: EDITOR_LOCALES,
+        overwrite,
+      })
+    : {};
+  const targets = EDITOR_LOCALES.filter((l) => chosen.has(l) && needs[l] !== undefined);
   const machine = translations.filter((tr) => tr.source === "machine");
   const blocked = !configured || dirty || pending || sourceLocale === null;
 
@@ -149,7 +168,9 @@ export function TranslatePanel({
             <div className="grid grid-cols-1 gap-2 @min-[24rem]:grid-cols-2 sb:grid-cols-4">
               {EDITOR_LOCALES.filter((l) => l !== sourceLocale).map((l) => {
                 const has = existing.includes(l);
-                const locked = has && !overwrite;
+                // a locale with its text still lacks something new (a size's name, a photo's alt) without "replace"
+                const partly = has && !overwrite && needs[l] !== undefined;
+                const locked = needs[l] === undefined;
                 return (
                   <label
                     key={l}
@@ -165,7 +186,11 @@ export function TranslatePanel({
                     <span lang={l} className="min-w-0 truncate">
                       {tLocales(l)}
                     </span>
-                    {has && <span className="ml-auto shrink-0 font-input text-xs whitespace-nowrap">{t("existing")}</span>}
+                    {has && (
+                      <span className="ml-auto shrink-0 font-input text-xs whitespace-nowrap">
+                        {partly ? t("incomplete") : t("existing")}
+                      </span>
+                    )}
                   </label>
                 );
               })}

@@ -92,11 +92,19 @@ export type TranslateResult =
     }
   | { ok: false; reason: TranslateFailure; usage: TokenUsage; attempts: number };
 
+/**
+ * Per target, the part of `content` it gets (#102): its texts (null = not asked), the alts and size names it lacks.
+ * A target without a part gets the whole content.
+ */
+export type TranslationParts = Partial<Record<Locale, TranslationContent>>;
+
 export type TranslateOptions = {
   model: LanguageModel;
   sourceLocale: Locale;
   targets: readonly Locale[];
+  /** Everything any target gets, in the source locale. */
   content: TranslationContent;
+  parts?: TranslationParts;
   glossary: readonly GlossaryTerm[];
   rules: readonly string[];
   /** One attempt's limit; a product with a long description into ten locales takes about a minute. */
@@ -147,47 +155,68 @@ function filledFields(content: TranslationContent): TranslatableField[] {
   return TRANSLATABLE_FIELDS.filter((field) => content.texts[field] !== null);
 }
 
-const imageRef = (index: number) => `image${index + 1}`;
-const sizeRef = (index: number) => `size${index + 1}`;
-
 function sizesOf(content: TranslationContent): VariantLabel[] {
   return content.variantLabels ?? [];
 }
 
-/** The shape the model fills: per target locale, a string for every filled source field, image alt and size name. */
-function modelSchema(content: TranslationContent, targets: readonly Locale[]) {
-  const fields = filledFields(content);
-  const localeShape: Record<string, z.ZodType> = {};
-  for (const field of fields) localeShape[field] = z.string().describe(FIELD_GUIDES[field]);
-  if (content.imageAlts.length > 0) {
-    localeShape.imageAlts = z.object(
-      Object.fromEntries(content.imageAlts.map((_, i) => [imageRef(i), z.string()])),
-    );
-  }
-  if (sizesOf(content).length > 0) {
-    localeShape.sizes = z
-      .object(Object.fromEntries(sizesOf(content).map((_, i) => [sizeRef(i), z.string()])))
-      .describe("the names of the product's sizes or lengths (ring sizes, chain lengths); keep numbers and units");
-  }
-  const localeSchema = z.object(localeShape);
-  return z.object({ translations: z.object(Object.fromEntries(targets.map((l) => [l, localeSchema]))) });
+/**
+ * The keys of the source JSON: image1, image2 … and size1, size2 … by their place in the whole content, so a
+ * target's part names the same photo or size as the source the model reads.
+ */
+function refsOf(content: TranslationContent) {
+  return {
+    image: new Map(content.imageAlts.map((image, i) => [image.imageId, `image${i + 1}`])),
+    size: new Map(sizesOf(content).map((size, i) => [size.variantId, `size${i + 1}`])),
+  };
 }
 
-/** The strict check of one locale's answer: every field present, trimmed, within its column limit. */
-function strictLocaleSchema(content: TranslationContent) {
+type Refs = ReturnType<typeof refsOf>;
+
+function partOf(content: TranslationContent, parts: TranslationParts | undefined, locale: Locale): TranslationContent {
+  return parts?.[locale] ?? content;
+}
+
+/**
+ * One locale's answer: a string for every filled field, image alt and size name of its part. Strict: the check of
+ * the answer (every one present, trimmed, within its column limit); else the shape the model is asked to fill.
+ */
+function localeSchema(part: TranslationContent, refs: Refs, strict: boolean) {
+  const text = (limit: number) => (strict ? z.string().trim().min(1).max(limit) : z.string());
   const shape: Record<string, z.ZodType> = {};
-  for (const field of filledFields(content)) shape[field] = z.string().trim().min(1).max(FIELD_LIMITS[field]);
-  if (content.imageAlts.length > 0) {
+  for (const field of filledFields(part)) {
+    shape[field] = strict ? text(FIELD_LIMITS[field]) : z.string().describe(FIELD_GUIDES[field]);
+  }
+  if (part.imageAlts.length > 0) {
     shape.imageAlts = z.object(
-      Object.fromEntries(content.imageAlts.map((_, i) => [imageRef(i), z.string().trim().min(1).max(IMAGE_ALT_LIMIT)])),
+      Object.fromEntries(part.imageAlts.map((image) => [refs.image.get(image.imageId)!, text(IMAGE_ALT_LIMIT)])),
     );
   }
-  if (sizesOf(content).length > 0) {
-    shape.sizes = z.object(
-      Object.fromEntries(sizesOf(content).map((_, i) => [sizeRef(i), z.string().trim().min(1).max(VARIANT_LABEL_LIMIT)])),
+  if (sizesOf(part).length > 0) {
+    const sizes = z.object(
+      Object.fromEntries(sizesOf(part).map((size) => [refs.size.get(size.variantId)!, text(VARIANT_LABEL_LIMIT)])),
     );
+    shape.sizes = strict
+      ? sizes
+      : sizes.describe("the names of the product's sizes or lengths (ring sizes, chain lengths); keep numbers and units");
   }
   return z.object(shape);
+}
+
+/** The shape the model fills: per target locale, a string for every filled field, image alt and size name of its part. */
+function modelSchema(content: TranslationContent, targets: readonly Locale[], parts?: TranslationParts) {
+  const refs = refsOf(content);
+  return z.object({
+    translations: z.object(Object.fromEntries(targets.map((l) => [l, localeSchema(partOf(content, parts, l), refs, false)]))),
+  });
+}
+
+/** The keys a part asks for, as the prompt names them: title, imageAlts.image1, sizes.size2 … */
+function keysOf(part: TranslationContent, refs: Refs): string[] {
+  return [
+    ...filledFields(part),
+    ...part.imageAlts.map((image) => `imageAlts.${refs.image.get(image.imageId)}`),
+    ...sizesOf(part).map((size) => `sizes.${refs.size.get(size.variantId)}`),
+  ];
 }
 
 /** The glossary pairs from the source locale into each target, for the system prompt. */
@@ -202,8 +231,11 @@ export function glossaryLines(glossary: readonly GlossaryTerm[], sourceLocale: L
   return lines;
 }
 
-export function buildPrompt(options: Pick<TranslateOptions, "sourceLocale" | "targets" | "content" | "glossary" | "rules">) {
-  const { sourceLocale, targets, content, glossary, rules } = options;
+export function buildPrompt(
+  options: Pick<TranslateOptions, "sourceLocale" | "targets" | "content" | "parts" | "glossary" | "rules">,
+) {
+  const { sourceLocale, targets, content, parts, glossary, rules } = options;
+  const refs = refsOf(content);
   const system = [
     "You translate the product texts of TJS, a small Ukrainian shop of handmade jewellery, for its online shop.",
     `Translate from ${LANGUAGE_NAMES[sourceLocale]} into each requested language. Write natural, fluent shop copy a native speaker would write, faithful to the source: add no facts, claims, materials or sizes, and leave nothing out.`,
@@ -217,14 +249,24 @@ export function buildPrompt(options: Pick<TranslateOptions, "sourceLocale" | "ta
   const source: Record<string, unknown> = {};
   for (const field of filledFields(content)) source[field] = content.texts[field];
   if (content.imageAlts.length > 0) {
-    source.imageAlts = Object.fromEntries(content.imageAlts.map((image, i) => [imageRef(i), image.alt]));
+    source.imageAlts = Object.fromEntries(content.imageAlts.map((image) => [refs.image.get(image.imageId), image.alt]));
   }
   if (sizesOf(content).length > 0) {
-    source.sizes = Object.fromEntries(sizesOf(content).map((size, i) => [sizeRef(i), size.label]));
+    source.sizes = Object.fromEntries(sizesOf(content).map((size) => [refs.size.get(size.variantId), size.label]));
   }
+  // a target that has some of the texts already gets only the others (#102); said only when the targets differ
+  const all = keysOf(content, refs).join(", ");
+  const perLocale = targets.map((l) => ({ l, keys: keysOf(partOf(content, parts, l), refs).join(", ") }));
+  const partial = perLocale.some(({ keys }) => keys !== all);
   const prompt = [
     `Source locale: ${sourceLocale} (${LANGUAGE_NAMES[sourceLocale]})`,
     `Target locales: ${targets.map((l) => `${l} (${LANGUAGE_NAMES[l]})`).join(", ")}`,
+    ...(partial
+      ? [
+          "Translate only these keys into each target locale (it has the others already):",
+          ...perLocale.map(({ l, keys }) => `${l}: ${keys}`),
+        ]
+      : []),
     "Source texts (JSON):",
     JSON.stringify(source, null, 2),
   ].join("\n");
@@ -236,8 +278,9 @@ export function readTranslations(
   raw: unknown,
   content: TranslationContent,
   targets: readonly Locale[],
+  parts?: TranslationParts,
 ): { translations: Partial<Record<Locale, TranslationContent>>; failed: { locale: Locale; reason: LocaleFailure }[] } {
-  const strict = strictLocaleSchema(content);
+  const refs = refsOf(content);
   const byLocale =
     typeof raw === "object" && raw !== null && "translations" in raw && typeof raw.translations === "object"
       ? (raw.translations as Record<string, unknown> | null)
@@ -251,22 +294,28 @@ export function readTranslations(
       failed.push({ locale, reason: "missing" });
       continue;
     }
-    const parsed = strict.safeParse(entry);
+    const part = partOf(content, parts, locale);
+    const parsed = localeSchema(part, refs, true).safeParse(entry);
     if (!parsed.success) {
       failed.push({ locale, reason: "invalid" });
       continue;
     }
     const data = parsed.data as Record<string, unknown>;
     const texts = Object.fromEntries(
-      TRANSLATABLE_FIELDS.map((field) => [field, content.texts[field] === null ? null : (data[field] as string)]),
+      TRANSLATABLE_FIELDS.map((field) => [field, part.texts[field] === null ? null : (data[field] as string)]),
     ) as TranslationTexts;
     const alts = (data.imageAlts ?? {}) as Record<string, string>;
     const sizes = (data.sizes ?? {}) as Record<string, string>;
     translations[locale] = {
       texts,
-      imageAlts: content.imageAlts.map((image, i) => ({ imageId: image.imageId, alt: alts[imageRef(i)] })),
-      ...(content.variantLabels
-        ? { variantLabels: content.variantLabels.map((size, i) => ({ variantId: size.variantId, label: sizes[sizeRef(i)]! })) }
+      imageAlts: part.imageAlts.map((image) => ({ imageId: image.imageId, alt: alts[refs.image.get(image.imageId)!]! })),
+      ...(part.variantLabels
+        ? {
+            variantLabels: part.variantLabels.map((size) => ({
+              variantId: size.variantId,
+              label: sizes[refs.size.get(size.variantId)!]!,
+            })),
+          }
         : {}),
     };
   }
@@ -352,7 +401,7 @@ export async function translateContent(options: TranslateOptions): Promise<Trans
   if (targets.length === 0) return { ok: true, translations: {}, failed: [], usage, attempts: 0 };
 
   const { system, prompt } = buildPrompt({ ...options, targets });
-  const schema = modelSchema(content, targets);
+  const schema = modelSchema(content, targets, options.parts);
   let last: TranslateFailure = "unavailable";
   let attempt = 0;
 
@@ -386,7 +435,7 @@ export async function translateContent(options: TranslateOptions): Promise<Trans
     }
 
     if (raw !== null) {
-      const read = readTranslations(raw, content, targets);
+      const read = readTranslations(raw, content, targets, options.parts);
       if (Object.keys(read.translations).length > 0) return { ok: true, ...read, usage, attempts: attempt };
       last = "invalidOutput";
     }

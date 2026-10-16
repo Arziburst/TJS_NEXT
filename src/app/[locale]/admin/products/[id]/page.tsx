@@ -173,7 +173,13 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
             deleteButton={
               <DeleteProductButton key="delete" productId={product.data.id} title={title ?? ""} deleteProduct={deleteProduct} />
             }
-            translation={{ configured: isTranslationConfigured(), translateProduct, setTranslationReviewed }}
+            translation={{
+              configured: isTranslationConfigured(),
+              // the locales each size has a name in (#102): a new size makes its missing languages translatable
+              sizes: variants.ok ? variants.variants.map((v) => ({ id: v.id, locales: Object.keys(v.labels) })) : [],
+              translateProduct,
+              setTranslationReviewed,
+            }}
           />
         ) : (
           <p role="alert" className="border-2 border-destructive p-3 font-input text-sm">

@@ -4,7 +4,7 @@ import type { Locale } from "@/i18n/routing";
 import { getAdmin } from "@/lib/auth/session";
 import { isLocale } from "@/lib/catalog/mappers";
 import { createServiceClient, type ServerSupabaseClient } from "@/lib/supabase/server";
-import type { VariantInput } from "./variant-form";
+import type { VariantInput, VariantLabelSource } from "./variant-form";
 
 /*
  * The admin's sizes of a product (#66). The read goes through the service role (it needs to know which sizes were
@@ -125,6 +125,27 @@ async function call(run: () => PromiseLike<{ data: unknown; error: { code?: stri
     return { ok: true, data };
   } catch {
     return { ok: false, reason: "unexpectedError" };
+  }
+}
+
+/** The stored labels of one live size of the product, with their source (a save keeps it, #102); null when unreadable. */
+export async function getStoredVariantLabels(
+  productId: string,
+  variantId: string,
+): Promise<{ locale: string; label: string; source: VariantLabelSource }[] | "notFound" | null> {
+  try {
+    const { data, error } = await createServiceClient()
+      .from("product_variants")
+      .select("id, product_variant_translations(locale, label, source)")
+      .eq("id", variantId)
+      .eq("product_id", productId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (error) return null;
+    if (!data) return "notFound";
+    return data.product_variant_translations;
+  } catch {
+    return null;
   }
 }
 
