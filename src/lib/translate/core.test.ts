@@ -7,6 +7,7 @@ import {
   FIELD_LIMITS,
   IMAGE_ALT_LIMIT,
   TRANSLATION_MODEL,
+  VARIANT_LABEL_LIMIT,
   backoffMs,
   buildPrompt,
   classifyError,
@@ -19,6 +20,7 @@ import {
   type KnownGatewayModelId,
   type TranslationContent,
 } from "./core";
+import { VARIANT_LABEL_MAX_LENGTH } from "@/lib/admin/variant-form";
 import { GLOSSARY, GLOSSARY_RULES } from "./glossary";
 
 const content: TranslationContent = {
@@ -101,6 +103,41 @@ describe("translateContent", () => {
     expect(result.translations.de?.imageAlts).toEqual([{ imageId: "img-a", alt: "[de] Earrings on a beige background" }]);
     expect(result.failed).toEqual([]);
     expect(result.usage).toEqual({ inputTokens: 1200, outputTokens: 800 });
+  });
+
+  it("translates the size names in the same call (#66), and refuses a locale that leaves one out", async () => {
+    const sized: TranslationContent = {
+      ...content,
+      variantLabels: [
+        { variantId: "size-a", label: "16" },
+        { variantId: "size-b", label: "45 см" },
+      ],
+    };
+    const model = new MockLanguageModelV4({
+      doGenerate: async () =>
+        answer({
+          en: { ...localeAnswer("en"), sizes: { size1: "16", size2: "45 cm" } },
+          de: { ...localeAnswer("de"), sizes: { size1: "16" } },
+        }),
+    });
+    const result = await translateContent({
+      model,
+      sourceLocale: "uk",
+      targets: ["en", "de"],
+      content: sized,
+      glossary: GLOSSARY,
+      rules: GLOSSARY_RULES,
+      sleep: noSleep,
+    });
+    expect(buildPrompt({ sourceLocale: "uk", targets: ["en"], content: sized, glossary: GLOSSARY, rules: GLOSSARY_RULES }).prompt).toContain(
+      '"size2": "45 см"',
+    );
+    expect(result.ok && result.translations.en?.variantLabels).toEqual([
+      { variantId: "size-a", label: "16" },
+      { variantId: "size-b", label: "45 cm" },
+    ]);
+    expect(result.ok && result.failed).toEqual([{ locale: "de", reason: "invalid" }]);
+    expect(VARIANT_LABEL_LIMIT).toBe(VARIANT_LABEL_MAX_LENGTH);
   });
 
   it("keeps the valid locales when one is missing and one breaks the limits (partial failure)", async () => {

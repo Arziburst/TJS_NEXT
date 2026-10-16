@@ -80,7 +80,8 @@
       "next": "Pagina următoare",
       "page": "Pagina {page} din {count}"
     },
-    "unreviewed": "{count, plural, one {# traducere automată neverificată} few {# traduceri automate neverificate} other {# de traduceri automate neverificate}}: {locales}"
+    "unreviewed": "{count, plural, one {# traducere automată neverificată} few {# traduceri automate neverificate} other {# de traduceri automate neverificate}}: {locales}",
+    "variants": "{count, plural, one {# mărime} few {# mărimi} other {# de mărimi}}"
   },
   "actionErrors": {
     "notAuthorized": "Doar administrarea poate face asta. Conectați-vă din nou.",
@@ -109,7 +110,8 @@
       "translations": "Texte în toate limbile",
       "taxonomy": "Materiale și culori",
       "photos": "Fotografii",
-      "publication": "Publicare"
+      "publication": "Publicare",
+      "variants": "Mărimi"
     },
     "chooseCategory": "Alegeți o categorie",
     "sku": "Cod produs",
@@ -184,7 +186,9 @@
       "skuTaken": "Alt produs folosește deja acest cod",
       "leadTimeOrder": "Nu poate fi mai mic decât „De la”",
       "titleRequired": "Introduceți un titlu în această limbă sau goliți celelalte texte ale ei",
-      "requiredToPublish": "Pentru publicare este necesar un titlu în ucraineană"
+      "requiredToPublish": "Pentru publicare este necesar un titlu în ucraineană",
+      "hasVariants": "O piesă cu mărimi rămâne la comandă; ștergeți mai întâi mărimile ei",
+      "variantPriceNotPositive": "O mărime a acestui produs ar costa zero sau mai puțin; schimbați mai întâi diferența ei de preț"
     },
     "translateAfterSave": "Salvați mai întâi produsul; apoi poate fi tradus automat în celelalte limbi."
   },
@@ -323,6 +327,55 @@
       "notFound": "Acest produs sau această fotografie nu mai există.",
       "conflict": "Fotografiile au fost schimbate în altă fereastră; acum sunt afișate cele actuale.",
       "unexpectedError": "Nu a funcționat. Încercați din nou."
+    }
+  },
+  "variants": {
+    "hint": "Fiecare mărime dintre care alege clienta, cu propria diferență față de prețul produsului. Un produs cu mărimi se comandă doar într-una dintre ele.",
+    "saveFirst": "Salvați mai întâi produsul, apoi adăugați-i mărimile.",
+    "oneOfAKind": "O piesă unicat nu are mărimi.",
+    "empty": "Fără mărimi: piesa se comandă așa cum este.",
+    "add": "Adăugați o mărime",
+    "newTitle": "Mărime nouă",
+    "editTitle": "Editați mărimea {label}",
+    "labels": "Nume în fiecare limbă",
+    "labelsHint": "Ucraineana este obligatorie. O limbă lăsată goală arată numele în engleză, altfel pe cel ucrainean.",
+    "priceDelta": "Diferență de preț, USD",
+    "priceDeltaHint": "Se adaugă la prețul produsului: 0 pentru același preț, de ex. 5 pentru o mărime mai scumpă sau -2.50 pentru una mai ieftină.",
+    "skuSuffix": "Sufix SKU",
+    "skuSuffixHint": "Opțional; se adaugă la SKU-ul produsului în comenzi, de ex. 17 → TJS-001-17.",
+    "price": "Preț: {price}",
+    "available": "Se poate comanda",
+    "availableOf": "{label} se poate comanda",
+    "off": "Indisponibilă acum",
+    "edit": "Editați {label}",
+    "moveEarlier": "Mutați {label} mai sus",
+    "moveLater": "Mutați {label} mai jos",
+    "delete": "Ștergeți {label}",
+    "deleteTitle": "Ștergeți această mărime?",
+    "deleteDescription": "{label} dispare din magazin; coșurile care o conțin o arată ca indisponibilă.",
+    "deleteConfirm": "Ștergeți",
+    "ordered": "Deja comandată: nu poate fi ștearsă, dezactivați-o în schimb.",
+    "save": "Salvați mărimea",
+    "saved": "Mărime salvată",
+    "deleted": "Mărime ștearsă",
+    "moved": "Mutată pe locul {position} din {count}",
+    "switchedOn": "{label} se poate comanda din nou",
+    "switchedOff": "{label} este dezactivată",
+    "errors": {
+      "notAuthorized": "Doar administratoarea poate face asta. Conectați-vă din nou.",
+      "notFound": "Acest produs sau această mărime nu mai există. Reîncărcați pagina.",
+      "conflict": "Mărimile au fost schimbate în altă filă: se afișează lista actuală.",
+      "ordered": "Această mărime a fost comandată: dezactivați-o în loc s-o ștergeți.",
+      "tooMany": "Un produs poate avea cel mult 50 de mărimi.",
+      "oneOfAKind": "O piesă unicat nu are mărimi.",
+      "invalid": "Verificați câmpurile.",
+      "unexpectedError": "Mărimile nu au putut fi schimbate. Încercați din nou.",
+      "labelRequired": "Introduceți numele în ucraineană",
+      "tooLong": "Cel mult {max} caractere",
+      "invalidDelta": "Introduceți o sumă, de ex. 5 sau -2.50",
+      "priceNotPositive": "Prețul mărimii trebuie să rămână peste zero",
+      "invalidSuffix": "Litere latine și cifre, cu puncte sau cratime între ele",
+      "suffixTaken": "O altă mărime a acestui produs are acest sufix"
     }
   }
 }

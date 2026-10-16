@@ -11,7 +11,8 @@
     "unavailable": "This piece can no longer be ordered.",
     "rateLimited": "Too many changes in a short time. Please wait a moment and try again.",
     "inCart": "In your cart: {count}",
-    "viewCart": "View the cart"
+    "viewCart": "View the cart",
+    "variantRequired": "Choose a size first."
   },
   "card": {
     "onlyOrder": "Made to order",
@@ -69,5 +70,11 @@
   },
   "recentlyViewed": {
     "title": "Recently viewed"
+  },
+  "variants": {
+    "legend": "Size",
+    "unavailable": "not available now",
+    "choose": "Choose a size to add it to the cart.",
+    "noneAvailable": "No size can be ordered right now."
   }
 }

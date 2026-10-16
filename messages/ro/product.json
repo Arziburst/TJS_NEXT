@@ -11,7 +11,8 @@
     "unavailable": "Această piesă nu mai poate fi comandată.",
     "rateLimited": "Prea multe modificări într-un timp scurt. Așteaptă puțin și încearcă din nou.",
     "inCart": "În coșul tău: {count}",
-    "viewCart": "Vezi coșul"
+    "viewCart": "Vezi coșul",
+    "variantRequired": "Alegeți mai întâi o mărime."
   },
   "card": {
     "onlyOrder": "Se face la comandă",
@@ -69,5 +70,11 @@
   },
   "recentlyViewed": {
     "title": "Văzute recent"
+  },
+  "variants": {
+    "legend": "Mărime",
+    "unavailable": "indisponibilă acum",
+    "choose": "Alegeți o mărime pentru a adăuga piesa în coș.",
+    "noneAvailable": "Momentan nu se poate comanda nicio mărime."
   }
 }

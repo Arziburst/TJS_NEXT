@@ -3,6 +3,7 @@ import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { deliveryKind, deliveryLang, deliveryLines } from "@/components/account/delivery-lines";
 import { CartItemImage } from "@/components/cart/cart-item-image";
+import { VariantLabel } from "@/components/cart/variant-label";
 import { countryOptions } from "@/components/delivery/nova-post/country-options";
 import { PriceTotal } from "@/components/price";
 import { buttonVariants } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import type { ContactNames } from "@/lib/account/names";
 import { toChoiceInput } from "@/lib/account/order-delivery";
 import { readContactNames } from "@/lib/account/profile";
 import { getCurrentUser } from "@/lib/auth/session";
-import { getCartView, orderableLines, type CartItem, type CartProduct } from "@/lib/cart";
+import { getCartView, lineKey, orderableLines, type CartItem, type CartProduct } from "@/lib/cart";
 import { parcelFromCart } from "@/lib/delivery/nova-poshta/parcel";
 import { isDeliveryCountry } from "@/lib/delivery/nova-post/countries";
 import { getNovaPostClient } from "@/lib/delivery/nova-post/config";
@@ -36,8 +37,8 @@ type Orderable = CartItem & { product: CartProduct };
 /** The Nova Poshta parcel of the orderable lines (D35, D37); null without a UAH rate. */
 function ukraineParcel(items: readonly Orderable[], tables: MoneyTables) {
   const lines = [];
-  for (const { product, quantity } of items) {
-    const uah = priceIn(product.priceUsdMinor, "UAH", tables);
+  for (const { product, unitUsdMinor, quantity } of items) {
+    const uah = priceIn(unitUsdMinor, "UAH", tables);
     if (!uah) return null;
     lines.push({ weightGrams: product.weightGrams, quantity, unitPriceUahMinor: uah.amountMinor });
   }
@@ -114,7 +115,7 @@ export async function CheckoutContents() {
   const ukraine = new Intl.DisplayNames([locale], { type: "region" }).of("UA") ?? "UA";
   const countries = [{ code: "UA" as const, label: ukraine }, ...countryOptions(locale)];
   const goods = goodsOf(
-    orderable.map(({ product, quantity }) => ({ priceUsdMinor: product.priceUsdMinor, weightGrams: product.weightGrams, quantity })),
+    orderable.map(({ product, unitUsdMinor, quantity }) => ({ priceUsdMinor: unitUsdMinor, weightGrams: product.weightGrams, quantity })),
     tables,
   );
   const account = await readAccount(user?.id ?? null, locale);
@@ -143,16 +144,17 @@ export async function CheckoutContents() {
           {t("summary.lines")}
         </h2>
         <ul className="flex flex-col divide-y divide-hairline border-y border-hairline">
-          {orderable.map(({ product, quantity }) => (
-            <li key={product.id} className="flex gap-3 py-3" data-testid="checkout-line">
+          {orderable.map(({ line, product, variant, unitUsdMinor, quantity }) => (
+            <li key={lineKey(line)} className="flex gap-3 py-3" data-testid="checkout-line">
               <CartItemImage image={product.image} alt="" sizes={IMAGE_SIZES} className="size-16 shrink-0" />
               <div className="flex min-w-0 grow flex-col gap-1">
                 <span lang={product.locale !== locale ? product.locale : undefined} className="font-sans font-semibold break-words">
                   {product.title}
                 </span>
+                {variant && <VariantLabel label={variant.label} />}
                 <span className="text-sm">{t("summary.quantity", { quantity })}</span>
               </div>
-              <PriceTotal lines={[{ usdMinor: product.priceUsdMinor, quantity }]} className="shrink-0 font-sans text-accent-text" />
+              <PriceTotal lines={[{ usdMinor: unitUsdMinor, quantity }]} className="shrink-0 font-sans text-accent-text" />
             </li>
           ))}
         </ul>
@@ -190,7 +192,7 @@ export async function CheckoutContents() {
             parcel={parcel}
             goods={goods}
             novaPostLive={getNovaPostClient() !== null}
-            expected={orderable.map(({ product, quantity }) => ({ productId: product.id, quantity }))}
+            expected={orderable.map(({ line, quantity }) => ({ productId: line.productId, variantId: line.variantId, quantity }))}
             // on a phone the summary is far above the button: the total is repeated next to it
             total={<div className="sb:hidden">{total()}</div>}
           />

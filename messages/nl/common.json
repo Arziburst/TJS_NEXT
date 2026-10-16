@@ -4,7 +4,8 @@
   "total": "Totaal",
   "price": {
     "unavailable": "Prijs niet beschikbaar",
-    "none": "—"
+    "none": "—",
+    "from": "vanaf {price}"
   },
   "pagination": {
     "of": "van"
@@ -48,5 +49,6 @@
     "contactsTbd": "Contact: TBD",
     "rights": "Trend Jewelry Store. Alle rechten voorbehouden",
     "developedBy": "Ontwikkeld door <link>Arziburst*</link>"
-  }
+  },
+  "variant": "Maat: {label}"
 }

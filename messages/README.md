@@ -38,7 +38,10 @@ removed), written in en, uk and the other 9 locales by machine, unreviewed; from
 order request form and its errors) and `checkout.done.*` (its confirmation), written in en, uk and the other 9
 locales by machine, unreviewed; from #26 the `notifications` namespace (the owner's Telegram message, read in uk,
 and the customer's emails; the legacy app sent no email, its Russian Telegram labels were not kept), written in
-en, uk and the other 9 locales by machine, unreviewed; from #28 the customer account `account.*` (except the legacy
+en, uk and the other 9 locales by machine, unreviewed; from #66 the sizes (`common.price.from`, `common.variant`,
+`product.variants.*`, `product.cart.variantRequired`, `admin.variants.*`, `admin.list.variants`,
+`admin.form.sections.variants`, `admin.form.errors.hasVariants` / `variantPriceNotPositive`, `checkout.request.errors.sizeUnavailable`; the legacy app had no
+sizes), written in en, uk and the other 9 locales by machine, unreviewed; from #28 the customer account `account.*` (except the legacy
 `account.orderStatus.canceled` / `inProcessing` / `accepted` / `closed`), `nav.profile`, `nav.addresses` and
 `checkout.request.saved.*`, written in en, uk and the other 9 locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the

@@ -59,7 +59,8 @@
       "cartChanged": "Între timp coșul dvs. s-a schimbat. Verificați comanda și trimiteți-o din nou.",
       "emptyCart": "În coș nu există nimic ce poate fi comandat.",
       "pricesUnavailable": "Prețurile nu pot fi calculate acum. Încercați din nou mai târziu.",
-      "unexpected": "Cererea nu a putut fi trimisă. Încercați din nou."
+      "unexpected": "Cererea nu a putut fi trimisă. Încercați din nou.",
+      "sizeUnavailable": "Ne pare rău, aceste mărimi nu pot fi comandate acum: {titles}. Nu s-a trimis nimic. Alegeți altă mărime sau scoateți-le din coș, apoi trimiteți din nou cererea."
     }
   },
   "done": {

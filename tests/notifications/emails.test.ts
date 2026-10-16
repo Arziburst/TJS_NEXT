@@ -64,6 +64,14 @@ describe("renderOrderConfirmation", () => {
     expect(text).toContain("фактичну вартість доставки ви оплачуєте перевізнику під час отримання");
   });
 
+  it("names the size each line was ordered in (#66)", async () => {
+    const { text, html } = await confirmation(
+      kyivBranchOrder({ lines: [{ title: "Каблучка", titleLocale: "uk", variantLabel: "17,5", quantity: 2, lineMinor: 1_578_00 }] }),
+    );
+    expect(text).toMatch(/Каблучка \(17,5\) × 2: 1\s578\s₴/);
+    expect(html).toContain("Каблучка (17,5)");
+  });
+
   it("lists the shop's channels as links, or the visible TBD line while there are none", async () => {
     const { html, text } = await confirmation();
     expect(html).toContain('<a href="https://www.instagram.com/tjs_shop/"');

@@ -607,4 +607,159 @@ test.describe("admin on the local stack", () => {
       expect(errors.filter((e) => !/net::ERR_FAILED|Failed to fetch/.test(e))).toEqual([]);
     });
   });
+
+  // #66: the sizes of a published made-to-order ring, each change on its product page at the next request.
+  test.describe.serial("the sizes of a product: add, price, order, switch off, delete", () => {
+    let admin: Credentials;
+    let productId: string;
+    let productPath: string;
+    let sku: string;
+
+    type SizeRow = { id: string; position: number; price_delta_usd_minor: number; is_available: boolean; label: string };
+
+    async function sizeRows(): Promise<SizeRow[]> {
+      const { data, error } = await db!
+        .from("product_variants")
+        .select("id, position, price_delta_usd_minor, is_available, product_variant_translations(locale, label)")
+        .eq("product_id", productId)
+        .is("deleted_at", null)
+        .order("position");
+      if (error) throw error;
+      return data.map(({ product_variant_translations: labels, ...row }) => ({
+        ...row,
+        label: labels.find((l) => l.locale === "uk")?.label ?? "",
+      }));
+    }
+
+    async function openSizes(page: Page) {
+      await signIn(page, admin, `/uk/admin/products/${productId}`);
+      await page.waitForLoadState("networkidle");
+      return page.getByRole("region", { name: ukAdmin.form.sections.variants, exact: true });
+    }
+
+    async function addSize(page: Page, sizes: ReturnType<Page["getByRole"]>, label: string, priceDelta?: string) {
+      await sizes.getByRole("button", { name: ukAdmin.variants.add }).click();
+      const dialog = page.getByRole("dialog");
+      await dialog.getByRole("textbox", { name: "Українська" }).fill(label);
+      if (priceDelta !== undefined) await dialog.getByLabel(ukAdmin.variants.priceDelta).fill(priceDelta);
+      await dialog.getByRole("button", { name: ukAdmin.variants.save }).click();
+      await expect(dialog).toHaveCount(0);
+    }
+
+    const sizePicker = (page: Page) => page.getByRole("group", { name: ukProduct.variants.legend });
+    const priceValue = async (page: Page) =>
+      Number(await page.getByTestId("product-price").locator("[data-slot=price]").getAttribute("value"));
+
+    test.beforeAll(async () => {
+      admin = await createUser("admin");
+      const draft = await insertDraft(`Розміри тест ${randomUUID().slice(0, 8)}`);
+      productId = draft.id;
+      sku = draft.sku;
+      const { data } = await db!.from("product_translations").select("slug").eq("product_id", productId).single();
+      productPath = `/uk/product/${data!.slug}`;
+      const published = await db!.from("products").update({ status: "published", price_usd: 20 }).eq("id", productId);
+      if (published.error) throw published.error;
+    });
+
+    test("add two ring sizes with a price difference: the product page shows them on the next request", async ({ page }) => {
+      const errors = collectErrors(page);
+      const sizes = await openSizes(page);
+      await expect(sizes.getByText(ukAdmin.variants.empty)).toBeVisible();
+
+      // a size without its Ukrainian name is refused, and the dialog says why
+      await sizes.getByRole("button", { name: ukAdmin.variants.add }).click();
+      const dialog = page.getByRole("dialog");
+      await dialog.getByRole("button", { name: ukAdmin.variants.save }).click();
+      await expect(dialog.getByRole("textbox", { name: "Українська" })).toHaveAccessibleDescription(
+        ukAdmin.variants.errors.labelRequired,
+      );
+      await dialog.getByRole("button", { name: ukAdmin.form.cancel }).click();
+
+      await addSize(page, sizes, "16");
+      await addSize(page, sizes, "18", "2.50");
+      await expect(sizes.getByTestId("admin-variant")).toHaveCount(2);
+      // the product form was not submitted with them
+      await expect(page.getByText(ukAdmin.form.saved)).toHaveCount(0);
+      expect((await sizeRows()).map((r) => [r.label, r.position, r.price_delta_usd_minor, r.is_available])).toEqual([
+        ["16", 0, 0, true],
+        ["18", 1, 250, true],
+      ]);
+
+      // the shop: both sizes, the price "from" the lowest, then the chosen size's own price
+      await page.goto(productPath);
+      const picker = sizePicker(page);
+      await expect(picker.getByRole("radio")).toHaveCount(2);
+      await expect(page.getByTestId("product-price")).toContainText("від");
+      const from = await priceValue(page);
+      await picker.getByText("18", { exact: true }).click();
+      await expect(picker.getByRole("radio", { name: /^18/ })).toBeChecked();
+      await expect(page.getByTestId("product-price")).not.toContainText("від");
+      expect(await priceValue(page)).toBeGreaterThan(from);
+      await picker.getByText("16", { exact: true }).click();
+      await expect.poll(() => priceValue(page)).toBe(from);
+
+      // the admin list counts them
+      await page.goto(`/uk/admin?q=${sku}`);
+      await expect(page.getByTestId("variant-count")).toHaveText("2 розміри");
+      expect(errors).toEqual([]);
+    });
+
+    test("adding to the cart needs a size, and each size is its own line", async ({ page }) => {
+      const errors = collectErrors(page);
+      await page.context().setExtraHTTPHeaders({ "x-forwarded-for": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}` });
+      await page.goto(productPath);
+      await page.waitForLoadState("networkidle");
+      await page.getByRole("button", { name: ukProduct.addToCart }).click();
+      await expect(page.getByText(ukProduct.cart.variantRequired)).toBeVisible();
+      await expect(sizePicker(page).getByRole("radio").first()).toBeFocused();
+
+      await sizePicker(page).getByText("16", { exact: true }).click();
+      await page.getByRole("button", { name: ukProduct.addToCart }).click();
+      await expect(page.getByTestId("in-cart")).toContainText(ukProduct.cart.inCart.replace("{count}", "1"));
+      await sizePicker(page).getByText("18", { exact: true }).click();
+      // the other size is not in the cart yet
+      await expect(page.getByTestId("in-cart")).toHaveCount(0);
+      await page.getByRole("button", { name: ukProduct.addToCart }).click();
+      await expect(page.getByTestId("in-cart")).toContainText(ukProduct.cart.inCart.replace("{count}", "1"));
+
+      await page.goto("/uk/cart");
+      const lines = page.getByTestId("cart-line");
+      await expect(lines).toHaveCount(2);
+      await expect(lines.nth(0).getByTestId("line-variant")).toHaveText("Розмір: 16");
+      await expect(lines.nth(1).getByTestId("line-variant")).toHaveText("Розмір: 18");
+      expect(errors).toEqual([]);
+    });
+
+    test("switch a size off, move the other first, delete the unordered one: the product page follows", async ({ page }) => {
+      const errors = collectErrors(page);
+      const [small, large] = await sizeRows();
+      const sizes = await openSizes(page);
+
+      await sizes.getByRole("switch", { name: ukAdmin.variants.availableOf.replace("{label}", "16") }).click();
+      await expect.poll(async () => (await sizeRows()).map((r) => r.is_available)).toEqual([false, true]);
+      await page.goto(productPath);
+      await expect(sizePicker(page).getByRole("radio", { name: /^16/ })).toBeDisabled();
+      await expect(sizePicker(page).getByText(ukProduct.variants.unavailable)).toBeVisible();
+
+      await page.goto(`/uk/admin/products/${productId}`);
+      await page.waitForLoadState("networkidle");
+      await sizes.getByRole("button", { name: ukAdmin.variants.moveEarlier.replace("{label}", "18") }).click();
+      await expect.poll(async () => (await sizeRows()).map((r) => r.id)).toEqual([large!.id, small!.id]);
+      await expect(sizes.getByRole("button", { name: ukAdmin.variants.moveEarlier.replace("{label}", "18") })).toBeFocused();
+
+      await sizes.getByRole("button", { name: ukAdmin.variants.delete.replace("{label}", "16") }).click();
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toContainText(ukAdmin.variants.deleteTitle);
+      await dialog.getByRole("button", { name: ukAdmin.variants.deleteConfirm, exact: true }).click();
+      await expect(page.getByText(ukAdmin.variants.deleted)).toBeVisible();
+      await expect.poll(async () => (await sizeRows()).map((r) => r.id)).toEqual([large!.id]);
+      const { data: deleted } = await db!.from("product_variants").select("deleted_at").eq("id", small!.id).single();
+      expect(deleted?.deleted_at).not.toBeNull();
+
+      await page.goto(productPath);
+      await expect(sizePicker(page).getByRole("radio")).toHaveCount(1);
+      await expect(sizePicker(page).getByRole("radio", { name: /^18/ })).toBeEnabled();
+      expect(errors).toEqual([]);
+    });
+  });
 });

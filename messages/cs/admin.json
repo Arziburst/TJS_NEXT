@@ -80,7 +80,8 @@
       "next": "Další stránka",
       "page": "Stránka {page} z {count}"
     },
-    "unreviewed": "{count, plural, one {# strojový překlad nezkontrolován} few {# strojové překlady nezkontrolovány} many {# strojového překladu nezkontrolováno} other {# strojových překladů nezkontrolováno}}: {locales}"
+    "unreviewed": "{count, plural, one {# strojový překlad nezkontrolován} few {# strojové překlady nezkontrolovány} many {# strojového překladu nezkontrolováno} other {# strojových překladů nezkontrolováno}}: {locales}",
+    "variants": "{count, plural, one {# velikost} few {# velikosti} many {# velikosti} other {# velikostí}}"
   },
   "actionErrors": {
     "notAuthorized": "To může udělat jen správce. Přihlaste se znovu.",
@@ -109,7 +110,8 @@
       "translations": "Texty ve všech jazycích",
       "taxonomy": "Materiály a barvy",
       "photos": "Fotky",
-      "publication": "Zveřejnění"
+      "publication": "Zveřejnění",
+      "variants": "Velikosti"
     },
     "chooseCategory": "Vyberte kategorii",
     "sku": "Kód produktu",
@@ -184,7 +186,9 @@
       "skuTaken": "Tento kód už používá jiný produkt",
       "leadTimeOrder": "Nesmí být menší než „Od“",
       "titleRequired": "Zadejte název v tomto jazyce, nebo vymažte jeho ostatní texty",
-      "requiredToPublish": "Ke zveřejnění je nutný ukrajinský název"
+      "requiredToPublish": "Ke zveřejnění je nutný ukrajinský název",
+      "hasVariants": "Kus s velikostmi zůstává na zakázku; nejprve smažte jeho velikosti",
+      "variantPriceNotPositive": "Některá velikost tohoto produktu by stála nula nebo méně; nejprve změňte její cenový rozdíl"
     },
     "translateAfterSave": "Nejprve produkt uložte; potom jej lze strojově přeložit do ostatních jazyků."
   },
@@ -323,6 +327,55 @@
       "notFound": "Tento produkt nebo fotka už neexistuje.",
       "conflict": "Fotky se změnily v jiném okně; nyní se zobrazují aktuální.",
       "unexpectedError": "To se nepovedlo. Zkuste to znovu."
+    }
+  },
+  "variants": {
+    "hint": "Každá velikost, ze které zákaznice vybírá, s vlastním rozdílem oproti ceně produktu. Produkt s velikostmi se objednává jen v jedné z nich.",
+    "saveFirst": "Nejprve uložte produkt, potom přidejte jeho velikosti.",
+    "oneOfAKind": "Unikátní kus nemá velikosti.",
+    "empty": "Žádné velikosti: kus se objednává tak, jak je.",
+    "add": "Přidat velikost",
+    "newTitle": "Nová velikost",
+    "editTitle": "Upravit velikost {label}",
+    "labels": "Název v každém jazyce",
+    "labelsHint": "Ukrajinština je povinná. Prázdný jazyk zobrazí anglický název, jinak ukrajinský.",
+    "priceDelta": "Cenový rozdíl, USD",
+    "priceDeltaHint": "Přičte se k ceně produktu: 0 pro stejnou cenu, např. 5 pro dražší velikost nebo -2.50 pro levnější.",
+    "skuSuffix": "Přípona SKU",
+    "skuSuffixHint": "Nepovinné; v objednávkách se připojí k SKU produktu, např. 17 → TJS-001-17.",
+    "price": "Cena: {price}",
+    "available": "Lze objednat",
+    "availableOf": "{label} lze objednat",
+    "off": "Nyní nedostupná",
+    "edit": "Upravit {label}",
+    "moveEarlier": "Posunout {label} nahoru",
+    "moveLater": "Posunout {label} dolů",
+    "delete": "Smazat {label}",
+    "deleteTitle": "Smazat tuto velikost?",
+    "deleteDescription": "{label} zmizí z obchodu; košíky, které ji obsahují, ji zobrazí jako nedostupnou.",
+    "deleteConfirm": "Smazat",
+    "ordered": "Již objednaná: nelze ji smazat, místo toho ji vypněte.",
+    "save": "Uložit velikost",
+    "saved": "Velikost uložena",
+    "deleted": "Velikost smazána",
+    "moved": "Přesunuto na místo {position} z {count}",
+    "switchedOn": "{label} lze znovu objednat",
+    "switchedOff": "{label} je vypnutá",
+    "errors": {
+      "notAuthorized": "To může jen administrátorka. Přihlaste se znovu.",
+      "notFound": "Tento produkt nebo velikost už neexistuje. Načtěte stránku znovu.",
+      "conflict": "Velikosti byly změněny v jiné kartě: zobrazuje se aktuální seznam.",
+      "ordered": "Tato velikost už byla objednána: místo smazání ji vypněte.",
+      "tooMany": "Produkt může mít nejvýše 50 velikostí.",
+      "oneOfAKind": "Unikátní kus nemá velikosti.",
+      "invalid": "Zkontrolujte pole.",
+      "unexpectedError": "Velikosti se nepodařilo změnit. Zkuste to znovu.",
+      "labelRequired": "Zadejte ukrajinský název",
+      "tooLong": "Nejvýše {max} znaků",
+      "invalidDelta": "Zadejte částku, např. 5 nebo -2.50",
+      "priceNotPositive": "Cena velikosti musí zůstat nad nulou",
+      "invalidSuffix": "Latinková písmena a číslice, mezi nimi tečky nebo pomlčky",
+      "suffixTaken": "Jiná velikost tohoto produktu má tuto příponu"
     }
   }
 }

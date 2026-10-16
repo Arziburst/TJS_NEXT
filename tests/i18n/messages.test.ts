@@ -110,6 +110,8 @@ describe("message catalogs", () => {
       amount: "80 ₴",
       flat: "12",
       site: "shop.example.test",
+      // a size's name (#66)
+      label: "17",
       // the page count of the order history (account)
       pages: 3,
       link: (chunks: string) => `<a>${chunks}</a>`,

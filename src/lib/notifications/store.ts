@@ -58,7 +58,7 @@ export async function completeOutboxEvent(service: ServerSupabaseClient, complet
 const ORDER_COLUMNS = `id, number, status, created_at, locale, first_name, last_name, phone, email, comment, country,
   delivery_carrier, delivery_method, delivery_destination, delivery_estimate_state, delivery_estimate_minor,
   delivery_estimate_currency, delivery_estimate_decimals, currency, currency_decimals, items_total_minor,
-  items_total_usd_minor, order_items(position, title, title_locale, quantity, line_total_minor)`;
+  items_total_usd_minor, order_items(position, title, title_locale, variant_label, quantity, line_total_minor)`;
 
 const orderRow = z.object({
   id: z.uuid(),
@@ -88,6 +88,7 @@ const orderRow = z.object({
       position: z.number().int(),
       title: z.string(),
       title_locale: z.string(),
+      variant_label: z.string().nullable(),
       quantity: z.number().int(),
       line_total_minor: z.number().int(),
     }),
@@ -132,6 +133,12 @@ export async function readNotificationOrder(service: ServerSupabaseClient, order
     totalUsdMinor: row.items_total_usd_minor,
     lines: [...row.order_items]
       .sort((a, b) => a.position - b.position)
-      .map((item) => ({ title: item.title, titleLocale: item.title_locale, quantity: item.quantity, lineMinor: item.line_total_minor })),
+      .map((item) => ({
+        title: item.title,
+        titleLocale: item.title_locale,
+        variantLabel: item.variant_label,
+        quantity: item.quantity,
+        lineMinor: item.line_total_minor,
+      })),
   };
 }

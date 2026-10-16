@@ -62,7 +62,10 @@ export type FieldErrorCode =
   | "skuTaken"
   | "leadTimeOrder"
   | "titleRequired"
-  | "requiredToPublish";
+  | "requiredToPublish"
+  // a product with sizes (#66): it stays made to order, and every size keeps a price above zero
+  | "hasVariants"
+  | "variantPriceNotPositive";
 
 export type FieldErrors = Partial<Record<string, FieldErrorCode>>;
 
