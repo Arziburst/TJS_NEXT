@@ -24,6 +24,51 @@ describe("scrub", () => {
     // dates, times, ports and stack positions stay readable
     expect(scrub("2026-10-16T05:21:43.567Z at file.js:15:70531 port 41311")).toBe("2026-10-16T05:21:43.567Z at file.js:15:70531 port 41311");
   });
+
+  it("masks a fragment of a phone at a boundary of V8's truncation (#123)", () => {
+    expect(scrub(`Unexpected token 'a', "+3806683"... is not valid JSON`)).toBe(`Unexpected token 'a', "<phone>"... is not valid JSON`);
+    expect(scrub(`"+3806683…`)).toBe(`"<phone>…`);
+    expect(scrub(`"+38 066 8"...`)).toBe(`"<phone>"...`);
+    expect(scrub(`Unexpected token 'x', ..."0-10-29 call me"... is not valid JSON`)).toBe(`Unexpected token 'x', ..."<phone> call me"... is not valid JSON`);
+    expect(scrub(`…"830 10 29"`)).toBe(`…"<phone>"`);
+    expect(scrub(`..."(066) 830-1`)).toBe(`..."<phone>`);
+    expect(scrub(`"call 830 10"...`)).toBe(`"call <phone>"...`);
+    // too short to say anything, or not shaped like a phone
+    expect(scrub(`"+38"...`)).toBe(`"+38"...`);
+    expect(scrub(`..."1-2 x"`)).toBe(`..."1-2 x"`);
+  });
+
+  it("keeps dates, times, ports, stack positions and ids at a truncation boundary", () => {
+    for (const text of [
+      `"2026-10-16"...`,
+      `"16-10-2026"...`,
+      `..."2026-10-16T05:21:43.567Z"`,
+      `"at 05:21:43"...`,
+      `"file.js:15:70531"...`,
+      `"port 41311"...`,
+      `..."order TJS-2026-0042 not found"`,
+      `"v1.2.3"...`,
+      `"page 10"...`,
+    ]) {
+      expect(scrub(text), text).toBe(text);
+    }
+  });
+
+  it("does not take a package specifier for an e-mail (#123)", () => {
+    for (const text of [
+      "pkg@1.2.3",
+      "@scope/pkg@2.0.0-beta.1",
+      "at node_modules/.pnpm/next@16.0.1_react@19.2.0/node_modules/next/dist/server.js:12:3",
+      "install react-dom@19.2.0+build.7 failed",
+    ]) {
+      expect(scrub(text), text).toBe(text);
+    }
+    // an address stays masked, also one whose domain starts with a digit or is a dotted quad
+    expect(scrub("anna@1.2.3.4")).toBe("<email>");
+    expect(scrub("anna@1and1.com")).toBe("<email>");
+    expect(scrub("anna@2.0")).toBe("<email>");
+    expect(scrub("pkg@latest")).toBe("<email>");
+  });
 });
 
 describe("maskConsoleArgs", () => {
