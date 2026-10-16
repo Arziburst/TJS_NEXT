@@ -5,7 +5,7 @@
 -- lines' regular prices.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(57);
+select plan(60);
 
 insert into auth.users (id, email) values
   ('67111111-1111-4111-8111-111111111111', 'collections-customer-' || gen_random_uuid() || '@example.test'),
@@ -102,6 +102,7 @@ update public.product_sales set price_usd_minor = 1 where product_id = 'a6700000
 select is(private.sale_price_minor('a6700000-0000-4000-8000-000000000004', 40, -39, now()), 1::bigint, 'never below 1 cent');
 select is(private.sale_price_minor('a6700000-0000-4000-8000-000000000004', 0, 0, now()), 0::bigint, 'a free piece stays free');
 delete from public.product_sales where product_id = 'a6700000-0000-4000-8000-000000000004';
+select ok(has_function_privilege('service_role', 'public.next_sale_change()', 'execute'), 'the server (service role) reads the next sale change');
 select ok(public.next_sale_change() is null, 'no sale starts or ends later: no next change');
 update public.collection_sales set ends_at = now() + interval '3 hours';
 select is(public.next_sale_change(), now() + interval '3 hours', 'the next change is the earliest start or end ahead');
@@ -159,6 +160,7 @@ select throws_ok(
   '42501', null, 'anon cannot start a sale'
 );
 select throws_ok($$select private.sale_price_minor(null, 1, 0, now())$$, '42501', null, 'anon cannot call the private price helper');
+select throws_ok($$select public.next_sale_change()$$, '42501', null, 'anon cannot learn when a planned sale starts');
 select throws_ok(
   $$select public.admin_save_collection(null, '{"is_published":false}', '[{"locale":"uk","slug":"x","name":"X"}]')$$,
   '42501', null, 'anon cannot execute admin_save_collection'
@@ -177,6 +179,7 @@ set local role authenticated;
 select is((select count(*)::int from public.product_sales where product_id::text like 'a67%'), 0,
   'a customer sees no planned, ended or draft product''s sale');
 select is((select count(*)::int from public.collections where id::text like 'd67%'), 1, 'a customer reads published collections only');
+select throws_ok($$select public.next_sale_change()$$, '42501', null, 'a customer cannot learn when a planned sale starts');
 select is_empty(
   $$update public.collections set is_published = false where id = 'd6700000-0000-4000-8000-000000000001' returning id$$,
   'a customer cannot unpublish a collection'

@@ -298,7 +298,8 @@ $$;
 
 revoke all on function private.sale_price_minor(uuid, bigint, bigint, timestamptz) from public;
 
--- The next moment a sale starts or ends: the storefront's cached pages live no longer than until then.
+-- The next moment a sale starts or ends: the storefront's cached pages live no longer than until then. The server
+-- only (service role): the start of a planned sale is not public, so the API roles cannot call it.
 create function public.next_sale_change()
 returns timestamptz
 language sql
@@ -314,8 +315,8 @@ as $$
   ) as changes;
 $$;
 
-revoke all on function public.next_sale_change() from public;
-grant execute on function public.next_sale_change() to anon, authenticated, service_role;
+revoke all on function public.next_sale_change() from public, anon, authenticated;
+grant execute on function public.next_sale_change() to service_role;
 
 -- Listings (shop_search / shop_facets of 20261016007500, 20261016007700) ---------------------------------------
 -- A collection's page lists its pieces (p_collection, sorted in the owner's order with p_sort 'position'); the

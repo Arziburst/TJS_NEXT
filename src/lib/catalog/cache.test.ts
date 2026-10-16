@@ -42,6 +42,8 @@ vi.mock("@/lib/supabase/server", () => ({
       }),
     },
   }),
+  // the next sale change (#67) is read through the service role only
+  createUncachedServiceClient: () => ({ rpc: (fn: string) => builder(`rpc:${fn}`) }),
 }));
 
 const { FAILED_READ_LIFE } = await import("@/lib/failed-read");

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createPublicServerClient } from "@/lib/supabase/server";
+import { createUncachedServiceClient } from "@/lib/supabase/server";
 
 /**
  * The next moment a sale starts or ends (ms since the epoch), null when none is ahead, undefined when it could not be
@@ -9,7 +9,8 @@ import { createPublicServerClient } from "@/lib/supabase/server";
  */
 export async function readNextSaleChange(): Promise<number | null | undefined> {
   try {
-    const { data, error } = await createPublicServerClient().rpc("next_sale_change");
+    // the service role only: the boundary of a planned sale is not public (the function is closed to the API roles)
+    const { data, error } = await createUncachedServiceClient().rpc("next_sale_change");
     if (error) return undefined;
     if (data === null) return null;
     const at = Date.parse(data);
