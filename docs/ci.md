@@ -45,17 +45,23 @@ on `ubuntu-24.04` with Node from `.nvmrc`; this is the check branch protection r
 ## `production-migrations.yml` — production migrations
 
 - **Push to `main` touching `supabase/migrations/**`**: job `plan` links the production project and runs
-  `supabase migration list` and `supabase db push --dry-run`. Main shows whether its migrations would apply
-  cleanly; nothing is written.
+  `supabase migration list` and `supabase db push --include-all --dry-run`. Main shows whether its migrations
+  would apply cleanly; nothing is written.
 - **Manual run with `confirm` = `apply`, from `main`**: `plan` runs first, then job `apply` runs
-  `supabase db push` and the migration list after it. Any other `confirm` value is only the dry run; a run
+  `supabase db push --include-all` and the migration list after it.
+- **Why `--include-all`:** each branch claims its migration slot when it starts (`docs/standards.md` §7), and
+  branches merge in any order, so main often gets a version older than one production already has (e.g. slot
+  `…007700` merged after `…009200` was applied). A plain `db push` refuses such a local version ("Found local
+  migration files to be inserted before the last migration on remote database"); `--include-all` applies every
+  local version missing on the remote, in version order. It never skips a check the other way: a version on the
+  remote that main does not have still fails the push. Any other `confirm` value is only the dry run; a run
   from another ref fails at once.
 - Missing secrets: `plan` writes a warning to the log and the job summary ("SKIPPED … nothing was checked")
   and ends without touching production; an explicit `apply` fails instead of ending green.
 - `concurrency: production-migrations`, never cancelled. Only code already on `main` runs here.
 - Runbook: take a dump first (`npx supabase db dump --linked -f <file>` and `--data-only`), then
   `gh workflow run production-migrations.yml --ref main -f confirm=apply`. If the remote history holds a
-  version that is missing locally, the dry run fails: stop and reconcile, never use `--include-all`.
+  version that is missing locally, the dry run fails: stop and reconcile.
 
 ## `project-status.yml` — board automation
 

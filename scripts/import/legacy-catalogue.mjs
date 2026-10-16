@@ -1,5 +1,6 @@
 // Imports the legacy catalogue (MongoDB products + archived Cloudinary photos) from a read-only export folder
-// into a Supabase project. Idempotent: products are keyed by products.legacy_id, photos by their storage path;
+// into a Supabase project. Idempotent: products are keyed by products.legacy_id, photos by their storage path
+// (or the file scripts/images/strip-metadata.mjs moved them to); photos are stored without metadata;
 // a second run changes nothing. Rows that differ from the export (edited in the admin since) are kept unless
 // --overwrite is given. Never calls MongoDB or Cloudinary. How to run: docs/dev-environment.md.
 //
@@ -13,10 +14,11 @@ import { basename, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { createClient } from "@supabase/supabase-js";
-import sharp from "sharp";
+import { encodeForStorage } from "../../src/lib/images/encode.ts";
 import { businessDate } from "../../src/lib/money/business-date.ts";
 import {
   IMPORT_LOCALES,
+  STORAGE_PREFIX,
   byCreation,
   categorySlugOf,
   cloudinaryFile,
@@ -32,7 +34,6 @@ import { renderReport } from "./legacy-report.mjs";
 
 const BUCKET = "product-images";
 const BUCKET_FILE_LIMIT = 5 * 1024 * 1024;
-const BLUR_SIZE = 8;
 const PAGE = 1000;
 const NBU_EXCHANGE_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
 // NBU answers bare server clients with errors (src/lib/money/nbu.ts)
@@ -112,21 +113,40 @@ async function selectAll(build) {
   }
 }
 
-async function imageFacts(path) {
-  const meta = await sharp(path).metadata();
-  // EXIF orientations 5–8 turn the picture a quarter: browsers and the image optimizer show it turned
-  const turned = (meta.orientation ?? 1) >= 5;
-  const blur = await sharp(path)
-    .rotate()
-    .resize(BLUR_SIZE, BLUR_SIZE, { fit: "inside" })
-    .png()
-    .toBuffer();
-  return {
-    width: turned ? meta.height : meta.width,
-    height: turned ? meta.width : meta.height,
-    blur_data_url: `data:image/png;base64,${blur.toString("base64")}`,
-    contentType: `image/${meta.format}`,
-  };
+/**
+ * An archived photo as it is stored: encoded by the admin upload's code (src/lib/images/encode.ts: turned
+ * upright, re-encoded without EXIF/XMP/IPTC, GPS included), under its file name with the extension of the
+ * encoded format.
+ * @param {Uint8Array} bytes
+ * @param {{ publicId: string, fileName: string }} source
+ */
+export async function encodeLegacyPhoto(bytes, { publicId, fileName }) {
+  const encoded = await encodeForStorage(bytes);
+  if (!encoded.ok) throw new Error(`${fileName}: cannot be stored (${encoded.reason})`);
+  const { image } = encoded;
+  if (image.bytes.byteLength > BUCKET_FILE_LIMIT) throw new Error(`${fileName} is larger than the bucket limit`);
+  return { ...image, fileName: `${publicId}.${image.extension}` };
+}
+
+/**
+ * The stored row of a planned photo: the row at its storage path, else the row that strip-metadata moved to a
+ * new file in the product's folder (scripts/images/strip-metadata.mjs: same folder, same position, a new file
+ * name). A moved row is one of the product's rows under its legacy folder whose path no planned photo of the
+ * product has.
+ * @param {{ storage_path: string, position: number }} planned
+ * @param {Map<string, any>} imageByPath every legacy photo row, by its storage path
+ * @param {Set<string>} plannedPaths the storage paths of the product's planned photos
+ * @param {string} productId
+ */
+export function currentImageOf(planned, imageByPath, plannedPaths, productId) {
+  const atPath = imageByPath.get(planned.storage_path);
+  if (atPath) return atPath;
+  const folder = `${STORAGE_PREFIX}/${productId}/`;
+  for (const row of imageByPath.values()) {
+    if (row.product_id !== productId || !row.storage_path.startsWith(folder) || plannedPaths.has(row.storage_path)) continue;
+    if (row.position === planned.position) return row;
+  }
+  return undefined;
 }
 
 function sameValue(a, b) {
@@ -231,31 +251,37 @@ async function buildPlan({ client, exportDir, products, translations, rate }) {
   }
 
   for (const plan of plans) {
+    const encoded = [];
     for (const [position, url] of plan.product.images.entries()) {
-      const { fileName } = cloudinaryFile(url);
-      const file = join(exportDir, "cloudinary", "image", fileName);
-      if (!existsSync(file)) throw new Error(`${plan.product.legacyId}: ${fileName} is not in the archive`);
-      if (statSync(file).size > BUCKET_FILE_LIMIT) throw new Error(`${fileName} is larger than the bucket limit`);
-      const facts = await imageFacts(file);
-      const storagePath = storagePathOf(plan.row.id, position, fileName);
+      const source = cloudinaryFile(url);
+      const file = join(exportDir, "cloudinary", "image", source.fileName);
+      if (!existsSync(file)) throw new Error(`${plan.product.legacyId}: ${source.fileName} is not in the archive`);
+      if (statSync(file).size > BUCKET_FILE_LIMIT) throw new Error(`${source.fileName} is larger than the bucket limit`);
+      encoded.push({ position, image: await encodeLegacyPhoto(readFileSync(file), source) });
+    }
+    const plannedPaths = new Set(encoded.map(({ position, image }) => storagePathOf(plan.row.id, position, image.fileName)));
+    for (const { position, image } of encoded) {
       const row = {
         product_id: plan.row.id,
-        storage_path: storagePath,
+        storage_path: storagePathOf(plan.row.id, position, image.fileName),
         position,
-        width: facts.width,
-        height: facts.height,
-        blur_data_url: facts.blur_data_url,
+        width: image.width,
+        height: image.height,
+        blur_data_url: image.blurDataUrl,
       };
       const alts = plan.translations.map((t) => ({ locale: t.row.locale, alt: t.row.title }));
-      const current = imageByPath.get(storagePath);
-      const diffs = current ? differingFields(current, row, ["position", "width", "height", "blur_data_url"]) : [];
+      const current = currentImageOf(row, imageByPath, plannedPaths, plan.row.id);
+      // the blur placeholder is not compared: it is derived from the stored file and changes with the encoder,
+      // so a photo stored by an earlier run (or cleaned by strip-metadata since) stays as it is
+      const diffs = current ? differingFields(current, row, ["position", "width", "height"]) : [];
       const currentAlts = new Map((current?.product_image_alts ?? []).map((a) => [a.locale, a.alt]));
       const altActions = alts.map((a) =>
         !currentAlts.has(a.locale) ? "create" : currentAlts.get(a.locale) === a.alt ? "unchanged" : "differs",
       );
       plan.images.push({
-        file,
-        contentType: facts.contentType,
+        // only a new photo is uploaded; the clean bytes of the others are not kept
+        bytes: current ? null : image.bytes,
+        contentType: image.contentType,
         row,
         id: current?.id ?? null,
         action: !current ? "create" : diffs.length ? "differs" : "unchanged",
@@ -341,7 +367,7 @@ async function applyPlan(client, plans, overwrite) {
         // a file without its row is left from an interrupted run and was never served: replace it
         const upload = await client.storage
           .from(BUCKET)
-          .upload(image.row.storage_path, readFileSync(image.file), { contentType: image.contentType, upsert: true });
+          .upload(image.row.storage_path, image.bytes, { contentType: image.contentType, upsert: true });
         if (upload.error) throw new Error(`upload ${image.row.storage_path}: ${upload.error.message}`);
         const { data, error } = await client.from("product_images").insert(image.row).select("id").single();
         if (error) throw new Error(`photo row ${image.row.storage_path}: ${error.message}`);
