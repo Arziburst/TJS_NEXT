@@ -15,7 +15,13 @@ export type EmailMessage = {
 
 const TIMEOUT_MS = 10_000;
 
-export async function sendEmail(config: EmailConfig, message: EmailMessage, fetchImpl: typeof fetch = fetch): Promise<SendResult> {
+/** `timeoutMs`: how long the request may take; the order emails keep the default, a caller with a budget passes less. */
+export async function sendEmail(
+  config: EmailConfig,
+  message: EmailMessage,
+  fetchImpl: typeof fetch = fetch,
+  timeoutMs: number = TIMEOUT_MS,
+): Promise<SendResult> {
   const scrub = (text: string) => text.split(config.apiKey).join("<key>").slice(0, 500);
   let response: Response;
   try {
@@ -34,7 +40,7 @@ export async function sendEmail(config: EmailConfig, message: EmailMessage, fetc
         text: message.text,
         ...(config.replyTo ? { reply_to: config.replyTo } : {}),
       }),
-      signal: AbortSignal.timeout(TIMEOUT_MS),
+      signal: AbortSignal.timeout(timeoutMs),
     });
   } catch (error) {
     const code = (error as { cause?: { code?: unknown } })?.cause?.code;

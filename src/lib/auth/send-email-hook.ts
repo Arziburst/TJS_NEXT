@@ -8,7 +8,8 @@ import { getMetadataBase } from "@/i18n/metadata";
 import { loadMessages } from "@/i18n/messages";
 import { routing, type Locale } from "@/i18n/routing";
 import { readShopContacts } from "@/lib/notifications/contacts";
-import type { EmailMessage } from "@/lib/notifications/resend";
+import type { ChannelConfig } from "@/lib/notifications/config";
+import { sendEmail, type EmailConfig, type EmailMessage } from "@/lib/notifications/resend";
 import type { SendResult } from "@/lib/notifications/telegram";
 import { notificationsTranslator } from "@/lib/notifications/texts";
 import { authUrl } from "./site-url";
@@ -111,6 +112,21 @@ export function confirmLink(locale: Locale, tokenHash: string, type: ConfirmType
 }
 
 export type EmailTransport = { ok: true; send: (message: EmailMessage) => Promise<SendResult> } | { ok: false; reason: string };
+
+// Supabase Auth waits 5 s for an HTTP hook, then fails the request that sent the email. The send gets less than that
+// (the order emails keep their 10 s), so a slow provider ends in this hook's own error answer, not in Auth's timeout.
+export const AUTH_HOOK_SEND_TIMEOUT_MS = 4_000;
+
+/** The order emails' Resend transport (#26) with the hook's time budget; not configured → the reason. */
+export function hookTransport(
+  email: ChannelConfig<EmailConfig>,
+  fetchImpl: typeof fetch = fetch,
+  timeoutMs: number = AUTH_HOOK_SEND_TIMEOUT_MS,
+): EmailTransport {
+  return email.ok
+    ? { ok: true, send: (message) => sendEmail(email.config, message, fetchImpl, timeoutMs) }
+    : { ok: false, reason: email.reason };
+}
 
 export type SendEmailHookDeps = {
   keys: Buffer[];

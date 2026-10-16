@@ -9,7 +9,9 @@ import { signWebhook, webhookKeys } from "@/lib/auth/webhook-signature";
 
 vi.mock("server-only", () => ({}));
 
-const { handleSendEmailHook, renderPlannedEmail } = await import("@/lib/auth/send-email-hook");
+const { AUTH_HOOK_SEND_TIMEOUT_MS, handleSendEmailHook, hookTransport, renderPlannedEmail } = await import(
+  "@/lib/auth/send-email-hook"
+);
 type Deps = Parameters<typeof handleSendEmailHook>[1];
 
 const SECRET = `v1,whsec_${Buffer.from("the hook secret of the tests").toString("base64")}`;
@@ -253,5 +255,45 @@ describe("the transport", () => {
     const result = await handleSendEmailHook(request(payload("recovery")), deps({ transport }));
     expect(result).toEqual({ status: 500, body: { error: { http_code: 500, message: "the email could not be sent" } } });
     expect(logs.some((line) => line.includes("HTTP 422"))).toBe(true);
+  });
+});
+
+describe("the hook's time budget", () => {
+  const email = {
+    ok: true as const,
+    config: { apiKey: "re_test", from: "Shop <auth@example.test>", replyTo: null, apiUrl: "http://resend.test" },
+  };
+  const message: EmailMessage = { to: "olena@example.test", subject: "s", html: "<p>h</p>", text: "t", idempotencyKey: "auth-email/k" };
+
+  it("stays under the 5 s Supabase gives an HTTP hook; the order emails keep 10 s", async () => {
+    expect(AUTH_HOOK_SEND_TIMEOUT_MS).toBeLessThan(5_000);
+    const timeout = vi.spyOn(AbortSignal, "timeout");
+    const ok = async () => new Response("{}", { status: 200 });
+    const transport = hookTransport(email, ok);
+    if (!transport.ok) throw new Error("configured");
+    expect(await transport.send(message)).toEqual({ ok: true });
+    expect(timeout).toHaveBeenLastCalledWith(AUTH_HOOK_SEND_TIMEOUT_MS);
+    const { sendEmail } = await import("@/lib/notifications/resend");
+    await sendEmail(email.config, message, ok);
+    expect(timeout).toHaveBeenLastCalledWith(10_000);
+  });
+
+  it("gives up on a provider that does not answer in time, with the hook's own 500", async () => {
+    // a provider that answers only when the request is aborted
+    const hanging = (_url: unknown, init?: RequestInit) =>
+      new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener("abort", () => reject(init.signal!.reason)));
+    const started = Date.now();
+    const transport = hookTransport(email, hanging as typeof fetch, 50);
+    const result = await handleSendEmailHook(request(payload("recovery")), deps({ transport }));
+    expect(result).toEqual({ status: 500, body: { error: { http_code: 500, message: "the email could not be sent" } } });
+    expect(Date.now() - started).toBeLessThan(2_000);
+    expect(logs.some((line) => line.includes("TimeoutError"))).toBe(true);
+  });
+
+  it("is not configured without the email settings", () => {
+    expect(hookTransport({ ok: false, reason: "not configured (RESEND_API_KEY unset)" })).toEqual({
+      ok: false,
+      reason: "not configured (RESEND_API_KEY unset)",
+    });
   });
 });

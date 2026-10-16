@@ -302,7 +302,9 @@ Supabase Auth's templates have one language. With the **Send Email Hook** on, Au
    `/<locale>/auth/confirm` on `NEXT_PUBLIC_SITE_URL` (never the payload's host);
 3. sends it through the order emails' Resend transport (Notifications below: `NOTIFICATIONS_SEND`,
    `RESEND_API_KEY`, `EMAIL_FROM`). Sending off or unconfigured → 500, so Auth reports the failure (a sign-up is
-   then refused) instead of creating an account nobody can confirm. Any other email type → 400.
+   then refused) instead of creating an account nobody can confirm. Any other email type → 400. Supabase Auth
+   waits 5 s for an HTTP hook: the send here gives up after 4 s (`AUTH_HOOK_SEND_TIMEOUT_MS`; the order emails keep
+   10 s) and answers 500, so a slow provider fails with the hook's own message rather than Auth's timeout.
 
 Answers: `{}` with 200 on success, `{ "error": { "http_code", "message" } }` otherwise. The token and the link are
 never logged. The locale is stored at sign-up (`options.data.locale`) and, while signed in, when the page's locale
