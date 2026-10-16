@@ -183,6 +183,27 @@ describe("RouteCacheHandler", () => {
     expect((await handler().get(key, PAGE))?.lastModified).toBe(stored?.lastModified);
   });
 
+  it("checks the first render of a page seeded without a lifetime, as the build seeds them (#116)", async () => {
+    const key = routeKey();
+    const tag = newTag();
+    // a build-time prerender: stored without a read before it and without cacheControl in its metadata
+    await handler().set(key, page([tag]), {} as SetCtx);
+
+    // Next finds it past the prerender manifest's revalidate time (which the handler cannot see) and renders it
+    // again; a write lands during that render
+    const request = handler();
+    const seeded = await request.get(key, PAGE);
+    expect(seeded).not.toBeNull();
+    expect(seeded?.cacheControl).toBeUndefined();
+    await sleep();
+    updateTag(tag);
+    await request.set(key, page([tag]), STORE);
+    // the seed stays, expired by the write: the next request renders it again (Next checks the expiry by its
+    // performance clock, a millisecond or so behind the write's Date.now)
+    await sleep();
+    expect(await handler().get(key, PAGE)).toBeNull();
+  });
+
   it("does not store a render that another request's handler stores (a background upgrade)", async () => {
     const key = routeKey();
     const tag = newTag();
