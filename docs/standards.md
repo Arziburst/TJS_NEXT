@@ -179,6 +179,28 @@ Business values (prices, markets, locales, statuses …) are not here — they l
 - The admin role is granted only in the database and checked on the server and in RLS — never only in
   the UI.
 - Escape user data in every output channel (HTML emails, Telegram HTML).
+- **Security headers** (#31, `src/lib/security/headers.ts`). `next.config.ts` sends on every response a
+  Content-Security-Policy (`default-src 'self'`, `frame-ancestors 'none'`, `object-src 'none'`, `base-uri` and
+  `form-action 'self'`, images and `connect-src` from this origin and the configured Supabase project only),
+  `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`, and HSTS when the request
+  came over https. A third-party API (Nova Poshta, Nova Post, Resend, Telegram, the AI Gateway) is called from the
+  server only and never enters `connect-src`; a new browser-side origin is added to the directives there, with
+  its reason. **Scripts are enforced with `'unsafe-inline'`** (no `'unsafe-eval'`): pages are served as their
+  prerendered static shells (Cache Components), whose inline scripts — the Turbopack bootstrap and React's
+  `$RC("B:n","S:n")` runtime with page-dependent ids — were rendered without a request, so without a nonce, and
+  their hashes change with the content after every regeneration. The strict policy (`'self'` + a per-request
+  nonce, which Next puts on what it renders per request) is sent by `src/proxy.ts` as
+  `Content-Security-Policy-Report-Only`: its console violations on the shells are expected. The way to enforce it
+  is to render every page per request (no static shell) — an owner decision, `docs/launch.md` 0.7. Client code
+  never needs eval: zod parses jitless in the browser (`src/instrumentation-client.ts`).
+- **Server errors** reach `onRequestError` (`src/instrumentation.ts` → `src/lib/monitoring/report.ts`): one
+  structured JSON event per error with the request id (`x-request-id` from the proxy, else the host's), the path
+  without its query and a message with e-mails, phones and tokens masked; never headers, cookies or bodies. With
+  `SENTRY_DSN` set the event also goes to that endpoint. Next prints its own line for the same error, and Node or
+  a library may print an unhandled rejection: `register()` wraps `console.error` and `console.warn` in the
+  Node.js runtime with the same masks (`src/lib/monitoring/mask.ts`, `console.ts`), so every log line is masked —
+  the structured event is the record, Next's line the readable copy. Code that catches an error itself logs what
+  it needs and must not put personal data into the message either.
 
 ## 5. UI, layout and text
 
