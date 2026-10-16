@@ -31,7 +31,8 @@
     "products": "Productos",
     "newProduct": "Añadir",
     "attributes": "Materiales y colores",
-    "viewShop": "Tienda"
+    "viewShop": "Tienda",
+    "collections": "Colecciones"
   },
   "status": {
     "draft": "Borrador",
@@ -376,6 +377,128 @@
       "priceNotPositive": "El precio de la talla debe seguir siendo mayor que cero",
       "invalidSuffix": "Letras latinas y cifras, con puntos o guiones entre ellas",
       "suffixTaken": "Otra talla de este producto tiene este sufijo"
+    }
+  },
+  "collections": {
+    "title": "Colecciones",
+    "intro": "Agrupa piezas en colecciones con su propia página en la tienda. Las publicadas se enlazan desde la página de inicio y la tienda.",
+    "new": "Nueva colección",
+    "newTitle": "Nueva colección",
+    "editTitle": "Editar colección",
+    "editTitleOf": "Editar: {name}",
+    "back": "Volver a las colecciones",
+    "empty": "Aún no hay colecciones.",
+    "loadError": "No se pudieron cargar las colecciones. Inténtalo más tarde.",
+    "productCount": "{count, plural, =0 {Sin piezas} one {# pieza} other {# piezas}}",
+    "onSale": "En rebaja",
+    "viewInShop": "Ver en la tienda",
+    "saveFirst": "Guarda primero la colección; después añade sus piezas, la foto de portada y la rebaja.",
+    "sections": {
+      "details": "Nombre y descripción",
+      "publication": "Publicación",
+      "cover": "Foto de portada",
+      "products": "Piezas",
+      "danger": "Eliminar"
+    },
+    "fields": {
+      "name": "Nombre",
+      "slug": "Slug de la URL",
+      "slugHint": "Déjalo vacío para crearlo a partir del nombre.",
+      "description": "Descripción",
+      "position": "Lugar en la lista",
+      "positionHint": "Los números más bajos van primero.",
+      "published": "Publicada en la tienda",
+      "publishedHint": "Necesita el nombre en ucraniano."
+    },
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saved": "Colección guardada",
+    "created": "Colección creada",
+    "publishedNow": "La colección está publicada",
+    "unpublishedNow": "La colección está oculta en la tienda",
+    "errors": {
+      "required": "Escribe un nombre.",
+      "invalidSlug": "Usa letras latinas minúsculas, cifras y guiones.",
+      "slugTaken": "Otra colección ya tiene este slug.",
+      "notAuthorized": "Solo un administrador puede hacer esto. Vuelve a iniciar sesión.",
+      "notFound": "Esta colección ya no existe.",
+      "needsUk": "Una colección publicada necesita su nombre en ucraniano.",
+      "invalid": "Revisa el formulario.",
+      "tooManyRequests": "Demasiados cambios en poco tiempo. Espera unos minutos y vuelve a intentarlo.",
+      "unexpectedError": "No ha funcionado. Inténtalo de nuevo."
+    },
+    "products": {
+      "add": "Añadir piezas",
+      "pickerTitle": "Añadir piezas a la colección",
+      "pickerDescription": "Toca una pieza para añadirla al final de la lista.",
+      "search": "Buscar por nombre o referencia",
+      "noResults": "No se encontraron piezas.",
+      "empty": "Esta colección aún no tiene piezas.",
+      "inCollection": "En la colección",
+      "remove": "Quitar {title}",
+      "moveUp": "Subir {title}",
+      "moveDown": "Bajar {title}",
+      "added": "{title}: añadida",
+      "removed": "{title}: quitada",
+      "moved": "Movida al puesto {position} de {count}",
+      "done": "Listo",
+      "notInShop": "No se muestra en la tienda"
+    },
+    "cover": {
+      "hint": "Una foto ancha para la página de inicio y la cabecera de la página de la colección. JPEG, PNG o WebP, hasta {maxMb} MB.",
+      "upload": "Subir foto de portada",
+      "replace": "Cambiar la foto de portada",
+      "remove": "Quitar la foto de portada",
+      "uploading": "Subiendo…",
+      "uploaded": "Foto de portada guardada",
+      "removed": "Foto de portada quitada",
+      "none": "Aún no hay foto de portada."
+    },
+    "delete": {
+      "button": "Eliminar la colección",
+      "title": "¿Eliminar «{name}»?",
+      "description": "Se eliminan la colección y su rebaja; sus piezas siguen en la tienda.",
+      "confirm": "Eliminar",
+      "deleted": "Colección eliminada"
+    }
+  },
+  "sale": {
+    "title": "Rebaja",
+    "introProduct": "Un porcentaje de descuento o un precio rebajado fijo para cada talla. La tienda muestra el precio habitual tachado y cobra el precio rebajado mientras dure.",
+    "introCollection": "Un porcentaje de descuento en cada pieza de esta colección mientras esté publicada. Si una pieza tiene su propia rebaja más baja, se aplica el precio más bajo.",
+    "kind": "Descuento",
+    "kinds": {
+      "percent": "Porcentaje",
+      "price": "Precio rebajado fijo"
+    },
+    "percent": "Porcentaje de descuento",
+    "price": "Precio rebajado, USD",
+    "priceHint": "Precio habitual {price}; cada talla mantiene su diferencia.",
+    "startsAt": "Inicio (hora de Kyiv)",
+    "endsAt": "Fin (hora de Kyiv)",
+    "windowHint": "Sin inicio, la rebaja empieza ya; sin fin, dura hasta que la termines.",
+    "save": "Guardar la rebaja",
+    "remove": "Terminar la rebaja",
+    "saved": "Rebaja guardada",
+    "removed": "Rebaja terminada",
+    "none": "Sin rebaja.",
+    "summaryPercent": "{percent} % de descuento",
+    "summaryPrice": "Precio rebajado {price}",
+    "state": {
+      "running": "Activa",
+      "scheduled": "Empieza más tarde",
+      "ended": "Terminada"
+    },
+    "errors": {
+      "required": "Escribe un valor.",
+      "invalid": "Escribe un valor válido.",
+      "notBelowPrice": "El precio rebajado debe ser menor que el habitual.",
+      "endBeforeStart": "El fin debe ser posterior al inicio.",
+      "collectionPercentOnly": "La rebaja de una colección es un porcentaje.",
+      "notAuthorized": "Solo un administrador puede hacer esto. Vuelve a iniciar sesión.",
+      "notFound": "Este producto o colección ya no existe.",
+      "tooManyRequests": "Demasiados cambios en poco tiempo. Espera unos minutos y vuelve a intentarlo.",
+      "unexpectedError": "No ha funcionado. Inténtalo de nuevo."
     }
   }
 }

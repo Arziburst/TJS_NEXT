@@ -31,7 +31,8 @@
     "products": "Prodotti",
     "newProduct": "Aggiungi",
     "attributes": "Materiali e colori",
-    "viewShop": "Negozio"
+    "viewShop": "Negozio",
+    "collections": "Collezioni"
   },
   "status": {
     "draft": "Bozza",
@@ -376,6 +377,128 @@
       "priceNotPositive": "Il prezzo della misura deve restare sopra zero",
       "invalidSuffix": "Lettere latine e cifre, con punti o trattini tra di esse",
       "suffixTaken": "Un’altra misura di questo prodotto ha questo suffisso"
+    }
+  },
+  "collections": {
+    "title": "Collezioni",
+    "intro": "Raggruppa i pezzi in collezioni con una propria pagina nel negozio. Quelle pubblicate sono collegate dalla home e dal negozio.",
+    "new": "Nuova collezione",
+    "newTitle": "Nuova collezione",
+    "editTitle": "Modifica collezione",
+    "editTitleOf": "Modifica: {name}",
+    "back": "Torna alle collezioni",
+    "empty": "Nessuna collezione per ora.",
+    "loadError": "Impossibile caricare le collezioni. Riprova più tardi.",
+    "productCount": "{count, plural, =0 {Nessun pezzo} one {# pezzo} other {# pezzi}}",
+    "onSale": "In promozione",
+    "viewInShop": "Vedi nel negozio",
+    "saveFirst": "Salva prima la collezione, poi aggiungi i pezzi, la foto di copertina e la promozione.",
+    "sections": {
+      "details": "Nome e descrizione",
+      "publication": "Pubblicazione",
+      "cover": "Foto di copertina",
+      "products": "Pezzi",
+      "danger": "Eliminazione"
+    },
+    "fields": {
+      "name": "Nome",
+      "slug": "Slug dell’URL",
+      "slugHint": "Lascialo vuoto per crearlo dal nome.",
+      "description": "Descrizione",
+      "position": "Posizione nell’elenco",
+      "positionHint": "I numeri più bassi vengono prima.",
+      "published": "Pubblicata nel negozio",
+      "publishedHint": "Richiede il nome in ucraino."
+    },
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "saved": "Collezione salvata",
+    "created": "Collezione creata",
+    "publishedNow": "La collezione è pubblicata",
+    "unpublishedNow": "La collezione è nascosta nel negozio",
+    "errors": {
+      "required": "Inserisci un nome.",
+      "invalidSlug": "Usa lettere latine minuscole, cifre e trattini.",
+      "slugTaken": "Un’altra collezione ha già questo slug.",
+      "notAuthorized": "Solo un amministratore può farlo. Accedi di nuovo.",
+      "notFound": "Questa collezione non esiste più.",
+      "needsUk": "Una collezione pubblicata ha bisogno del nome in ucraino.",
+      "invalid": "Controlla il modulo.",
+      "tooManyRequests": "Troppe modifiche in poco tempo. Attendi qualche minuto e riprova.",
+      "unexpectedError": "Non ha funzionato. Riprova."
+    },
+    "products": {
+      "add": "Aggiungi pezzi",
+      "pickerTitle": "Aggiungi pezzi alla collezione",
+      "pickerDescription": "Tocca un pezzo per aggiungerlo in fondo all’elenco.",
+      "search": "Cerca per nome o codice",
+      "noResults": "Nessun pezzo trovato.",
+      "empty": "Questa collezione non ha ancora pezzi.",
+      "inCollection": "Nella collezione",
+      "remove": "Rimuovi {title}",
+      "moveUp": "Sposta su {title}",
+      "moveDown": "Sposta giù {title}",
+      "added": "{title} aggiunto",
+      "removed": "{title} rimosso",
+      "moved": "Spostato in posizione {position} di {count}",
+      "done": "Fatto",
+      "notInShop": "Non visibile nel negozio"
+    },
+    "cover": {
+      "hint": "Una foto larga per la home e l’intestazione della pagina della collezione. JPEG, PNG o WebP, fino a {maxMb} MB.",
+      "upload": "Carica la foto di copertina",
+      "replace": "Sostituisci la foto di copertina",
+      "remove": "Rimuovi la foto di copertina",
+      "uploading": "Caricamento…",
+      "uploaded": "Foto di copertina salvata",
+      "removed": "Foto di copertina rimossa",
+      "none": "Nessuna foto di copertina."
+    },
+    "delete": {
+      "button": "Elimina la collezione",
+      "title": "Eliminare «{name}»?",
+      "description": "La collezione e la sua promozione vengono rimosse; i suoi pezzi restano nel negozio.",
+      "confirm": "Elimina",
+      "deleted": "Collezione eliminata"
+    }
+  },
+  "sale": {
+    "title": "Promozione",
+    "introProduct": "Una percentuale di sconto o un prezzo scontato fisso per ogni misura. Il negozio mostra il prezzo normale barrato e addebita il prezzo scontato finché la promozione è attiva.",
+    "introCollection": "Una percentuale di sconto su ogni pezzo di questa collezione finché è pubblicata. Se un pezzo ha una sua promozione più bassa, vale il prezzo più basso.",
+    "kind": "Sconto",
+    "kinds": {
+      "percent": "Percentuale",
+      "price": "Prezzo scontato fisso"
+    },
+    "percent": "Percentuale di sconto",
+    "price": "Prezzo scontato, USD",
+    "priceHint": "Prezzo normale {price}; ogni misura mantiene la sua differenza.",
+    "startsAt": "Inizio (ora di Kyiv)",
+    "endsAt": "Fine (ora di Kyiv)",
+    "windowHint": "Senza inizio la promozione parte subito, senza fine dura finché non la termini.",
+    "save": "Salva la promozione",
+    "remove": "Termina la promozione",
+    "saved": "Promozione salvata",
+    "removed": "Promozione terminata",
+    "none": "Nessuna promozione.",
+    "summaryPercent": "Sconto del {percent} %",
+    "summaryPrice": "Prezzo scontato {price}",
+    "state": {
+      "running": "Attiva",
+      "scheduled": "Inizia più tardi",
+      "ended": "Terminata"
+    },
+    "errors": {
+      "required": "Inserisci un valore.",
+      "invalid": "Inserisci un valore valido.",
+      "notBelowPrice": "Il prezzo scontato deve essere inferiore al prezzo normale.",
+      "endBeforeStart": "La fine deve venire dopo l’inizio.",
+      "collectionPercentOnly": "La promozione di una collezione è una percentuale.",
+      "notAuthorized": "Solo un amministratore può farlo. Accedi di nuovo.",
+      "notFound": "Questo prodotto o questa collezione non esiste più.",
+      "tooManyRequests": "Troppe modifiche in poco tempo. Attendi qualche minuto e riprova.",
+      "unexpectedError": "Non ha funzionato. Riprova."
     }
   }
 }

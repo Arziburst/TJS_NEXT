@@ -31,7 +31,8 @@
     "products": "Producten",
     "newProduct": "Toevoegen",
     "attributes": "Materialen & kleuren",
-    "viewShop": "Winkel"
+    "viewShop": "Winkel",
+    "collections": "Collecties"
   },
   "status": {
     "draft": "Concept",
@@ -376,6 +377,128 @@
       "priceNotPositive": "De prijs van de maat moet boven nul blijven",
       "invalidSuffix": "Latijnse letters en cijfers, met punten of streepjes ertussen",
       "suffixTaken": "Een andere maat van dit product heeft dit achtervoegsel"
+    }
+  },
+  "collections": {
+    "title": "Collecties",
+    "intro": "Bundel stukken in collecties met een eigen pagina in de winkel. De gepubliceerde zijn gelinkt vanaf de startpagina en de winkel.",
+    "new": "Nieuwe collectie",
+    "newTitle": "Nieuwe collectie",
+    "editTitle": "Collectie bewerken",
+    "editTitleOf": "Bewerken: {name}",
+    "back": "Terug naar de collecties",
+    "empty": "Nog geen collecties.",
+    "loadError": "De collecties konden niet worden geladen. Probeer het later opnieuw.",
+    "productCount": "{count, plural, =0 {Geen stukken} one {# stuk} other {# stukken}}",
+    "onSale": "In de uitverkoop",
+    "viewInShop": "Bekijk in de winkel",
+    "saveFirst": "Sla de collectie eerst op en voeg daarna de stukken, de omslagfoto en de uitverkoop toe.",
+    "sections": {
+      "details": "Naam en beschrijving",
+      "publication": "Publicatie",
+      "cover": "Omslagfoto",
+      "products": "Stukken",
+      "danger": "Verwijderen"
+    },
+    "fields": {
+      "name": "Naam",
+      "slug": "URL-slug",
+      "slugHint": "Laat leeg om hem uit de naam te maken.",
+      "description": "Beschrijving",
+      "position": "Plaats in de lijst",
+      "positionHint": "Lagere getallen komen eerst.",
+      "published": "Gepubliceerd in de winkel",
+      "publishedHint": "Vereist de Oekraïense naam."
+    },
+    "save": "Opslaan",
+    "saving": "Opslaan…",
+    "saved": "Collectie opgeslagen",
+    "created": "Collectie aangemaakt",
+    "publishedNow": "De collectie is gepubliceerd",
+    "unpublishedNow": "De collectie is verborgen in de winkel",
+    "errors": {
+      "required": "Vul een naam in.",
+      "invalidSlug": "Gebruik kleine Latijnse letters, cijfers en koppeltekens.",
+      "slugTaken": "Een andere collectie heeft deze slug al.",
+      "notAuthorized": "Alleen een beheerder kan dit doen. Meld u opnieuw aan.",
+      "notFound": "Deze collectie bestaat niet meer.",
+      "needsUk": "Een gepubliceerde collectie heeft haar Oekraïense naam nodig.",
+      "invalid": "Controleer het formulier.",
+      "tooManyRequests": "Te veel wijzigingen in korte tijd. Wacht een paar minuten en probeer het opnieuw.",
+      "unexpectedError": "Dat is niet gelukt. Probeer het opnieuw."
+    },
+    "products": {
+      "add": "Stukken toevoegen",
+      "pickerTitle": "Stukken aan de collectie toevoegen",
+      "pickerDescription": "Tik op een stuk om het achteraan de lijst toe te voegen.",
+      "search": "Zoeken op naam of artikelnummer",
+      "noResults": "Geen stukken gevonden.",
+      "empty": "Deze collectie heeft nog geen stukken.",
+      "inCollection": "In de collectie",
+      "remove": "{title} verwijderen",
+      "moveUp": "{title} omhoog",
+      "moveDown": "{title} omlaag",
+      "added": "{title} toegevoegd",
+      "removed": "{title} verwijderd",
+      "moved": "Verplaatst naar plaats {position} van {count}",
+      "done": "Klaar",
+      "notInShop": "Niet zichtbaar in de winkel"
+    },
+    "cover": {
+      "hint": "Een brede foto voor de startpagina en de kop van de collectiepagina. JPEG, PNG of WebP, tot {maxMb} MB.",
+      "upload": "Omslagfoto uploaden",
+      "replace": "Omslagfoto vervangen",
+      "remove": "Omslagfoto verwijderen",
+      "uploading": "Uploaden…",
+      "uploaded": "Omslagfoto opgeslagen",
+      "removed": "Omslagfoto verwijderd",
+      "none": "Nog geen omslagfoto."
+    },
+    "delete": {
+      "button": "Collectie verwijderen",
+      "title": "„{name}” verwijderen?",
+      "description": "De collectie en haar uitverkoop worden verwijderd; de stukken blijven in de winkel.",
+      "confirm": "Verwijderen",
+      "deleted": "Collectie verwijderd"
+    }
+  },
+  "sale": {
+    "title": "Uitverkoop",
+    "introProduct": "Een kortingspercentage of een vaste actieprijs voor elke maat. De winkel toont de normale prijs doorgestreept en rekent de actieprijs zolang de uitverkoop loopt.",
+    "introCollection": "Een kortingspercentage op elk stuk van deze collectie zolang ze gepubliceerd is. Heeft een stuk een eigen lagere uitverkoop, dan geldt de laagste prijs.",
+    "kind": "Korting",
+    "kinds": {
+      "percent": "Percentage",
+      "price": "Vaste actieprijs"
+    },
+    "percent": "Kortingspercentage",
+    "price": "Actieprijs, USD",
+    "priceHint": "Normale prijs {price}; elke maat houdt haar verschil.",
+    "startsAt": "Begin (Kyivse tijd)",
+    "endsAt": "Einde (Kyivse tijd)",
+    "windowHint": "Zonder begin start de uitverkoop meteen, zonder einde loopt hij tot u hem beëindigt.",
+    "save": "Uitverkoop opslaan",
+    "remove": "Uitverkoop beëindigen",
+    "saved": "Uitverkoop opgeslagen",
+    "removed": "Uitverkoop beëindigd",
+    "none": "Geen uitverkoop.",
+    "summaryPercent": "{percent} % korting",
+    "summaryPrice": "Actieprijs {price}",
+    "state": {
+      "running": "Loopt",
+      "scheduled": "Begint later",
+      "ended": "Afgelopen"
+    },
+    "errors": {
+      "required": "Vul een waarde in.",
+      "invalid": "Vul een geldige waarde in.",
+      "notBelowPrice": "De actieprijs moet lager zijn dan de normale prijs.",
+      "endBeforeStart": "Het einde moet na het begin liggen.",
+      "collectionPercentOnly": "De uitverkoop van een collectie is een percentage.",
+      "notAuthorized": "Alleen een beheerder kan dit doen. Meld u opnieuw aan.",
+      "notFound": "Dit product of deze collectie bestaat niet meer.",
+      "tooManyRequests": "Te veel wijzigingen in korte tijd. Wacht een paar minuten en probeer het opnieuw.",
+      "unexpectedError": "Dat is niet gelukt. Probeer het opnieuw."
     }
   }
 }

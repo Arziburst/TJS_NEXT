@@ -112,6 +112,8 @@ describe("message catalogs", () => {
       site: "shop.example.test",
       // a size's name (#66)
       label: "17",
+      // a sale's percentage off (#67)
+      percent: 20,
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

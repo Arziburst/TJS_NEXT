@@ -12,6 +12,8 @@ import { createServiceClient } from "@/lib/supabase/server";
 export const ADMIN_RATE_LIMITS = {
   translate: { max: 120, windowSeconds: 3600 },
   review: { max: 300, windowSeconds: 600 },
+  // collections and sales (#67): each tap is one write that expires shop caches; far above a person's pace
+  merchandising: { max: 300, windowSeconds: 600 },
 } as const;
 
 export type AdminRateLimitedAction = keyof typeof ADMIN_RATE_LIMITS;

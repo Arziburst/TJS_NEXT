@@ -1,10 +1,10 @@
 "use client";
 
-import { PackageIcon, PlusIcon, StoreIcon, TagsIcon } from "lucide-react";
+import { LayersIcon, PackageIcon, PlusIcon, StoreIcon, TagsIcon } from "lucide-react";
 import { routes } from "@/config/routes";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { ADMIN_ATTRIBUTES_HREF, ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "./paths";
+import { ADMIN_ATTRIBUTES_HREF, ADMIN_COLLECTIONS_HREF, ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "./paths";
 
 const ENTRIES = {
   // the list and every product's edit page
@@ -17,6 +17,12 @@ const ENTRIES = {
   add: { href: NEW_PRODUCT_HREF, icon: PlusIcon, isActive: (path: string) => path === NEW_PRODUCT_HREF },
   // the materials and colours of the filters (#25)
   attributes: { href: ADMIN_ATTRIBUTES_HREF, icon: TagsIcon, isActive: (path: string) => path === ADMIN_ATTRIBUTES_HREF },
+  // the collections and each one's page (#67)
+  collections: {
+    href: ADMIN_COLLECTIONS_HREF,
+    icon: LayersIcon,
+    isActive: (path: string) => path === ADMIN_COLLECTIONS_HREF || path.startsWith(`${ADMIN_COLLECTIONS_HREF}/`),
+  },
   shop: { href: routes.shop.path, icon: StoreIcon, isActive: () => false },
 } as const;
 
