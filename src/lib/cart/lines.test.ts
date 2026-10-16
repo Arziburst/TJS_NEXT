@@ -3,6 +3,7 @@ import {
   MAX_CART_LINES,
   MAX_MADE_TO_ORDER_QUANTITY,
   addLine,
+  checkLineVariant,
   clampQuantity,
   countPieces,
   mergeLines,
@@ -53,6 +54,51 @@ describe("addLine", () => {
     const result = addLine([line(A, 1)], withVariant, "made_to_order");
     expect(result).toMatchObject({ ok: true, quantity: 1 });
     expect(result.ok && result.lines).toHaveLength(2);
+  });
+});
+
+describe("lines keyed by product and size (#66)", () => {
+  const size = (variantId: string, quantity: number): CartLine => ({ productId: A, variantId, quantity });
+
+  it("keeps two sizes of one product as two lines, each up to the D36 limit", () => {
+    const first = addLine([], { productId: A, variantId: B }, "made_to_order");
+    const second = first.ok ? addLine(first.lines, { productId: A, variantId: C }, "made_to_order") : first;
+    expect(second).toEqual({ ok: true, lines: [size(B, 1), size(C, 1)], quantity: 1 });
+    expect(addLine([size(B, 10), size(C, 1)], { productId: A, variantId: C }, "made_to_order")).toMatchObject({ ok: true, quantity: 2 });
+    expect(addLine([size(B, 10), size(C, 1)], { productId: A, variantId: B }, "made_to_order")).toEqual({ ok: false, reason: "maxQuantity" });
+  });
+
+  it("sets, removes and merges one size without touching the other", () => {
+    expect(setLineQuantity([size(B, 1), size(C, 1)], { productId: A, variantId: C }, 4, "made_to_order")).toEqual({
+      ok: true,
+      lines: [size(B, 1), size(C, 4)],
+    });
+    expect(removeLine([size(B, 1), size(C, 1)], { productId: A, variantId: B })).toEqual([size(C, 1)]);
+    expect(mergeLines([size(B, 2)], [size(C, 1), size(B, 3)])).toEqual([size(B, 3), size(C, 1)]);
+  });
+
+  it("round-trips the sizes through the guest cookie and drops a malformed variant id", () => {
+    expect(parseGuestCart(serializeGuestCart([size(B, 2), size(C, 1)]))).toEqual([size(B, 2), size(C, 1)]);
+    expect(parseGuestCart(JSON.stringify([{ p: A, v: "17", q: 1 }]))).toEqual([]);
+  });
+});
+
+describe("checkLineVariant", () => {
+  const variants = [
+    { id: B, available: true },
+    { id: C, available: false },
+  ];
+
+  it("takes a live variant that can be ordered, or none for a product without variants", () => {
+    expect(checkLineVariant(variants, B)).toEqual({ ok: true, variant: variants[0] });
+    expect(checkLineVariant([], null)).toEqual({ ok: true, variant: null });
+  });
+
+  it("requires a size of a product with variants and refuses one that is off, gone or foreign", () => {
+    expect(checkLineVariant(variants, null)).toEqual({ ok: false, reason: "variantRequired" });
+    expect(checkLineVariant(variants, C)).toEqual({ ok: false, reason: "unavailable" });
+    expect(checkLineVariant(variants, A)).toEqual({ ok: false, reason: "unavailable" });
+    expect(checkLineVariant([], B)).toEqual({ ok: false, reason: "unavailable" });
   });
 });
 

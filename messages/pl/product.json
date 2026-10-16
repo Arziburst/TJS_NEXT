@@ -11,7 +11,8 @@
     "unavailable": "Tej sztuki nie można już zamówić.",
     "rateLimited": "Zbyt wiele zmian w krótkim czasie. Poczekaj chwilę i spróbuj ponownie.",
     "inCart": "W koszyku: {count}",
-    "viewCart": "Zobacz koszyk"
+    "viewCart": "Zobacz koszyk",
+    "variantRequired": "Najpierw wybierz rozmiar."
   },
   "card": {
     "onlyOrder": "Na zamówienie",
@@ -69,5 +70,11 @@
   },
   "recentlyViewed": {
     "title": "Ostatnio oglądane"
+  },
+  "variants": {
+    "legend": "Rozmiar",
+    "unavailable": "obecnie niedostępny",
+    "choose": "Wybierz rozmiar, aby dodać wyrób do koszyka.",
+    "noneAvailable": "Obecnie nie można zamówić żadnego rozmiaru."
   }
 }

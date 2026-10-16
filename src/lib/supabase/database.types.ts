@@ -22,6 +22,12 @@ export type Database = {
 isOneToOne: false
       referencedRelation: "products"
       referencedColumns: ["id"]
+    },{
+      foreignKeyName: "cart_items_variant_id_fkey"
+      columns: ["variant_id"]
+isOneToOne: false
+      referencedRelation: "product_variants"
+      referencedColumns: ["id"]
     }
                   ]
                 },"categories": {
@@ -161,13 +167,13 @@ isOneToOne: false
                   ]
                 },"order_items": {
                   Row: {
-                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id": string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id": string | null,"quantity": number,"sku": string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id": string | null
+                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id": string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id": string | null,"quantity": number,"sku": string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id": string | null,"variant_label": string | null,"variant_label_locale": string | null
                   }
                   Insert: {
-                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id"?: string | null,"quantity": number,"sku"?: string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id"?: string | null
+                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id"?: string | null,"quantity": number,"sku"?: string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
                   }
                   Update: {
-                    "fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor"?: number,"line_total_usd_minor"?: number,"order_id"?: string,"position"?: number,"product_id"?: string | null,"quantity"?: number,"sku"?: string | null,"title"?: string,"title_locale"?: string,"unit_price_minor"?: number,"unit_price_usd_minor"?: number,"variant_id"?: string | null
+                    "fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor"?: number,"line_total_usd_minor"?: number,"order_id"?: string,"position"?: number,"product_id"?: string | null,"quantity"?: number,"sku"?: string | null,"title"?: string,"title_locale"?: string,"unit_price_minor"?: number,"unit_price_usd_minor"?: number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
                   }
                   Relationships: [
                     {
@@ -181,6 +187,12 @@ isOneToOne: false
       columns: ["product_id"]
 isOneToOne: false
       referencedRelation: "products"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "order_items_variant_id_fkey"
+      columns: ["variant_id"]
+isOneToOne: false
+      referencedRelation: "product_variants"
       referencedColumns: ["id"]
     }
                   ]
@@ -310,6 +322,44 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"product_variant_translations": {
+                  Row: {
+                    "label": string,"locale": string,"source": Database["public"]['Enums']["translation_source"],"variant_id": string
+                  }
+                  Insert: {
+                    "label": string,"locale": string,"source"?: Database["public"]['Enums']["translation_source"],"variant_id": string
+                  }
+                  Update: {
+                    "label"?: string,"locale"?: string,"source"?: Database["public"]['Enums']["translation_source"],"variant_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "product_variant_translations_variant_id_fkey"
+      columns: ["variant_id"]
+isOneToOne: false
+      referencedRelation: "product_variants"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"product_variants": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"deleted_at": string | null,"id": string,"is_available": boolean,"position": number,"price_delta_usd_minor": number,"product_id": string,"sku_suffix": string | null,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"id"?: string,"is_available"?: boolean,"position"?: number,"price_delta_usd_minor"?: number,"product_id": string,"sku_suffix"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"deleted_at"?: string | null,"id"?: string,"is_available"?: boolean,"position"?: number,"price_delta_usd_minor"?: number,"product_id"?: string,"sku_suffix"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "product_variants_product_id_fkey"
+      columns: ["product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"products": {
                   Row: {
                     "availability": Database["public"]['Enums']["product_availability"],"category_id": string,"created_at": string,"created_by": string | null,"deleted_at": string | null,"fulfillment": Database["public"]['Enums']["product_fulfillment"],"height_mm": number | null,"hs_code": string,"id": string,"lead_time_max_days": number | null,"lead_time_min_days": number | null,"legacy_id": string | null,"length_mm": number | null,"position": number,"price_usd": number,"published_at": string | null,"sku": string | null,"status": Database["public"]['Enums']["product_status"],"updated_at": string,"updated_by": string | null,"weight_g": number,"width_mm": number | null
@@ -386,11 +436,17 @@ isOneToOne: false
 "admin_delete_product":
 { Args: { "p_id": string }; Returns: boolean
                            },
+"admin_delete_product_variant":
+{ Args: { "p_product_id": string,"p_variant_id": string }; Returns: boolean
+                           },
 "admin_delete_taxonomy_term":
 { Args: { "p_id": string }; Returns: string
                            },
 "admin_reorder_product_images":
 { Args: { "p_image_ids": (string)[],"p_product_id": string }; Returns: undefined
+                           },
+"admin_reorder_product_variants":
+{ Args: { "p_product_id": string,"p_variant_ids": (string)[] }; Returns: undefined
                            },
 "admin_save_image_alts":
 { Args: { "p_alts": Json,"p_image_id": string,"p_product_id": string }; Returns: boolean
@@ -398,14 +454,23 @@ isOneToOne: false
 "admin_save_product":
 { Args: { "p_id": string,"p_product": Json,"p_translations": Json }; Returns: string
                            },
+"admin_save_product_variant":
+{ Args: { "p_labels": Json,"p_product_id": string,"p_variant": Json,"p_variant_id": string }; Returns: string
+                           },
 "admin_save_product_with_terms":
 { Args: { "p_id": string,"p_product": Json,"p_term_ids": (string)[],"p_translations": Json }; Returns: string
                            },
 "admin_save_taxonomy_term":
 { Args: { "p_id": string,"p_kind": Database["public"]['Enums']["taxonomy_kind"],"p_names": Json,"p_slug": string }; Returns: string
                            },
+"admin_save_variant_labels":
+{ Args: { "p_labels": Json,"p_overwrite": boolean,"p_product_id": string }; Returns: number
+                           },
 "admin_set_product_status":
 { Args: { "p_id": string,"p_status": Database["public"]['Enums']["product_status"] }; Returns: boolean
+                           },
+"admin_set_product_variant_available":
+{ Args: { "p_available": boolean,"p_product_id": string,"p_variant_id": string }; Returns: boolean
                            },
 "claim_outbox_events":
 { Args: { "p_lease_seconds": number,"p_limit": number }; Returns: {

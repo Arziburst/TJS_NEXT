@@ -11,7 +11,8 @@
     "unavailable": "Tento kus už nelze objednat.",
     "rateLimited": "Příliš mnoho změn v krátké době. Chvíli počkejte a zkuste to znovu.",
     "inCart": "V košíku: {count}",
-    "viewCart": "Zobrazit košík"
+    "viewCart": "Zobrazit košík",
+    "variantRequired": "Nejprve vyberte velikost."
   },
   "card": {
     "onlyOrder": "Na zakázku",
@@ -69,5 +70,11 @@
   },
   "recentlyViewed": {
     "title": "Naposledy zobrazené"
+  },
+  "variants": {
+    "legend": "Velikost",
+    "unavailable": "nyní nedostupná",
+    "choose": "Vyberte velikost a přidejte šperk do košíku.",
+    "noneAvailable": "Nyní nelze objednat žádnou velikost."
   }
 }

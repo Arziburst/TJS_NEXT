@@ -80,7 +80,8 @@
       "next": "Página siguiente",
       "page": "Página {page} de {count}"
     },
-    "unreviewed": "{count, plural, one {# traducción automática sin revisar} other {# traducciones automáticas sin revisar}}: {locales}"
+    "unreviewed": "{count, plural, one {# traducción automática sin revisar} other {# traducciones automáticas sin revisar}}: {locales}",
+    "variants": "{count, plural, one {# talla} other {# tallas}}"
   },
   "actionErrors": {
     "notAuthorized": "Solo la administración puede hacer esto. Vuelve a iniciar sesión.",
@@ -109,7 +110,8 @@
       "translations": "Textos en todos los idiomas",
       "taxonomy": "Materiales y colores",
       "photos": "Fotos",
-      "publication": "Publicación"
+      "publication": "Publicación",
+      "variants": "Tallas"
     },
     "chooseCategory": "Elige una categoría",
     "sku": "Referencia",
@@ -184,7 +186,9 @@
       "skuTaken": "Otro producto ya usa esta referencia",
       "leadTimeOrder": "No puede ser menor que «Desde»",
       "titleRequired": "Introduce un título en este idioma o vacía sus otros textos",
-      "requiredToPublish": "Para publicar hace falta un título en ucraniano"
+      "requiredToPublish": "Para publicar hace falta un título en ucraniano",
+      "hasVariants": "Una pieza con tallas sigue siendo por encargo; elimina primero sus tallas",
+      "variantPriceNotPositive": "Una talla de este producto costaría cero o menos; cambia primero su diferencia de precio"
     },
     "translateAfterSave": "Guarde primero el producto; después podrá traducirse automáticamente a los demás idiomas."
   },
@@ -323,6 +327,55 @@
       "notFound": "Este producto o esta foto ya no existe.",
       "conflict": "Las fotos se cambiaron en otra ventana; ahora se muestran las actuales.",
       "unexpectedError": "No ha funcionado. Inténtalo de nuevo."
+    }
+  },
+  "variants": {
+    "hint": "Cada talla entre las que elige la clienta, con su propia diferencia respecto al precio del producto. Un producto con tallas solo se pide en una de ellas.",
+    "saveFirst": "Guarda primero el producto y después añade sus tallas.",
+    "oneOfAKind": "Una pieza única no tiene tallas.",
+    "empty": "Sin tallas: la pieza se pide tal como es.",
+    "add": "Añadir una talla",
+    "newTitle": "Nueva talla",
+    "editTitle": "Editar la talla {label}",
+    "labels": "Nombre en cada idioma",
+    "labelsHint": "El ucraniano es obligatorio. Un idioma vacío muestra el nombre en inglés y, si no, el ucraniano.",
+    "priceDelta": "Diferencia de precio, USD",
+    "priceDeltaHint": "Se suma al precio del producto: 0 para el mismo precio, p. ej. 5 para una talla más cara o -2.50 para una más barata.",
+    "skuSuffix": "Sufijo de SKU",
+    "skuSuffixHint": "Opcional; se añade al SKU del producto en los pedidos, p. ej. 17 → TJS-001-17.",
+    "price": "Precio: {price}",
+    "available": "Se puede pedir",
+    "availableOf": "{label} se puede pedir",
+    "off": "No disponible ahora",
+    "edit": "Editar {label}",
+    "moveEarlier": "Subir {label}",
+    "moveLater": "Bajar {label}",
+    "delete": "Eliminar {label}",
+    "deleteTitle": "¿Eliminar esta talla?",
+    "deleteDescription": "{label} desaparece de la tienda; los carritos que la tienen la muestran como no disponible.",
+    "deleteConfirm": "Eliminar",
+    "ordered": "Ya se ha pedido: no se puede eliminar, desactívala en su lugar.",
+    "save": "Guardar la talla",
+    "saved": "Talla guardada",
+    "deleted": "Talla eliminada",
+    "moved": "Movida al puesto {position} de {count}",
+    "switchedOn": "{label} se puede pedir de nuevo",
+    "switchedOff": "{label} está desactivada",
+    "errors": {
+      "notAuthorized": "Solo la administradora puede hacerlo. Vuelve a iniciar sesión.",
+      "notFound": "Este producto o esta talla ya no existe. Recarga la página.",
+      "conflict": "Las tallas se cambiaron en otra pestaña: se muestra la lista actual.",
+      "ordered": "Esta talla ya se ha pedido: desactívala en lugar de eliminarla.",
+      "tooMany": "Un producto puede tener como máximo 50 tallas.",
+      "oneOfAKind": "Una pieza única no tiene tallas.",
+      "invalid": "Revisa los campos.",
+      "unexpectedError": "No se pudieron cambiar las tallas. Inténtalo de nuevo.",
+      "labelRequired": "Introduce el nombre en ucraniano",
+      "tooLong": "Como máximo {max} caracteres",
+      "invalidDelta": "Introduce un importe, p. ej. 5 o -2.50",
+      "priceNotPositive": "El precio de la talla debe seguir siendo mayor que cero",
+      "invalidSuffix": "Letras latinas y cifras, con puntos o guiones entre ellas",
+      "suffixTaken": "Otra talla de este producto tiene este sufijo"
     }
   }
 }

@@ -12,11 +12,19 @@ import {
   reorderProductImages,
   saveProductImageAlts,
 } from "@/app/[locale]/admin/image-actions";
+import {
+  deleteProductVariant,
+  reorderProductVariants,
+  saveProductVariant,
+  setProductVariantAvailable,
+} from "@/app/[locale]/admin/variant-actions";
 import { AdminPending, AdminShell } from "@/components/admin/admin-shell";
 import { DeleteProductButton } from "@/components/admin/delete-product-button";
 import { ADMIN_PRODUCTS_HREF, editProductHref } from "@/components/admin/paths";
 import { ProductForm } from "@/components/admin/product-form";
 import { ProductImages } from "@/components/admin/product-images";
+import { ProductVariants } from "@/components/admin/product-variants";
+import { VariantsNote } from "@/components/admin/variants-note";
 import { productHref } from "@/components/catalog/links";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
@@ -24,6 +32,8 @@ import { cn } from "@/lib/utils";
 import { routing, type Locale } from "@/i18n/routing";
 import { getAdminProduct, type AdminProduct } from "@/lib/admin/products";
 import { getProductTermIds, listAdminTerms } from "@/lib/admin/taxonomy";
+import { getAdminVariants, type AdminVariant } from "@/lib/admin/variants";
+import { usdTextToMinor } from "@/lib/catalog/mappers";
 import { ProductTermsFields } from "@/components/admin/product-terms-fields";
 import { MAX_IMAGE_BYTES } from "@/lib/images/encode";
 import { getAdmin, requireAdmin } from "@/lib/auth/session";
@@ -37,6 +47,21 @@ const UNKNOWN_ID = "00000000-0000-0000-0000-000000000000";
 
 export function generateStaticParams() {
   return [{ id: UNKNOWN_ID }];
+}
+
+/** The sizes section (#66): only made-to-order work has sizes; one-of-a-kind pieces say so. */
+function Variants({ product, variants }: { product: AdminProduct; variants: AdminVariant[] | null }) {
+  const priceUsdMinor = usdTextToMinor(product.priceUsd);
+  if (variants === null || priceUsdMinor === null) return <VariantsNote reason="loadError" />;
+  if (product.fulfillment === "one_of_a_kind" && variants.length === 0) return <VariantsNote reason="oneOfAKind" />;
+  return (
+    <ProductVariants
+      productId={product.id}
+      priceUsdMinor={priceUsdMinor}
+      variants={variants}
+      actions={{ saveProductVariant, setProductVariantAvailable, reorderProductVariants, deleteProductVariant }}
+    />
+  );
 }
 
 function titleOf(product: AdminProduct, locale: Locale): string | null {
@@ -63,12 +88,13 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
   const { locale, id } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   await requireAdmin(locale, `/${locale}${editProductHref(id)}`);
-  const [t, categories, product, terms, termIds] = await Promise.all([
+  const [t, categories, product, terms, termIds, variants] = await Promise.all([
     getTranslations("admin.form"),
     getCachedCategories(locale),
     getAdminProduct(id),
     listAdminTerms(locale),
     getProductTermIds(id),
+    getAdminVariants(id),
   ]);
   if (!product.ok && product.reason === "notFound") notFound();
 
@@ -124,6 +150,9 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
                 maxBytes={MAX_IMAGE_BYTES}
                 actions={{ createImageUpload, finishImageUpload, deleteProductImage, reorderProductImages, saveProductImageAlts }}
               />
+            }
+            variants={
+              <Variants key="variants" product={product.data} variants={variants.ok ? variants.variants : null} />
             }
             // keyed like the photos: the translation actions refresh() the page too
             deleteButton={
