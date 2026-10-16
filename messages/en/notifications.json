@@ -74,6 +74,45 @@
       "whatsapp": "WhatsApp",
       "email": "Email"
     },
-    "footer": "You get this email because an order request with this address was sent on {site}."
+    "footer": "You get this email because an order request with this address was sent on {site}.",
+    "auth": {
+      "signup": {
+        "subject": "Confirm your email",
+        "title": "Confirm your email",
+        "text": "Follow the link to confirm your email address and finish signing up at {shop}.",
+        "action": "Confirm your email",
+        "ignore": "If you did not sign up, ignore this email."
+      },
+      "recovery": {
+        "subject": "Reset your password",
+        "title": "Reset your password",
+        "text": "Follow the link to choose a new password for your {shop} account.",
+        "action": "Choose a new password",
+        "ignore": "If you did not ask for a new password, ignore this email: your password stays as it is."
+      },
+      "emailChangeCurrent": {
+        "subject": "Confirm the change of your email",
+        "title": "Confirm the change of your email",
+        "text": "Follow the link to confirm that the email of your {shop} account changes from {email} to {newEmail}. The change takes effect once it is confirmed from both addresses.",
+        "action": "Confirm the change",
+        "ignore": "If you did not ask for this change, ignore this email: your address stays as it is."
+      },
+      "emailChangeNew": {
+        "subject": "Confirm your new email",
+        "title": "Confirm your new email",
+        "text": "Follow the link to confirm {newEmail} as the new email of your {shop} account.",
+        "action": "Confirm the new email",
+        "ignore": "If you did not ask for this change, ignore this email: your address stays as it is."
+      },
+      "magicLink": {
+        "subject": "Your sign-in link for {shop}",
+        "title": "Sign in to {shop}",
+        "text": "Follow the link to sign in to your {shop} account.",
+        "action": "Sign in",
+        "ignore": "If you did not ask to sign in, ignore this email."
+      },
+      "linkHint": "If the button does not work, open this link:",
+      "footer": "You get this email because this address was used on {site}."
+    }
   }
 }

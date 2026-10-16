@@ -3,6 +3,8 @@
 // at it (playwright.config.ts); nothing reaches a real chat or inbox.
 //   GET /health            ready check
 //   GET /sent?number=10001 { telegram: [{ chatId, text, parseMode }], email: [{ to, subject, html, text, idempotencyKey }] }
+//   GET /sent?to=a@b.test  { telegram: [], email: [...] } every email to that address (Auth's emails through the
+//                          Send Email Hook, #99, when the stack runs with it)
 import { createServer } from "node:http";
 
 const port = Number(process.env.NOTIFICATIONS_MOCK_PORT || 4100);
@@ -24,10 +26,14 @@ const server = createServer((request, response) => {
 
   if (request.method === "GET" && url.pathname === "/health") return send(200, { ok: true });
   if (request.method === "GET" && url.pathname === "/sent") {
+    const to = url.searchParams.get("to");
+    if (to) return send(200, { telegram: [], email: email.filter((message) => message.to.includes(to)) });
     const number = url.searchParams.get("number") ?? "";
+    // an Auth email's token hash could contain the digits of an order number
+    const orderEmails = email.filter((message) => !message.idempotencyKey?.startsWith("auth-email/"));
     return send(200, {
       telegram: telegram.filter((message) => message.text.includes(`№ ${number}`)),
-      email: email.filter((message) => message.text.includes(number)),
+      email: orderEmails.filter((message) => message.text.includes(number)),
     });
   }
 

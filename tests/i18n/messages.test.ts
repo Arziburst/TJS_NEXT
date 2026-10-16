@@ -114,6 +114,9 @@ describe("message catalogs", () => {
       label: "17",
       // the page count of the order history (account)
       pages: 3,
+      // Auth's emails (#99): the shop's name and the new address of an email change
+      shop: "TJS",
+      newEmail: "olena.new@example.com",
       // the admin's orders (#27)
       from: "New",
       to: "In processing",

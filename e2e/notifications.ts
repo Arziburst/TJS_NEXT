@@ -7,6 +7,13 @@ export type SentNotifications = {
   email: { to: string[]; subject: string; html: string; text: string; idempotencyKey: string | null }[];
 };
 
+/** Every email the stand-in got for `address` (Auth's emails through the Send Email Hook, #99). */
+export async function emailsTo(address: string): Promise<SentNotifications["email"]> {
+  const response = await fetch(`${mockUrl}/sent?to=${encodeURIComponent(address)}`);
+  if (!response.ok) throw new Error(`notifications mock: HTTP ${response.status}`);
+  return ((await response.json()) as SentNotifications).email;
+}
+
 export async function sentFor(number: number): Promise<SentNotifications> {
   const response = await fetch(`${mockUrl}/sent?number=${number}`);
   if (!response.ok) throw new Error(`notifications mock: HTTP ${response.status}`);

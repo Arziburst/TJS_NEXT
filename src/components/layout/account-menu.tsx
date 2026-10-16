@@ -11,7 +11,13 @@ export async function AccountMenu() {
   const user = await getCurrentUser();
   if (!user) return <AccountSlot />;
   const displayName = user.name ?? user.email ?? "";
-  if (user.role !== "admin") return <AccountMenuClient displayName={displayName} />;
+  if (user.role !== "admin") return <AccountMenuClient displayName={displayName} savedLocale={user.locale} />;
   const t = await getTranslations("admin");
-  return <AccountMenuClient displayName={displayName} adminLinks={{ admin: t("shell.nav"), addProduct: t("list.add") }} />;
+  return (
+    <AccountMenuClient
+      displayName={displayName}
+      savedLocale={user.locale}
+      adminLinks={{ admin: t("shell.nav"), addProduct: t("list.add") }}
+    />
+  );
 }

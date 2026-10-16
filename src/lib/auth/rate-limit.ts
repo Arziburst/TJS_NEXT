@@ -1,5 +1,6 @@
 import "server-only";
 
+import { createHash } from "node:crypto";
 import { createServiceClient } from "@/lib/supabase/server";
 import { AUTH_RATE_LIMIT, rateLimitKeys, type RateLimitedAction } from "./rate-limit-keys";
 
@@ -36,4 +37,16 @@ export async function allowAttempt(action: RateLimitedAction, ip: string, email?
   } catch {
     return false;
   }
+}
+
+/**
+ * Records the id of a signed webhook (private.webhook_receipts): true the first time, false when it was accepted
+ * before (a replay). Hashed, like the counter keys. Throws when the store cannot be reached (the caller refuses).
+ */
+export async function claimWebhookReceipt(scope: string, id: string): Promise<boolean> {
+  const { data, error } = await createServiceClient().rpc("claim_webhook_receipt", {
+    p_id: `${scope}:${createHash("sha256").update(id).digest("hex").slice(0, 32)}`,
+  });
+  if (error) throw new Error(`webhook receipts: ${error.message}`);
+  return data === true;
 }

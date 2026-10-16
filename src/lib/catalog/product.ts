@@ -5,6 +5,7 @@ import type { Locale } from "@/i18n/routing";
 import { createPublicServerClient } from "@/lib/supabase/server";
 import { FAILED_READ_LIFE } from "@/lib/failed-read";
 import { getCategories, getProductBySlug } from "./index";
+import { holdRenderForTest } from "./render-hold";
 import { isLocale, localesFor } from "./mappers";
 import {
   PRODUCT_SLUG_PATTERN,
@@ -152,6 +153,7 @@ export async function getProductPage(locale: Locale, slug: string): Promise<Prod
   else if (bounded) cacheLife(bounded);
   else cacheLife("daysNoSwr");
 
+  await holdRenderForTest([product.data.id]);
   return { kind: "ok", product: product.data, categoryName: category?.name ?? null, translations };
 }
 

@@ -74,6 +74,45 @@
       "whatsapp": "WhatsApp",
       "email": "E-mail"
     },
-    "footer": "Recebe este e-mail porque foi enviado em {site} um pedido de encomenda com este endereço."
+    "footer": "Recebe este e-mail porque foi enviado em {site} um pedido de encomenda com este endereço.",
+    "auth": {
+      "signup": {
+        "subject": "Confirme o seu e-mail",
+        "title": "Confirme o seu e-mail",
+        "text": "Abra a ligação para confirmar o seu endereço de e-mail e concluir o registo na {shop}.",
+        "action": "Confirmar o e-mail",
+        "ignore": "Se não se registou, ignore este e-mail."
+      },
+      "recovery": {
+        "subject": "Repor a palavra-passe",
+        "title": "Repor a palavra-passe",
+        "text": "Abra a ligação para escolher uma nova palavra-passe para a sua conta {shop}.",
+        "action": "Escolher uma nova palavra-passe",
+        "ignore": "Se não pediu uma nova palavra-passe, ignore este e-mail: a sua palavra-passe mantém-se."
+      },
+      "emailChangeCurrent": {
+        "subject": "Confirme a alteração do seu e-mail",
+        "title": "Confirme a alteração do seu e-mail",
+        "text": "Abra a ligação para confirmar que o e-mail da sua conta {shop} muda de {email} para {newEmail}. A alteração entra em vigor depois de confirmada a partir dos dois endereços.",
+        "action": "Confirmar a alteração",
+        "ignore": "Se não pediu esta alteração, ignore este e-mail: o seu endereço mantém-se."
+      },
+      "emailChangeNew": {
+        "subject": "Confirme o seu novo e-mail",
+        "title": "Confirme o seu novo e-mail",
+        "text": "Abra a ligação para confirmar {newEmail} como o novo e-mail da sua conta {shop}.",
+        "action": "Confirmar o novo e-mail",
+        "ignore": "Se não pediu esta alteração, ignore este e-mail: o seu endereço mantém-se."
+      },
+      "magicLink": {
+        "subject": "A sua ligação para entrar na {shop}",
+        "title": "Entrar na {shop}",
+        "text": "Abra a ligação para entrar na sua conta {shop}.",
+        "action": "Entrar",
+        "ignore": "Se não pediu para entrar, ignore este e-mail."
+      },
+      "linkHint": "Se o botão não funcionar, abra esta ligação:",
+      "footer": "Recebe este e-mail porque este endereço foi utilizado em {site}."
+    }
   }
 }

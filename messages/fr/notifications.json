@@ -74,6 +74,45 @@
       "whatsapp": "WhatsApp",
       "email": "E-mail"
     },
-    "footer": "Vous recevez cet e-mail parce qu’une demande de commande avec cette adresse a été envoyée sur {site}."
+    "footer": "Vous recevez cet e-mail parce qu’une demande de commande avec cette adresse a été envoyée sur {site}.",
+    "auth": {
+      "signup": {
+        "subject": "Confirmez votre adresse e-mail",
+        "title": "Confirmez votre adresse e-mail",
+        "text": "Suivez le lien pour confirmer votre adresse e-mail et terminer votre inscription sur {shop}.",
+        "action": "Confirmer mon adresse e-mail",
+        "ignore": "Si cette inscription ne vient pas de vous, ignorez cet e-mail."
+      },
+      "recovery": {
+        "subject": "Réinitialisez votre mot de passe",
+        "title": "Réinitialisez votre mot de passe",
+        "text": "Suivez le lien pour choisir un nouveau mot de passe pour votre compte {shop}.",
+        "action": "Choisir un nouveau mot de passe",
+        "ignore": "Si vous n’avez pas demandé de nouveau mot de passe, ignorez cet e-mail : votre mot de passe reste inchangé."
+      },
+      "emailChangeCurrent": {
+        "subject": "Confirmez le changement de votre adresse e-mail",
+        "title": "Confirmez le changement de votre adresse e-mail",
+        "text": "Suivez le lien pour confirmer que l’adresse e-mail de votre compte {shop} passe de {email} à {newEmail}. Le changement prend effet une fois confirmé depuis les deux adresses.",
+        "action": "Confirmer le changement",
+        "ignore": "Si vous n’avez pas demandé ce changement, ignorez cet e-mail : votre adresse reste inchangée."
+      },
+      "emailChangeNew": {
+        "subject": "Confirmez votre nouvelle adresse e-mail",
+        "title": "Confirmez votre nouvelle adresse e-mail",
+        "text": "Suivez le lien pour confirmer {newEmail} comme nouvelle adresse e-mail de votre compte {shop}.",
+        "action": "Confirmer la nouvelle adresse",
+        "ignore": "Si vous n’avez pas demandé ce changement, ignorez cet e-mail : votre adresse reste inchangée."
+      },
+      "magicLink": {
+        "subject": "Votre lien de connexion à {shop}",
+        "title": "Connexion à {shop}",
+        "text": "Suivez le lien pour vous connecter à votre compte {shop}.",
+        "action": "Se connecter",
+        "ignore": "Si vous n’avez pas demandé à vous connecter, ignorez cet e-mail."
+      },
+      "linkHint": "Si le bouton ne fonctionne pas, ouvrez ce lien :",
+      "footer": "Vous recevez cet e-mail parce que cette adresse a été utilisée sur {site}."
+    }
   }
 }

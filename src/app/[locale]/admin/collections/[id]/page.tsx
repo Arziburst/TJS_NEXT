@@ -100,10 +100,6 @@ async function EditCollection({ params }: PageProps<"/[locale]/admin/collections
           {shopSlug && (
             <Link
               href={collectionHref(shopSlug)}
-              // as the product page's "view in shop" link: every action here refresh()es the page, which would re-prefetch
-              // the collection's page; a prefetch render started before a write's updateTag and stored after it keeps
-              // the old data (https://github.com/Arziburst/TJS_NEXT/issues/93)
-              prefetch={false}
               className={cn(buttonVariants({ variant: "outline", size: "sm", className: "min-h-11 justify-self-start" }))}
             >
               <ExternalLinkIcon aria-hidden />

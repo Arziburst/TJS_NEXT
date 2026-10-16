@@ -79,9 +79,8 @@ Business values (prices, markets, locales, statuses …) are not here — they l
     shell texts that need no data stay static (category names come from the messages).
   - Prefetch stays on: no `prefetch={false}` against this. A `prefetch={false}` is allowed only as a
     stopgap for a cause found and filed: a comment at the link names the cause and links its open issue, and
-    the fix of that issue removes it. Today: the admin product page's "view in shop" link (#92), against the
-    render race of #93 (a prefetch render started before an admin write's `updateTag` and stored after it
-    keeps the old data).
+    the fix of that issue removes it. Today: none (the stopgap of #92 on the admin's "view in shop" link went
+    with the fix of #93, below).
   - Check: `e2e/prefetch.e2e.ts` reloads the shop ten times and fails on any response of the page that
     carries `stale-while-revalidate`; or `curl -sD - -o /dev/null -H "rsc: 1" -H
     "next-router-prefetch: 1" -H "next-router-segment-prefetch: /_tree" <url>` on `next start`.
@@ -96,6 +95,41 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   Check: `e2e/settings.e2e.ts` asserts the footer on a category page and a product page, and the
   product page's price and JSON-LD price, on the first request after each save; `e2e/admin.e2e.ts` the 404
   of a just-deleted product.
+- **A render that started before a write is never stored (Next 16.4.1, found in #18/#92, fixed in #93).**
+  Next dates a `"use cache"` entry from the START of its computation, so a tag expired while it computed
+  expires it too. But the route cache (the rendered page, its RSC payload and prefetch segments, kept by
+  `next start` in `.next/server/route-cache` and memory) dates a page from when it was STORED
+  (`FileSystemCache.set`: `lastModified: Date.now()`): a render that read the product before an admin
+  write's `updateTag` and finished after it counts as newer than the write and keeps the old data until its
+  revalidate time (one day) or the next write. Seen in #18: the admin's photo actions `refresh()` the edit page,
+  whose "view in shop" prefetch rendered the product page during the next upload; any visitor's render can
+  do the same. A page whose data is read at request time (the listings: their Suspense boundary reads
+  `searchParams`) only reads `"use cache"` entries and is not affected.
+  - Fix: `next.config.ts` `cacheHandler` = `src/lib/catalog/route-cache-handler.ts`, Next's own file system
+    cache that refuses to store a page if one of its tags was expired (or marked stale) between the read that
+    made the render due and the store; the expired page stays, and the next request renders it again. It is on
+    everywhere but Vercel, where Next's own handler must keep talking to the platform's cache (see Hosting).
+    Admin writes need nothing else: they keep calling `revalidateProduct` / `revalidatePieces` (`src/lib/admin/revalidate.ts`),
+    and a new tag for the storefront goes through there too.
+  - Hosting. `next start` on one server (one Node process): the handler is on and is the whole fix. Several
+    processes or servers behind a load balancer: Next keeps the tag expiries (`tagsManifest`) and the
+    stored pages per process, so an admin write expires them in its own process only; such a setup needs a
+    shared `cacheHandler` and `cacheHandlers` (e.g. Redis) first, and this rule (refuse a store whose tags
+    expired since the render was due) carried over into it. Vercel: off (`VERCEL` set at build); Vercel's
+    ISR marks a revalidated tag stale in every region and regenerates in the background, but its docs say
+    nothing of a regeneration that started before the revalidation, so the race there is open. Check after
+    a deploy: add two photos to a published product one after the other in the admin, then open its page in
+    a fresh browser context (no cookies) and reload once after a few seconds — both photos must show.
+  - Left as is: a request that arrives while such a render is still running shares its result (Next batches
+    the renders of one route); the render is not stored, so the request after it is fresh. A page first
+    served from its fallback shell is rendered in the background after the response, so a request right
+    after it can still join that render: the product and category routes' `unstable_paramMatching`
+    "blocking" (#21) renders them in the request instead, and the race e2e relies on it.
+  - Check: `e2e/cache-race.e2e.ts` holds a render after its catalog read (`src/lib/catalog/render-hold.ts`,
+    a test-only hook switched on by `TJS_TEST_RENDER_HOLD_DIR`, which only the e2e server gets), renames the
+    product in the admin meanwhile and asserts the next request shows the new title (product page, category
+    page, shop); unit tests: `src/lib/catalog/route-cache-handler.test.ts`. Upgrading Next: run both, and drop
+    the handler if Next dates route entries from the render's start.
 - **A failed read is never cached as data (Next 16.4.1, found in #59).** A `"use cache"` data function
   either throws on a failed read or gives its entry `cacheLife(FAILED_READ_LIFE)`
   (`src/lib/failed-read.ts`: zero stale, revalidate and expire). That covers an *incomplete* read
