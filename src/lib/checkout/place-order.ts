@@ -27,6 +27,8 @@ export type PlaceOrderResult =
         | "emptyCart"
         // the cart's lines differ from the ones the customer saw: the page shows them again
         | "cartChanged"
+        // a price changed since the page was shown (a sale started or ended, #67): it shows the new prices first
+        | "pricesChanged"
         // no exchange rate to price the order in the visitor's currency
         | "pricesUnavailable"
         | "unexpectedError";
@@ -75,7 +77,10 @@ function compareWithExpected(items: readonly CartItem[], expected: CheckoutReque
   if (unavailable.length > 0) return { ok: false, reason: "unavailable", titles: unavailable };
   if (sizes.length > 0) return { ok: false, reason: "sizeUnavailable", titles: sizes };
   const extra = items.some((item) => isOrderable(item) && !expected.some((line) => sameLine(line, item.line)));
-  return extra ? { ok: false, reason: "cartChanged" } : null;
+  if (extra) return { ok: false, reason: "cartChanged" };
+  // the order is priced now, never at the shown price: a different price is shown before it is sent
+  const repriced = expected.some((line) => items.find((i) => sameLine(i.line, line))?.unitUsdMinor !== line.unitUsdMinor);
+  return repriced ? { ok: false, reason: "pricesChanged" } : null;
 }
 
 /**
@@ -103,7 +108,7 @@ export async function placeOrder(input: unknown, deps: PlaceOrderDeps): Promise<
     if (orderable.length === 0) return { ok: false, reason: "emptyCart" };
 
     const { current, tables } = await deps.currency(request.locale);
-    const quoteItems: QuoteItem[] = orderable.map(({ line, product, variant, unitUsdMinor, quantity }) => ({
+    const quoteItems: QuoteItem[] = orderable.map(({ line, product, variant, unitUsdMinor, regularUnitUsdMinor, quantity }) => ({
       productId: product.id,
       variantId: line.variantId,
       fulfillment: product.fulfillment,
@@ -112,6 +117,7 @@ export async function placeOrder(input: unknown, deps: PlaceOrderDeps): Promise<
       variantLabel: variant ? { text: variant.label, locale: variant.labelLocale } : null,
       sku: product.sku,
       priceUsdMinor: unitUsdMinor,
+      regularPriceUsdMinor: regularUnitUsdMinor,
       weightGrams: product.weightGrams,
       quantity,
     }));
@@ -161,6 +167,8 @@ export async function placeOrder(input: unknown, deps: PlaceOrderDeps): Promise<
         quantity: line.quantity,
         unit_price_usd_minor: line.priceUsdMinor,
         unit_price_minor: line.unitMinor,
+        regular_unit_price_usd_minor: line.regularPriceUsdMinor,
+        regular_unit_price_minor: line.regularUnitMinor,
       })),
     );
 

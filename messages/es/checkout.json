@@ -60,7 +60,8 @@
       "emptyCart": "No hay nada en el carrito que se pueda pedir.",
       "pricesUnavailable": "Ahora no se pueden calcular los precios. Inténtalo de nuevo más tarde.",
       "unexpected": "No se pudo enviar la solicitud. Inténtalo de nuevo.",
-      "sizeUnavailable": "Lo sentimos, estas tallas no se pueden pedir ahora: {titles}. No se ha enviado nada. Elige otra talla o quítalas del carrito y vuelve a enviar la solicitud."
+      "sizeUnavailable": "Lo sentimos, estas tallas no se pueden pedir ahora: {titles}. No se ha enviado nada. Elige otra talla o quítalas del carrito y vuelve a enviar la solicitud.",
+      "pricesChanged": "Mientras tanto han cambiado algunos precios (una rebaja ha empezado o terminado). No se ha enviado nada. Revisa los nuevos precios y envía la solicitud de nuevo."
     }
   },
   "done": {

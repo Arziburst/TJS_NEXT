@@ -49,8 +49,10 @@ export type CartItem = {
   product: CartProduct | null;
   /** The line's size (#66), also when it cannot be ordered now; null without one or when it was deleted. */
   variant: ProductVariant | null;
-  /** The line's unit price in USD cents: the variant's price, else the product's. */
+  /** The line's unit price in USD cents as the shopper pays it now: the variant's price, else the product's (#67: on sale). */
   unitUsdMinor: number;
+  /** The same without the sale: equal to `unitUsdMinor` unless a sale runs. */
+  regularUnitUsdMinor: number;
   status: CartItemStatus;
   /** The line's quantity within the product's limits (a one-of-a-kind piece is always 1). */
   quantity: number;
@@ -101,7 +103,8 @@ export async function readCartView(locale: Locale): Promise<CartView> {
       line,
       product,
       variant,
-      unitUsdMinor: variant?.priceUsdMinor ?? product?.priceUsdMinor ?? 0,
+      unitUsdMinor: variant?.priceUsdMinor ?? product?.offer.usdMinor ?? 0,
+      regularUnitUsdMinor: variant?.regularPriceUsdMinor ?? product?.offer.regularUsdMinor ?? 0,
       status: statusOf(product, line),
       quantity: clampQuantity(line.quantity, product?.fulfillment ?? null),
     };
@@ -119,6 +122,13 @@ export function orderableLines(items: readonly CartItem[]): { usdMinor: number; 
   return items
     .filter((item): item is CartItem & { product: CartProduct } => item.status === "available" && item.product !== null)
     .map((item) => ({ usdMinor: item.unitUsdMinor, quantity: item.quantity }));
+}
+
+/** The same lines at their regular prices: the subtotal struck through while a sale runs (#67). */
+export function regularLines(items: readonly CartItem[]): { usdMinor: number; quantity: number }[] {
+  return items
+    .filter((item): item is CartItem & { product: CartProduct } => item.status === "available" && item.product !== null)
+    .map((item) => ({ usdMinor: item.regularUnitUsdMinor, quantity: item.quantity }));
 }
 
 /** The key of a cart line in a list (two sizes of one product are two lines). */

@@ -26,6 +26,7 @@ export async function listingFiltersFor(
   locale: Locale,
   categorySlug: string | null,
   state: ListingState,
+  collectionId: string | null = null,
 ): Promise<{ filters: ListingFilters; price: PriceContext }> {
   const { filters } = state;
   const [choice, tables] = await Promise.all([getCurrencyChoice(), getMoneyTables()]);
@@ -51,6 +52,7 @@ export async function listingFiltersFor(
     filters: {
       locale,
       categorySlug,
+      collectionId,
       terms: state.context === "search" ? searchTerms(state.q) : [],
       materials: filters.materials,
       colours: filters.colours,

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { routes } from "@/config/routes";
 import { Link } from "@/i18n/navigation";
-import { getCartView, lineKey, orderableLines, type CartItem, type CartView } from "@/lib/cart";
+import { getCartView, lineKey, orderableLines, regularLines, type CartItem, type CartView } from "@/lib/cart";
 import { cn } from "@/lib/utils";
 import { CartIcon } from "./cart-icon";
 import { CartItemImage } from "./cart-item-image";
@@ -81,7 +81,7 @@ async function MiniCartContents({ view }: { view: CartView }) {
       <dl className="flex items-baseline justify-between gap-4 border-t-2 border-primary pt-4">
         <dt>{t("subtotal")}</dt>
         <dd className="font-sans text-lg text-accent-text">
-          <PriceTotal lines={orderable} />
+          <PriceTotal lines={orderable} regularLines={regularLines(view.items)} />
         </dd>
       </dl>
       <div className="mt-auto flex flex-col gap-3">
@@ -120,7 +120,7 @@ async function MiniCartRow({ item }: { item: CartItem }) {
         {item.variant && <VariantLabel label={item.variant.label} />}
         {status === "available" ? (
           <span className="text-sm">
-            {t("each", { quantity })} <Price usdMinor={item.unitUsdMinor} />
+            {t("each", { quantity })} <Price usdMinor={item.unitUsdMinor} regularUsdMinor={item.regularUnitUsdMinor} />
           </span>
         ) : (
           <Badge variant="outline">{t(`status.${status}`)}</Badge>

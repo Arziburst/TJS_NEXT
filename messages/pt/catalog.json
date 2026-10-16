@@ -18,7 +18,8 @@
     "relevance": "Relevância",
     "placeholder": "Selecione o filtro",
     "priceAsc": "Preço (do mais baixo ao mais alto)",
-    "priceDesc": "Preço (do mais alto ao mais baixo)"
+    "priceDesc": "Preço (do mais alto ao mais baixo)",
+    "featured": "Destaques"
   },
   "filters": {
     "title": "Filtros",
@@ -67,5 +68,11 @@
     "position": "<b>{page}</b> de {total}",
     "gap": "…",
     "first": "Voltar à primeira página"
+  },
+  "collections": {
+    "title": "Coleções",
+    "option": "Coleção: {name}",
+    "untranslated": "Esta coleção ainda não está traduzida para o seu idioma.",
+    "metaDescription": "{name}: uma coleção de bijuteria feita à mão pela autora e designer da TJS."
   }
 }

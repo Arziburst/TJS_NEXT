@@ -13,12 +13,16 @@ const SORT_PARAMS = {
   "price-asc": "price_asc",
   "price-desc": "price_desc",
   relevance: "relevance",
+  featured: "position",
 } as const satisfies Record<string, ListingSort>;
 
 export type SortParam = keyof typeof SORT_PARAMS;
 
-/** The shop's listings, or the search results: the same view, the search adds the query and its relevance order. */
-export type ListingContext = "shop" | "search";
+/**
+ * The shop's listings, the search results or a collection's page (#67): the same view, the search adds the query
+ * and its relevance order, a collection its owner's order.
+ */
+export type ListingContext = "shop" | "search" | "collection";
 
 /**
  * The listing state, all of it in the URL (shareable, survives a reload):
@@ -38,12 +42,14 @@ function positiveInt(value: string | undefined): number | null {
 }
 
 export function defaultSortOf(context: ListingContext): ListingSort {
-  return context === "search" ? "relevance" : "newest";
+  return context === "search" ? "relevance" : context === "collection" ? "position" : "newest";
 }
 
-/** The orders a listing offers: relevance only for search results. */
+/** The orders a listing offers: relevance only for search results, the owner's order only for a collection. */
 export function sortsOf(context: ListingContext): readonly ListingSort[] {
-  return context === "search" ? ["relevance", "newest", "price_asc", "price_desc"] : ["newest", "price_asc", "price_desc"];
+  if (context === "search") return ["relevance", "newest", "price_asc", "price_desc"];
+  if (context === "collection") return ["position", "newest", "price_asc", "price_desc"];
+  return ["newest", "price_asc", "price_desc"];
 }
 
 /** Unknown or malformed values fall back to the defaults instead of failing the page. */

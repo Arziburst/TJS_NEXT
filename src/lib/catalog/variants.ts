@@ -1,4 +1,5 @@
 import { defaultLocale, locales, type Locale } from "@/i18n/routing";
+import { offerFor, type PriceOffer, type Sale } from "./sale";
 import type { ListPrice, ProductVariant } from "./types";
 
 function isLocale(value: string): value is Locale {
@@ -30,21 +31,33 @@ export function pickVariantLabel(rows: readonly VariantLabelRow[], locale: Local
   return picked && isLocale(picked.locale) ? { ...picked, locale: picked.locale } : null;
 }
 
-/** The product's variants in the owner's order; one without a label or a price above zero is left out. */
-export function mapVariants(rows: readonly VariantRow[], productPriceUsdMinor: number, locale: Locale): ProductVariant[] {
+/**
+ * The product's variants in the owner's order, each at its price under the product's running `sales` (#67); one
+ * without a label or a regular price above zero is left out.
+ */
+export function mapVariants(
+  rows: readonly VariantRow[],
+  productPriceUsdMinor: number,
+  locale: Locale,
+  sales: readonly Sale[] = [],
+  now: number = Date.now(),
+): ProductVariant[] {
   return [...rows]
     .sort((a, b) => a.position - b.position || a.id.localeCompare(b.id))
     .flatMap((row): ProductVariant[] => {
       const label = pickVariantLabel(row.product_variant_translations, locale);
-      const priceUsdMinor = productPriceUsdMinor + row.price_delta_usd_minor;
-      if (!label || !Number.isSafeInteger(priceUsdMinor) || priceUsdMinor <= 0) return [];
+      const regularUsdMinor = productPriceUsdMinor + row.price_delta_usd_minor;
+      if (!label || !Number.isSafeInteger(regularUsdMinor) || regularUsdMinor <= 0) return [];
+      const offer = offerFor(productPriceUsdMinor, row.price_delta_usd_minor, sales, now);
       return [
         {
           id: row.id,
           label: label.label,
           labelLocale: label.locale,
           skuSuffix: row.sku_suffix,
-          priceUsdMinor,
+          priceUsdMinor: offer.usdMinor,
+          regularPriceUsdMinor: offer.regularUsdMinor,
+          saleEndsAt: offer.saleEndsAt,
           available: row.is_available,
         },
       ];
@@ -52,16 +65,22 @@ export function mapVariants(rows: readonly VariantRow[], productPriceUsdMinor: n
 }
 
 /**
- * The price a listing shows (the same rule as private.listing_price_usd, which filters and sorts the listing): the
- * lowest price of the variants that can be ordered, else of all variants, else the product's own price; "from …"
- * when those variants do not all cost the same.
+ * The price a listing shows (the same rule as private.listing_price_usd and the sale of private.shop_candidates,
+ * which filter and sort the listing): the lowest price of the variants that can be ordered, else of all variants,
+ * else the product's own `offer`; "from …" when those variants do not all cost the same. A sale lowers every price
+ * alike, so the lowest sale price and the lowest regular price are the same size's.
  */
-export function listPriceOf(productPriceUsdMinor: number, variants: readonly ProductVariant[]): ListPrice {
+export function listPriceOf(offer: PriceOffer, variants: readonly ProductVariant[]): ListPrice {
   const orderable = variants.filter((v) => v.available);
   const counted = orderable.length > 0 ? orderable : variants;
-  if (counted.length === 0) return { usdMinor: productPriceUsdMinor, from: false };
-  const prices = counted.map((v) => v.priceUsdMinor);
-  return { usdMinor: Math.min(...prices), from: new Set(prices).size > 1 };
+  if (counted.length === 0) return { ...offer, from: false };
+  const lowest = counted.reduce((a, b) => (b.priceUsdMinor < a.priceUsdMinor ? b : a));
+  return {
+    usdMinor: lowest.priceUsdMinor,
+    regularUsdMinor: lowest.regularPriceUsdMinor,
+    saleEndsAt: lowest.saleEndsAt,
+    from: new Set(counted.map((v) => v.priceUsdMinor)).size > 1,
+  };
 }
 
 /** The SKU of an ordered variant: the product's SKU and the variant's suffix (as create_order_request stores it). */

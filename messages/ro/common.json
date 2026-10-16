@@ -5,7 +5,9 @@
   "price": {
     "unavailable": "Preț indisponibil",
     "none": "—",
-    "from": "de la {price}"
+    "from": "de la {price}",
+    "regular": "Preț obișnuit:",
+    "sale": "Preț redus:"
   },
   "pagination": {
     "of": "din"

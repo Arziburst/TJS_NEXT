@@ -94,11 +94,13 @@ export type DeliveryChoice = z.output<typeof deliverySchema>;
 export type DeliveryChoiceInput = z.input<typeof deliverySchema>;
 
 // A line the customer saw on the checkout page: compared with the cart at submit, never used for a price. A
-// product with variants is a line per size (#66)
+// product with variants is a line per size (#66). The unit price shown (USD cents) only tells the server whether
+// the price changed since (a sale that started or ended, #67): the customer then sees the new price first
 const expectedLine = z.object({
   productId: z.uuid(),
   variantId: z.uuid().nullable().default(null),
   quantity: z.number().int().min(1).max(999),
+  unitUsdMinor: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER),
 });
 
 export const checkoutSchema = z.object({

@@ -8,6 +8,7 @@ import type {
   ProductTranslation,
   TranslationSource,
 } from "./types";
+import { offerFor, saleFromRow, type Sale, type SaleRow } from "./sale";
 import { listPriceOf, mapVariants, type VariantRow } from "./variants";
 
 /** Content missing in a locale falls back to the default locale (x-default, D3). */
@@ -74,7 +75,24 @@ export type ImageRow = {
   product_image_alts: { locale: string; alt: string }[];
 };
 
-export type ProductRow = {
+/**
+ * A product's sales as the storefront reads them (#67): its own and those of its collections. RLS returns only
+ * the sales running now and only the published collections, so whatever is here applies.
+ */
+export type SaleRows = {
+  product_sales: SaleRow | null;
+  collection_products: { collections: { collection_sales: SaleRow | null } | null }[];
+};
+
+export function salesOf(row: SaleRows): Sale[] {
+  const sales = row.product_sales ? [saleFromRow(row.product_sales)] : [];
+  for (const { collections } of row.collection_products) {
+    if (collections?.collection_sales) sales.push(saleFromRow(collections.collection_sales));
+  }
+  return sales;
+}
+
+export type ProductRow = SaleRows & {
   id: string;
   sku: string | null;
   fulfillment: ProductSummary["fulfillment"];
@@ -129,8 +147,11 @@ function leadTimeOf(row: ProductRow): LeadTime | null {
   return minDays !== null && maxDays !== null ? { minDays, maxDays } : null;
 }
 
-/** Null when the row cannot be shown: no translation in the locale or the fallback, or a broken price. */
-export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: PublicUrlFor): Product | null {
+/**
+ * Null when the row cannot be shown: no translation in the locale or the fallback, or a broken price. Prices are
+ * those at `now` (a cached entry lives no longer than until the next sale starts or ends: src/lib/catalog/sale-life.ts).
+ */
+export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: PublicUrlFor, now: number = Date.now()): Product | null {
   const t = pickByLocale(row.product_translations, locale);
   const priceUsdMinor = usdTextToMinor(row.price_usd_text);
   if (!t || !isLocale(t.locale) || priceUsdMinor === null || !row.category) return null;
@@ -138,7 +159,9 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
     .sort((a, b) => a.position - b.position)
     .map((img) => mapImage(img, locale, t, publicUrlFor));
   // a one-of-a-kind piece has no variants (the database refuses them)
-  const variants = row.fulfillment === "made_to_order" ? mapVariants(row.product_variants, priceUsdMinor, locale) : [];
+  const sales = salesOf(row);
+  const variants = row.fulfillment === "made_to_order" ? mapVariants(row.product_variants, priceUsdMinor, locale, sales, now) : [];
+  const offer = offerFor(priceUsdMinor, 0, sales, now);
   return {
     id: row.id,
     sku: row.sku,
@@ -147,7 +170,8 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
     availability: row.availability,
     leadTime: leadTimeOf(row),
     priceUsdMinor,
-    listPrice: listPriceOf(priceUsdMinor, variants),
+    offer,
+    listPrice: listPriceOf(offer, variants),
     weightG: row.weight_g,
     createdAt: row.created_at,
     publishedAt: row.published_at,
@@ -171,6 +195,7 @@ export function toSummary(product: Product): ProductSummary {
     availability: product.availability,
     leadTime: product.leadTime,
     priceUsdMinor: product.priceUsdMinor,
+    offer: product.offer,
     listPrice: product.listPrice,
     weightG: product.weightG,
     createdAt: product.createdAt,

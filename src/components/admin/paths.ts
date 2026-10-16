@@ -21,3 +21,11 @@ export function adminOrderHref(number: number): string {
 
 export const ADMIN_SETTINGS_HREF = `${routes.admin.path}/settings`;
 export const ADMIN_ABOUT_HREF = `${routes.admin.path}/settings/about`;
+
+/** The collections (#67). */
+export const ADMIN_COLLECTIONS_HREF = `${routes.admin.path}/collections`;
+export const NEW_COLLECTION_HREF = `${routes.admin.path}/collections/new`;
+
+export function editCollectionHref(id: string): string {
+  return `${routes.admin.path}/collections/${id}`;
+}

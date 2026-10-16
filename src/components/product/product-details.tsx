@@ -6,7 +6,7 @@ import { categoryHref } from "@/components/catalog/links";
 import { FavoriteToggle } from "@/components/favorites/favorite-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
-import type { Product } from "@/lib/catalog/types";
+import type { Product, ProductVariant } from "@/lib/catalog/types";
 import { GoBackButton } from "./go-back-button";
 import { ProductGallery } from "./product-gallery";
 import { SelectedPrice, VariantPicker, VariantSelection } from "./variant-picker";
@@ -15,7 +15,7 @@ type ProductDetailsProps = {
   product: Product;
   categoryName: string | null;
   /** Renders a price in the visitor's currency (`<Price>`): the page's, the lowest one "from", each size's. */
-  price: (usdMinor: number, from?: boolean) => ReactNode;
+  price: (price: { usdMinor: number; regularUsdMinor: number; from?: boolean }) => ReactNode;
 };
 
 /*
@@ -35,11 +35,11 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
   const hasVariants = variants.length > 0;
   const shownPrice = hasVariants ? (
     <SelectedPrice
-      prices={Object.fromEntries(variants.map((variant) => [variant.id, price(variant.priceUsdMinor)]))}
-      fallback={price(listPrice.usdMinor, listPrice.from)}
+      prices={Object.fromEntries(variants.map((variant) => [variant.id, price(variantPrice(variant))]))}
+      fallback={price(listPrice)}
     />
   ) : (
-    price(product.priceUsdMinor)
+    price(product.offer)
   );
   const Selection = hasVariants ? VariantSelection : Fragment;
   // fallback content keeps its own language for screen readers and translators
@@ -147,7 +147,7 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
                   label: variant.label,
                   lang: variant.labelLocale !== locale ? variant.labelLocale : undefined,
                   available: variant.available,
-                  price: listPrice.from ? price(variant.priceUsdMinor) : undefined,
+                  price: listPrice.from ? price(variantPrice(variant)) : undefined,
                 }))}
               />
             )}
@@ -157,6 +157,10 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
       </div>
     </NextIntlClientProvider>
   );
+}
+
+function variantPrice(variant: ProductVariant) {
+  return { usdMinor: variant.priceUsdMinor, regularUsdMinor: variant.regularPriceUsdMinor };
 }
 
 // a one-of-a-kind piece says so, and whether it is still available; made-to-order work needs no badge

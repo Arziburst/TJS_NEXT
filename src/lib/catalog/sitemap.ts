@@ -3,12 +3,13 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { createPublicServerClient } from "@/lib/supabase/server";
 import { FAILED_READ_LIFE } from "@/lib/failed-read";
-import type { SitemapCategory, SitemapProduct } from "@/lib/seo/sitemap";
+import type { SitemapCategory, SitemapCollection, SitemapProduct } from "@/lib/seo/sitemap";
 import { CATALOG_TAG } from "./cache";
+import { COLLECTIONS_TAG } from "./collections";
 import { isLocale } from "./mappers";
 import type { CatalogResult } from "./types";
 
-export type SitemapCatalog = { products: SitemapProduct[]; categories: SitemapCategory[] };
+export type SitemapCatalog = { products: SitemapProduct[]; categories: SitemapCategory[]; collections: SitemapCollection[] };
 
 // a page of top-level rows, below the API's max_rows (1000) so a short page always means the last one
 const PAGE_SIZE = 500;
@@ -60,21 +61,41 @@ async function readCategories(): Promise<SitemapCategory[] | null> {
   return data.map((row) => ({ slug: row.slug, updatedAt: row.updated_at }));
 }
 
+// anon: RLS shows the published collections only (#67)
+async function readCollections(): Promise<SitemapCollection[] | null> {
+  const { data, error } = await createPublicServerClient()
+    .from("collections")
+    .select("id, updated_at, collection_translations(locale, slug, source, reviewed_at, updated_at)")
+    .eq("is_published", true)
+    .order("id")
+    .retry(false)
+    .abortSignal(AbortSignal.timeout(READ_TIMEOUT_MS));
+  if (error) return null;
+  return data.map((row) => ({
+    updatedAt: row.updated_at,
+    translations: row.collection_translations.flatMap((t) =>
+      isLocale(t.locale) ? [{ locale: t.locale, slug: t.slug, source: t.source, reviewedAt: t.reviewed_at, updatedAt: t.updated_at }] : [],
+    ),
+  }));
+}
+
 /**
- * Every published product with its translations' slugs and review state, and the categories, for the
- * sitemap. One entry for everyone, expired by any admin change (CATALOG_TAG); a failed read is never kept.
+ * Every published product with its translations' slugs and review state, the categories and the published
+ * collections, for the sitemap. One entry for everyone, expired by any admin change (CATALOG_TAG,
+ * COLLECTIONS_TAG); a failed read is never kept.
  */
 export async function getSitemapCatalog(): Promise<CatalogResult<SitemapCatalog>> {
   "use cache";
   cacheTag(CATALOG_TAG);
+  cacheTag(COLLECTIONS_TAG);
   try {
-    const [products, categories] = await Promise.all([readProducts(), readCategories()]);
-    if (products === null || categories === null) {
+    const [products, categories, collections] = await Promise.all([readProducts(), readCategories(), readCollections()]);
+    if (products === null || categories === null || collections === null) {
       cacheLife(FAILED_READ_LIFE);
       return { ok: false, reason: "unexpectedError" };
     }
     cacheLife("hours");
-    return { ok: true, data: { products, categories } };
+    return { ok: true, data: { products, categories, collections } };
   } catch {
     cacheLife(FAILED_READ_LIFE);
     return { ok: false, reason: "unexpectedError" };

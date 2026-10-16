@@ -18,7 +18,8 @@
     "relevance": "Relevantie",
     "placeholder": "Kies een filter",
     "priceAsc": "Prijs (laag naar hoog)",
-    "priceDesc": "Prijs (hoog naar laag)"
+    "priceDesc": "Prijs (hoog naar laag)",
+    "featured": "Uitgelicht"
   },
   "filters": {
     "title": "Filters",
@@ -67,5 +68,11 @@
     "position": "<b>{page}</b> van {total}",
     "gap": "…",
     "first": "Terug naar de eerste pagina"
+  },
+  "collections": {
+    "title": "Collecties",
+    "option": "Collectie: {name}",
+    "untranslated": "Deze collectie is nog niet in uw taal vertaald.",
+    "metaDescription": "{name}: een collectie handgemaakte sieraden van de ontwerpster van TJS."
   }
 }

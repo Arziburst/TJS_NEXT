@@ -15,6 +15,8 @@ export const ADMIN_RATE_LIMITS = {
   review: { max: 300, windowSeconds: 600 },
   orderStatus: { max: 120, windowSeconds: 600 },
   orderNote: { max: 120, windowSeconds: 600 },
+  // collections and sales (#67): each tap is one write that expires shop caches; far above a person's pace
+  merchandising: { max: 300, windowSeconds: 600 },
 } as const;
 
 export type AdminRateLimitedAction = keyof typeof ADMIN_RATE_LIMITS;

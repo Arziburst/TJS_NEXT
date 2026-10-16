@@ -1,10 +1,17 @@
 "use client";
 
-import { InboxIcon, PackageIcon, PlusIcon, SettingsIcon, StoreIcon, TagsIcon } from "lucide-react";
+import { InboxIcon, LayersIcon, PackageIcon, PlusIcon, SettingsIcon, StoreIcon, TagsIcon } from "lucide-react";
 import { routes } from "@/config/routes";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { ADMIN_ATTRIBUTES_HREF, ADMIN_ORDERS_HREF, ADMIN_PRODUCTS_HREF, ADMIN_SETTINGS_HREF, NEW_PRODUCT_HREF } from "./paths";
+import {
+  ADMIN_ATTRIBUTES_HREF,
+  ADMIN_COLLECTIONS_HREF,
+  ADMIN_ORDERS_HREF,
+  ADMIN_PRODUCTS_HREF,
+  ADMIN_SETTINGS_HREF,
+  NEW_PRODUCT_HREF,
+} from "./paths";
 
 const ENTRIES = {
   // the order list and every order's page (#27)
@@ -28,6 +35,12 @@ const ENTRIES = {
     href: ADMIN_SETTINGS_HREF,
     icon: SettingsIcon,
     isActive: (path: string) => path === ADMIN_SETTINGS_HREF || path.startsWith(`${ADMIN_SETTINGS_HREF}/`),
+  },
+  // the collections and each one's page (#67)
+  collections: {
+    href: ADMIN_COLLECTIONS_HREF,
+    icon: LayersIcon,
+    isActive: (path: string) => path === ADMIN_COLLECTIONS_HREF || path.startsWith(`${ADMIN_COLLECTIONS_HREF}/`),
   },
   shop: { href: routes.shop.path, icon: StoreIcon, isActive: () => false },
 } as const;

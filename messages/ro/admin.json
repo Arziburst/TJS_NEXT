@@ -34,7 +34,8 @@
     "viewShop": "Magazin",
     "orders": "Comenzi",
     "ordersWithNew": "Comenzi, {count, plural, one {# cerere nouă} few {# cereri noi} other {# de cereri noi}}",
-    "settings": "Setări"
+    "settings": "Setări",
+    "collections": "Colecții"
   },
   "status": {
     "draft": "Ciornă",
@@ -626,6 +627,128 @@
         "tooLong": "Acest text este prea lung",
         "textRequired": "Scrieți textul în această limbă sau ștergeți descrierea ei"
       }
+    }
+  },
+  "collections": {
+    "title": "Colecții",
+    "intro": "Grupați piesele în colecții cu propria pagină în magazin. Cele publicate au linkuri de pe pagina principală și din magazin.",
+    "new": "Colecție nouă",
+    "newTitle": "Colecție nouă",
+    "editTitle": "Editare colecție",
+    "editTitleOf": "Editare: {name}",
+    "back": "Înapoi la colecții",
+    "empty": "Încă nu există colecții.",
+    "loadError": "Colecțiile nu au putut fi încărcate. Încercați din nou mai târziu.",
+    "productCount": "{count, plural, =0 {Nicio piesă} one {# piesă} few {# piese} other {# de piese}}",
+    "onSale": "La reducere",
+    "viewInShop": "Vedeți în magazin",
+    "saveFirst": "Salvați întâi colecția, apoi adăugați piesele, fotografia de copertă și reducerea.",
+    "sections": {
+      "details": "Nume și descriere",
+      "publication": "Publicare",
+      "cover": "Fotografie de copertă",
+      "products": "Piese",
+      "danger": "Ștergere"
+    },
+    "fields": {
+      "name": "Nume",
+      "slug": "Slug URL",
+      "slugHint": "Lăsați gol pentru a-l crea din nume.",
+      "description": "Descriere",
+      "position": "Locul în listă",
+      "positionHint": "Numerele mai mici sunt primele.",
+      "published": "Publicată în magazin",
+      "publishedHint": "Necesită numele în ucraineană."
+    },
+    "save": "Salvați",
+    "saving": "Se salvează…",
+    "saved": "Colecție salvată",
+    "created": "Colecție creată",
+    "publishedNow": "Colecția este publicată",
+    "unpublishedNow": "Colecția este ascunsă în magazin",
+    "errors": {
+      "required": "Introduceți un nume.",
+      "invalidSlug": "Folosiți litere latine mici, cifre și cratime.",
+      "slugTaken": "O altă colecție are deja acest slug.",
+      "notAuthorized": "Doar un administrator poate face asta. Conectați-vă din nou.",
+      "notFound": "Această colecție nu mai există.",
+      "needsUk": "O colecție publicată are nevoie de numele în ucraineană.",
+      "invalid": "Verificați formularul.",
+      "tooManyRequests": "Prea multe modificări într-un timp scurt. Așteptați câteva minute și încercați din nou.",
+      "unexpectedError": "Nu a funcționat. Încercați din nou."
+    },
+    "products": {
+      "add": "Adăugați piese",
+      "pickerTitle": "Adăugați piese în colecție",
+      "pickerDescription": "Atingeți o piesă pentru a o adăuga la sfârșitul listei.",
+      "search": "Căutați după nume sau cod",
+      "noResults": "Nu s-au găsit piese.",
+      "empty": "Această colecție nu are încă piese.",
+      "inCollection": "În colecție",
+      "remove": "Scoateți {title}",
+      "moveUp": "Mutați {title} mai sus",
+      "moveDown": "Mutați {title} mai jos",
+      "added": "{title}: adăugată",
+      "removed": "{title}: scoasă",
+      "moved": "Mutată pe locul {position} din {count}",
+      "done": "Gata",
+      "notInShop": "Nu apare în magazin"
+    },
+    "cover": {
+      "hint": "O fotografie lată pentru pagina principală și partea de sus a paginii colecției. JPEG, PNG sau WebP, până la {maxMb} MB.",
+      "upload": "Încărcați fotografia de copertă",
+      "replace": "Înlocuiți fotografia de copertă",
+      "remove": "Scoateți fotografia de copertă",
+      "uploading": "Se încarcă…",
+      "uploaded": "Fotografia de copertă a fost salvată",
+      "removed": "Fotografia de copertă a fost scoasă",
+      "none": "Încă nu există fotografie de copertă."
+    },
+    "delete": {
+      "button": "Ștergeți colecția",
+      "title": "Ștergeți „{name}”?",
+      "description": "Colecția și reducerea ei sunt eliminate; piesele ei rămân în magazin.",
+      "confirm": "Ștergeți",
+      "deleted": "Colecție ștearsă"
+    }
+  },
+  "sale": {
+    "title": "Reducere",
+    "introProduct": "Un procent de reducere sau un preț redus fix pentru fiecare mărime. Magazinul arată prețul obișnuit tăiat și încasează prețul redus cât timp durează reducerea.",
+    "introCollection": "Un procent de reducere la fiecare piesă a acestei colecții cât timp este publicată. Dacă o piesă are propria reducere mai mare, se aplică prețul mai mic.",
+    "kind": "Reducere",
+    "kinds": {
+      "percent": "Procent",
+      "price": "Preț redus fix"
+    },
+    "percent": "Procent de reducere",
+    "price": "Preț redus, USD",
+    "priceHint": "Preț obișnuit {price}; fiecare mărime își păstrează diferența.",
+    "startsAt": "Început (ora Kievului)",
+    "endsAt": "Sfârșit (ora Kievului)",
+    "windowHint": "Fără început, reducerea pornește imediat; fără sfârșit, durează până o încheiați.",
+    "save": "Aplicați reducerea",
+    "remove": "Încheiați reducerea",
+    "saved": "Reducere salvată",
+    "removed": "Reducere încheiată",
+    "none": "Fără reducere.",
+    "summaryPercent": "Reducere {percent} %",
+    "summaryPrice": "Preț redus {price}",
+    "state": {
+      "running": "În curs",
+      "scheduled": "Începe mai târziu",
+      "ended": "Încheiată"
+    },
+    "errors": {
+      "required": "Introduceți o valoare.",
+      "invalid": "Introduceți o valoare validă.",
+      "notBelowPrice": "Prețul redus trebuie să fie sub prețul obișnuit.",
+      "endBeforeStart": "Sfârșitul trebuie să fie după început.",
+      "collectionPercentOnly": "Reducerea unei colecții este un procent.",
+      "notAuthorized": "Doar un administrator poate face asta. Conectați-vă din nou.",
+      "notFound": "Acest produs sau această colecție nu mai există.",
+      "tooManyRequests": "Prea multe modificări într-un timp scurt. Așteptați câteva minute și încercați din nou.",
+      "unexpectedError": "Nu a funcționat. Încercați din nou."
     }
   }
 }
