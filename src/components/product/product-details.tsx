@@ -1,6 +1,6 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getLocale, getMessages, getTranslations } from "next-intl/server";
-import { Fragment, type ReactNode } from "react";
+import { Fragment, Suspense, type ReactNode } from "react";
 import { AddToCartSlot } from "@/components/cart/add-to-cart-slot";
 import { categoryHref } from "@/components/catalog/links";
 import { FavoriteToggle } from "@/components/favorites/favorite-toggle";
@@ -9,6 +9,7 @@ import { Link } from "@/i18n/navigation";
 import type { Product, ProductVariant } from "@/lib/catalog/types";
 import { GoBackButton } from "./go-back-button";
 import { ProductGallery } from "./product-gallery";
+import { ProductInfoSkeleton } from "./product-skeleton";
 import { SelectedPrice, VariantPicker, VariantSelection } from "./variant-picker";
 
 type ProductDetailsProps = {
@@ -60,100 +61,103 @@ export async function ProductDetails({ product, categoryName, price }: ProductDe
       <div className="grid gap-6 sb:grid-cols-2 sb:gap-14">
         <ProductGallery images={product.images} />
 
-        <Selection>
-          <div className="flex flex-col gap-5 sb:sticky sb:top-24 sb:self-start">
-            <GoBackButton className="self-start" />
-            {translation.isFallback && (
-              <p role="note" className="text-sm">
-                {t("untranslated")}
-              </p>
-            )}
-            <div className="flex flex-col gap-2" lang={contentLang}>
-              {categoryName && (
-                <Link
-                  href={categoryHref(product.category.slug)}
-                  className="self-start font-sans text-sm tracking-[0.2em] uppercase underline-offset-4 hover:text-accent-text hover:underline"
-                >
-                  {categoryName}
-                </Link>
-              )}
-              <h1 className="text-xl font-bold tracking-[0.2em] uppercase sb:text-2xl">{translation.title}</h1>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="text-2xl text-accent-text">{shownPrice}</span>
-              {status && <Badge variant="secondary">{t(status)}</Badge>}
-              <FavoriteToggle productId={product.id} title={translation.title} variant="page" className="ml-auto" />
-            </div>
-            {product.fulfillment === "made_to_order" && (
-              <div className="grid gap-1 text-sm">
-                <p className="flex flex-wrap gap-x-3">
-                  <span>{tProduct("card.onlyOrder")}</span>
-                  {leadTime && (
-                    <span>
-                      {leadTime.minDays === leadTime.maxDays
-                        ? t("leadTime", { days: leadTime.maxDays })
-                        : t("leadTimeRange", { min: leadTime.minDays, max: leadTime.maxDays })}
-                    </span>
-                  )}
+        {/* the info column streams in its own boundary, so the main photo stays in the static shell (#127) */}
+        <Suspense fallback={<ProductInfoSkeleton />}>
+          <Selection>
+            <div className="flex flex-col gap-5 sb:sticky sb:top-24 sb:self-start">
+              <GoBackButton className="self-start" />
+              {translation.isFallback && (
+                <p role="note" className="text-sm">
+                  {t("untranslated")}
                 </p>
-                {product.leadTimeNote && (
-                  <p className="whitespace-pre-line" lang={contentLang}>
-                    {product.leadTimeNote}
-                  </p>
+              )}
+              <div className="flex flex-col gap-2" lang={contentLang}>
+                {categoryName && (
+                  <Link
+                    href={categoryHref(product.category.slug)}
+                    className="self-start font-sans text-sm tracking-[0.2em] uppercase underline-offset-4 hover:text-accent-text hover:underline"
+                  >
+                    {categoryName}
+                  </Link>
                 )}
+                <h1 className="text-xl font-bold tracking-[0.2em] uppercase sb:text-2xl">{translation.title}</h1>
               </div>
-            )}
-            {translation.description && (
-              <p className="whitespace-pre-line" lang={contentLang}>
-                {translation.description}
-              </p>
-            )}
-            <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-              {product.materials && (
-                <>
-                  <dt className="font-semibold">{t("materials")}</dt>
-                  <dd lang={contentLang}>{product.materials}</dd>
-                </>
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-2xl text-accent-text">{shownPrice}</span>
+                {status && <Badge variant="secondary">{t(status)}</Badge>}
+                <FavoriteToggle productId={product.id} title={translation.title} variant="page" className="ml-auto" />
+              </div>
+              {product.fulfillment === "made_to_order" && (
+                <div className="grid gap-1 text-sm">
+                  <p className="flex flex-wrap gap-x-3">
+                    <span>{tProduct("card.onlyOrder")}</span>
+                    {leadTime && (
+                      <span>
+                        {leadTime.minDays === leadTime.maxDays
+                          ? t("leadTime", { days: leadTime.maxDays })
+                          : t("leadTimeRange", { min: leadTime.minDays, max: leadTime.maxDays })}
+                      </span>
+                    )}
+                  </p>
+                  {product.leadTimeNote && (
+                    <p className="whitespace-pre-line" lang={contentLang}>
+                      {product.leadTimeNote}
+                    </p>
+                  )}
+                </div>
               )}
-              {product.care && (
-                <>
-                  <dt className="font-semibold">{t("care")}</dt>
-                  <dd lang={contentLang}>{product.care}</dd>
-                </>
+              {translation.description && (
+                <p className="whitespace-pre-line" lang={contentLang}>
+                  {translation.description}
+                </p>
               )}
-              {product.clasp && (
-                <>
-                  <dt className="font-semibold">{t("clasp")}</dt>
-                  <dd lang={contentLang}>{product.clasp}</dd>
-                </>
+              <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
+                {product.materials && (
+                  <>
+                    <dt className="font-semibold">{t("materials")}</dt>
+                    <dd lang={contentLang}>{product.materials}</dd>
+                  </>
+                )}
+                {product.care && (
+                  <>
+                    <dt className="font-semibold">{t("care")}</dt>
+                    <dd lang={contentLang}>{product.care}</dd>
+                  </>
+                )}
+                {product.clasp && (
+                  <>
+                    <dt className="font-semibold">{t("clasp")}</dt>
+                    <dd lang={contentLang}>{product.clasp}</dd>
+                  </>
+                )}
+                {dimensions.length > 0 && (
+                  <>
+                    <dt className="font-semibold">{t("dimensions")}</dt>
+                    <dd>{format.list(dimensions, { type: "unit" })}</dd>
+                  </>
+                )}
+                {product.weightG > 0 && (
+                  <>
+                    <dt className="font-semibold">{t("weight")}</dt>
+                    <dd>{format.number(product.weightG, { style: "unit", unit: "gram" })}</dd>
+                  </>
+                )}
+              </dl>
+              {canOrder && hasVariants && (
+                <VariantPicker
+                  options={variants.map((variant) => ({
+                    id: variant.id,
+                    label: variant.label,
+                    lang: variant.labelLocale !== locale ? variant.labelLocale : undefined,
+                    available: variant.available,
+                    price: listPrice.from ? price(variantPrice(variant)) : undefined,
+                  }))}
+                />
               )}
-              {dimensions.length > 0 && (
-                <>
-                  <dt className="font-semibold">{t("dimensions")}</dt>
-                  <dd>{format.list(dimensions, { type: "unit" })}</dd>
-                </>
-              )}
-              {product.weightG > 0 && (
-                <>
-                  <dt className="font-semibold">{t("weight")}</dt>
-                  <dd>{format.number(product.weightG, { style: "unit", unit: "gram" })}</dd>
-                </>
-              )}
-            </dl>
-            {canOrder && hasVariants && (
-              <VariantPicker
-                options={variants.map((variant) => ({
-                  id: variant.id,
-                  label: variant.label,
-                  lang: variant.labelLocale !== locale ? variant.labelLocale : undefined,
-                  available: variant.available,
-                  price: listPrice.from ? price(variantPrice(variant)) : undefined,
-                }))}
-              />
-            )}
-            {canOrder && <AddToCartSlot productId={product.id} fulfillment={product.fulfillment} />}
-          </div>
-        </Selection>
+              {canOrder && <AddToCartSlot productId={product.id} fulfillment={product.fulfillment} />}
+            </div>
+          </Selection>
+        </Suspense>
       </div>
     </NextIntlClientProvider>
   );
