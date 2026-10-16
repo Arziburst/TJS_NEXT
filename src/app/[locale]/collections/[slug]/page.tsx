@@ -19,6 +19,10 @@ import { translationRobots } from "@/lib/seo/indexing";
 // A slug no collection can have: the build still validates the route without collections or a database.
 const UNAVAILABLE_SLUG = "-";
 
+// A page whose entry an admin save just expired renders anew on its next request, never from the build's
+// generic fallback shell (docs/standards.md §3, "No build-time shell after an admin save")
+export const unstable_paramMatching = { slug: "blocking" };
+
 export async function generateStaticParams({ params }: { params: { locale: string } }) {
   const locale = hasLocale(routing.locales, params.locale) ? params.locale : routing.defaultLocale;
   const slugs = await getCollectionSlugs(locale);

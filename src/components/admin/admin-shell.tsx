@@ -36,12 +36,13 @@ export async function AdminShell({ children }: { children: ReactNode }) {
         </main>
         <nav
           aria-label={t("nav")}
-          className="sticky bottom-0 z-30 -mx-(--page-gutter) border-t-2 border-primary bg-background pb-[env(safe-area-inset-bottom)] sb:top-24 sb:col-start-1 sb:row-start-1 sb:mx-0 sb:self-start sb:border-t-0 sb:border-r-2 sb:pr-4 sb:pb-0"
+          className="sticky bottom-0 z-30 -mx-(--page-gutter) min-w-0 border-t-2 border-primary bg-background pb-[env(safe-area-inset-bottom)] sb:top-24 sb:col-start-1 sb:row-start-1 sb:mx-0 sb:self-start sb:border-t-0 sb:border-r-2 sb:pr-4 sb:pb-0"
         >
           <p className="hidden px-3 pb-3 font-sans text-xs font-semibold tracking-[0.2em] uppercase sb:block">
             {t("title")}
           </p>
-          <ul className="grid grid-cols-6 sb:grid-cols-1 sb:gap-1">
+          {/* on a phone the tabs share the bar's width, each at least 78px; more than fit scroll sideways */}
+          <ul className="flex overflow-x-auto [scrollbar-width:none] sb:grid sb:grid-cols-1 sb:gap-1 sb:overflow-visible [&>li]:min-w-[4.875rem] [&>li]:flex-1 sb:[&>li]:min-w-0">
             <li>
               <AdminNavLink
                 entry="orders"
@@ -62,6 +63,10 @@ export async function AdminShell({ children }: { children: ReactNode }) {
               <AdminNavLink entry="attributes" label={t("attributes")} />
             </li>
             <li>
+              <AdminNavLink entry="settings" label={t("settings")} />
+            </li>
+            {/* on a phone the logo above leads to the shop */}
+            <li className="hidden sb:block">
               <AdminNavLink entry="shop" label={t("viewShop")} />
             </li>
           </ul>

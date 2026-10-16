@@ -34,6 +34,7 @@
     "viewShop": "Loja",
     "orders": "Encomendas",
     "ordersWithNew": "Encomendas, {count, plural, one {# pedido novo} other {# pedidos novos}}",
+    "settings": "Definições",
     "collections": "Coleções"
   },
   "status": {
@@ -524,6 +525,108 @@
       "historyPlaced": "Pedido feito",
       "historyChange": "{from} → {to}",
       "historyBy": "{date}, {name}"
+    }
+  },
+  "settings": {
+    "title": "Definições",
+    "intro": "Como os clientes o contactam, como os preços são convertidos e a sua história. Uma alteração guardada aparece no site no próximo carregamento da página.",
+    "save": "Guardar",
+    "saving": "A guardar…",
+    "saved": "Guardado. O site já o mostra.",
+    "loadError": "Não foi possível carregar as definições. Recarregue a página.",
+    "errorSummary": "{count, plural, one {# campo precisa da sua atenção} other {# campos precisam da sua atenção}}",
+    "errors": {
+      "notAuthorized": "Só o administrador pode fazer isto. Inicie sessão novamente.",
+      "unexpectedError": "Não foi possível guardar as definições. Tente novamente."
+    },
+    "contacts": {
+      "title": "Contactos",
+      "hint": "Mostrados no rodapé de cada página, na confirmação da encomenda e nos e-mails aos clientes. Deixe um campo vazio para ocultar esse canal.",
+      "shopName": "Nome da loja",
+      "shopNameHint": "Usado na confirmação da encomenda e nos e-mails.",
+      "instagram": "Instagram",
+      "instagramHint": "O nome da sua conta (@name) ou a ligação para o seu perfil.",
+      "email": "E-mail",
+      "emailHint": "Por exemplo shop@example.com.",
+      "phone": "Telefone",
+      "phoneHint": "Com o indicativo do país, por exemplo +38 (066) 123 45 67. Mostrado como o escrever.",
+      "telegram": "Conversa no Telegram",
+      "telegramHint": "O seu nome de utilizador (@name) ou uma ligação t.me.",
+      "viber": "Conversa no Viber",
+      "viberHint": "O seu número de telefone com o indicativo do país, ou uma ligação de convite do Viber.",
+      "whatsapp": "Conversa no WhatsApp",
+      "whatsappHint": "O seu número de telefone com o indicativo do país, ou uma ligação wa.me.",
+      "notifications": "Notificações",
+      "telegramChatId": "ID da conversa do Telegram para novas encomendas",
+      "telegramChatIdHint": "A conversa onde o bot da loja anuncia novas encomendas: um número (o ID de um grupo começa por -100). Nunca é mostrado no site.",
+      "tooLong": "No máximo {max} caracteres",
+      "invalid": {
+        "shopName": "Introduza um nome",
+        "instagram": "Introduza um nome de conta como @name ou uma ligação de perfil instagram.com",
+        "email": "Introduza um e-mail como shop@example.com",
+        "phone": "Introduza um telefone com o indicativo do país: algarismos, espaços, parênteses e hífenes",
+        "telegram": "Introduza um nome de utilizador como @name (pelo menos 5 caracteres) ou uma ligação t.me",
+        "viber": "Introduza um telefone com o indicativo do país ou uma ligação de convite do Viber",
+        "whatsapp": "Introduza um telefone com o indicativo do país ou uma ligação wa.me",
+        "telegramChatId": "Introduza o ID da conversa como número, por exemplo -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Preços noutras moedas",
+      "hint": "Define cada preço em USD. Os visitantes veem-no convertido à taxa do BNU mais a margem, arredondado para cima para um preço redondo.",
+      "markup": "Margem, %",
+      "markupHint": "Somada à taxa do BNU em cada moeda, incluindo USD. 3 significa 3 %.",
+      "rulesTitle": "Arredondamento",
+      "rulesHint": "Um preço é arredondado para cima até ao degrau seguinte mais a terminação: degrau 10 e terminação 9 dão 1 289, 1 299 e assim por diante. Os preços abaixo do limiar opcional usam o degrau pequeno: degrau 1 e terminação 0.90 dão 29.90.",
+      "step": "Degrau",
+      "ending": "Terminação",
+      "smallBelow": "Preços pequenos abaixo de",
+      "smallStep": "Degrau pequeno",
+      "smallEnding": "Terminação pequena",
+      "example": "Preço de exemplo, USD",
+      "exampleHint": "Cada moeda abaixo mostra como fica este preço com os valores acima.",
+      "shownAs": "Mostrado como",
+      "noRate": "Ainda sem taxa",
+      "errors": {
+        "required": "Este campo é obrigatório",
+        "invalidNumber": "Introduza um número, por exemplo 9.90",
+        "outOfRange": "Este valor está fora do intervalo",
+        "endingTooLarge": "Tem de ser menor do que o degrau",
+        "smallTierIncomplete": "Preencha os três campos de preços pequenos, ou nenhum"
+      }
+    },
+    "about": {
+      "cardHint": "A sua história, em cada língua.",
+      "edit": "Editar a página «Sobre nós»",
+      "back": "Definições",
+      "title": "Página «Sobre nós»",
+      "hint": "Escreva a sua história em ucraniano (obrigatório para publicar) e em qualquer outra língua. Uma língua sem texto próprio mostra o inglês, senão o ucraniano; essa página fica oculta aos motores de busca.",
+      "state": "Página",
+      "text": "Texto",
+      "editorHint": "Apenas títulos, parágrafos, listas e ligações; tudo o resto é removido ao guardar.",
+      "metaDescription": "Descrição para motores de busca",
+      "metaDescriptionHint": "Até 500 caracteres. Se ficar vazia, usa-se o início do texto.",
+      "filled": "Escrito",
+      "empty": "Vazio",
+      "requiredToPublish": "Obrigatório para publicar",
+      "hasErrors": "Tem erros",
+      "view": "Ver a página",
+      "toolbar": {
+        "label": "Formatação",
+        "heading": "Título",
+        "subheading": "Subtítulo",
+        "paragraph": "Parágrafo",
+        "bulletList": "Lista com marcas",
+        "numberedList": "Lista numerada",
+        "link": "Ligação",
+        "unlink": "Remover ligação",
+        "linkPrompt": "Endereço da ligação: https://…, mailto:… ou tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Escreva o texto em ucraniano antes de publicar",
+        "tooLong": "Este texto é demasiado longo",
+        "textRequired": "Escreva o texto nesta língua ou apague a sua descrição"
+      }
     }
   },
   "collections": {

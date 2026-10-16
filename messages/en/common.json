@@ -33,7 +33,11 @@
   },
   "contact": {
     "phone": "Phone",
-    "email": "Email"
+    "email": "Email",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp"
   },
   "cookieConsent": {
     "text": "We use cookies to provide you the best experience on our website. By continuing to use our site, we will assume you are happy with it.",
@@ -45,7 +49,9 @@
     "imageAlt": "Main image of the \"About us\" page",
     "missionStart": "love my work and want to bring joy and beauty to our world.",
     "motto": "Affordable luxury is my motto!",
-    "customOrders": "I also create custom jewelry. And always take into account the wishes of customers."
+    "customOrders": "I also create custom jewelry. And always take into account the wishes of customers.",
+    "tbd": "About us: TBD",
+    "fallbackNote": "This page is not yet available in your language."
   },
   "footer": {
     "contactsTbd": "Contacts: TBD",

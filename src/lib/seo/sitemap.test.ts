@@ -53,7 +53,7 @@ function find(url: string) {
 describe("buildSitemap", () => {
   it("lists every shop page once per locale with all locales and x-default /en as alternates", () => {
     const sitemap = build([]);
-    // home, shop and the six categories in 11 locales (About is not live yet)
+    // home, shop and the six categories in 11 locales (no About text yet)
     expect(sitemap).toHaveLength(8 * locales.length);
 
     const home = find("https://tjs.example/de");
@@ -63,6 +63,21 @@ describe("buildSitemap", () => {
     });
     expect(home.lastModified).toBeUndefined();
     for (const slug of CATEGORY_SLUGS) find(`https://tjs.example/uk/shop/${slug}`);
+  });
+
+  it("lists the About page only in the locales with their own text, with alternates among them", () => {
+    const sitemap = buildSitemap({ base, products: [], categories, aboutLocales: ["en", "uk"] });
+    const about = sitemap.filter((e) => e.url.endsWith("/about"));
+    expect(about.map((e) => e.url)).toEqual(["https://tjs.example/uk/about", "https://tjs.example/en/about"]);
+    expect(about[0].alternates?.languages).toEqual({
+      uk: "https://tjs.example/uk/about",
+      en: "https://tjs.example/en/about",
+      "x-default": "https://tjs.example/en/about",
+    });
+    expect(buildSitemap({ base, products: [], categories, aboutLocales: ["uk"] }).filter((e) => e.url.endsWith("/about"))[0].alternates?.languages).toEqual({
+      uk: "https://tjs.example/uk/about",
+      "x-default": "https://tjs.example/uk/about",
+    });
   });
 
   it("lists a product only in its indexable locales, with alternates among them", () => {

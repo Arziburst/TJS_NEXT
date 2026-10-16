@@ -34,6 +34,7 @@
     "viewShop": "Winkel",
     "orders": "Bestellingen",
     "ordersWithNew": "Bestellingen, {count, plural, one {# nieuwe aanvraag} other {# nieuwe aanvragen}}",
+    "settings": "Instellingen",
     "collections": "Collecties"
   },
   "status": {
@@ -524,6 +525,108 @@
       "historyPlaced": "Aanvraag geplaatst",
       "historyChange": "{from} → {to}",
       "historyBy": "{date}, {name}"
+    }
+  },
+  "settings": {
+    "title": "Instellingen",
+    "intro": "Hoe klanten je bereiken, hoe prijzen worden omgerekend en jouw verhaal. Een opgeslagen wijziging staat bij de volgende paginalading op de site.",
+    "save": "Opslaan",
+    "saving": "Opslaan…",
+    "saved": "Opgeslagen. De site toont het nu.",
+    "loadError": "De instellingen konden niet worden geladen. Laad de pagina opnieuw.",
+    "errorSummary": "{count, plural, one {# veld vraagt je aandacht} other {# velden vragen je aandacht}}",
+    "errors": {
+      "notAuthorized": "Alleen de beheerder kan dit doen. Log opnieuw in.",
+      "unexpectedError": "De instellingen konden niet worden opgeslagen. Probeer het opnieuw."
+    },
+    "contacts": {
+      "title": "Contact",
+      "hint": "Getoond onderaan elke pagina, in de orderbevestiging en in e-mails aan klanten. Laat een veld leeg om dat kanaal te verbergen.",
+      "shopName": "Naam van de winkel",
+      "shopNameHint": "Gebruikt in de orderbevestiging en in e-mails.",
+      "instagram": "Instagram",
+      "instagramHint": "Je accountnaam (@name) of de link naar je profiel.",
+      "email": "E-mail",
+      "emailHint": "Bijvoorbeeld shop@example.com.",
+      "phone": "Telefoon",
+      "phoneHint": "Met landcode, bijvoorbeeld +38 (066) 123 45 67. Getoond zoals je het schrijft.",
+      "telegram": "Telegram-chat",
+      "telegramHint": "Je gebruikersnaam (@name) of een t.me-link.",
+      "viber": "Viber-chat",
+      "viberHint": "Je telefoonnummer met landcode, of een Viber-uitnodigingslink.",
+      "whatsapp": "WhatsApp-chat",
+      "whatsappHint": "Je telefoonnummer met landcode, of een wa.me-link.",
+      "notifications": "Meldingen",
+      "telegramChatId": "Telegram-chat-ID voor nieuwe bestellingen",
+      "telegramChatIdHint": "De chat waarin de bot van de winkel nieuwe bestellingen meldt: een getal (de ID van een groep begint met -100). Nooit op de site getoond.",
+      "tooLong": "Maximaal {max} tekens",
+      "invalid": {
+        "shopName": "Vul een naam in",
+        "instagram": "Vul een accountnaam zoals @name of een instagram.com-profiellink in",
+        "email": "Vul een e-mailadres zoals shop@example.com in",
+        "phone": "Vul een telefoonnummer met landcode in: cijfers, spaties, haakjes en streepjes",
+        "telegram": "Vul een gebruikersnaam zoals @name (minstens 5 tekens) of een t.me-link in",
+        "viber": "Vul een telefoonnummer met landcode of een Viber-uitnodigingslink in",
+        "whatsapp": "Vul een telefoonnummer met landcode of een wa.me-link in",
+        "telegramChatId": "Vul de chat-ID in als getal, bijvoorbeeld -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Prijzen in andere valuta",
+      "hint": "Je stelt elke prijs in USD in. Bezoekers zien hem omgerekend tegen de NBU-koers plus de opslag, naar boven afgerond op een mooie prijs.",
+      "markup": "Opslag, %",
+      "markupHint": "Bovenop de NBU-koers in elke valuta, ook USD. 3 betekent 3 %.",
+      "rulesTitle": "Afronding",
+      "rulesHint": "Een prijs wordt naar boven afgerond op de volgende stap plus de uitgang: stap 10 en uitgang 9 geven 1 289, 1 299 enzovoort. Prijzen onder de optionele drempel gebruiken de kleine stap: stap 1 en uitgang 0.90 geven 29.90.",
+      "step": "Stap",
+      "ending": "Uitgang",
+      "smallBelow": "Kleine prijzen onder",
+      "smallStep": "Kleine stap",
+      "smallEnding": "Kleine uitgang",
+      "example": "Voorbeeldprijs, USD",
+      "exampleHint": "Elke valuta hieronder toont hoe deze prijs eruitziet met de waarden hierboven.",
+      "shownAs": "Getoond als",
+      "noRate": "Nog geen koers",
+      "errors": {
+        "required": "Dit veld is verplicht",
+        "invalidNumber": "Vul een getal in, bijvoorbeeld 9.90",
+        "outOfRange": "Deze waarde valt buiten het bereik",
+        "endingTooLarge": "Moet kleiner zijn dan de stap",
+        "smallTierIncomplete": "Vul alle drie de velden voor kleine prijzen in, of geen"
+      }
+    },
+    "about": {
+      "cardHint": "Jouw verhaal, in elke taal.",
+      "edit": "Pagina ‘Over ons’ bewerken",
+      "back": "Instellingen",
+      "title": "Pagina ‘Over ons’",
+      "hint": "Schrijf je verhaal in het Oekraïens (vereist om te publiceren) en in elke andere taal. Een taal zonder eigen tekst toont de Engelse, anders de Oekraïense; zo’n pagina is verborgen voor zoekmachines.",
+      "state": "Pagina",
+      "text": "Tekst",
+      "editorHint": "Alleen koppen, alinea’s, lijsten en links; al het andere wordt bij het opslaan verwijderd.",
+      "metaDescription": "Beschrijving voor zoekmachines",
+      "metaDescriptionHint": "Tot 500 tekens. Leeg gelaten wordt het begin van de tekst gebruikt.",
+      "filled": "Geschreven",
+      "empty": "Leeg",
+      "requiredToPublish": "Vereist om te publiceren",
+      "hasErrors": "Bevat fouten",
+      "view": "Pagina bekijken",
+      "toolbar": {
+        "label": "Opmaak",
+        "heading": "Kop",
+        "subheading": "Subkop",
+        "paragraph": "Alinea",
+        "bulletList": "Lijst met opsommingstekens",
+        "numberedList": "Genummerde lijst",
+        "link": "Link",
+        "unlink": "Link verwijderen",
+        "linkPrompt": "Linkadres: https://…, mailto:… of tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Schrijf de Oekraïense tekst voordat je publiceert",
+        "tooLong": "Deze tekst is te lang",
+        "textRequired": "Schrijf de tekst voor deze taal, of wis de beschrijving"
+      }
     }
   },
   "collections": {

@@ -14,7 +14,7 @@ export const routes = {
   // #67: /collections/<slug>; the home page and the shop's navigation link the published ones
   collections: { path: "/collections", enabled: true },
   // #21
-  aboutUs: { path: "/about-us", enabled: false },
+  aboutUs: { path: "/about", enabled: true },
   // #20
   cart: { path: "/cart", enabled: true },
   // #29

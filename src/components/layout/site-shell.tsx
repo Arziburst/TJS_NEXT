@@ -4,6 +4,7 @@ import { FavoritesHeaderSlot } from "@/components/favorites/favorites-header-slo
 import { Toaster } from "@/components/ui/sonner";
 import { AccountMenu } from "./account-menu";
 import { Footer } from "./footer";
+import { FooterContacts } from "./footer-contacts";
 import { Header } from "./header";
 import { AccountSlot } from "./header-slots";
 
@@ -19,10 +20,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <AccountMenu />
           </Suspense>
         }
-        menuFooter={<Footer />}
+        menuFooter={<Footer contacts={<FooterContacts />} />}
       />
       <div className="flex flex-1 flex-col">{children}</div>
-      <Footer />
+      <Footer contacts={<FooterContacts />} />
       <Toaster />
     </>
   );

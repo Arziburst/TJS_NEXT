@@ -33,7 +33,11 @@
   },
   "contact": {
     "phone": "Telefon",
-    "email": "E-mail"
+    "email": "E-mail",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp"
   },
   "cookieConsent": {
     "text": "Folosim cookie-uri pentru a-ți oferi cea mai bună experiență pe site-ul nostru. Continuând să folosești site-ul, considerăm că ești de acord cu acest lucru.",
@@ -45,7 +49,9 @@
     "imageAlt": "Imaginea principală a paginii „Despre noi”",
     "missionStart": "îmi iubesc munca și vreau să aduc bucurie și frumusețe în lumea noastră.",
     "motto": "Lux accesibil este deviza mea!",
-    "customOrders": "Creez și bijuterii la comandă și țin mereu cont de dorințele clienților."
+    "customOrders": "Creez și bijuterii la comandă și țin mereu cont de dorințele clienților.",
+    "tbd": "Despre noi: TBD",
+    "fallbackNote": "Această pagină nu este încă disponibilă în limba dumneavoastră."
   },
   "footer": {
     "contactsTbd": "Contacte: TBD",

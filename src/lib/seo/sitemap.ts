@@ -11,8 +11,8 @@ import { productPath } from "./product";
 /*
  * The sitemap of the storefront: only pages a search engine may index, one <url> per locale with xhtml:link
  * alternates of the same page in the other indexable locales (each one listing itself too) and x-default on the
- * fallback locale's. The shop's own pages (home, the listing, the categories, About) are written in every
- * locale's messages, so every locale is indexable; a product is indexable in the locales whose translation is
+ * fallback locale's. The shop's own pages (home, the listing, the categories) are written in every locale's
+ * messages, so every locale is indexable; About only in the locales with their own reviewed text (#21); a product is indexable in the locales whose translation is
  * (./indexing.ts). Search, cart, checkout, favorites, account, admin and the demo pages are noindex and never
  * listed. Google reads at most 50 000 URLs per sitemap: 11 locales × (9 pages + the products) stays far below
  * for this catalogue; a sitemap index is the next step once it does not.
@@ -39,6 +39,8 @@ export type SitemapInput = {
   base: URL;
   products: readonly SitemapProduct[];
   categories: readonly SitemapCategory[];
+  /** The locales whose About page is indexed (src/lib/settings/about.ts); none while it is unpublished. */
+  aboutLocales?: readonly Locale[];
   /** The published collections (#67); none when left out. */
   collections?: readonly SitemapCollection[];
 };
@@ -66,6 +68,18 @@ function shopPage(base: URL, href: Href, lastModified: string | undefined): Meta
   for (const locale of locales) languages[locale] = absolute(locale);
   languages["x-default"] = absolute(defaultLocale);
   return locales.map((locale) => entry(absolute(locale), languages, lastModified));
+}
+
+/** The About page: one URL per locale with its own text, alternates among those, x-default en, else uk. */
+function aboutPages(base: URL, aboutLocales: readonly Locale[]): MetadataRoute.Sitemap {
+  const indexed = locales.filter((locale) => aboutLocales.includes(locale));
+  if (indexed.length === 0) return [];
+  const absolute = (locale: Locale) => new URL(getPathname({ href: routes.aboutUs.path, locale }), base).href;
+  const languages: Record<string, string> = {};
+  for (const locale of indexed) languages[locale] = absolute(locale);
+  const xDefault = indexed.includes("en") ? "en" : indexed.includes("uk") ? "uk" : null;
+  if (xDefault) languages["x-default"] = absolute(xDefault);
+  return indexed.map((locale) => entry(absolute(locale), languages, undefined));
 }
 
 /** A product: one URL per indexable translation, alternates only among those. */
@@ -100,7 +114,7 @@ function translatedPages(
   );
 }
 
-export function buildSitemap({ base, products, categories, collections = [] }: SitemapInput): MetadataRoute.Sitemap {
+export function buildSitemap({ base, products, categories, aboutLocales = [], collections = [] }: SitemapInput): MetadataRoute.Sitemap {
   const productChange = (filter: (p: SitemapProduct) => boolean) =>
     latest(
       ...products
@@ -121,7 +135,7 @@ export function buildSitemap({ base, products, categories, collections = [] }: S
     ...shopPage(base, routes.home.path, undefined),
     ...shopPage(base, routes.shop.path, latest(productChange(() => true), ...categories.map((c) => c.updatedAt))),
     ...categoryPages,
-    ...(routes.aboutUs.enabled ? shopPage(base, routes.aboutUs.path, undefined) : []),
+    ...(routes.aboutUs.enabled ? aboutPages(base, aboutLocales) : []),
     ...products.flatMap((product) => productPages(base, product)),
     ...collections.flatMap((collection) => collectionPages(base, collection)),
   ];

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { getLocale, getTranslations } from "next-intl/server";
 import { HomeCollections } from "@/components/collections/home-collections";
 import { getCategoryEntries } from "@/components/catalog/category-entries";
 import { SEE_ALL_IMAGE, STATIC_BLUR } from "@/components/catalog/category-images";
@@ -12,7 +12,8 @@ import { getAlternates, getMetadataBase } from "@/i18n/metadata";
 import { getPathname, Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { pageOpenGraph } from "@/lib/seo/open-graph";
-import { siteJsonLd } from "@/lib/seo/organization";
+import { organizationContacts, siteJsonLd } from "@/lib/seo/organization";
+import { getShopContacts } from "@/lib/settings/cache";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [t, tCommon, locale] = await Promise.all([getTranslations("home"), getTranslations("common"), getLocale()]);
@@ -34,17 +35,13 @@ export default async function HomePage() {
   const [t, tCommon, locale] = await Promise.all([getTranslations("home"), getTranslations("common"), getLocale()]);
   // static: the category names come from the messages, so the whole page is prerendered
   const categories = await getCategoryEntries(locale as Locale);
-  // the shop's contacts join it once the admin settings (#21) exist
-  const structuredData = siteJsonLd({
-    base: getMetadataBase(),
-    locale: locale as Locale,
-    name: tCommon("brand"),
-    description: t("meta.description"),
-  });
 
   return (
     <main className="page-container flex flex-1 flex-col gap-10 overflow-x-clip py-8 sb:gap-14 sb:py-12">
-      <JsonLd data={structuredData} />
+      {/* its own boundary: the contacts are a cached read that, when it fails, is read again per request */}
+      <Suspense fallback={null}>
+        <SiteJsonLd locale={locale as Locale} name={tCommon("brand")} description={t("meta.description")} />
+      </Suspense>
       <h1 className="sr-only">{t("meta.title")}</h1>
       <CategoryTiles categories={categories} />
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -69,4 +66,10 @@ export default async function HomePage() {
       </Suspense>
     </main>
   );
+}
+
+/** The Organization and WebSite structured data, with the shop's contacts from the admin settings (#21). */
+async function SiteJsonLd({ locale, name, description }: { locale: Locale; name: string; description: string }) {
+  const contacts = organizationContacts(await getShopContacts());
+  return <JsonLd data={siteJsonLd({ base: getMetadataBase(), locale, name, description, contacts })} />;
 }

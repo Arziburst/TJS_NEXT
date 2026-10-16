@@ -34,6 +34,7 @@
     "viewShop": "Magazin",
     "orders": "Comenzi",
     "ordersWithNew": "Comenzi, {count, plural, one {# cerere nouă} few {# cereri noi} other {# de cereri noi}}",
+    "settings": "Setări",
     "collections": "Colecții"
   },
   "status": {
@@ -524,6 +525,108 @@
       "historyPlaced": "Cerere plasată",
       "historyChange": "{from} → {to}",
       "historyBy": "{date}, {name}"
+    }
+  },
+  "settings": {
+    "title": "Setări",
+    "intro": "Cum vă contactează clienții, cum se convertesc prețurile și povestea dumneavoastră. O modificare salvată apare pe site la următoarea încărcare a paginii.",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "saved": "Salvat. Site-ul îl afișează acum.",
+    "loadError": "Setările nu au putut fi încărcate. Reîncărcați pagina.",
+    "errorSummary": "{count, plural, one {# câmp necesită atenție} few {# câmpuri necesită atenție} other {# de câmpuri necesită atenție}}",
+    "errors": {
+      "notAuthorized": "Doar administratorul poate face asta. Autentificați-vă din nou.",
+      "unexpectedError": "Setările nu au putut fi salvate. Încercați din nou."
+    },
+    "contacts": {
+      "title": "Contacte",
+      "hint": "Afișate în subsolul fiecărei pagini, în confirmarea comenzii și în e-mailurile către clienți. Lăsați un câmp gol pentru a ascunde acel canal.",
+      "shopName": "Numele magazinului",
+      "shopNameHint": "Folosit în confirmarea comenzii și în e-mailuri.",
+      "instagram": "Instagram",
+      "instagramHint": "Numele contului (@name) sau linkul către profil.",
+      "email": "E-mail",
+      "emailHint": "De exemplu shop@example.com.",
+      "phone": "Telefon",
+      "phoneHint": "Cu prefixul țării, de exemplu +38 (066) 123 45 67. Afișat așa cum îl scrieți.",
+      "telegram": "Chat Telegram",
+      "telegramHint": "Numele de utilizator (@name) sau un link t.me.",
+      "viber": "Chat Viber",
+      "viberHint": "Numărul de telefon cu prefixul țării sau un link de invitație Viber.",
+      "whatsapp": "Chat WhatsApp",
+      "whatsappHint": "Numărul de telefon cu prefixul țării sau un link wa.me.",
+      "notifications": "Notificări",
+      "telegramChatId": "ID-ul chatului Telegram pentru comenzi noi",
+      "telegramChatIdHint": "Chatul în care botul magazinului anunță comenzile noi: un număr (ID-ul unui grup începe cu -100). Nu este afișat niciodată pe site.",
+      "tooLong": "Cel mult {max} caractere",
+      "invalid": {
+        "shopName": "Introduceți un nume",
+        "instagram": "Introduceți un nume de cont ca @name sau un link de profil instagram.com",
+        "email": "Introduceți o adresă de e-mail ca shop@example.com",
+        "phone": "Introduceți un telefon cu prefixul țării: cifre, spații, paranteze și cratime",
+        "telegram": "Introduceți un nume de utilizator ca @name (cel puțin 5 caractere) sau un link t.me",
+        "viber": "Introduceți un telefon cu prefixul țării sau un link de invitație Viber",
+        "whatsapp": "Introduceți un telefon cu prefixul țării sau un link wa.me",
+        "telegramChatId": "Introduceți ID-ul chatului ca număr, de exemplu -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Prețuri în alte monede",
+      "hint": "Stabiliți fiecare preț în USD. Vizitatorii îl văd convertit la cursul BNU plus adaosul, rotunjit în sus la un preț rotund.",
+      "markup": "Adaos, %",
+      "markupHint": "Adăugat la cursul BNU în fiecare monedă, inclusiv USD. 3 înseamnă 3 %.",
+      "rulesTitle": "Rotunjire",
+      "rulesHint": "Un preț se rotunjește în sus la treapta următoare plus terminația: treapta 10 și terminația 9 dau 1 289, 1 299 și așa mai departe. Prețurile sub pragul opțional folosesc treapta mică: treapta 1 și terminația 0.90 dau 29.90.",
+      "step": "Treaptă",
+      "ending": "Terminație",
+      "smallBelow": "Prețuri mici sub",
+      "smallStep": "Treaptă mică",
+      "smallEnding": "Terminație mică",
+      "example": "Preț de exemplu, USD",
+      "exampleHint": "Fiecare monedă de mai jos arată cum apare acest preț cu valorile de mai sus.",
+      "shownAs": "Afișat ca",
+      "noRate": "Încă fără curs",
+      "errors": {
+        "required": "Acest câmp este obligatoriu",
+        "invalidNumber": "Introduceți un număr, de exemplu 9.90",
+        "outOfRange": "Valoarea este în afara intervalului",
+        "endingTooLarge": "Trebuie să fie mai mică decât treapta",
+        "smallTierIncomplete": "Completați toate cele trei câmpuri pentru prețuri mici sau niciunul"
+      }
+    },
+    "about": {
+      "cardHint": "Povestea dumneavoastră, în fiecare limbă.",
+      "edit": "Editați pagina „Despre noi”",
+      "back": "Setări",
+      "title": "Pagina „Despre noi”",
+      "hint": "Scrieți povestea în ucraineană (obligatoriu pentru publicare) și în orice altă limbă. O limbă fără text propriu afișează textul în engleză, altfel pe cel în ucraineană; o astfel de pagină este ascunsă motoarelor de căutare.",
+      "state": "Pagină",
+      "text": "Text",
+      "editorHint": "Doar titluri, paragrafe, liste și linkuri; restul se elimină la salvare.",
+      "metaDescription": "Descriere pentru motoarele de căutare",
+      "metaDescriptionHint": "Până la 500 de caractere. Dacă rămâne goală, se folosește începutul textului.",
+      "filled": "Scris",
+      "empty": "Gol",
+      "requiredToPublish": "Obligatoriu pentru publicare",
+      "hasErrors": "Conține erori",
+      "view": "Vezi pagina",
+      "toolbar": {
+        "label": "Formatare",
+        "heading": "Titlu",
+        "subheading": "Subtitlu",
+        "paragraph": "Paragraf",
+        "bulletList": "Listă cu marcatori",
+        "numberedList": "Listă numerotată",
+        "link": "Link",
+        "unlink": "Elimină linkul",
+        "linkPrompt": "Adresa linkului: https://…, mailto:… sau tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Scrieți textul în ucraineană înainte de publicare",
+        "tooLong": "Acest text este prea lung",
+        "textRequired": "Scrieți textul în această limbă sau ștergeți descrierea ei"
+      }
     }
   },
   "collections": {

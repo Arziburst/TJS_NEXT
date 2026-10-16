@@ -5,7 +5,11 @@ import { sendEmail } from "@/lib/notifications/resend";
 
 vi.mock("server-only", () => ({}));
 
-const { notificationConfig } = await import("@/lib/notifications/config");
+// the admin settings (#21), read with the service role
+const readShopSettingsAsService = vi.fn<() => Promise<{ telegram_chat_id: string | null } | null>>();
+vi.mock("@/lib/settings/store", () => ({ readShopSettingsAsService: () => readShopSettingsAsService() }));
+
+const { loadNotificationConfig, notificationConfig } = await import("@/lib/notifications/config");
 
 const FULL = {
   NOTIFICATIONS_SEND: "true",
@@ -80,5 +84,32 @@ describe("sendEmail", () => {
       throw new DOMException("The operation was aborted due to timeout", "TimeoutError");
     });
     expect(await sendEmail(config, message, fetchImpl)).toEqual({ ok: false, error: "email: TimeoutError" });
+  });
+});
+
+describe("the owner's Telegram chat", () => {
+  const chatOf = (config: Awaited<ReturnType<typeof loadNotificationConfig>>) => config.telegram.ok && config.telegram.config.chatId;
+
+  it("is the one in the admin settings, TELEGRAM_CHAT_ID only the fallback", () => {
+    expect(chatOf(notificationConfig(FULL, "-100777"))).toBe("-100777");
+    expect(chatOf(notificationConfig({ ...FULL, TELEGRAM_CHAT_ID: undefined }, "-100777"))).toBe("-100777");
+    expect(chatOf(notificationConfig(FULL, null))).toBe("-100123");
+    expect(chatOf(notificationConfig(FULL, "  "))).toBe("-100123");
+  });
+
+  it("is read from the settings for a run, falling back to the environment when none is set or the read fails", async () => {
+    readShopSettingsAsService.mockResolvedValueOnce({ telegram_chat_id: "-100777" });
+    expect(chatOf(await loadNotificationConfig(FULL))).toBe("-100777");
+    readShopSettingsAsService.mockResolvedValueOnce({ telegram_chat_id: null });
+    expect(chatOf(await loadNotificationConfig(FULL))).toBe("-100123");
+    readShopSettingsAsService.mockResolvedValueOnce(null);
+    expect(chatOf(await loadNotificationConfig(FULL))).toBe("-100123");
+  });
+
+  it("is not read at all while sending is off", async () => {
+    readShopSettingsAsService.mockClear();
+    const config = await loadNotificationConfig({ ...FULL, NOTIFICATIONS_SEND: undefined });
+    expect(config.telegram.ok).toBe(false);
+    expect(readShopSettingsAsService).not.toHaveBeenCalled();
   });
 });

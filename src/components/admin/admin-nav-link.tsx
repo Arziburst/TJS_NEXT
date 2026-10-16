@@ -1,10 +1,17 @@
 "use client";
 
-import { InboxIcon, LayersIcon, PackageIcon, PlusIcon, StoreIcon, TagsIcon } from "lucide-react";
+import { InboxIcon, LayersIcon, PackageIcon, PlusIcon, SettingsIcon, StoreIcon, TagsIcon } from "lucide-react";
 import { routes } from "@/config/routes";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { ADMIN_ATTRIBUTES_HREF, ADMIN_COLLECTIONS_HREF, ADMIN_ORDERS_HREF, ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "./paths";
+import {
+  ADMIN_ATTRIBUTES_HREF,
+  ADMIN_COLLECTIONS_HREF,
+  ADMIN_ORDERS_HREF,
+  ADMIN_PRODUCTS_HREF,
+  ADMIN_SETTINGS_HREF,
+  NEW_PRODUCT_HREF,
+} from "./paths";
 
 const ENTRIES = {
   // the order list and every order's page (#27)
@@ -23,6 +30,12 @@ const ENTRIES = {
   add: { href: NEW_PRODUCT_HREF, icon: PlusIcon, isActive: (path: string) => path === NEW_PRODUCT_HREF },
   // the materials and colours of the filters (#25)
   attributes: { href: ADMIN_ATTRIBUTES_HREF, icon: TagsIcon, isActive: (path: string) => path === ADMIN_ATTRIBUTES_HREF },
+  // the settings and the About page editor
+  settings: {
+    href: ADMIN_SETTINGS_HREF,
+    icon: SettingsIcon,
+    isActive: (path: string) => path === ADMIN_SETTINGS_HREF || path.startsWith(`${ADMIN_SETTINGS_HREF}/`),
+  },
   // the collections and each one's page (#67)
   collections: {
     href: ADMIN_COLLECTIONS_HREF,
@@ -55,7 +68,7 @@ export function AdminNavLink({ entry, label, badge }: AdminNavLinkProps) {
       aria-current={active ? "page" : undefined}
       aria-label={count?.label}
       className={cn(
-        "flex min-h-14 flex-col items-center justify-center gap-1 px-2 font-sans text-xs font-semibold outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring sb:min-h-11 sb:flex-row sb:justify-start sb:gap-3 sb:px-3 sb:text-sm",
+        "flex min-h-14 flex-col items-center justify-center gap-1 px-0.5 font-sans text-xs font-semibold outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring sb:min-h-11 sb:flex-row sb:justify-start sb:gap-3 sb:px-3 sb:text-sm",
         active ? "text-accent-text" : "hover:text-accent-text",
       )}
     >
@@ -71,7 +84,10 @@ export function AdminNavLink({ entry, label, badge }: AdminNavLinkProps) {
           </span>
         )}
       </span>
-      <span>{label}</span>
+      {/* five tabs share a phone's width: a long word is hyphenated or broken rather than cut off */}
+      <span className="max-w-full text-center text-[0.625rem] leading-tight hyphens-auto [overflow-wrap:anywhere] sb:text-left sb:text-sm sb:[overflow-wrap:normal]">
+        {label}
+      </span>
     </Link>
   );
 }
