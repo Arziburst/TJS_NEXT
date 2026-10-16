@@ -11,8 +11,8 @@ import {
   productSlugFor,
   resolveProductPath,
   type SlugMatch,
-  type TranslationSlug,
 } from "./product-path";
+import type { AlternateTranslation } from "@/lib/seo/product";
 import type { CatalogResult, Product } from "./types";
 
 /** The cache tag of everything rendered from one product; the admin revalidates it on every change. */
@@ -33,12 +33,12 @@ export function productSlugTag(slug: string): string {
  * slugs. Read as `anon`, so RLS hides drafts, archived and deleted products; the API roles cannot name deleted_at
  * (column grants), so only the status is filtered here.
  */
-export async function findSlugMatches(slug: string): Promise<CatalogResult<SlugMatch[]>> {
+export async function findSlugMatches(slug: string): Promise<CatalogResult<SlugMatch<AlternateTranslation>[]>> {
   if (!PRODUCT_SLUG_PATTERN.test(slug)) return { ok: false, reason: "invalid" };
   try {
     const { data, error } = await createPublicServerClient()
       .from("product_translations")
-      .select("product_id, locale, slug, product:products!inner(product_translations(locale, slug))")
+      .select("product_id, locale, slug, product:products!inner(product_translations(locale, slug, source, reviewed_at))")
       .eq("slug", slug)
       .eq("product.status", "published");
     if (error) return { ok: false, reason: "unexpectedError" };
@@ -48,7 +48,12 @@ export async function findSlugMatches(slug: string): Promise<CatalogResult<SlugM
         productId: row.product_id,
         locale: row.locale,
         slug: row.slug,
-        productSlugs: row.product.product_translations,
+        productSlugs: row.product.product_translations.map((t) => ({
+          locale: t.locale,
+          slug: t.slug,
+          source: t.source,
+          reviewedAt: t.reviewed_at,
+        })),
       })),
     };
   } catch {
@@ -88,8 +93,8 @@ export type ProductPageData =
       product: Product;
       /** The category's name in the locale (or the fallback), null when it cannot be read. */
       categoryName: string | null;
-      /** The product's slug in every locale it is translated into: its hreflang alternates. */
-      translations: TranslationSlug[];
+      /** The product's slug in every locale it is translated into, with its review state: its hreflang alternates. */
+      translations: AlternateTranslation[];
     }
   | { kind: "redirect"; slug: string }
   | { kind: "notFound" }

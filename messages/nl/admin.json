@@ -79,7 +79,8 @@
       "previous": "Vorige pagina",
       "next": "Volgende pagina",
       "page": "Pagina {page} van {count}"
-    }
+    },
+    "unreviewed": "{count, plural, one {# machinevertaling niet nagekeken} other {# machinevertalingen niet nagekeken}}: {locales}"
   },
   "actionErrors": {
     "notAuthorized": "Alleen het beheer kan dit doen. Meld je opnieuw aan.",
@@ -184,6 +185,64 @@
       "leadTimeOrder": "Mag niet kleiner zijn dan ‘Van’",
       "titleRequired": "Voer een titel in deze taal in of maak de andere teksten ervan leeg",
       "requiredToPublish": "Om te publiceren is een Oekraïense titel nodig"
+    },
+    "translateAfterSave": "Sla het product eerst op; daarna kan het machinaal naar de andere talen worden vertaald."
+  },
+  "translate": {
+    "title": "Machinevertaling",
+    "hint": "Vult de andere talen in één keer vanuit één tekst. Machineteksten staan in de winkel, maar zoekmachines indexeren ze pas als u ze als nagekeken markeert.",
+    "notConfigured": "Machinevertaling is op deze server niet ingesteld. Vul de talen met de hand in of vraag de ontwikkelaar de AI Gateway te koppelen.",
+    "saveFirst": "Sla eerst uw wijzigingen op: de vertaling gaat uit van de opgeslagen tekst.",
+    "source": "Vertalen uit",
+    "noSourceOption": "Nog geen tekst",
+    "targets": "Naar",
+    "existing": "heeft tekst",
+    "overwrite": "Ook bestaande teksten vervangen",
+    "submit": "{count, plural, =0 {Vertalen} one {Naar # taal vertalen} other {Naar # talen vertalen}}",
+    "running": "Bezig met vertalen naar {count, plural, one {# taal} other {# talen}}… Dit duurt een à twee minuten.",
+    "done": "Vertaald naar: {locales}.",
+    "doneToast": "{count, plural, one {Naar # taal vertaald} other {Naar # talen vertaald}}",
+    "partial": "Niet vertaald: {locales}. Probeer het opnieuw.",
+    "review": {
+      "title": "Nakijken",
+      "hint": "Lees elke machinetekst en markeer hem als nagekeken: pas dan indexeren zoekmachines de pagina in die taal.",
+      "none": "Geen machinevertaling om na te kijken.",
+      "reviewed": "Nagekeken",
+      "notReviewed": "Niet nagekeken",
+      "label": "{language}: nagekeken",
+      "markedToast": "{language}: als nagekeken gemarkeerd",
+      "unmarkedToast": "{language}: weer niet nagekeken"
+    },
+    "errors": {
+      "notAuthorized": "Alleen de beheerder kan dit doen. Meld u opnieuw aan.",
+      "invalid": "Dit verzoek is ongeldig.",
+      "notConfigured": "Machinevertaling is op deze server niet ingesteld.",
+      "tooManyRequests": "Te veel vertalingen in korte tijd. Wacht even en probeer het opnieuw.",
+      "notFound": "Dit product bestaat niet meer.",
+      "noSource": "De gekozen taal heeft geen tekst om uit te vertalen.",
+      "nothingToTranslate": "Niets te vertalen: elke gekozen taal heeft al een tekst.",
+      "conflict": "Een ander product heeft intussen een van de nieuwe paginaadressen ingenomen. Probeer het opnieuw.",
+      "authFailed": "De vertaaldienst heeft de toegangssleutel geweigerd. Vraag de ontwikkelaar die te controleren.",
+      "rateLimited": "De vertaaldienst is overbelast. Probeer het over een paar minuten opnieuw.",
+      "timeout": "De vertaling duurde te lang. Probeer het opnieuw of kies minder talen.",
+      "unavailable": "De vertaaldienst is nu niet beschikbaar. Probeer het later opnieuw.",
+      "rejected": "De vertaaldienst heeft het verzoek geweigerd. Vraag de ontwikkelaar de logs te bekijken.",
+      "invalidOutput": "De vertaling kwam onbruikbaar terug. Probeer het opnieuw.",
+      "unexpectedError": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "bulk": {
+      "label": "Vertaling van de geselecteerde producten",
+      "selectAll": "Alles op deze pagina selecteren",
+      "select": "{title} selecteren",
+      "selected": "{count, plural, =0 {Niets geselecteerd} one {# geselecteerd} other {# geselecteerd}}",
+      "translate": "{count, plural, =0 {Ontbrekende talen vertalen} other {Ontbrekende talen vertalen (#)}}",
+      "markReviewed": "{count, plural, =0 {Vertalingen als nagekeken markeren} other {Vertalingen als nagekeken markeren (#)}}",
+      "stop": "Stoppen na dit product",
+      "progress": "Vertalen {current} van {total}: {title}",
+      "report": "Resultaten van de vertaling",
+      "translatedLine": "{count, plural, one {# taal vertaald} other {# talen vertaald}}, {failed} niet vertaald",
+      "summary": "{done, plural, one {# product vertaald} other {# producten vertaald}}, {failed, plural, =0 {geen fouten} one {# fout} other {# fouten}}",
+      "reviewedToast": "{count, plural, =0 {Geen vertaling wachtte op nakijken} one {# vertaling als nagekeken gemarkeerd} other {# vertalingen als nagekeken gemarkeerd}}"
     }
   },
   "taxonomy": {

@@ -102,6 +102,8 @@ describe("message catalogs", () => {
       name: "IMG_0042.jpg",
       done: 3,
       position: 2,
+      current: 3,
+      failed: 1,
       // the notifications (#26): an order number, its status, money and the shop's host
       number: 10042,
       status: "Accepted",

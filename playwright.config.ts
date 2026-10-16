@@ -9,13 +9,22 @@ const serverScript = process.env.E2E_SERVER === "start" ? "start" : "dev";
 // The Nova Post fixture server (e2e/nova-post-mock.ts) the app's delivery client talks to instead of the real API
 const novaPostMockPort = Number(process.env.NOVA_POST_MOCK_PORT || port + 1000);
 const novaPostMockKey = "e2e-fixture-key";
+// The AI Gateway stand-in (e2e/ai-gateway-mock.ts) the admin's machine translation talks to
+const aiGatewayMockPort = Number(process.env.AI_GATEWAY_MOCK_PORT || port + 1500);
+const aiGatewayMockKey = "e2e-gateway-key";
 // The Telegram and Resend stand-in (e2e/notifications-mock.ts) the app sends the order notifications to; the
 // e2e tests read what it got (e2e/notifications.ts computes the same port)
 const notificationsMockPort = Number(process.env.NOTIFICATIONS_MOCK_PORT || port + 2000);
 const notificationsMockToken = "e2e-bot-token";
 const notificationsMockKey = "e2e-resend-key";
 // e2e files that write products of their own to the catalog (see the projects below)
-const CATALOG_WRITERS = ["**/cart.e2e.ts", "**/admin.e2e.ts", "**/favorites.e2e.ts", "**/checkout.e2e.ts"];
+const CATALOG_WRITERS = [
+  "**/cart.e2e.ts",
+  "**/admin.e2e.ts",
+  "**/favorites.e2e.ts",
+  "**/checkout.e2e.ts",
+  "**/translation.e2e.ts",
+];
 
 export default defineConfig({
   testDir: "./e2e",
@@ -71,6 +80,13 @@ export default defineConfig({
           env: { NOVA_POST_MOCK_PORT: String(novaPostMockPort), NOVA_POST_MOCK_KEY: novaPostMockKey },
         },
         {
+          command: "node e2e/ai-gateway-mock.ts",
+          url: `http://127.0.0.1:${aiGatewayMockPort}/health`,
+          reuseExistingServer: false,
+          timeout: 30_000,
+          env: { AI_GATEWAY_MOCK_PORT: String(aiGatewayMockPort), AI_GATEWAY_MOCK_KEY: aiGatewayMockKey },
+        },
+        {
           command: "node e2e/notifications-mock.ts",
           url: `http://127.0.0.1:${notificationsMockPort}/health`,
           reuseExistingServer: false,
@@ -88,12 +104,15 @@ export default defineConfig({
           timeout: 120_000,
           // the shell tests use the /ui-kit showcase; a production build needs the flag at build time too (CI).
           // The delivery tests answer Nova Poshta from the recorded fixtures (server-side, read at run time), and
-          // Nova Post from the fixture server above (key and URL read at request time).
+          // Nova Post from the fixture server above (key and URL read at request time), and the machine translation
+          // from the AI Gateway stand-in (read at request time too).
           env: {
             TJS_UI_KIT: "true",
             NOVA_POSHTA_FIXTURES: "true",
             NOVA_POST_API_KEY: novaPostMockKey,
             NOVA_POST_API_URL: `http://127.0.0.1:${novaPostMockPort}/v.1.0`,
+            AI_GATEWAY_API_KEY: aiGatewayMockKey,
+            AI_GATEWAY_BASE_URL: `http://127.0.0.1:${aiGatewayMockPort}/v4/ai`,
             // the order notifications go to the stand-in above (read at request time); the flag lets them be sent
             NOTIFICATIONS_SEND: "true",
             TELEGRAM_BOT_TOKEN: notificationsMockToken,
