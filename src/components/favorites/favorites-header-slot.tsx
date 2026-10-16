@@ -5,6 +5,7 @@ import { CountBadge } from "@/components/cart/cart-icon";
 import { FavoritesSlot } from "@/components/layout/header-slots";
 import { routes } from "@/config/routes";
 import { Link } from "@/i18n/navigation";
+import { unlessSessionUnavailable } from "@/lib/auth/session";
 import { getFavoriteIds } from "@/lib/favorites";
 import { FavoritesSync } from "./favorites-sync";
 
@@ -22,7 +23,13 @@ export function FavoritesHeaderSlot() {
 }
 
 async function FavoritesHeaderValue() {
-  const [favorites, t, format] = await Promise.all([getFavoriteIds(), getTranslations("nav"), getFormatter()]);
+  const [favorites, t, format] = await Promise.all([
+    // the plain heart link while the session cannot be read (#112): the header must not fail the page
+    unlessSessionUnavailable(getFavoriteIds(), null),
+    getTranslations("nav"),
+    getFormatter(),
+  ]);
+  if (!favorites) return <FavoritesSlot />;
   const ids = favorites.ok ? favorites.ids : [];
   const count = ids.length;
 
