@@ -4,7 +4,8 @@
   "total": "Усього",
   "price": {
     "unavailable": "Ціна недоступна",
-    "none": "—"
+    "none": "—",
+    "from": "від {price}"
   },
   "pagination": {
     "of": "із"
@@ -48,5 +49,6 @@
     "contactsTbd": "Контакти: TBD",
     "rights": "Trend Jewelry Store. Усі права захищено",
     "developedBy": "Розроблено <link>Arziburst*</link>"
-  }
+  },
+  "variant": "Розмір: {label}"
 }

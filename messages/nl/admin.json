@@ -79,7 +79,8 @@
       "previous": "Vorige pagina",
       "next": "Volgende pagina",
       "page": "Pagina {page} van {count}"
-    }
+    },
+    "variants": "{count, plural, one {# maat} other {# maten}}"
   },
   "actionErrors": {
     "notAuthorized": "Alleen het beheer kan dit doen. Meld je opnieuw aan.",
@@ -108,7 +109,8 @@
       "translations": "Teksten in alle talen",
       "taxonomy": "Materialen en kleuren",
       "photos": "Foto’s",
-      "publication": "Publicatie"
+      "publication": "Publicatie",
+      "variants": "Maten"
     },
     "chooseCategory": "Kies een categorie",
     "sku": "Artikelnummer",
@@ -183,7 +185,9 @@
       "skuTaken": "Een ander product gebruikt dit artikelnummer al",
       "leadTimeOrder": "Mag niet kleiner zijn dan ‘Van’",
       "titleRequired": "Voer een titel in deze taal in of maak de andere teksten ervan leeg",
-      "requiredToPublish": "Om te publiceren is een Oekraïense titel nodig"
+      "requiredToPublish": "Om te publiceren is een Oekraïense titel nodig",
+      "hasVariants": "Een stuk met maten blijft op bestelling; verwijder eerst de maten",
+      "variantPriceNotPositive": "Een maat van dit product zou nul of minder kosten; pas eerst het prijsverschil aan"
     }
   },
   "taxonomy": {
@@ -264,6 +268,55 @@
       "notFound": "Dit product of deze foto bestaat niet meer.",
       "conflict": "De foto's zijn in een ander venster gewijzigd; nu worden de huidige getoond.",
       "unexpectedError": "Dat is niet gelukt. Probeer het opnieuw."
+    }
+  },
+  "variants": {
+    "hint": "Elke maat waaruit de klant kiest, met een eigen prijsverschil ten opzichte van de productprijs. Een product met maten wordt alleen in een daarvan besteld.",
+    "saveFirst": "Sla eerst het product op en voeg daarna de maten toe.",
+    "oneOfAKind": "Een uniek stuk heeft geen maten.",
+    "empty": "Geen maten: het stuk wordt besteld zoals het is.",
+    "add": "Maat toevoegen",
+    "newTitle": "Nieuwe maat",
+    "editTitle": "Maat {label} bewerken",
+    "labels": "Naam in elke taal",
+    "labelsHint": "Oekraïens is verplicht. Een lege taal toont de Engelse naam, anders de Oekraïense.",
+    "priceDelta": "Prijsverschil, USD",
+    "priceDeltaHint": "Wordt bij de productprijs opgeteld: 0 voor dezelfde prijs, bv. 5 voor een duurdere maat of -2.50 voor een goedkopere.",
+    "skuSuffix": "SKU-achtervoegsel",
+    "skuSuffixHint": "Optioneel; wordt in bestellingen aan de SKU van het product toegevoegd, bv. 17 → TJS-001-17.",
+    "price": "Prijs: {price}",
+    "available": "Te bestellen",
+    "availableOf": "{label} is te bestellen",
+    "off": "Nu niet beschikbaar",
+    "edit": "{label} bewerken",
+    "moveEarlier": "{label} omhoog verplaatsen",
+    "moveLater": "{label} omlaag verplaatsen",
+    "delete": "{label} verwijderen",
+    "deleteTitle": "Deze maat verwijderen?",
+    "deleteDescription": "{label} verdwijnt uit de winkel; winkelwagens met deze maat tonen hem als niet meer beschikbaar.",
+    "deleteConfirm": "Verwijderen",
+    "ordered": "Al besteld: kan niet worden verwijderd, zet hem in plaats daarvan uit.",
+    "save": "Maat opslaan",
+    "saved": "Maat opgeslagen",
+    "deleted": "Maat verwijderd",
+    "moved": "Verplaatst naar plaats {position} van {count}",
+    "switchedOn": "{label} is weer te bestellen",
+    "switchedOff": "{label} is uitgezet",
+    "errors": {
+      "notAuthorized": "Alleen de beheerder kan dit doen. Meld je opnieuw aan.",
+      "notFound": "Dit product of deze maat bestaat niet meer. Laad de pagina opnieuw.",
+      "conflict": "De maten zijn in een ander tabblad gewijzigd: de huidige lijst wordt getoond.",
+      "ordered": "Deze maat is al besteld: zet hem uit in plaats van hem te verwijderen.",
+      "tooMany": "Een product kan hoogstens 50 maten hebben.",
+      "oneOfAKind": "Een uniek stuk heeft geen maten.",
+      "invalid": "Controleer de velden.",
+      "unexpectedError": "De maten konden niet worden gewijzigd. Probeer het opnieuw.",
+      "labelRequired": "Vul de Oekraïense naam in",
+      "tooLong": "Hoogstens {max} tekens",
+      "invalidDelta": "Vul een bedrag in, bv. 5 of -2.50",
+      "priceNotPositive": "De prijs van de maat moet boven nul blijven",
+      "invalidSuffix": "Latijnse letters en cijfers, met punten of streepjes ertussen",
+      "suffixTaken": "Een andere maat van dit product heeft dit achtervoegsel"
     }
   }
 }

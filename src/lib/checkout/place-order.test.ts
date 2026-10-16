@@ -36,12 +36,22 @@ function product(id: string, overrides: Partial<CartProduct> = {}): CartProduct 
     title: "Earrings",
     locale: "en",
     image: null,
+    variants: [],
+    listPrice: { usdMinor: overrides.priceUsdMinor ?? 2490, from: false },
     ...overrides,
   };
 }
 
-function item(p: CartProduct, quantity = 1, status: CartItem["status"] = "available"): CartItem {
-  return { line: { productId: p.id, variantId: null, quantity }, product: p, status, quantity };
+function item(p: CartProduct, quantity = 1, status: CartItem["status"] = "available", variantId: string | null = null): CartItem {
+  const variant = p.variants.find((v) => v.id === variantId) ?? null;
+  return {
+    line: { productId: p.id, variantId, quantity },
+    product: p,
+    variant,
+    unitUsdMinor: variant?.priceUsdMinor ?? p.priceUsdMinor,
+    status,
+    quantity,
+  };
 }
 
 const earrings = product(EARRINGS);
@@ -112,7 +122,10 @@ describe("placeOrder", () => {
     const { deps: d, calls, created } = deps();
     expect(await placeOrder(input(), d)).toEqual({ ok: true, number: 10001 });
     expect(calls).toEqual(["createOrder", "removeFromCart", "rememberOrder"]);
-    expect(d.removeFromCart).toHaveBeenCalledWith([EARRINGS, CORAL]);
+    expect(d.removeFromCart).toHaveBeenCalledWith([
+      { productId: EARRINGS, variantId: null },
+      { productId: CORAL, variantId: null },
+    ]);
     expect(d.rememberOrder).toHaveBeenCalledWith({ number: 10001, token: ATTEMPT });
     // €22.90 × 2 + €26.90 (24.90 / 29.90 × 0.86 × 1.03, charm-rounded up)
     expect(created.order).toMatchObject({
@@ -137,9 +150,62 @@ describe("placeOrder", () => {
       delivery_estimate_decimals: 2,
     });
     expect(created.items).toEqual([
-      { product_id: EARRINGS, variant_id: null, position: 0, title: "Earrings", title_locale: "en", quantity: 2, unit_price_usd_minor: 2490, unit_price_minor: 2290 },
-      { product_id: CORAL, variant_id: null, position: 1, title: "Coral", title_locale: "en", quantity: 1, unit_price_usd_minor: 2990, unit_price_minor: 2690 },
+      { product_id: EARRINGS, variant_id: null, position: 0, title: "Earrings", title_locale: "en", variant_label: null, variant_label_locale: null, quantity: 2, unit_price_usd_minor: 2490, unit_price_minor: 2290 },
+      { product_id: CORAL, variant_id: null, position: 1, title: "Coral", title_locale: "en", variant_label: null, variant_label_locale: null, quantity: 1, unit_price_usd_minor: 2990, unit_price_minor: 2690 },
     ]);
+  });
+
+  describe("with sizes (#66)", () => {
+    const SIZE_16 = "c6000000-0000-4000-8000-000000000016";
+    const SIZE_18 = "c6000000-0000-4000-8000-000000000018";
+    const ring = product(EARRINGS, {
+      title: "Ring",
+      variants: [
+        { id: SIZE_16, label: "16", labelLocale: "uk", skuSuffix: "16", priceUsdMinor: 2490, available: true },
+        { id: SIZE_18, label: "18", labelLocale: "uk", skuSuffix: "18", priceUsdMinor: 2990, available: true },
+      ],
+    });
+    const twoSizes = () => ({ ok: true as const, items: [item(ring, 2, "available", SIZE_16), item(ring, 1, "available", SIZE_18)], pieces: 3, pendingMerge: false });
+    const expected = [
+      { productId: EARRINGS, variantId: SIZE_16, quantity: 2 },
+      { productId: EARRINGS, variantId: SIZE_18, quantity: 1 },
+    ];
+
+    it("orders two sizes of one product as two lines, each at its size's price with its label", async () => {
+      const { deps: d, created } = deps({ readCart: vi.fn(async () => twoSizes()) });
+      expect(await placeOrder(input({ expected }), d)).toEqual({ ok: true, number: 10001 });
+      expect(created.items).toEqual([
+        { product_id: EARRINGS, variant_id: SIZE_16, position: 0, title: "Ring", title_locale: "en", variant_label: "16", variant_label_locale: "uk", quantity: 2, unit_price_usd_minor: 2490, unit_price_minor: 2290 },
+        { product_id: EARRINGS, variant_id: SIZE_18, position: 1, title: "Ring", title_locale: "en", variant_label: "18", variant_label_locale: "uk", quantity: 1, unit_price_usd_minor: 2990, unit_price_minor: 2690 },
+      ]);
+      expect(created.order).toMatchObject({ items_total_usd_minor: 2490 * 2 + 2990, items_total_minor: 2290 * 2 + 2690 });
+      expect(d.removeFromCart).toHaveBeenCalledWith([
+        { productId: EARRINGS, variantId: SIZE_16 },
+        { productId: EARRINGS, variantId: SIZE_18 },
+      ]);
+    });
+
+    it("compares the lines by size: another size seen on the page is a changed cart", async () => {
+      const { deps: d } = deps({ readCart: vi.fn(async () => twoSizes()) });
+      const swapped = [
+        { productId: EARRINGS, variantId: SIZE_16, quantity: 1 },
+        { productId: EARRINGS, variantId: SIZE_18, quantity: 2 },
+      ];
+      expect(await placeOrder(input({ expected: swapped }), d)).toEqual({ ok: false, reason: "cartChanged" });
+      expect(await placeOrder(input({ expected: expected.slice(0, 1) }), d)).toEqual({ ok: false, reason: "cartChanged" });
+      expect(d.createOrder).not.toHaveBeenCalled();
+    });
+
+    it("names a size that is no longer available with its label", async () => {
+      const { deps: d } = deps({
+        readCart: vi.fn(async () => ({
+          ...twoSizes(),
+          items: [item(ring, 2, "available", SIZE_16), item(ring, 1, "unavailable", SIZE_18)],
+        })),
+      });
+      expect(await placeOrder(input({ expected }), d)).toEqual({ ok: false, reason: "unavailable", titles: ["Ring (18)"] });
+      expect(d.createOrder).not.toHaveBeenCalled();
+    });
   });
 
   it("ignores prices, totals and goods sent with the form: every number is the server's", async () => {

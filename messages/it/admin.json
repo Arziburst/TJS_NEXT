@@ -79,7 +79,8 @@
       "previous": "Pagina precedente",
       "next": "Pagina successiva",
       "page": "Pagina {page} di {count}"
-    }
+    },
+    "variants": "{count, plural, one {# misura} other {# misure}}"
   },
   "actionErrors": {
     "notAuthorized": "Solo la gestione può farlo. Accedi di nuovo.",
@@ -108,7 +109,8 @@
       "translations": "Testi in tutte le lingue",
       "taxonomy": "Materiali e colori",
       "photos": "Foto",
-      "publication": "Pubblicazione"
+      "publication": "Pubblicazione",
+      "variants": "Misure"
     },
     "chooseCategory": "Scegli una categoria",
     "sku": "Codice articolo",
@@ -183,7 +185,9 @@
       "skuTaken": "Un altro prodotto usa già questo codice",
       "leadTimeOrder": "Non può essere inferiore a «Da»",
       "titleRequired": "Inserisci un titolo in questa lingua o svuota gli altri suoi testi",
-      "requiredToPublish": "Per pubblicare serve un titolo ucraino"
+      "requiredToPublish": "Per pubblicare serve un titolo ucraino",
+      "hasVariants": "Un pezzo con misure resta su ordinazione; elimina prima le sue misure",
+      "variantPriceNotPositive": "Una misura di questo prodotto costerebbe zero o meno; cambia prima la sua differenza di prezzo"
     }
   },
   "taxonomy": {
@@ -264,6 +268,55 @@
       "notFound": "Questo prodotto o questa foto non esiste più.",
       "conflict": "Le foto sono state modificate in un'altra finestra; ora sono mostrate quelle attuali.",
       "unexpectedError": "Non è andata a buon fine. Riprova."
+    }
+  },
+  "variants": {
+    "hint": "Ogni misura tra cui sceglie la cliente, con la propria differenza rispetto al prezzo del prodotto. Un prodotto con misure si ordina solo in una di esse.",
+    "saveFirst": "Salva prima il prodotto, poi aggiungi le sue misure.",
+    "oneOfAKind": "Un pezzo unico non ha misure.",
+    "empty": "Nessuna misura: il pezzo si ordina così com’è.",
+    "add": "Aggiungi una misura",
+    "newTitle": "Nuova misura",
+    "editTitle": "Modifica la misura {label}",
+    "labels": "Nome in ogni lingua",
+    "labelsHint": "L’ucraino è obbligatorio. Una lingua lasciata vuota mostra il nome inglese, altrimenti quello ucraino.",
+    "priceDelta": "Differenza di prezzo, USD",
+    "priceDeltaHint": "Si aggiunge al prezzo del prodotto: 0 per lo stesso prezzo, ad es. 5 per una misura più cara o -2.50 per una più economica.",
+    "skuSuffix": "Suffisso SKU",
+    "skuSuffixHint": "Facoltativo; si aggiunge allo SKU del prodotto negli ordini, ad es. 17 → TJS-001-17.",
+    "price": "Prezzo: {price}",
+    "available": "Ordinabile",
+    "availableOf": "{label} è ordinabile",
+    "off": "Non disponibile ora",
+    "edit": "Modifica {label}",
+    "moveEarlier": "Sposta {label} in su",
+    "moveLater": "Sposta {label} in giù",
+    "delete": "Elimina {label}",
+    "deleteTitle": "Eliminare questa misura?",
+    "deleteDescription": "{label} scompare dal negozio; i carrelli che la contengono la mostrano come non più disponibile.",
+    "deleteConfirm": "Elimina",
+    "ordered": "Già ordinata: non si può eliminare, disattivala invece.",
+    "save": "Salva la misura",
+    "saved": "Misura salvata",
+    "deleted": "Misura eliminata",
+    "moved": "Spostata al posto {position} di {count}",
+    "switchedOn": "{label} è di nuovo ordinabile",
+    "switchedOff": "{label} è disattivata",
+    "errors": {
+      "notAuthorized": "Solo l’amministratrice può farlo. Accedi di nuovo.",
+      "notFound": "Questo prodotto o questa misura non esiste più. Ricarica la pagina.",
+      "conflict": "Le misure sono state cambiate in un’altra scheda: è mostrato l’elenco attuale.",
+      "ordered": "Questa misura è stata ordinata: disattivala invece di eliminarla.",
+      "tooMany": "Un prodotto può avere al massimo 50 misure.",
+      "oneOfAKind": "Un pezzo unico non ha misure.",
+      "invalid": "Controlla i campi.",
+      "unexpectedError": "Non è stato possibile modificare le misure. Riprova.",
+      "labelRequired": "Inserisci il nome in ucraino",
+      "tooLong": "Al massimo {max} caratteri",
+      "invalidDelta": "Inserisci un importo, ad es. 5 o -2.50",
+      "priceNotPositive": "Il prezzo della misura deve restare sopra zero",
+      "invalidSuffix": "Lettere latine e cifre, con punti o trattini tra di esse",
+      "suffixTaken": "Un’altra misura di questo prodotto ha questo suffisso"
     }
   }
 }

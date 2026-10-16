@@ -6,6 +6,7 @@ import { parseProductForm, STATUSES, type FieldErrors } from "@/lib/admin/produc
 import { findSaveConflicts, getStoredProduct, sourceAfterSave } from "@/lib/admin/products";
 import { parseTermIds, PRODUCT_TERMS_FIELD } from "@/lib/admin/taxonomy-form";
 import { revalidateProduct } from "@/lib/admin/revalidate";
+import { usdTextToMinor } from "@/lib/catalog/mappers";
 import { getAdmin } from "@/lib/auth/session";
 import { createSessionClient } from "@/lib/supabase/server";
 
@@ -46,6 +47,15 @@ export async function saveProduct(_previous: SaveProductState, formData: FormDat
   const stored = id === null ? null : await getStoredProduct(id);
   if (stored === "notFound") return failed("notFound");
   if (id !== null && stored === null) return failed("unexpectedError");
+
+  // a product with sizes (#66) stays made to order and keeps every size above zero (the database refuses it too)
+  if (stored && stored.variantDeltas.length > 0) {
+    const fields: FieldErrors = {};
+    if (product.fulfillment !== "made_to_order") fields.fulfillment = "hasVariants";
+    const price = usdTextToMinor(product.price_usd);
+    if (price !== null && price + Math.min(...stored.variantDeltas) <= 0) fields.priceUsd = "variantPriceNotPositive";
+    if (Object.keys(fields).length > 0) return { status: "error", fields };
+  }
 
   const conflicts = await findSaveConflicts(id, product.sku, translations);
   if (!conflicts) return failed("unexpectedError");

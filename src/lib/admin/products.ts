@@ -4,6 +4,7 @@ import { getAdmin } from "@/lib/auth/session";
 import { PRODUCT_IMAGES_BUCKET } from "@/lib/catalog";
 import { isLocale, pickByLocale, usdTextToMinor } from "@/lib/catalog/mappers";
 import { createServiceClient } from "@/lib/supabase/server";
+import { getVariantDeltas } from "./variants";
 import { locales, type Locale } from "@/i18n/routing";
 import type { Database } from "@/lib/supabase/database.types";
 import {
@@ -41,6 +42,8 @@ export type AdminProductListItem = {
   /** Locales without a translation, in the editor's order; uk first when it is missing. */
   missingLocales: Locale[];
   image: AdminImage | null;
+  /** Its live sizes (#66); 0 for a product without sizes. */
+  variantCount: number;
   updatedAt: string;
 };
 
@@ -168,6 +171,9 @@ export async function listAdminProducts(
       }
     }
 
+    const variants = await getVariantDeltas(shown.map((row) => row.id));
+    if (!variants) return { ok: false, reason: "unexpectedError" };
+
     const items = shown.map((row): AdminProductListItem => {
       const translated = new Set(row.product_translations.map((t) => t.locale));
       return {
@@ -181,6 +187,7 @@ export async function listAdminProducts(
         title: titleFor(row.product_translations, filters.locale),
         missingLocales: EDITOR_LOCALES.filter((l) => !translated.has(l)),
         image: images.get(row.id) ?? null,
+        variantCount: variants.get(row.id)?.length ?? 0,
         updatedAt: row.updated_at,
       };
     });
@@ -320,22 +327,38 @@ export type StoredTranslation = Omit<TranslationInput, "locale"> & { locale: str
  * A product as stored before a save: its category and slugs (what the save must revalidate on the
  * storefront) and its translations (an unchanged machine translation keeps its source). Null when unreadable.
  */
-export async function getStoredProduct(
-  id: string,
-): Promise<{ categoryId: string; translations: StoredTranslation[] } | "notFound" | null> {
+export type StoredProduct = {
+  categoryId: string;
+  fulfillment: Enums["product_fulfillment"];
+  /** USD cents; null only for a broken stored value. */
+  priceUsdMinor: number | null;
+  translations: StoredTranslation[];
+  /** The price differences of its live sizes (#66): a save keeps every size above zero. */
+  variantDeltas: number[];
+};
+
+export async function getStoredProduct(id: string): Promise<StoredProduct | "notFound" | null> {
   try {
     const { data, error } = await createServiceClient()
       .from("products")
       .select(
-        `category_id, product_translations(locale, slug, title, description, materials, care, clasp, lead_time_note,
-         meta_title, meta_description, source)`,
+        `category_id, fulfillment, price_usd_text:price_usd::text,
+         product_translations(locale, slug, title, description, materials, care, clasp, lead_time_note,
+         meta_title, meta_description, source),
+         product_variants(price_delta_usd_minor, deleted_at)`,
       )
       .eq("id", id)
       .is("deleted_at", null)
       .maybeSingle();
     if (error) return null;
     if (!data) return "notFound";
-    return { categoryId: data.category_id, translations: data.product_translations };
+    return {
+      categoryId: data.category_id,
+      fulfillment: data.fulfillment,
+      priceUsdMinor: usdTextToMinor(data.price_usd_text),
+      translations: data.product_translations,
+      variantDeltas: data.product_variants.filter((v) => v.deleted_at === null).map((v) => v.price_delta_usd_minor),
+    };
   } catch {
     return null;
   }

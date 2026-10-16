@@ -107,6 +107,7 @@ const productRow = {
     translation("de", "korallen-ohrringe", "Korallen-Ohrringe"),
   ],
   product_images: [],
+  product_variants: [],
 };
 
 const slugMatches: Response = {

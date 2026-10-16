@@ -1,5 +1,6 @@
 import type { Locale } from "@/i18n/routing";
 import type { CartItem, CartView } from "@/lib/cart";
+import { lineTitle, sameLine, type LineRef } from "@/lib/cart/lines";
 import type { Currency } from "@/lib/money/currencies";
 import type { MoneyTables } from "@/lib/money/store";
 import type { CreateOrderResult, NewOrder, NewOrderItem } from "@/lib/orders/store";
@@ -40,7 +41,7 @@ export type PlaceOrderDeps = {
   delivery: Omit<DeliveryDeps, "tables">;
   createOrder: (order: NewOrder, items: NewOrderItem[]) => Promise<CreateOrderResult>;
   // the ordered lines leave the cart only once the order is stored
-  removeFromCart: (productIds: string[]) => Promise<void>;
+  removeFromCart: (lines: LineRef[]) => Promise<void>;
   rememberOrder: (access: { number: number; token: string }) => Promise<void>;
 };
 
@@ -51,21 +52,22 @@ function isOrderable(item: CartItem): item is Orderable {
 }
 
 /**
- * Compares the cart now with the lines the customer saw on the page. A piece that has become unavailable is
- * named; any other difference (a line added, removed or changed in another tab) asks to check the order again.
+ * Compares the cart now with the lines the customer saw on the page (a line is a product and its size). A piece
+ * that has become unavailable is named; any other difference (a line added, removed or changed in another tab)
+ * asks to check the order again.
  */
 function compareWithExpected(items: readonly CartItem[], expected: CheckoutRequest["expected"]): PlaceOrderResult | null {
   const unavailable: string[] = [];
   for (const line of expected) {
-    const item = items.find((i) => i.line.productId === line.productId);
+    const item = items.find((i) => sameLine(i.line, line));
     if (!item) return { ok: false, reason: "cartChanged" };
     if (!isOrderable(item)) {
-      if (item.product) unavailable.push(item.product.title);
+      if (item.product) unavailable.push(lineTitle(item.product.title, item.variant?.label));
       else return { ok: false, reason: "cartChanged" };
     } else if (item.quantity !== line.quantity) return { ok: false, reason: "cartChanged" };
   }
   if (unavailable.length > 0) return { ok: false, reason: "unavailable", titles: unavailable };
-  const extra = items.some((item) => isOrderable(item) && !expected.some((line) => line.productId === item.line.productId));
+  const extra = items.some((item) => isOrderable(item) && !expected.some((line) => sameLine(line, item.line)));
   return extra ? { ok: false, reason: "cartChanged" } : null;
 }
 
@@ -94,14 +96,15 @@ export async function placeOrder(input: unknown, deps: PlaceOrderDeps): Promise<
     if (orderable.length === 0) return { ok: false, reason: "emptyCart" };
 
     const { current, tables } = await deps.currency(request.locale);
-    const quoteItems: QuoteItem[] = orderable.map(({ line, product, quantity }) => ({
+    const quoteItems: QuoteItem[] = orderable.map(({ line, product, variant, unitUsdMinor, quantity }) => ({
       productId: product.id,
       variantId: line.variantId,
       fulfillment: product.fulfillment,
       title: product.title,
       titleLocale: product.locale,
+      variantLabel: variant ? { text: variant.label, locale: variant.labelLocale } : null,
       sku: product.sku,
-      priceUsdMinor: product.priceUsdMinor,
+      priceUsdMinor: unitUsdMinor,
       weightGrams: product.weightGrams,
       quantity,
     }));
@@ -146,6 +149,8 @@ export async function placeOrder(input: unknown, deps: PlaceOrderDeps): Promise<
         position: line.position,
         title: line.title,
         title_locale: line.titleLocale,
+        variant_label: line.variantLabel?.text ?? null,
+        variant_label_locale: line.variantLabel?.locale ?? null,
         quantity: line.quantity,
         unit_price_usd_minor: line.priceUsdMinor,
         unit_price_minor: line.unitMinor,
@@ -154,14 +159,16 @@ export async function placeOrder(input: unknown, deps: PlaceOrderDeps): Promise<
 
     if (!created.ok) {
       if (created.reason === "error") return { ok: false, reason: "unexpectedError" };
-      const titles = quote.lines.filter((line) => created.productIds.includes(line.productId)).map((line) => line.title);
+      const titles = quote.lines
+        .filter((line) => created.productIds.includes(line.productId))
+        .map((line) => lineTitle(line.title, line.variantLabel?.text));
       return { ok: false, reason: "unavailable", titles };
     }
     if (created.replayed) return confirm(created, user?.id ?? null, request.attempt, deps);
 
     // the order is stored: a cart that could not be emptied is not reported as a failure
     try {
-      await deps.removeFromCart(quote.lines.map((line) => line.productId));
+      await deps.removeFromCart(quote.lines.map((line) => ({ productId: line.productId, variantId: line.variantId })));
     } catch (error) {
       console.error("checkout: the ordered lines could not be removed from the cart", error);
     }

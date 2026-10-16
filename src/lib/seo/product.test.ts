@@ -64,6 +64,7 @@ const input: ProductJsonLdInput = {
   fulfillment: "one_of_a_kind",
   availability: "available",
   price: { price: "27.90", priceCurrency: "EUR" },
+  variants: [],
   breadcrumbs: [
     { name: "TJS", url: "https://tjs.test/de" },
     { name: "Ohrringe", url: "https://tjs.test/de/shop/earrings" },
@@ -119,6 +120,32 @@ describe("productJsonLd", () => {
     expect(product).not.toHaveProperty("description");
     expect(product).not.toHaveProperty("image");
     expect(product).not.toHaveProperty("sku");
+  });
+
+  it("states one Offer per size at the size's price (#66), a size that cannot be made now out of stock", () => {
+    const sized: ProductJsonLdInput = {
+      ...input,
+      fulfillment: "made_to_order",
+      variants: [
+        { name: "16", sku: "TEST-001-16", price: { price: "27.90", priceCurrency: "EUR" }, available: true },
+        { name: "18", sku: null, price: { price: "31.90", priceCurrency: "EUR" }, available: true },
+        { name: "20", sku: "TEST-001-20", price: { price: "31.90", priceCurrency: "EUR" }, available: false },
+      ],
+    };
+    const [product] = productJsonLd(sized)["@graph"] as Record<string, unknown>[];
+    const offer = { "@type": "Offer", url: input.url, priceCurrency: "EUR", itemCondition: "https://schema.org/NewCondition" };
+    expect(product?.offers).toEqual([
+      { ...offer, name: "16", sku: "TEST-001-16", price: "27.90", availability: "https://schema.org/MadeToOrder" },
+      { ...offer, name: "18", price: "31.90", availability: "https://schema.org/MadeToOrder" },
+      { ...offer, name: "20", sku: "TEST-001-20", price: "31.90", availability: "https://schema.org/OutOfStock" },
+    ]);
+  });
+
+  it("states no Offer for sizes without a price, and never the product's own price next to its sizes", () => {
+    const [product] = productJsonLd({ ...input, variants: [{ name: "16", sku: null, price: null, available: true }] })[
+      "@graph"
+    ] as Record<string, unknown>[];
+    expect(product).not.toHaveProperty("offers");
   });
 });
 

@@ -11,7 +11,8 @@
     "unavailable": "Dit stuk kan niet meer worden besteld.",
     "rateLimited": "Te veel wijzigingen in korte tijd. Wacht even en probeer het opnieuw.",
     "inCart": "In je winkelwagen: {count}",
-    "viewCart": "Winkelwagen bekijken"
+    "viewCart": "Winkelwagen bekijken",
+    "variantRequired": "Kies eerst een maat."
   },
   "card": {
     "onlyOrder": "Op bestelling gemaakt",
@@ -69,5 +70,11 @@
   },
   "recentlyViewed": {
     "title": "Recent bekeken"
+  },
+  "variants": {
+    "legend": "Maat",
+    "unavailable": "nu niet beschikbaar",
+    "choose": "Kies een maat om het stuk aan de winkelwagen toe te voegen.",
+    "noneAvailable": "Er is nu geen maat te bestellen."
   }
 }

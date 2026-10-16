@@ -36,7 +36,7 @@ type CheckoutFormProps = {
   goods: OrderGoods | null;
   novaPostLive: boolean;
   // the lines shown in the summary: the server checks that the cart still holds exactly these
-  expected: { productId: string; quantity: number }[];
+  expected: { productId: string; variantId: string | null; quantity: number }[];
   // the server-rendered total next to the button
   total: ReactNode;
 };

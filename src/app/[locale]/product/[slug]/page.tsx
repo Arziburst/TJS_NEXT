@@ -12,6 +12,7 @@ import { getMetadataBase } from "@/i18n/metadata";
 import { getPathname, redirect } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { getProductPage, getProductSlugs } from "@/lib/catalog/product";
+import { variantSku } from "@/lib/catalog/variants";
 import { getJsonLdPrice } from "@/lib/money/prices";
 import {
   productAlternates,
@@ -95,7 +96,7 @@ async function ProductContent({ params }: { params: PageProps<"/[locale]/product
       <ProductDetails
         product={page.product}
         categoryName={page.categoryName}
-        price={<Price usdMinor={page.product.priceUsdMinor} />}
+        price={(usdMinor, from) => <Price usdMinor={usdMinor} from={from} />}
       />
       <RecentlyViewed currentId={page.product.id} />
     </>
@@ -105,9 +106,10 @@ async function ProductContent({ params }: { params: PageProps<"/[locale]/product
 async function ProductJsonLd({ locale, page }: { locale: Locale; page: Extract<Awaited<ReturnType<typeof getProductPage>>, { kind: "ok" }> }) {
   const { product } = page;
   const { translation } = product;
-  const [tCommon, price] = await Promise.all([
+  const [tCommon, price, variantPrices] = await Promise.all([
     getTranslations("common"),
     getJsonLdPrice(product.priceUsdMinor, locale),
+    Promise.all(product.variants.map((variant) => getJsonLdPrice(variant.priceUsdMinor, locale))),
   ]);
   const base = getMetadataBase();
   const absolute = (path: string) => new URL(path, base).href;
@@ -132,6 +134,12 @@ async function ProductJsonLd({ locale, page }: { locale: Locale; page: Extract<A
     fulfillment: product.fulfillment,
     availability: product.availability,
     price,
+    variants: product.variants.map((variant, index) => ({
+      name: variant.label,
+      sku: variantSku(product.sku, variant.skuSuffix),
+      price: variantPrices[index] ?? null,
+      available: variant.available,
+    })),
     breadcrumbs,
   });
 
