@@ -18,5 +18,13 @@
     "nameMaxLength": "O nome deve ter no máximo {max} caracteres",
     "passwordMaxLength": "A palavra-passe deve ter no máximo {max} caracteres",
     "passwordsDontMatch": "As palavras-passe não coincidem"
+  },
+  "boundary": {
+    "title": "Algo correu mal",
+    "description": "Não conseguimos mostrar esta página agora. Tente novamente daqui a pouco.",
+    "retry": "Tentar novamente",
+    "home": "Ir para a página inicial",
+    "reference": "Código de erro para o suporte: {digest}",
+    "accountUnavailable": "A sua conta não está disponível neste momento. Tente novamente daqui a pouco."
   }
 }

@@ -16,7 +16,12 @@ export async function LocaleDocument({ locale, children }: { locale: Locale; chi
       <body className="flex min-h-full flex-col">
         {/* client components only get the namespaces they use */}
         <NextIntlClientProvider
-          messages={{ nav: messages.nav, common: { brand: messages.common.brand, actions: messages.common.actions } }}
+          messages={{
+            nav: messages.nav,
+            common: { brand: messages.common.brand, actions: messages.common.actions },
+            // the error pages (error.tsx, #112) are client components under this layout
+            errors: { boundary: messages.errors.boundary },
+          }}
         >
           <SiteShell>{children}</SiteShell>
         </NextIntlClientProvider>

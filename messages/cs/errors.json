@@ -18,5 +18,13 @@
     "nameMaxLength": "Jméno může mít nejvýše {max} znaků",
     "passwordMaxLength": "Heslo může mít nejvýše {max} znaků",
     "passwordsDontMatch": "Hesla se neshodují"
+  },
+  "boundary": {
+    "title": "Něco se pokazilo",
+    "description": "Tuto stránku teď nemůžeme zobrazit. Zkuste to prosím za chvíli znovu.",
+    "retry": "Zkusit znovu",
+    "home": "Přejít na úvodní stránku",
+    "reference": "Kód chyby pro podporu: {digest}",
+    "accountUnavailable": "Váš účet je teď nedostupný. Zkuste to prosím za chvíli znovu."
   }
 }

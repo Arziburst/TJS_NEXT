@@ -18,5 +18,13 @@
     "nameMaxLength": "Imię może mieć co najwyżej {max} znaków",
     "passwordMaxLength": "Hasło może mieć co najwyżej {max} znaków",
     "passwordsDontMatch": "Hasła nie są takie same"
+  },
+  "boundary": {
+    "title": "Coś poszło nie tak",
+    "description": "Nie możemy teraz wyświetlić tej strony. Spróbuj ponownie za chwilę.",
+    "retry": "Spróbuj ponownie",
+    "home": "Przejdź do strony głównej",
+    "reference": "Kod błędu dla pomocy technicznej: {digest}",
+    "accountUnavailable": "Twoje konto jest teraz niedostępne. Spróbuj ponownie za chwilę."
   }
 }

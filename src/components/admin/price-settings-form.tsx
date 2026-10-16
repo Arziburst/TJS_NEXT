@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { startTransition, useActionState, useState, type FormEvent } from "react";
+import { startTransition, useState, type FormEvent } from "react";
 import type { PriceSettingsFormState } from "@/app/[locale]/admin/settings/actions";
 import { formatMoney, priceIn } from "@/lib/money/format";
 import type { Currency } from "@/lib/money/currencies";
@@ -13,6 +13,7 @@ import {
   type RuleField,
 } from "@/lib/settings/price-settings";
 import { cn } from "@/lib/utils";
+import { useFormActionState } from "./form-action";
 import { TextField, fieldId } from "./form-fields";
 import { inputClass, labelClass } from "./styles";
 import { SaveButton, SettingsFeedback } from "./settings-form-parts";
@@ -26,6 +27,7 @@ type PriceSettingsFormProps = {
 };
 
 const idle: PriceSettingsFormState = { status: "idle" };
+const unexpected: PriceSettingsFormState = { status: "error", error: "unexpectedError" };
 
 const MAIN_FIELDS = ["step", "ending"] as const satisfies readonly RuleField[];
 const SMALL_FIELDS = ["smallBelow", "smallStep", "smallEnding"] as const satisfies readonly RuleField[];
@@ -37,7 +39,7 @@ const SMALL_FIELDS = ["smallBelow", "smallStep", "smallEnding"] as const satisfi
 export function PriceSettingsForm({ values, currencies, displayRates, savePriceSettings }: PriceSettingsFormProps) {
   const t = useTranslations("admin.settings.prices");
   const locale = useLocale();
-  const [state, dispatch, pending] = useActionState(savePriceSettings, idle);
+  const [state, dispatch, pending] = useFormActionState(savePriceSettings, idle, unexpected);
   const [draft, setDraft] = useState<Record<string, string>>(values);
   const [example, setExample] = useState("29.00");
   const fields = state.status === "error" ? (state.fields ?? {}) : {};
