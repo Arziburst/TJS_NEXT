@@ -797,5 +797,74 @@ test.describe("admin on the local stack", () => {
       await expect(sizePicker(page).getByRole("radio", { name: /^18/ })).toBeEnabled();
       expect(errors).toEqual([]);
     });
+
+    // #102: the delete button of an ordered size is focusable but disabled, and must look it and say why
+    test("a size someone ordered cannot be deleted: its button looks disabled and says why", async ({ page }) => {
+      const errors = collectErrors(page);
+      const [size] = await sizeRows();
+      const email = `e2e-ordered-size-${randomUUID()}@example.test`;
+      const { data: order, error } = await db!
+        .from("orders")
+        .insert({
+          idempotency_key: randomUUID(),
+          locale: "uk",
+          first_name: "Olena",
+          phone: "+380501234567",
+          email,
+          country: "UA",
+          delivery_carrier: "nova_poshta",
+          delivery_method: "warehouse",
+          delivery_destination: {},
+          delivery_estimate_state: "unavailable",
+          currency: "USD",
+          currency_decimals: 2,
+          fx_rate: 1,
+          markup_bps: 300,
+          items_total_usd_minor: 2000,
+          items_total_minor: 2000,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      try {
+        const line = await db!.from("order_items").insert({
+          order_id: order.id,
+          position: 0,
+          product_id: productId,
+          variant_id: size!.id,
+          variant_label: "18",
+          variant_label_locale: "uk",
+          fulfillment: "made_to_order",
+          title: "E2E ring",
+          title_locale: "uk",
+          quantity: 1,
+          unit_price_usd_minor: 2000,
+          unit_price_minor: 2000,
+          line_total_usd_minor: 2000,
+          line_total_minor: 2000,
+        });
+        if (line.error) throw line.error;
+
+        const sizes = await openSizes(page);
+        const remove = sizes.getByRole("button", { name: ukAdmin.variants.delete.replace("{label}", "18") });
+        await expect(remove).toHaveAttribute("aria-disabled", "true");
+        // the reason: as its description, as visible text and as the hover tooltip
+        await expect(remove).toHaveAccessibleDescription(ukAdmin.variants.ordered);
+        await expect(sizes.getByText(ukAdmin.variants.ordered)).toBeVisible();
+        await expect(remove).toHaveAttribute("title", ukAdmin.variants.ordered);
+        // it looks disabled: reduced contrast and a not-allowed cursor, unlike the edit button next to it
+        await expect(remove).toHaveCSS("opacity", "0.5");
+        await expect(remove).toHaveCSS("cursor", "not-allowed");
+        const edit = sizes.getByRole("button", { name: ukAdmin.variants.edit.replace("{label}", "18") });
+        await expect(edit).toHaveCSS("opacity", "1");
+        // a click opens nothing
+        await remove.click({ force: true });
+        await expect(page.getByRole("dialog")).toHaveCount(0);
+        expect((await sizeRows()).map((r) => r.id)).toEqual([size!.id]);
+        expect(errors).toEqual([]);
+      } finally {
+        await db!.from("orders").delete().eq("id", order.id);
+      }
+    });
   });
 });

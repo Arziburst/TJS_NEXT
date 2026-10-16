@@ -205,6 +205,7 @@
     "noSourceOption": "Aún sin texto",
     "targets": "A",
     "existing": "tiene texto",
+    "incomplete": "incompleto",
     "overwrite": "Sustituir también los textos existentes",
     "submit": "{count, plural, =0 {Traducir} one {Traducir a # idioma} other {Traducir a # idiomas}}",
     "running": "Traduciendo a {count, plural, one {# idioma} other {# idiomas}}… Tarda uno o dos minutos.",

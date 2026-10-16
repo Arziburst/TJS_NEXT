@@ -37,7 +37,7 @@ type ProductFormProps = {
   /** The materials and colours to choose from, and the product's (#25), rendered by the page. */
   taxonomy?: ReactNode;
   /** Machine translation of an existing (saved) product. */
-  translation?: Pick<TranslatePanelProps, "configured" | "translateProduct" | "setTranslationReviewed">;
+  translation?: Pick<TranslatePanelProps, "configured" | "sizes" | "translateProduct" | "setTranslationReviewed">;
 };
 
 const idle: SaveProductState = { status: "idle" };
@@ -263,7 +263,13 @@ export function ProductForm({
         </h2>
         <p className="font-input text-xs">{t("translationsHint")}</p>
         {product && translation ? (
-          <TranslatePanel productId={product.id} translations={product.translations} dirty={dirty} {...translation} />
+          <TranslatePanel
+            productId={product.id}
+            translations={product.translations}
+            images={product.images}
+            dirty={dirty}
+            {...translation}
+          />
         ) : (
           <p className="font-input text-xs">{t("translateAfterSave")}</p>
         )}

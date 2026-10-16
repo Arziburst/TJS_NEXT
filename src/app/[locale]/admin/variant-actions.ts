@@ -4,9 +4,10 @@ import { refresh } from "next/cache";
 import { z } from "zod";
 import { getStoredProduct, type StoredProduct } from "@/lib/admin/products";
 import { revalidateProduct } from "@/lib/admin/revalidate";
-import { parseVariantForm, variantFormInput, type VariantFieldErrors } from "@/lib/admin/variant-form";
+import { labelSources, parseVariantForm, variantFormInput, type VariantFieldErrors } from "@/lib/admin/variant-form";
 import {
   deleteVariant,
+  getStoredVariantLabels,
   reorderVariants,
   saveVariant,
   setVariantAvailable,
@@ -62,7 +63,15 @@ export async function saveProductVariant(input: unknown): Promise<SaveVariantRes
 
   const form = parseVariantForm(parsed.data, product.stored.priceUsdMinor);
   if (!form.ok) return { ok: false, reason: "fields", fields: form.fields };
-  const result = await saveVariant(await createSessionClient(), { productId, variantId, input: form.input, available });
+  let variant = form.input;
+  if (variantId) {
+    // a label the admin did not change keeps its source (a machine name stays machine); an edited one is human
+    const stored = await getStoredVariantLabels(productId, variantId);
+    if (stored === "notFound") return { ok: false, reason: "notFound" };
+    if (stored === null) return { ok: false, reason: "unexpectedError" };
+    variant = { ...variant, labels: labelSources(variant.labels, stored) };
+  }
+  const result = await saveVariant(await createSessionClient(), { productId, variantId, input: variant, available });
   if (!result.ok) {
     // a suffix another size took is the field's error
     if (result.reason === "suffixTaken") return { ok: false, reason: "fields", fields: { skuSuffix: "suffixTaken" } };

@@ -8,7 +8,6 @@ import { isLocale } from "@/lib/catalog/mappers";
 import { createServiceClient, type ServerSupabaseClient } from "@/lib/supabase/server";
 import {
   pickSourceLocale,
-  planTargets,
   slugCandidate,
   TRANSLATABLE_FIELDS,
   translateContent,
@@ -19,6 +18,7 @@ import {
   type TranslationContent,
 } from "./core";
 import { GLOSSARY, GLOSSARY_RULES } from "./glossary";
+import { partsOf, planNeeds, type TranslationHoldings } from "./plan";
 
 /*
  * One product's machine translation, from its stored texts to its saved rows. Reads through the service role
@@ -100,6 +100,15 @@ function contentOf(row: TranslationRow, { images, variants }: StoredTexts): Tran
   return { texts, imageAlts, ...(variantLabels.length > 0 ? { variantLabels } : {}) };
 }
 
+/** The locales each text, alt and size name is written in. */
+function holdingsOf({ translations, images, variants }: StoredTexts): TranslationHoldings {
+  return {
+    texts: translations.map((t) => t.locale),
+    images: images.map((image) => ({ id: image.id, locales: image.alts.map((a) => a.locale) })),
+    variants: variants.map((variant) => ({ id: variant.id, locales: variant.labels.map((l) => l.locale) })),
+  };
+}
+
 // three attempts with their backoff stay within a Vercel function's 300 s
 const ATTEMPT_TIMEOUT_MS = 90_000;
 
@@ -165,21 +174,23 @@ export async function translateProduct(
   const sourceRow = stored.translations.find((t) => t.locale === sourceLocale);
   if (!sourceLocale || !sourceRow) return { ok: false, reason: "noSource" };
 
-  const targets = planTargets({
-    allLocales: EDITOR_LOCALES,
-    existing,
+  // per locale and per item (#102): a size added to a translated product gets only its name, nothing else is touched
+  const needs = planNeeds({
+    holdings: holdingsOf(stored),
     sourceLocale,
-    requested: input.targets,
+    candidates: input.targets ? EDITOR_LOCALES.filter((l) => input.targets!.includes(l)) : EDITOR_LOCALES,
     overwrite: input.overwrite,
   });
+  const targets = EDITOR_LOCALES.filter((l) => needs[l] !== undefined);
   if (targets.length === 0) return { ok: false, reason: "nothingToTranslate" };
 
-  const content = contentOf(sourceRow, stored);
+  const { content, parts } = partsOf(contentOf(sourceRow, stored), needs);
   const result = await translateContent({
     model,
     sourceLocale,
     targets,
     content,
+    parts,
     glossary: GLOSSARY,
     rules: GLOSSARY_RULES,
     timeoutMs: ATTEMPT_TIMEOUT_MS,
@@ -187,16 +198,17 @@ export async function translateProduct(
   if (!result.ok) return { ok: false, reason: result.reason };
 
   const translated = targets.filter((l) => result.translations[l] !== undefined);
+  const withTexts = translated.filter((l) => needs[l]!.texts);
   const current = new Map(stored.translations.map((t) => [t.locale, t]));
   const slugs = await slugsFor(
     input.productId,
-    translated
+    withTexts
       .filter((locale) => !current.has(locale))
       .map((locale) => ({ locale, base: slugify(result.translations[locale]!.texts.title ?? "") || sourceRow.slug })),
   );
   if (!slugs) return { ok: false, reason: "unexpectedError" };
 
-  const rows = translated.map((locale) => {
+  const rows = withTexts.map((locale) => {
     const { texts } = result.translations[locale]!;
     return {
       product_id: input.productId,
@@ -223,15 +235,20 @@ export async function translateProduct(
   );
 
   try {
-    const saved = await writer.from("product_translations").upsert(rows, { onConflict: "product_id,locale" });
-    if (saved.error) {
-      if (saved.error.code === "42501") return { ok: false, reason: "notAuthorized" };
-      // a slug taken between the check and the save
-      if (saved.error.code === "23505") return { ok: false, reason: "conflict" };
-      return { ok: false, reason: "unexpectedError" };
+    if (rows.length > 0) {
+      const saved = await writer.from("product_translations").upsert(rows, { onConflict: "product_id,locale" });
+      if (saved.error) {
+        if (saved.error.code === "42501") return { ok: false, reason: "notAuthorized" };
+        // a slug taken between the check and the save
+        if (saved.error.code === "23505") return { ok: false, reason: "conflict" };
+        return { ok: false, reason: "unexpectedError" };
+      }
     }
     if (alts.length > 0) {
-      const savedAlts = await writer.from("product_image_alts").upsert(alts, { onConflict: "image_id,locale" });
+      // an alt written meanwhile (another tab) is kept unless replacing, like a size name
+      const savedAlts = await writer
+        .from("product_image_alts")
+        .upsert(alts, { onConflict: "image_id,locale", ignoreDuplicates: !input.overwrite });
       if (savedAlts.error) return { ok: false, reason: "unexpectedError" };
     }
     if (sizeLabels.length > 0) {

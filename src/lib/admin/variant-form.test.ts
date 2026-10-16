@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { minorToDeltaText, parseVariantForm, usdDeltaToMinor } from "./variant-form";
+import { labelSources, minorToDeltaText, parseVariantForm, usdDeltaToMinor } from "./variant-form";
 
 describe("usdDeltaToMinor", () => {
   it.each([
@@ -60,5 +60,36 @@ describe("parseVariantForm", () => {
     expect(parseVariantForm({ ...base, skuSuffix: "17.5" }, 2000)).toMatchObject({ ok: true, input: { sku_suffix: "17.5" } });
     expect(parseVariantForm({ ...base, skuSuffix: "17 5" }, 2000)).toEqual({ ok: false, fields: { skuSuffix: "invalidSuffix" } });
     expect(parseVariantForm({ ...base, skuSuffix: "-17" }, 2000)).toEqual({ ok: false, fields: { skuSuffix: "invalidSuffix" } });
+  });
+});
+
+describe("labelSources (#102)", () => {
+  const stored = [
+    { locale: "uk", label: "18", source: "human" as const },
+    { locale: "en", label: "18 mm", source: "machine" as const },
+    { locale: "de", label: "18 mm", source: "machine" as const },
+  ];
+
+  it("keeps the source of a label the admin did not change; an edited or new one is human", () => {
+    expect(
+      labelSources(
+        [
+          { locale: "uk", label: "18" },
+          { locale: "en", label: "18 mm" },
+          { locale: "de", label: "18 Millimeter" },
+          { locale: "fr", label: "18 mm" },
+        ],
+        stored,
+      ),
+    ).toEqual([
+      { locale: "uk", label: "18", source: "human" },
+      { locale: "en", label: "18 mm", source: "machine" },
+      { locale: "de", label: "18 Millimeter", source: "human" },
+      { locale: "fr", label: "18 mm", source: "human" },
+    ]);
+  });
+
+  it("makes every label of a new size human", () => {
+    expect(labelSources([{ locale: "uk", label: "19" }], [])).toEqual([{ locale: "uk", label: "19", source: "human" }]);
   });
 });
