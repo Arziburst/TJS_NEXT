@@ -568,10 +568,6 @@ $$;
 revoke all on function public.create_order_request(jsonb, jsonb) from public, anon, authenticated;
 grant execute on function public.create_order_request(jsonb, jsonb) to service_role;
 
--- Load pg_trgm in this session first: on the hosted database (no superuser) the function below may only set
--- pg_trgm.word_similarity_threshold when the module is loaded (production failed with 42501 without this line).
-select extensions.similarity('a', 'a');
-
 -- Listings (shop_candidates of 20261016007500) -----------------------------------------------------------------
 -- The listing filters and sorts by the price its cards show: a product with variants by its lowest variant price
 -- (private.listing_price_usd, shown as "from …" when its variants differ in price). Otherwise unchanged.
