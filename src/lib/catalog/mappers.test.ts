@@ -80,6 +80,7 @@ describe("mapProduct", () => {
         product_image_alts: [{ locale: "de", alt: "Rote Koralle" }],
       },
     ],
+    product_variants: [],
   };
   const urlFor = (path: string) => `https://cdn.test/${path}`;
 
@@ -97,6 +98,33 @@ describe("mapProduct", () => {
       ["i1", "https://cdn.test/p1/1.jpg", "Rote Koralle"],
       ["i2", "https://cdn.test/p1/2.jpg", "Red coral on beige"],
     ]);
+  });
+
+  it("maps the variants of made-to-order work with their prices, and lists the lowest one as from", () => {
+    const variant = (id: string, position: number, delta: number, label: string) => ({
+      id,
+      position,
+      sku_suffix: null,
+      price_delta_usd_minor: delta,
+      is_available: true,
+      product_variant_translations: [{ locale: "uk", label }],
+    });
+    const sized: ProductRow = {
+      ...row,
+      fulfillment: "made_to_order",
+      availability: "available",
+      product_variants: [variant("v2", 1, 300, "18"), variant("v1", 0, -100, "16")],
+    };
+    const p = mapProduct(sized, "en", urlFor);
+    expect(p?.variants.map((v) => [v.id, v.label, v.labelLocale, v.priceUsdMinor])).toEqual([
+      ["v1", "16", "uk", 5390],
+      ["v2", "18", "uk", 5790],
+    ]);
+    expect(p?.priceUsdMinor).toBe(5490);
+    expect(p?.listPrice).toEqual({ usdMinor: 5390, from: true });
+    // a one-of-a-kind piece never shows variants, and a product without any lists its own price
+    expect(mapProduct({ ...sized, fulfillment: "one_of_a_kind" }, "en", urlFor)?.variants).toEqual([]);
+    expect(mapProduct(row, "en", urlFor)?.listPrice).toEqual({ usdMinor: 5490, from: false });
   });
 
   it("drops a product without a usable translation or price", () => {

@@ -81,7 +81,8 @@
       "next": "Następna strona",
       "page": "Strona {page} z {count}"
     },
-    "unreviewed": "{count, plural, one {# niesprawdzone tłumaczenie maszynowe} few {# niesprawdzone tłumaczenia maszynowe} many {# niesprawdzonych tłumaczeń maszynowych} other {# niesprawdzonego tłumaczenia maszynowego}}: {locales}"
+    "unreviewed": "{count, plural, one {# niesprawdzone tłumaczenie maszynowe} few {# niesprawdzone tłumaczenia maszynowe} many {# niesprawdzonych tłumaczeń maszynowych} other {# niesprawdzonego tłumaczenia maszynowego}}: {locales}",
+    "variants": "{count, plural, one {# rozmiar} few {# rozmiary} many {# rozmiarów} other {# rozmiaru}}"
   },
   "actionErrors": {
     "notAuthorized": "Tylko administrator może to zrobić. Zaloguj się ponownie.",
@@ -110,7 +111,8 @@
       "translations": "Teksty we wszystkich językach",
       "taxonomy": "Materiały i kolory",
       "photos": "Zdjęcia",
-      "publication": "Publikacja"
+      "publication": "Publikacja",
+      "variants": "Rozmiary"
     },
     "chooseCategory": "Wybierz kategorię",
     "sku": "Kod produktu",
@@ -185,7 +187,9 @@
       "skuTaken": "Ten kod ma już inny produkt",
       "leadTimeOrder": "Nie może być mniejsze niż „Od”",
       "titleRequired": "Wpisz nazwę w tym języku albo wyczyść jego pozostałe teksty",
-      "requiredToPublish": "Do publikacji potrzebna jest nazwa po ukraińsku"
+      "requiredToPublish": "Do publikacji potrzebna jest nazwa po ukraińsku",
+      "hasVariants": "Wyrób z rozmiarami pozostaje na zamówienie; najpierw usuń jego rozmiary",
+      "variantPriceNotPositive": "Jeden z rozmiarów tego produktu kosztowałby zero lub mniej; najpierw zmień jego różnicę ceny"
     },
     "translateAfterSave": "Najpierw zapisz produkt; potem można go maszynowo przetłumaczyć na pozostałe języki."
   },
@@ -324,6 +328,55 @@
       "notFound": "Ten produkt lub to zdjęcie już nie istnieje.",
       "conflict": "Zdjęcia zmieniono w innym oknie; teraz widać aktualne.",
       "unexpectedError": "Nie udało się. Spróbuj ponownie."
+    }
+  },
+  "variants": {
+    "hint": "Każdy rozmiar, spośród których wybiera klientka, z własną różnicą względem ceny produktu. Produkt z rozmiarami zamawia się tylko w jednym z nich.",
+    "saveFirst": "Najpierw zapisz produkt, potem dodaj jego rozmiary.",
+    "oneOfAKind": "Wyrób unikatowy nie ma rozmiarów.",
+    "empty": "Brak rozmiarów: wyrób zamawia się taki, jaki jest.",
+    "add": "Dodaj rozmiar",
+    "newTitle": "Nowy rozmiar",
+    "editTitle": "Edytuj rozmiar {label}",
+    "labels": "Nazwa w każdym języku",
+    "labelsHint": "Ukraiński jest wymagany. Pusty język pokazuje nazwę angielską, a bez niej ukraińską.",
+    "priceDelta": "Różnica ceny, USD",
+    "priceDeltaHint": "Dodawana do ceny produktu: 0 dla tej samej ceny, np. 5 dla droższego rozmiaru lub -2.50 dla tańszego.",
+    "skuSuffix": "Przyrostek SKU",
+    "skuSuffixHint": "Opcjonalnie; dodawany do SKU produktu w zamówieniach, np. 17 → TJS-001-17.",
+    "price": "Cena: {price}",
+    "available": "Można zamówić",
+    "availableOf": "{label} można zamówić",
+    "off": "Obecnie niedostępny",
+    "edit": "Edytuj {label}",
+    "moveEarlier": "Przesuń {label} wyżej",
+    "moveLater": "Przesuń {label} niżej",
+    "delete": "Usuń {label}",
+    "deleteTitle": "Usunąć ten rozmiar?",
+    "deleteDescription": "{label} zniknie ze sklepu; koszyki, w których jest, pokażą go jako niedostępny.",
+    "deleteConfirm": "Usuń",
+    "ordered": "Już zamówiony: nie można go usunąć, wyłącz go.",
+    "save": "Zapisz rozmiar",
+    "saved": "Rozmiar zapisany",
+    "deleted": "Rozmiar usunięty",
+    "moved": "Przeniesiono na miejsce {position} z {count}",
+    "switchedOn": "{label} znów można zamówić",
+    "switchedOff": "{label} wyłączony",
+    "errors": {
+      "notAuthorized": "Tylko administratorka może to zrobić. Zaloguj się ponownie.",
+      "notFound": "Tego produktu lub rozmiaru już nie ma. Odśwież stronę.",
+      "conflict": "Rozmiary zmieniono w innej karcie: pokazano aktualną listę.",
+      "ordered": "Ten rozmiar był już zamówiony: wyłącz go zamiast usuwać.",
+      "tooMany": "Produkt może mieć najwyżej 50 rozmiarów.",
+      "oneOfAKind": "Wyrób unikatowy nie ma rozmiarów.",
+      "invalid": "Sprawdź pola.",
+      "unexpectedError": "Nie udało się zmienić rozmiarów. Spróbuj ponownie.",
+      "labelRequired": "Wpisz nazwę ukraińską",
+      "tooLong": "Najwyżej {max} znaków",
+      "invalidDelta": "Wpisz kwotę, np. 5 lub -2.50",
+      "priceNotPositive": "Cena rozmiaru musi pozostać większa od zera",
+      "invalidSuffix": "Litery łacińskie i cyfry, z kropkami lub łącznikami między nimi",
+      "suffixTaken": "Inny rozmiar tego produktu ma ten przyrostek"
     }
   },
   "settings": {

@@ -11,7 +11,8 @@
     "unavailable": "Esta pieza ya no se puede pedir.",
     "rateLimited": "Demasiados cambios en poco tiempo. Espera un momento y vuelve a intentarlo.",
     "inCart": "En tu carrito: {count}",
-    "viewCart": "Ver el carrito"
+    "viewCart": "Ver el carrito",
+    "variantRequired": "Elige primero una talla."
   },
   "card": {
     "onlyOrder": "Hecho por encargo",
@@ -69,5 +70,11 @@
   },
   "recentlyViewed": {
     "title": "Vistos recientemente"
+  },
+  "variants": {
+    "legend": "Talla",
+    "unavailable": "no disponible ahora",
+    "choose": "Elige una talla para añadir la pieza al carrito.",
+    "noneAvailable": "Ahora mismo no se puede pedir ninguna talla."
   }
 }

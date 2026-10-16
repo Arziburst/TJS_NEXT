@@ -36,9 +36,9 @@ export async function placeOrderAction(input: unknown): Promise<PlaceOrderResult
         estimateDelivery(request, { client: getNovaPostClient(), parcel, zoneRates: readZoneRates, tables }),
     },
     createOrder: (order, items) => createOrderRequest(createServiceClient(), order, items),
-    removeFromCart: async (productIds) => {
+    removeFromCart: async (ordered) => {
       const outcome = await changeCart<undefined, never>(async (lines) => ({
-        lines: productIds.reduce((rest, productId) => removeLine(rest, { productId, variantId: null }), lines),
+        lines: ordered.reduce((rest, line) => removeLine(rest, line), lines),
         result: undefined,
       }));
       if (!outcome.ok) throw new Error(`cart: ${outcome.reason}`);

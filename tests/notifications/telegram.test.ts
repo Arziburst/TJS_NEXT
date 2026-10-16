@@ -76,6 +76,20 @@ describe("renderTelegramOrder", () => {
     expect(text).toMatch(/29,90\s€<\/b> \(31\s\$\)/);
   });
 
+  it("names the size of a line (#66), also after a long title is cut", async () => {
+    const long = "Каблучка ".repeat(30);
+    const text = await render(
+      kyivBranchOrder({
+        lines: [
+          { title: "Каблучка", titleLocale: "uk", variantLabel: "17,5", quantity: 1, lineMinor: 789_00 },
+          { title: long, titleLocale: "uk", variantLabel: "18", quantity: 1, lineMinor: 789_00 },
+        ],
+      }),
+    );
+    expect(text).toContain("1. Каблучка (17,5)");
+    expect(text).toMatch(/2\. Каблучка[^\n]*… \(18\)/);
+  });
+
   it("keeps a long order below Telegram's 4096 characters", async () => {
     const long = "Дуже довга назва виробу & <тег> ".repeat(10);
     const lines = Array.from({ length: 50 }, (_, index) => ({ title: `${index} ${long}`, titleLocale: "uk", quantity: 10, lineMinor: 99_999_00 }));

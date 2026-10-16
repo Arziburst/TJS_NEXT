@@ -4,7 +4,8 @@
   "total": "Total",
   "price": {
     "unavailable": "Preț indisponibil",
-    "none": "—"
+    "none": "—",
+    "from": "de la {price}"
   },
   "pagination": {
     "of": "din"
@@ -54,5 +55,6 @@
     "contactsTbd": "Contacte: TBD",
     "rights": "Trend Jewelry Store. Toate drepturile rezervate",
     "developedBy": "Dezvoltat de <link>Arziburst*</link>"
-  }
+  },
+  "variant": "Mărime: {label}"
 }

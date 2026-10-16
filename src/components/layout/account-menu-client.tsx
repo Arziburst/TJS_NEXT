@@ -1,10 +1,12 @@
 "use client";
 
 import { Menu } from "@base-ui/react/menu";
-import { LayoutDashboardIcon, LogOutIcon, PlusIcon } from "lucide-react";
+import { HeartIcon, LayoutDashboardIcon, LogOutIcon, MapPinIcon, PackageIcon, PlusIcon, UserIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
+import { ACCOUNT_ADDRESSES_HREF, ACCOUNT_HREF, ACCOUNT_ORDERS_HREF } from "@/components/account/paths";
 import { ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "@/components/admin/paths";
+import { routes } from "@/config/routes";
 import { Link } from "@/i18n/navigation";
 import { signOut } from "@/lib/auth/actions";
 import { cn } from "@/lib/utils";
@@ -18,6 +20,14 @@ type AccountMenuClientProps = {
   className?: string;
 };
 
+// every signed-in user's own pages (#28); the labels are the nav's
+const ACCOUNT_LINKS = [
+  { key: "profile", href: ACCOUNT_HREF, icon: UserIcon },
+  { key: "orders", href: ACCOUNT_ORDERS_HREF, icon: PackageIcon },
+  { key: "addresses", href: ACCOUNT_ADDRESSES_HREF, icon: MapPinIcon },
+  { key: "favorites", href: routes.favorites.path, icon: HeartIcon },
+] as const;
+
 const itemClass =
   "flex cursor-pointer items-center gap-2 px-3 py-2.5 outline-none select-none data-highlighted:bg-primary data-highlighted:text-primary-foreground";
 
@@ -26,7 +36,7 @@ function initials(displayName: string): string {
   return displayName.replace(/[^\p{L}\p{N}]/gu, "").slice(0, 2).toUpperCase();
 }
 
-/** The signed-in user's menu in the header's account slot: who is signed in, and sign-out. */
+/** The signed-in user's menu in the header's account slot: who is signed in, their account pages, sign-out. */
 export function AccountMenuClient({ displayName, adminLinks, className }: AccountMenuClientProps) {
   const t = useTranslations("nav");
   const locale = useLocale();
@@ -70,6 +80,14 @@ export function AccountMenuClient({ displayName, adminLinks, className }: Accoun
                 </span>
               </Menu.GroupLabel>
             </Menu.Group>
+            <Menu.Separator className="my-1 h-0.5 bg-hairline" />
+            {ACCOUNT_LINKS.map(({ key, href, icon: Icon }) => (
+              // a client navigation keeps the header (and this menu) mounted: the menu closes itself
+              <Menu.LinkItem key={key} closeOnClick render={<Link href={href} />} className={itemClass}>
+                <Icon aria-hidden className="size-4" />
+                {t(key)}
+              </Menu.LinkItem>
+            ))}
             <Menu.Separator className="my-1 h-0.5 bg-hairline" />
             {adminLinks && (
               <>

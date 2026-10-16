@@ -96,7 +96,7 @@ export async function ProductCard({ product, eager = false, highlight }: Product
         </span>
         {/* a line of its own: the streamed price and its placeholder are then the same height (#57) */}
         <span className="font-sans text-[15px] text-accent-text">
-          <Price usdMinor={product.priceUsdMinor} />
+          <Price usdMinor={product.listPrice.usdMinor} from={product.listPrice.from} />
         </span>
       </Link>
       <FavoriteToggle productId={product.id} title={product.translation.title} className="absolute top-0 right-0" />

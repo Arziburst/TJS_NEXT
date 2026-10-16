@@ -28,6 +28,12 @@
       "email": "E-mail"
     },
     "commentHint": "Opcional",
+    "saved": {
+      "label": "Moradas guardadas",
+      "other": "Outra morada",
+      "default": "predefinida",
+      "manage": "Gerir as moradas"
+    },
     "summary": {
       "lines": "Peças da encomenda",
       "quantity": "Quantidade: {quantity}",
@@ -53,7 +59,8 @@
       "cartChanged": "Entretanto, o seu carrinho mudou. Verifique a encomenda e envie-a novamente.",
       "emptyCart": "Não há nada no carrinho que possa ser encomendado.",
       "pricesUnavailable": "De momento não é possível calcular os preços. Tente novamente mais tarde.",
-      "unexpected": "Não foi possível enviar o pedido. Tente novamente."
+      "unexpected": "Não foi possível enviar o pedido. Tente novamente.",
+      "sizeUnavailable": "Lamentamos, estes tamanhos não podem ser encomendados de momento: {titles}. Nada foi enviado. Escolha outro tamanho ou retire-os do carrinho e envie o pedido novamente."
     }
   },
   "done": {

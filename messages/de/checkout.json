@@ -28,6 +28,12 @@
       "email": "E-Mail"
     },
     "commentHint": "Optional",
+    "saved": {
+      "label": "Gespeicherte Adressen",
+      "other": "Andere Adresse",
+      "default": "Standard",
+      "manage": "Adressen verwalten"
+    },
     "summary": {
       "lines": "Stücke in der Bestellung",
       "quantity": "Menge: {quantity}",
@@ -53,7 +59,8 @@
       "cartChanged": "Ihr Warenkorb hat sich inzwischen geändert. Bitte prüfen Sie die Bestellung und senden Sie sie erneut.",
       "emptyCart": "Im Warenkorb ist nichts, was bestellt werden kann.",
       "pricesUnavailable": "Die Preise können gerade nicht berechnet werden. Bitte versuchen Sie es später erneut.",
-      "unexpected": "Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+      "unexpected": "Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+      "sizeUnavailable": "Leider sind diese Größen gerade nicht bestellbar: {titles}. Es wurde nichts gesendet. Wählen Sie eine andere Größe oder entfernen Sie sie aus dem Warenkorb und senden Sie die Anfrage erneut."
     }
   },
   "done": {

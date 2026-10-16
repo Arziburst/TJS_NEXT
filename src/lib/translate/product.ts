@@ -49,6 +49,8 @@ type StoredTexts = {
   categoryId: string;
   translations: TranslationRow[];
   images: { id: string; alts: { locale: string; alt: string }[] }[];
+  /** The live sizes (#66) in the owner's order, with their names. */
+  variants: { id: string; labels: { locale: string; label: string }[] }[];
 };
 
 async function readTexts(productId: string): Promise<StoredTexts | "notFound" | null> {
@@ -59,11 +61,13 @@ async function readTexts(productId: string): Promise<StoredTexts | "notFound" | 
         `category_id,
          product_translations(locale, slug, source, title, description, materials, care, clasp, lead_time_note,
            meta_title, meta_description, alt_text),
-         product_images(id, position, product_image_alts(locale, alt))`,
+         product_images(id, position, product_image_alts(locale, alt)),
+         product_variants(id, position, deleted_at, product_variant_translations(locale, label))`,
       )
       .eq("id", productId)
       .is("deleted_at", null)
       .order("position", { referencedTable: "product_images" })
+      .order("position", { referencedTable: "product_variants" })
       .maybeSingle();
     if (error) return null;
     if (!data) return "notFound";
@@ -71,13 +75,16 @@ async function readTexts(productId: string): Promise<StoredTexts | "notFound" | 
       categoryId: data.category_id,
       translations: data.product_translations,
       images: data.product_images.map((image) => ({ id: image.id, alts: image.product_image_alts })),
+      variants: data.product_variants
+        .filter((variant) => variant.deleted_at === null)
+        .map((variant) => ({ id: variant.id, labels: variant.product_variant_translations })),
     };
   } catch {
     return null;
   }
 }
 
-function contentOf(row: TranslationRow, images: StoredTexts["images"]): TranslationContent {
+function contentOf(row: TranslationRow, { images, variants }: StoredTexts): TranslationContent {
   const texts = Object.fromEntries(
     TRANSLATABLE_FIELDS.map((field) => [field, row[columnOf(field)]]),
   ) as TranslationContent["texts"];
@@ -85,7 +92,12 @@ function contentOf(row: TranslationRow, images: StoredTexts["images"]): Translat
     const alt = image.alts.find((a) => a.locale === row.locale)?.alt;
     return alt ? [{ imageId: image.id, alt }] : [];
   });
-  return { texts, imageAlts };
+  // the size names in the source locale go into the same call (#66)
+  const variantLabels = variants.flatMap((variant) => {
+    const label = variant.labels.find((l) => l.locale === row.locale)?.label;
+    return label ? [{ variantId: variant.id, label }] : [];
+  });
+  return { texts, imageAlts, ...(variantLabels.length > 0 ? { variantLabels } : {}) };
 }
 
 // three attempts with their backoff stay within a Vercel function's 300 s
@@ -162,7 +174,7 @@ export async function translateProduct(
   });
   if (targets.length === 0) return { ok: false, reason: "nothingToTranslate" };
 
-  const content = contentOf(sourceRow, stored.images);
+  const content = contentOf(sourceRow, stored);
   const result = await translateContent({
     model,
     sourceLocale,
@@ -206,6 +218,9 @@ export async function translateProduct(
   const alts = translated.flatMap((locale) =>
     result.translations[locale]!.imageAlts.map(({ imageId, alt }) => ({ image_id: imageId, locale, alt })),
   );
+  const sizeLabels = translated.flatMap((locale) =>
+    (result.translations[locale]!.variantLabels ?? []).map(({ variantId, label }) => ({ variant_id: variantId, locale, label })),
+  );
 
   try {
     const saved = await writer.from("product_translations").upsert(rows, { onConflict: "product_id,locale" });
@@ -218,6 +233,15 @@ export async function translateProduct(
     if (alts.length > 0) {
       const savedAlts = await writer.from("product_image_alts").upsert(alts, { onConflict: "image_id,locale" });
       if (savedAlts.error) return { ok: false, reason: "unexpectedError" };
+    }
+    if (sizeLabels.length > 0) {
+      const savedSizes = await writer.rpc("admin_save_variant_labels", {
+        p_product_id: input.productId,
+        p_labels: sizeLabels,
+        // a size name already there is kept, like an existing translation
+        p_overwrite: input.overwrite,
+      });
+      if (savedSizes.error) return { ok: false, reason: savedSizes.error.code === "42501" ? "notAuthorized" : "unexpectedError" };
     }
   } catch {
     return { ok: false, reason: "unexpectedError" };

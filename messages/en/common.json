@@ -4,7 +4,8 @@
   "total": "Total",
   "price": {
     "unavailable": "Price unavailable",
-    "none": "—"
+    "none": "—",
+    "from": "from {price}"
   },
   "pagination": {
     "of": "of"
@@ -54,5 +55,6 @@
     "contactsTbd": "Contacts: TBD",
     "rights": "Trend Jewelry Store. All Rights Reserved",
     "developedBy": "Developed by <link>Arziburst*</link>"
-  }
+  },
+  "variant": "Size: {label}"
 }

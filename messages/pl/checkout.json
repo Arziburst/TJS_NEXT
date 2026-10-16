@@ -28,6 +28,12 @@
       "email": "E-mail"
     },
     "commentHint": "Opcjonalnie",
+    "saved": {
+      "label": "Zapisane adresy",
+      "other": "Inny adres",
+      "default": "domyślny",
+      "manage": "Zarządzaj adresami"
+    },
     "summary": {
       "lines": "Produkty w zamówieniu",
       "quantity": "Ilość: {quantity}",
@@ -53,7 +59,8 @@
       "cartChanged": "W międzyczasie Twój koszyk się zmienił. Sprawdź zamówienie i wyślij je ponownie.",
       "emptyCart": "W koszyku nie ma niczego, co można zamówić.",
       "pricesUnavailable": "Nie można teraz obliczyć cen. Spróbuj ponownie później.",
-      "unexpected": "Nie udało się wysłać zapytania. Spróbuj ponownie."
+      "unexpected": "Nie udało się wysłać zapytania. Spróbuj ponownie.",
+      "sizeUnavailable": "Niestety tych rozmiarów nie można teraz zamówić: {titles}. Nic nie zostało wysłane. Wybierz inny rozmiar lub usuń je z koszyka i wyślij prośbę ponownie."
     }
   },
   "done": {

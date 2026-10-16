@@ -10,6 +10,9 @@ import { cn } from "@/lib/utils";
 
 type CartLineControlsProps = {
   productId: string;
+  /** The line's size (#66); null for a product without sizes. */
+  variantId: string | null;
+  /** The line's name for screen readers, with its size. */
   title: string;
   quantity: number;
   /** The most this line may hold; 1 for a one-of-a-kind piece. Null: the piece cannot be ordered, only removed. */
@@ -18,7 +21,7 @@ type CartLineControlsProps = {
 };
 
 // Quantity stepper and remove button of one cart line; the server re-renders the cart after each change.
-export function CartLineControls({ productId, title, quantity, max, className }: CartLineControlsProps) {
+export function CartLineControls({ productId, variantId, title, quantity, max, className }: CartLineControlsProps) {
   const t = useTranslations("cart");
   const tActions = useTranslations("common.actions");
   const [isPending, startTransition] = useTransition();
@@ -33,8 +36,8 @@ export function CartLineControls({ productId, title, quantity, max, className }:
     });
   }
 
-  const setQuantity = (next: number) => run(() => updateCartQuantity({ productId, quantity: next }));
-  const remove = () => run(() => removeFromCart({ productId }));
+  const setQuantity = (next: number) => run(() => updateCartQuantity({ productId, variantId, quantity: next }));
+  const remove = () => run(() => removeFromCart({ productId, variantId }));
 
   return (
     <div className={cn("flex flex-wrap items-center gap-x-6 gap-y-2", className)} aria-busy={isPending}>

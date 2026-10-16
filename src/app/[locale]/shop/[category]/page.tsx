@@ -6,7 +6,9 @@ import { getCategoryEntries } from "@/components/catalog/category-entries";
 import { categoryHref } from "@/components/catalog/links";
 import { ShopView } from "@/components/catalog/shop-view";
 import { getAlternates } from "@/i18n/metadata";
+import { getPathname } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
+import { pageOpenGraph } from "@/lib/seo/open-graph";
 import { CATEGORY_SLUGS, isCategorySlug } from "@/lib/catalog/categories";
 
 // A page whose entry an admin save just expired renders anew on its next request, never from the build's
@@ -20,15 +22,25 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[locale]/shop/[category]">): Promise<Metadata> {
   const { locale, category } = await params;
   if (!hasLocale(routing.locales, locale) || !isCategorySlug(category)) return {};
-  const [entries, t] = await Promise.all([
+  const [entries, t, tCommon] = await Promise.all([
     getCategoryEntries(locale),
     getTranslations({ locale, namespace: "catalog.meta" }),
+    getTranslations({ locale, namespace: "common" }),
   ]);
   const name = entries.find((c) => c.slug === category)?.name ?? category;
+  const description = t("categoryDescription", { category: name });
   return {
     title: name,
-    description: t("categoryDescription", { category: name }),
+    description,
     alternates: getAlternates(categoryHref(category), locale),
+    // og:image: ./opengraph-image.tsx
+    openGraph: pageOpenGraph({
+      locale,
+      url: getPathname({ href: categoryHref(category), locale }),
+      title: name,
+      description,
+      siteName: tCommon("brand"),
+    }),
   };
 }
 

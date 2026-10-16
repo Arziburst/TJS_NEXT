@@ -8,6 +8,7 @@ import type {
   ProductTranslation,
   TranslationSource,
 } from "./types";
+import { listPriceOf, mapVariants, type VariantRow } from "./variants";
 
 /** Content missing in a locale falls back to the default locale (x-default, D3). */
 export const fallbackLocale: Locale = defaultLocale;
@@ -90,6 +91,7 @@ export type ProductRow = {
   category: { id: string; slug: string } | null;
   product_translations: TranslationRow[];
   product_images: ImageRow[];
+  product_variants: VariantRow[];
 };
 
 /** Maps a storage path to its public URL (the bucket is public). */
@@ -135,6 +137,8 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
   const images = [...row.product_images]
     .sort((a, b) => a.position - b.position)
     .map((img) => mapImage(img, locale, t, publicUrlFor));
+  // a one-of-a-kind piece has no variants (the database refuses them)
+  const variants = row.fulfillment === "made_to_order" ? mapVariants(row.product_variants, priceUsdMinor, locale) : [];
   return {
     id: row.id,
     sku: row.sku,
@@ -143,6 +147,7 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
     availability: row.availability,
     leadTime: leadTimeOf(row),
     priceUsdMinor,
+    listPrice: listPriceOf(priceUsdMinor, variants),
     weightG: row.weight_g,
     createdAt: row.created_at,
     publishedAt: row.published_at,
@@ -153,6 +158,7 @@ export function mapProduct(row: ProductRow, locale: Locale, publicUrlFor: Public
     clasp: t.clasp,
     leadTimeNote: t.lead_time_note,
     dimensions: { lengthMm: row.length_mm, widthMm: row.width_mm, heightMm: row.height_mm },
+    variants,
   };
 }
 
@@ -165,6 +171,7 @@ export function toSummary(product: Product): ProductSummary {
     availability: product.availability,
     leadTime: product.leadTime,
     priceUsdMinor: product.priceUsdMinor,
+    listPrice: product.listPrice,
     weightG: product.weightG,
     createdAt: product.createdAt,
     publishedAt: product.publishedAt,

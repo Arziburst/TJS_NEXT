@@ -24,6 +24,8 @@ const CATALOG_WRITERS = [
   "**/favorites.e2e.ts",
   "**/checkout.e2e.ts",
   "**/translation.e2e.ts",
+  // a ring with a size of its own, ordered with a saved address (#28)
+  "**/account.e2e.ts",
 ];
 // e2e files that change the shop-wide settings (every footer, every price): alone, after everything else
 const SETTINGS_WRITERS = ["**/settings.e2e.ts"];

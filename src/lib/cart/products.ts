@@ -2,7 +2,8 @@ import "server-only";
 
 import { PRODUCT_IMAGES_BUCKET } from "@/lib/catalog";
 import { isLocale, localesFor, pickByLocale, usdTextToMinor } from "@/lib/catalog/mappers";
-import type { LeadTime, ProductAvailability, ProductFulfillment } from "@/lib/catalog/types";
+import type { LeadTime, ListPrice, ProductAvailability, ProductFulfillment, ProductVariant } from "@/lib/catalog/types";
+import { listPriceOf, mapVariants } from "@/lib/catalog/variants";
 import type { Locale } from "@/i18n/routing";
 import { createPublicServerClient } from "@/lib/supabase/server";
 
@@ -13,7 +14,12 @@ export type CartProduct = {
   availability: ProductAvailability;
   /** Made-to-order work only: how many days making it takes. */
   leadTime: LeadTime | null;
+  /** The product's own price; a line of a variant costs the variant's price. */
   priceUsdMinor: number;
+  /** The live variants, in the owner's order (#66); empty for a product without variants. */
+  variants: ProductVariant[];
+  /** What a product strip shows (favorites, recently viewed): the lowest variant price, else `priceUsdMinor`. */
+  listPrice: ListPrice;
   /** products.weight_g: the parcel's weight at checkout (D37). */
   weightGrams: number;
   sku: string | null;
@@ -44,7 +50,8 @@ export async function getCartProducts(ids: readonly string[], locale: Locale): P
       .select(
         `id, sku, fulfillment, availability, weight_g, lead_time_min_days, lead_time_max_days, price_usd_text:price_usd::text,
          product_translations!inner(locale, slug, title),
-         product_images(storage_path, position, width, height, blur_data_url)`,
+         product_images(storage_path, position, width, height, blur_data_url),
+         product_variants(id, position, sku_suffix, price_delta_usd_minor, is_available, product_variant_translations(locale, label))`,
       )
       .in("id", unique)
       .eq("status", "published")
@@ -59,6 +66,7 @@ export async function getCartProducts(ids: readonly string[], locale: Locale): P
       const priceUsdMinor = usdTextToMinor(row.price_usd_text);
       if (!translation || !isLocale(translation.locale) || priceUsdMinor === null) continue;
       const photo = row.product_images[0];
+      const variants = row.fulfillment === "made_to_order" ? mapVariants(row.product_variants, priceUsdMinor, locale) : [];
       products.set(row.id, {
         id: row.id,
         fulfillment: row.fulfillment,
@@ -68,6 +76,8 @@ export async function getCartProducts(ids: readonly string[], locale: Locale): P
             ? { minDays: row.lead_time_min_days, maxDays: row.lead_time_max_days }
             : null,
         priceUsdMinor,
+        variants,
+        listPrice: listPriceOf(priceUsdMinor, variants),
         weightGrams: Number(row.weight_g),
         sku: row.sku,
         slug: translation.slug,

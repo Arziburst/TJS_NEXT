@@ -4,7 +4,7 @@
 // products of its own, so it runs with the other catalog writers (playwright.config.ts).
 import { randomInt, randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../src/lib/supabase/database.types";
 import ukAdmin from "../messages/uk/admin.json" with { type: "json" };
@@ -107,6 +107,12 @@ const hreflangsOf = (html: string) =>
   );
 const NOINDEX = /<meta name="robots" content="noindex, follow"\/>/;
 
+// the paths the sitemap lists (#30)
+async function sitemapPaths(request: APIRequestContext): Promise<string[]> {
+  const xml = await (await request.get("/sitemap.xml")).text();
+  return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(([, loc]) => new URL(loc).pathname);
+}
+
 test.describe("machine translation on the local stack", () => {
   test.beforeAll(() => {
     if (!stack && process.env.CI === "true") {
@@ -191,6 +197,11 @@ test.describe("machine translation on the local stack", () => {
     expect(plHtml).toMatch(NOINDEX);
     expect(Object.keys(hreflangsOf(plHtml)).sort()).toEqual(["de", "fr", "uk"]);
 
+    // the sitemap follows at once (each admin save expires its cache): the human and the reviewed texts only
+    const slugs = [...reviewed.values()].map((t) => t.slug);
+    const listed = (await sitemapPaths(request)).filter((path) => slugs.some((slug) => path.endsWith(`/product/${slug}`)));
+    expect(listed.sort()).toEqual([dePath, `/fr/product/${reviewed.get("fr")!.slug}`, `/uk/product/${product.slug}`].sort());
+
     // taking the review back makes the page noindex again
     await page.goto(`/uk/admin/products/${product.id}`);
     await page.waitForLoadState("networkidle");
@@ -199,6 +210,7 @@ test.describe("machine translation on the local stack", () => {
     await expect(deToggle).not.toBeChecked();
     await expect.poll(async () => (await translationsOf(product.id)).get("de")?.reviewed_at ?? null).toBeNull();
     expect(await (await request.get(dePath)).text()).toMatch(NOINDEX);
+    expect(await sitemapPaths(request)).not.toContain(dePath);
     expect(errors).toEqual([]);
   });
 

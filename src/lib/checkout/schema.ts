@@ -93,8 +93,13 @@ export const deliverySchema = z.discriminatedUnion("kind", [
 export type DeliveryChoice = z.output<typeof deliverySchema>;
 export type DeliveryChoiceInput = z.input<typeof deliverySchema>;
 
-// A line the customer saw on the checkout page: compared with the cart at submit, never used for a price
-const expectedLine = z.object({ productId: z.uuid(), quantity: z.number().int().min(1).max(999) });
+// A line the customer saw on the checkout page: compared with the cart at submit, never used for a price. A
+// product with variants is a line per size (#66)
+const expectedLine = z.object({
+  productId: z.uuid(),
+  variantId: z.uuid().nullable().default(null),
+  quantity: z.number().int().min(1).max(999),
+});
 
 export const checkoutSchema = z.object({
   // one checkout attempt (crypto.randomUUID in the form): a repeated submit returns the same order

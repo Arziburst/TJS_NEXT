@@ -3,6 +3,141 @@
     "canceled": "Anulowane",
     "inProcessing": "W realizacji",
     "accepted": "Przyjęte",
-    "closed": "Zamknięte"
+    "closed": "Zamknięte",
+    "new": "Nowe",
+    "pendingPayment": "Oczekuje na płatność",
+    "paid": "Opłacone",
+    "refunded": "Zwrócono środki"
+  },
+  "title": "Moje konto",
+  "sections": {
+    "label": "Sekcje konta",
+    "profile": "Profil",
+    "orders": "Zamówienia",
+    "addresses": "Adresy",
+    "favorites": "Ulubione"
+  },
+  "loadError": "Nie udało się wczytać tej strony. Spróbuj ponownie później.",
+  "profile": {
+    "title": "Profil",
+    "intro": "Twoje dane wypełniają formularz zapytania o zamówienie.",
+    "firstName": "Imię",
+    "lastName": "Nazwisko (opcjonalnie)",
+    "phone": "Telefon (opcjonalnie)",
+    "phoneHint": "Z numerem kierunkowym kraju, na przykład +48 512 345 678",
+    "save": "Zapisz",
+    "saving": "Zapisywanie…",
+    "saved": "Twoje dane zostały zapisane.",
+    "errors": {
+      "firstName": "Podaj imię (do 100 znaków).",
+      "lastName": "Nazwisko jest za długie.",
+      "phone": "Podaj numer telefonu z numerem kierunkowym kraju, na przykład +48512345678.",
+      "rateLimited": "Zbyt wiele zmian. Poczekaj kilka minut i spróbuj ponownie.",
+      "signedOut": "Wylogowano cię. Zaloguj się ponownie.",
+      "unexpected": "Nie udało się zapisać danych. Spróbuj ponownie."
+    }
+  },
+  "email": {
+    "title": "E-mail",
+    "current": "Obecny e-mail",
+    "new": "Nowy e-mail",
+    "submit": "Zmień e-mail",
+    "sending": "Wysyłanie…",
+    "hint": "Wysyłamy link potwierdzający na obecny i na nowy adres. E-mail zmieni się po kliknięciu obu linków.",
+    "sent": "Sprawdź obie skrzynki: wysłaliśmy linki potwierdzające na twój obecny adres i na {email}.",
+    "pending": "Zmiana na {email} czeka na potwierdzenie: kliknij linki w wiadomościach wysłanych na obecny i na nowy adres.",
+    "errors": {
+      "invalid": "Podaj prawidłowy adres e-mail.",
+      "same": "To już jest twój e-mail.",
+      "rateLimited": "Zbyt wiele prób. Poczekaj kilka minut i spróbuj ponownie.",
+      "signedOut": "Wylogowano cię. Zaloguj się ponownie.",
+      "unexpected": "Nie udało się zmienić e-maila. Spróbuj ponownie."
+    }
+  },
+  "security": {
+    "title": "Hasło i wylogowanie",
+    "changePassword": "Zmień hasło",
+    "signOut": "Wyloguj się"
+  },
+  "orders": {
+    "title": "Zamówienia",
+    "intro": "Twoje zapytania o zamówienie i ich status, od najnowszych.",
+    "empty": "Nie wysłano jeszcze żadnych zapytań o zamówienie.",
+    "toShop": "Przejdź do sklepu",
+    "number": "Zamówienie {number}",
+    "date": "Data",
+    "status": "Status",
+    "total": "Suma",
+    "pieces": "{count, plural, one {# sztuka} few {# sztuki} many {# sztuk} other {# sztuki}}",
+    "details": "Szczegóły zamówienia {number}",
+    "pastEnd": "Na tej stronie nie ma zamówień.",
+    "lastPage": "Do ostatniej strony",
+    "pagination": {
+      "label": "Strony zamówień",
+      "previous": "Nowsze zamówienia",
+      "next": "Starsze zamówienia",
+      "page": "Strona {page} z {pages}"
+    }
+  },
+  "order": {
+    "title": "Zamówienie {number}",
+    "back": "Wszystkie zamówienia",
+    "placed": "Wysłano {date}",
+    "status": "Status",
+    "lines": "Zamówione produkty",
+    "quantity": "Ilość: {quantity}",
+    "goodsTotal": "Razem za produkty",
+    "contact": "Dane kontaktowe",
+    "delivery": "Dostawa",
+    "estimate": "Dostawa (szacunkowo)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "oblicza przewoźnik",
+    "deliveryNote": "Rzeczywisty koszt dostawy płacisz przewoźnikowi przy odbiorze.",
+    "comment": "Komentarz",
+    "notFound": {
+      "title": "Nie znaleziono zamówienia",
+      "text": "Na twoim koncie nie ma zamówienia o tym numerze."
+    }
+  },
+  "addresses": {
+    "title": "Adresy dostawy",
+    "intro": "Zapisz do {max} adresów. Adres domyślny jest wpisywany, gdy wysyłasz zapytanie o zamówienie.",
+    "empty": "Brak zapisanych adresów.",
+    "default": "Domyślny",
+    "makeDefault": "Ustaw jako domyślny",
+    "delete": "Usuń",
+    "deleteLabel": "Usuń adres {name}",
+    "makeDefaultLabel": "Ustaw {name} jako adres domyślny",
+    "add": "Dodaj adres",
+    "label": "Nazwa adresu (opcjonalnie)",
+    "labelHint": "Na przykład: Dom, Biuro",
+    "country": "Kraj",
+    "countryPlaceholder": "Wybierz kraj",
+    "method": "Dostawa",
+    "methods": {
+      "warehouse": "Oddział lub paczkomat",
+      "address": "Kurier pod adres",
+      "division": "Oddział, paczkomat lub punkt odbioru"
+    },
+    "save": "Zapisz adres",
+    "saving": "Zapisywanie…",
+    "saved": "Adres został zapisany.",
+    "full": "Masz {max} adresów: usuń jeden, aby dodać kolejny.",
+    "kinds": {
+      "novaPoshtaBranch": "Oddział Nova Poshta",
+      "novaPoshtaPostomat": "Paczkomat Nova Poshta",
+      "novaPoshtaAddress": "Kurier Nova Poshta",
+      "novaPostDivision": "Punkt Nova Post",
+      "novaPostAddress": "Kurier Nova Post"
+    },
+    "errors": {
+      "delivery": "Wybierz punkt dostawy lub wypełnij adres.",
+      "label": "Nazwa jest za długa.",
+      "limitReached": "Masz już {max} adresów: usuń jeden, aby dodać kolejny.",
+      "notFound": "Ten adres już nie istnieje.",
+      "rateLimited": "Zbyt wiele zmian. Poczekaj kilka minut i spróbuj ponownie.",
+      "signedOut": "Wylogowano cię. Zaloguj się ponownie.",
+      "unexpected": "Nie udało się zapisać adresu. Spróbuj ponownie."
+    }
   }
 }

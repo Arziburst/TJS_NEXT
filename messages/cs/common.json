@@ -4,7 +4,8 @@
   "total": "Celkem",
   "price": {
     "unavailable": "Cena není k dispozici",
-    "none": "—"
+    "none": "—",
+    "from": "od {price}"
   },
   "pagination": {
     "of": "z"
@@ -54,5 +55,6 @@
     "contactsTbd": "Kontakty: TBD",
     "rights": "Trend Jewelry Store. Všechna práva vyhrazena",
     "developedBy": "Vytvořil <link>Arziburst*</link>"
-  }
+  },
+  "variant": "Velikost: {label}"
 }

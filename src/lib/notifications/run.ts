@@ -4,7 +4,7 @@ import { routes } from "@/config/routes";
 import { renderOrderConfirmation } from "@/emails/order-confirmation";
 import { getMetadataBase } from "@/i18n/metadata";
 import { createServiceClient } from "@/lib/supabase/server";
-import { notificationConfig, type NotificationConfig } from "./config";
+import { loadNotificationConfig, type NotificationConfig } from "./config";
 import { readShopContacts } from "./contacts";
 import { processOutbox, type ProcessorDeps, type ProcessReport } from "./processor";
 import { sendEmail } from "./resend";
@@ -59,7 +59,7 @@ export async function runNotifications(): Promise<ProcessReport> {
     claim: (limit, lease) => claimOutboxEvents(service, limit, lease),
     loadOrder: (orderId) => readNotificationOrder(service, orderId),
     complete: (completion) => completeOutboxEvent(service, completion),
-    send: channelSenders(notificationConfig()),
+    send: channelSenders(await loadNotificationConfig()),
   });
 }
 

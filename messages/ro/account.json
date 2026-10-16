@@ -3,6 +3,141 @@
     "canceled": "Anulată",
     "inProcessing": "În curs de procesare",
     "accepted": "Acceptată",
-    "closed": "Finalizată"
+    "closed": "Finalizată",
+    "new": "Nouă",
+    "pendingPayment": "În așteptarea plății",
+    "paid": "Plătită",
+    "refunded": "Rambursată"
+  },
+  "title": "Contul meu",
+  "sections": {
+    "label": "Secțiunile contului",
+    "profile": "Profil",
+    "orders": "Comenzi",
+    "addresses": "Adrese",
+    "favorites": "Favorite"
+  },
+  "loadError": "Această pagină nu a putut fi încărcată. Încercați din nou mai târziu.",
+  "profile": {
+    "title": "Profil",
+    "intro": "Datele dvs. completează formularul cererii de comandă.",
+    "firstName": "Prenume",
+    "lastName": "Nume (opțional)",
+    "phone": "Telefon (opțional)",
+    "phoneHint": "Cu prefixul țării, de exemplu +40 712 345 678",
+    "save": "Salvați",
+    "saving": "Se salvează…",
+    "saved": "Datele dvs. au fost salvate.",
+    "errors": {
+      "firstName": "Introduceți prenumele (cel mult 100 de caractere).",
+      "lastName": "Numele este prea lung.",
+      "phone": "Introduceți numărul de telefon cu prefixul țării, de exemplu +40712345678.",
+      "rateLimited": "Prea multe modificări. Așteptați câteva minute și încercați din nou.",
+      "signedOut": "V-ați deconectat. Conectați-vă din nou.",
+      "unexpected": "Datele dvs. nu au putut fi salvate. Încercați din nou."
+    }
+  },
+  "email": {
+    "title": "E-mail",
+    "current": "E-mailul actual",
+    "new": "E-mailul nou",
+    "submit": "Schimbați e-mailul",
+    "sending": "Se trimite…",
+    "hint": "Trimitem un link de confirmare la adresa actuală și la cea nouă. E-mailul se schimbă după ce ambele linkuri au fost accesate.",
+    "sent": "Verificați ambele căsuțe: am trimis linkuri de confirmare la adresa dvs. actuală și la {email}.",
+    "pending": "Schimbarea la {email} așteaptă confirmarea: accesați linkurile din e-mailurile trimise la adresa actuală și la cea nouă.",
+    "errors": {
+      "invalid": "Introduceți o adresă de e-mail validă.",
+      "same": "Acesta este deja e-mailul dvs.",
+      "rateLimited": "Prea multe încercări. Așteptați câteva minute și încercați din nou.",
+      "signedOut": "V-ați deconectat. Conectați-vă din nou.",
+      "unexpected": "E-mailul nu a putut fi schimbat. Încercați din nou."
+    }
+  },
+  "security": {
+    "title": "Parolă și deconectare",
+    "changePassword": "Schimbați parola",
+    "signOut": "Deconectare"
+  },
+  "orders": {
+    "title": "Comenzi",
+    "intro": "Cererile dvs. de comandă și starea lor, cele mai noi primele.",
+    "empty": "Nu ați trimis încă nicio cerere de comandă.",
+    "toShop": "Mergeți la magazin",
+    "number": "Comanda {number}",
+    "date": "Data",
+    "status": "Stare",
+    "total": "Total",
+    "pieces": "{count, plural, one {# piesă} few {# piese} other {# de piese}}",
+    "details": "Detaliile comenzii {number}",
+    "pastEnd": "Nu există comenzi pe această pagină.",
+    "lastPage": "Mergeți la ultima pagină",
+    "pagination": {
+      "label": "Paginile comenzilor",
+      "previous": "Comenzi mai noi",
+      "next": "Comenzi mai vechi",
+      "page": "Pagina {page} din {pages}"
+    }
+  },
+  "order": {
+    "title": "Comanda {number}",
+    "back": "Toate comenzile",
+    "placed": "Trimisă pe {date}",
+    "status": "Stare",
+    "lines": "Piese comandate",
+    "quantity": "Cantitate: {quantity}",
+    "goodsTotal": "Total pentru piese",
+    "contact": "Date de contact",
+    "delivery": "Livrare",
+    "estimate": "Livrare (estimare)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calculată de curier",
+    "deliveryNote": "Prețul real al livrării îl plătiți curierului la primire.",
+    "comment": "Comentariu",
+    "notFound": {
+      "title": "Comanda nu a fost găsită",
+      "text": "În contul dvs. nu există nicio comandă cu acest număr."
+    }
+  },
+  "addresses": {
+    "title": "Adrese de livrare",
+    "intro": "Păstrați până la {max} adrese. Adresa implicită este completată când trimiteți o cerere de comandă.",
+    "empty": "Încă nu există adrese salvate.",
+    "default": "Implicită",
+    "makeDefault": "Setați ca implicită",
+    "delete": "Ștergeți",
+    "deleteLabel": "Ștergeți adresa {name}",
+    "makeDefaultLabel": "Setați {name} ca adresă implicită",
+    "add": "Adăugați o adresă",
+    "label": "Numele adresei (opțional)",
+    "labelHint": "De exemplu: Acasă, Birou",
+    "country": "Țara",
+    "countryPlaceholder": "Alegeți țara",
+    "method": "Livrare",
+    "methods": {
+      "warehouse": "Sucursală sau automat de colete",
+      "address": "Curier la adresă",
+      "division": "Sucursală, automat sau punct de ridicare"
+    },
+    "save": "Salvați adresa",
+    "saving": "Se salvează…",
+    "saved": "Adresa a fost salvată.",
+    "full": "Aveți {max} adrese: ștergeți una pentru a adăuga alta.",
+    "kinds": {
+      "novaPoshtaBranch": "Sucursală Nova Poshta",
+      "novaPoshtaPostomat": "Automat de colete Nova Poshta",
+      "novaPoshtaAddress": "Curier Nova Poshta",
+      "novaPostDivision": "Punct Nova Post",
+      "novaPostAddress": "Curier Nova Post"
+    },
+    "errors": {
+      "delivery": "Alegeți punctul de livrare sau completați adresa.",
+      "label": "Numele este prea lung.",
+      "limitReached": "Aveți deja {max} adrese: ștergeți una pentru a adăuga alta.",
+      "notFound": "Această adresă nu mai există.",
+      "rateLimited": "Prea multe modificări. Așteptați câteva minute și încercați din nou.",
+      "signedOut": "V-ați deconectat. Conectați-vă din nou.",
+      "unexpected": "Adresa nu a putut fi salvată. Încercați din nou."
+    }
   }
 }
