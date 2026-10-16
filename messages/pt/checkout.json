@@ -28,6 +28,12 @@
       "email": "E-mail"
     },
     "commentHint": "Opcional",
+    "saved": {
+      "label": "Moradas guardadas",
+      "other": "Outra morada",
+      "default": "predefinida",
+      "manage": "Gerir as moradas"
+    },
     "summary": {
       "lines": "Peças da encomenda",
       "quantity": "Quantidade: {quantity}",

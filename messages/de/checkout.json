@@ -28,6 +28,12 @@
       "email": "E-Mail"
     },
     "commentHint": "Optional",
+    "saved": {
+      "label": "Gespeicherte Adressen",
+      "other": "Andere Adresse",
+      "default": "Standard",
+      "manage": "Adressen verwalten"
+    },
     "summary": {
       "lines": "Stücke in der Bestellung",
       "quantity": "Menge: {quantity}",

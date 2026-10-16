@@ -3,6 +3,139 @@
     "canceled": "Cancelado",
     "inProcessing": "En proceso",
     "accepted": "Aceptado",
-    "closed": "Cerrado"
+    "closed": "Cerrado",
+    "new": "Nuevo",
+    "pendingPayment": "Pendiente de pago",
+    "paid": "Pagado",
+    "refunded": "Reembolsado"
+  },
+  "title": "Mi cuenta",
+  "sections": {
+    "label": "Secciones de la cuenta",
+    "profile": "Perfil",
+    "orders": "Pedidos",
+    "addresses": "Direcciones",
+    "favorites": "Favoritos"
+  },
+  "loadError": "No se pudo cargar esta página. Inténtalo de nuevo más tarde.",
+  "profile": {
+    "title": "Perfil",
+    "intro": "Tus datos rellenan el formulario de la solicitud de pedido.",
+    "firstName": "Nombre",
+    "lastName": "Apellidos (opcional)",
+    "phone": "Teléfono (opcional)",
+    "phoneHint": "Con el prefijo del país, por ejemplo +34 612 34 56 78",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saved": "Tus datos están guardados.",
+    "errors": {
+      "firstName": "Indica tu nombre (hasta 100 caracteres).",
+      "lastName": "Los apellidos son demasiado largos.",
+      "phone": "Indica el número de teléfono con el prefijo del país, por ejemplo +34612345678.",
+      "rateLimited": "Demasiados cambios. Espera unos minutos e inténtalo de nuevo.",
+      "signedOut": "Has cerrado sesión. Vuelve a iniciar sesión.",
+      "unexpected": "No se pudieron guardar tus datos. Inténtalo de nuevo."
+    }
+  },
+  "email": {
+    "title": "Correo electrónico",
+    "current": "Correo actual",
+    "new": "Nuevo correo",
+    "submit": "Cambiar el correo",
+    "sending": "Enviando…",
+    "hint": "Enviamos un enlace de confirmación a la dirección actual y a la nueva. El correo cambia cuando se siguen los dos enlaces.",
+    "sent": "Revisa los dos buzones: hemos enviado enlaces de confirmación a tu dirección actual y a {email}.",
+    "pending": "Pendiente de confirmación: {email}",
+    "errors": {
+      "invalid": "Indica una dirección de correo válida.",
+      "same": "Este ya es tu correo.",
+      "rateLimited": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
+      "signedOut": "Has cerrado sesión. Vuelve a iniciar sesión.",
+      "unexpected": "No se pudo cambiar el correo. Inténtalo de nuevo."
+    }
+  },
+  "security": {
+    "title": "Contraseña y cierre de sesión",
+    "changePassword": "Cambiar la contraseña",
+    "signOut": "Cerrar sesión"
+  },
+  "orders": {
+    "title": "Pedidos",
+    "intro": "Tus solicitudes de pedido y su estado, las más recientes primero.",
+    "empty": "Todavía no has enviado ninguna solicitud de pedido.",
+    "toShop": "Ir a la tienda",
+    "number": "Pedido {number}",
+    "date": "Fecha",
+    "status": "Estado",
+    "total": "Total",
+    "pieces": "{count, plural, one {# pieza} other {# piezas}}",
+    "details": "Detalles del pedido {number}",
+    "pagination": {
+      "label": "Páginas de los pedidos",
+      "previous": "Pedidos más recientes",
+      "next": "Pedidos más antiguos",
+      "page": "Página {page} de {pages}"
+    }
+  },
+  "order": {
+    "title": "Pedido {number}",
+    "back": "Todos los pedidos",
+    "placed": "Enviado el {date}",
+    "status": "Estado",
+    "lines": "Piezas pedidas",
+    "quantity": "Cantidad: {quantity}",
+    "goodsTotal": "Total de las piezas",
+    "contact": "Datos de contacto",
+    "delivery": "Envío",
+    "estimate": "Envío (estimación)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "lo calcula el transportista",
+    "deliveryNote": "El precio real del envío lo pagas al transportista al recibirlo.",
+    "comment": "Comentario",
+    "notFound": {
+      "title": "Pedido no encontrado",
+      "text": "En tu cuenta no hay ningún pedido con este número."
+    }
+  },
+  "addresses": {
+    "title": "Direcciones de envío",
+    "intro": "Guarda hasta {max} direcciones. La predeterminada se rellena cuando envías una solicitud de pedido.",
+    "empty": "Aún no hay direcciones guardadas.",
+    "default": "Predeterminada",
+    "makeDefault": "Hacer predeterminada",
+    "delete": "Eliminar",
+    "deleteLabel": "Eliminar la dirección {name}",
+    "makeDefaultLabel": "Hacer de {name} la dirección predeterminada",
+    "add": "Añadir una dirección",
+    "label": "Nombre de la dirección (opcional)",
+    "labelHint": "Por ejemplo: Casa, Oficina",
+    "country": "País",
+    "countryPlaceholder": "Elige un país",
+    "method": "Envío",
+    "methods": {
+      "warehouse": "Sucursal o taquilla",
+      "address": "Mensajero a la dirección",
+      "division": "Sucursal, taquilla o punto de recogida"
+    },
+    "save": "Guardar la dirección",
+    "saving": "Guardando…",
+    "saved": "La dirección está guardada.",
+    "full": "Tienes {max} direcciones: elimina una para añadir otra.",
+    "kinds": {
+      "novaPoshtaBranch": "Sucursal de Nova Poshta",
+      "novaPoshtaPostomat": "Taquilla de Nova Poshta",
+      "novaPoshtaAddress": "Mensajero de Nova Poshta",
+      "novaPostDivision": "Punto de Nova Post",
+      "novaPostAddress": "Mensajero de Nova Post"
+    },
+    "errors": {
+      "delivery": "Elige el punto de entrega o rellena la dirección.",
+      "label": "El nombre es demasiado largo.",
+      "limitReached": "Ya tienes {max} direcciones: elimina una para añadir otra.",
+      "notFound": "Esta dirección ya no existe.",
+      "rateLimited": "Demasiados cambios. Espera unos minutos e inténtalo de nuevo.",
+      "signedOut": "Has cerrado sesión. Vuelve a iniciar sesión.",
+      "unexpected": "No se pudo guardar la dirección. Inténtalo de nuevo."
+    }
   }
 }

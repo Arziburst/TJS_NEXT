@@ -28,6 +28,12 @@
       "email": "E-mail"
     },
     "commentHint": "Facultatif",
+    "saved": {
+      "label": "Adresses enregistrées",
+      "other": "Une autre adresse",
+      "default": "par défaut",
+      "manage": "Gérer les adresses"
+    },
     "summary": {
       "lines": "Pièces de la commande",
       "quantity": "Quantité : {quantity}",

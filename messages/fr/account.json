@@ -3,6 +3,139 @@
     "canceled": "Annulée",
     "inProcessing": "En cours de traitement",
     "accepted": "Acceptée",
-    "closed": "Clôturée"
+    "closed": "Clôturée",
+    "new": "Nouvelle",
+    "pendingPayment": "En attente de paiement",
+    "paid": "Payée",
+    "refunded": "Remboursée"
+  },
+  "title": "Mon compte",
+  "sections": {
+    "label": "Rubriques du compte",
+    "profile": "Profil",
+    "orders": "Commandes",
+    "addresses": "Adresses",
+    "favorites": "Favoris"
+  },
+  "loadError": "Cette page n’a pas pu être chargée. Veuillez réessayer plus tard.",
+  "profile": {
+    "title": "Profil",
+    "intro": "Vos coordonnées remplissent le formulaire de demande de commande.",
+    "firstName": "Prénom",
+    "lastName": "Nom (facultatif)",
+    "phone": "Téléphone (facultatif)",
+    "phoneHint": "Avec l’indicatif du pays, par exemple +33 6 12 34 56 78",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Vos coordonnées sont enregistrées.",
+    "errors": {
+      "firstName": "Indiquez votre prénom (100 caractères au maximum).",
+      "lastName": "Le nom est trop long.",
+      "phone": "Indiquez le numéro de téléphone avec l’indicatif du pays, par exemple +33612345678.",
+      "rateLimited": "Trop de modifications. Veuillez patienter quelques minutes et réessayer.",
+      "signedOut": "Vous êtes déconnecté. Veuillez vous reconnecter.",
+      "unexpected": "Vos coordonnées n’ont pas pu être enregistrées. Veuillez réessayer."
+    }
+  },
+  "email": {
+    "title": "E-mail",
+    "current": "E-mail actuel",
+    "new": "Nouvel e-mail",
+    "submit": "Changer l’e-mail",
+    "sending": "Envoi…",
+    "hint": "Nous envoyons un lien de confirmation à l’adresse actuelle et à la nouvelle. L’e-mail change une fois les deux liens suivis.",
+    "sent": "Consultez les deux boîtes : nous avons envoyé des liens de confirmation à votre adresse actuelle et à {email}.",
+    "pending": "En attente de confirmation : {email}",
+    "errors": {
+      "invalid": "Indiquez une adresse e-mail valide.",
+      "same": "C’est déjà votre e-mail.",
+      "rateLimited": "Trop de tentatives. Veuillez patienter quelques minutes et réessayer.",
+      "signedOut": "Vous êtes déconnecté. Veuillez vous reconnecter.",
+      "unexpected": "L’e-mail n’a pas pu être changé. Veuillez réessayer."
+    }
+  },
+  "security": {
+    "title": "Mot de passe et déconnexion",
+    "changePassword": "Changer le mot de passe",
+    "signOut": "Déconnexion"
+  },
+  "orders": {
+    "title": "Commandes",
+    "intro": "Vos demandes de commande et leur statut, les plus récentes d’abord.",
+    "empty": "Vous n’avez encore envoyé aucune demande de commande.",
+    "toShop": "Aller à la boutique",
+    "number": "Commande {number}",
+    "date": "Date",
+    "status": "Statut",
+    "total": "Total",
+    "pieces": "{count, plural, one {# pièce} other {# pièces}}",
+    "details": "Détails de la commande {number}",
+    "pagination": {
+      "label": "Pages des commandes",
+      "previous": "Commandes plus récentes",
+      "next": "Commandes plus anciennes",
+      "page": "Page {page} sur {pages}"
+    }
+  },
+  "order": {
+    "title": "Commande {number}",
+    "back": "Toutes les commandes",
+    "placed": "Envoyée le {date}",
+    "status": "Statut",
+    "lines": "Pièces commandées",
+    "quantity": "Quantité : {quantity}",
+    "goodsTotal": "Total des pièces",
+    "contact": "Coordonnées",
+    "delivery": "Livraison",
+    "estimate": "Livraison (estimation)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calculée par le transporteur",
+    "deliveryNote": "Vous payez le prix réel de la livraison au transporteur à la réception.",
+    "comment": "Commentaire",
+    "notFound": {
+      "title": "Commande introuvable",
+      "text": "Votre compte ne contient aucune commande avec ce numéro."
+    }
+  },
+  "addresses": {
+    "title": "Adresses de livraison",
+    "intro": "Enregistrez jusqu’à {max} adresses. L’adresse par défaut est remplie quand vous envoyez une demande de commande.",
+    "empty": "Aucune adresse enregistrée pour l’instant.",
+    "default": "Par défaut",
+    "makeDefault": "Définir par défaut",
+    "delete": "Supprimer",
+    "deleteLabel": "Supprimer l’adresse {name}",
+    "makeDefaultLabel": "Définir {name} comme adresse par défaut",
+    "add": "Ajouter une adresse",
+    "label": "Nom de l’adresse (facultatif)",
+    "labelHint": "Par exemple : Maison, Bureau",
+    "country": "Pays",
+    "countryPlaceholder": "Choisissez un pays",
+    "method": "Livraison",
+    "methods": {
+      "warehouse": "Agence ou consigne",
+      "address": "Coursier à l’adresse",
+      "division": "Agence, consigne ou point relais"
+    },
+    "save": "Enregistrer l’adresse",
+    "saving": "Enregistrement…",
+    "saved": "L’adresse est enregistrée.",
+    "full": "Vous avez {max} adresses : supprimez-en une pour en ajouter une autre.",
+    "kinds": {
+      "novaPoshtaBranch": "Agence Nova Poshta",
+      "novaPoshtaPostomat": "Consigne Nova Poshta",
+      "novaPoshtaAddress": "Coursier Nova Poshta",
+      "novaPostDivision": "Point Nova Post",
+      "novaPostAddress": "Coursier Nova Post"
+    },
+    "errors": {
+      "delivery": "Choisissez le point de livraison ou remplissez l’adresse.",
+      "label": "Le nom est trop long.",
+      "limitReached": "Vous avez déjà {max} adresses : supprimez-en une pour en ajouter une autre.",
+      "notFound": "Cette adresse n’existe plus.",
+      "rateLimited": "Trop de modifications. Veuillez patienter quelques minutes et réessayer.",
+      "signedOut": "Vous êtes déconnecté. Veuillez vous reconnecter.",
+      "unexpected": "L’adresse n’a pas pu être enregistrée. Veuillez réessayer."
+    }
   }
 }

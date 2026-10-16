@@ -3,6 +3,139 @@
     "canceled": "Zrušeno",
     "inProcessing": "Zpracovává se",
     "accepted": "Přijato",
-    "closed": "Uzavřeno"
+    "closed": "Uzavřeno",
+    "new": "Nová",
+    "pendingPayment": "Čeká na platbu",
+    "paid": "Zaplaceno",
+    "refunded": "Vráceno"
+  },
+  "title": "Můj účet",
+  "sections": {
+    "label": "Sekce účtu",
+    "profile": "Profil",
+    "orders": "Objednávky",
+    "addresses": "Adresy",
+    "favorites": "Oblíbené"
+  },
+  "loadError": "Tuto stránku se nepodařilo načíst. Zkuste to prosím později.",
+  "profile": {
+    "title": "Profil",
+    "intro": "Vaše údaje se vyplní do formuláře žádosti o objednávku.",
+    "firstName": "Jméno",
+    "lastName": "Příjmení (nepovinné)",
+    "phone": "Telefon (nepovinné)",
+    "phoneHint": "S předvolbou země, například +420 601 234 567",
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "saved": "Vaše údaje jsou uloženy.",
+    "errors": {
+      "firstName": "Zadejte své jméno (nejvýše 100 znaků).",
+      "lastName": "Příjmení je příliš dlouhé.",
+      "phone": "Zadejte telefonní číslo s předvolbou země, například +420601234567.",
+      "rateLimited": "Příliš mnoho změn. Počkejte několik minut a zkuste to znovu.",
+      "signedOut": "Jste odhlášeni. Přihlaste se prosím znovu.",
+      "unexpected": "Vaše údaje se nepodařilo uložit. Zkuste to prosím znovu."
+    }
+  },
+  "email": {
+    "title": "E-mail",
+    "current": "Současný e-mail",
+    "new": "Nový e-mail",
+    "submit": "Změnit e-mail",
+    "sending": "Odesílání…",
+    "hint": "Pošleme potvrzovací odkaz na současnou i na novou adresu. E-mail se změní po otevření obou odkazů.",
+    "sent": "Zkontrolujte obě schránky: poslali jsme potvrzovací odkazy na vaši současnou adresu a na {email}.",
+    "pending": "Čeká na potvrzení: {email}",
+    "errors": {
+      "invalid": "Zadejte platnou e-mailovou adresu.",
+      "same": "Toto už je váš e-mail.",
+      "rateLimited": "Příliš mnoho pokusů. Počkejte několik minut a zkuste to znovu.",
+      "signedOut": "Jste odhlášeni. Přihlaste se prosím znovu.",
+      "unexpected": "E-mail se nepodařilo změnit. Zkuste to prosím znovu."
+    }
+  },
+  "security": {
+    "title": "Heslo a odhlášení",
+    "changePassword": "Změnit heslo",
+    "signOut": "Odhlásit se"
+  },
+  "orders": {
+    "title": "Objednávky",
+    "intro": "Vaše žádosti o objednávku a jejich stav, nejnovější první.",
+    "empty": "Zatím jste neposlali žádnou žádost o objednávku.",
+    "toShop": "Do obchodu",
+    "number": "Objednávka {number}",
+    "date": "Datum",
+    "status": "Stav",
+    "total": "Celkem",
+    "pieces": "{count, plural, one {# kus} few {# kusy} many {# kusu} other {# kusů}}",
+    "details": "Podrobnosti objednávky {number}",
+    "pagination": {
+      "label": "Stránky objednávek",
+      "previous": "Novější objednávky",
+      "next": "Starší objednávky",
+      "page": "Stránka {page} z {pages}"
+    }
+  },
+  "order": {
+    "title": "Objednávka {number}",
+    "back": "Všechny objednávky",
+    "placed": "Odesláno {date}",
+    "status": "Stav",
+    "lines": "Objednané kusy",
+    "quantity": "Množství: {quantity}",
+    "goodsTotal": "Celkem za kusy",
+    "contact": "Kontaktní údaje",
+    "delivery": "Doprava",
+    "estimate": "Doprava (odhad)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "spočítá dopravce",
+    "deliveryNote": "Skutečnou cenu dopravy platíte dopravci při převzetí.",
+    "comment": "Komentář",
+    "notFound": {
+      "title": "Objednávka nenalezena",
+      "text": "Ve vašem účtu není žádná objednávka s tímto číslem."
+    }
+  },
+  "addresses": {
+    "title": "Doručovací adresy",
+    "intro": "Uložte si až {max} adres. Výchozí adresa se vyplní, když posíláte žádost o objednávku.",
+    "empty": "Zatím žádné uložené adresy.",
+    "default": "Výchozí",
+    "makeDefault": "Nastavit jako výchozí",
+    "delete": "Smazat",
+    "deleteLabel": "Smazat adresu {name}",
+    "makeDefaultLabel": "Nastavit {name} jako výchozí adresu",
+    "add": "Přidat adresu",
+    "label": "Název adresy (nepovinné)",
+    "labelHint": "Například: Domov, Kancelář",
+    "country": "Země",
+    "countryPlaceholder": "Vyberte zemi",
+    "method": "Doprava",
+    "methods": {
+      "warehouse": "Pobočka nebo výdejní box",
+      "address": "Kurýrem na adresu",
+      "division": "Pobočka, výdejní box nebo výdejní místo"
+    },
+    "save": "Uložit adresu",
+    "saving": "Ukládání…",
+    "saved": "Adresa je uložena.",
+    "full": "Máte {max} adres: jednu smažte, abyste mohli přidat další.",
+    "kinds": {
+      "novaPoshtaBranch": "Pobočka Nova Poshta",
+      "novaPoshtaPostomat": "Výdejní box Nova Poshta",
+      "novaPoshtaAddress": "Kurýr Nova Poshta",
+      "novaPostDivision": "Výdejní místo Nova Post",
+      "novaPostAddress": "Kurýr Nova Post"
+    },
+    "errors": {
+      "delivery": "Vyberte výdejní místo nebo vyplňte adresu.",
+      "label": "Název je příliš dlouhý.",
+      "limitReached": "Už máte {max} adres: jednu smažte, abyste mohli přidat další.",
+      "notFound": "Tato adresa už neexistuje.",
+      "rateLimited": "Příliš mnoho změn. Počkejte několik minut a zkuste to znovu.",
+      "signedOut": "Jste odhlášeni. Přihlaste se prosím znovu.",
+      "unexpected": "Adresu se nepodařilo uložit. Zkuste to prosím znovu."
+    }
   }
 }

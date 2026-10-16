@@ -3,6 +3,139 @@
     "canceled": "Geannuleerd",
     "inProcessing": "In behandeling",
     "accepted": "Geaccepteerd",
-    "closed": "Afgesloten"
+    "closed": "Afgesloten",
+    "new": "Nieuw",
+    "pendingPayment": "Wacht op betaling",
+    "paid": "Betaald",
+    "refunded": "Terugbetaald"
+  },
+  "title": "Mijn account",
+  "sections": {
+    "label": "Onderdelen van het account",
+    "profile": "Profiel",
+    "orders": "Bestellingen",
+    "addresses": "Adressen",
+    "favorites": "Favorieten"
+  },
+  "loadError": "Deze pagina kon niet worden geladen. Probeer het later opnieuw.",
+  "profile": {
+    "title": "Profiel",
+    "intro": "Je gegevens vullen het formulier van de bestelaanvraag in.",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam (optioneel)",
+    "phone": "Telefoon (optioneel)",
+    "phoneHint": "Met landcode, bijvoorbeeld +31 6 12345678",
+    "save": "Opslaan",
+    "saving": "Opslaan…",
+    "saved": "Je gegevens zijn opgeslagen.",
+    "errors": {
+      "firstName": "Vul je voornaam in (maximaal 100 tekens).",
+      "lastName": "De achternaam is te lang.",
+      "phone": "Vul het telefoonnummer met landcode in, bijvoorbeeld +31612345678.",
+      "rateLimited": "Te veel wijzigingen. Wacht een paar minuten en probeer het opnieuw.",
+      "signedOut": "Je bent uitgelogd. Log opnieuw in.",
+      "unexpected": "Je gegevens konden niet worden opgeslagen. Probeer het opnieuw."
+    }
+  },
+  "email": {
+    "title": "E-mail",
+    "current": "Huidig e-mailadres",
+    "new": "Nieuw e-mailadres",
+    "submit": "E-mailadres wijzigen",
+    "sending": "Verzenden…",
+    "hint": "We sturen een bevestigingslink naar het huidige en naar het nieuwe adres. Het e-mailadres verandert zodra beide links zijn gevolgd.",
+    "sent": "Kijk in beide mailboxen: we hebben bevestigingslinks gestuurd naar je huidige adres en naar {email}.",
+    "pending": "Wacht op bevestiging: {email}",
+    "errors": {
+      "invalid": "Vul een geldig e-mailadres in.",
+      "same": "Dit is al je e-mailadres.",
+      "rateLimited": "Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.",
+      "signedOut": "Je bent uitgelogd. Log opnieuw in.",
+      "unexpected": "Het e-mailadres kon niet worden gewijzigd. Probeer het opnieuw."
+    }
+  },
+  "security": {
+    "title": "Wachtwoord en uitloggen",
+    "changePassword": "Wachtwoord wijzigen",
+    "signOut": "Uitloggen"
+  },
+  "orders": {
+    "title": "Bestellingen",
+    "intro": "Je bestelaanvragen en hun status, de nieuwste eerst.",
+    "empty": "Je hebt nog geen bestelaanvragen verstuurd.",
+    "toShop": "Naar de winkel",
+    "number": "Bestelling {number}",
+    "date": "Datum",
+    "status": "Status",
+    "total": "Totaal",
+    "pieces": "{count, plural, one {# stuk} other {# stuks}}",
+    "details": "Details van bestelling {number}",
+    "pagination": {
+      "label": "Pagina’s van de bestellingen",
+      "previous": "Nieuwere bestellingen",
+      "next": "Oudere bestellingen",
+      "page": "Pagina {page} van {pages}"
+    }
+  },
+  "order": {
+    "title": "Bestelling {number}",
+    "back": "Alle bestellingen",
+    "placed": "Verstuurd op {date}",
+    "status": "Status",
+    "lines": "Bestelde stuks",
+    "quantity": "Aantal: {quantity}",
+    "goodsTotal": "Totaal voor de stuks",
+    "contact": "Contactgegevens",
+    "delivery": "Bezorging",
+    "estimate": "Verzending (schatting)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "berekend door de vervoerder",
+    "deliveryNote": "De werkelijke verzendprijs betaal je bij ontvangst aan de vervoerder.",
+    "comment": "Opmerking",
+    "notFound": {
+      "title": "Bestelling niet gevonden",
+      "text": "Er is geen bestelling met dit nummer in je account."
+    }
+  },
+  "addresses": {
+    "title": "Bezorgadressen",
+    "intro": "Bewaar tot {max} adressen. Het standaardadres wordt ingevuld wanneer je een bestelaanvraag verstuurt.",
+    "empty": "Nog geen opgeslagen adressen.",
+    "default": "Standaard",
+    "makeDefault": "Als standaard instellen",
+    "delete": "Verwijderen",
+    "deleteLabel": "Adres {name} verwijderen",
+    "makeDefaultLabel": "{name} als standaardadres instellen",
+    "add": "Een adres toevoegen",
+    "label": "Naam van het adres (optioneel)",
+    "labelHint": "Bijvoorbeeld: Thuis, Kantoor",
+    "country": "Land",
+    "countryPlaceholder": "Kies een land",
+    "method": "Bezorging",
+    "methods": {
+      "warehouse": "Filiaal of pakketautomaat",
+      "address": "Koerier naar het adres",
+      "division": "Filiaal, pakketautomaat of afhaalpunt"
+    },
+    "save": "Adres opslaan",
+    "saving": "Opslaan…",
+    "saved": "Het adres is opgeslagen.",
+    "full": "Je hebt {max} adressen: verwijder er een om een ander toe te voegen.",
+    "kinds": {
+      "novaPoshtaBranch": "Nova Poshta-filiaal",
+      "novaPoshtaPostomat": "Nova Poshta-pakketautomaat",
+      "novaPoshtaAddress": "Nova Poshta-koerier",
+      "novaPostDivision": "Nova Post-punt",
+      "novaPostAddress": "Nova Post-koerier"
+    },
+    "errors": {
+      "delivery": "Kies het afleverpunt of vul het adres in.",
+      "label": "De naam is te lang.",
+      "limitReached": "Je hebt al {max} adressen: verwijder er een om een ander toe te voegen.",
+      "notFound": "Dit adres bestaat niet meer.",
+      "rateLimited": "Te veel wijzigingen. Wacht een paar minuten en probeer het opnieuw.",
+      "signedOut": "Je bent uitgelogd. Log opnieuw in.",
+      "unexpected": "Het adres kon niet worden opgeslagen. Probeer het opnieuw."
+    }
   }
 }
