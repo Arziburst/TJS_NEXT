@@ -143,9 +143,10 @@ export function TranslatePanel({
             </select>
           </div>
 
-          <fieldset className="grid gap-2">
+          <fieldset className="@container grid gap-2">
             <legend className={`${labelClass} mb-1.5`}>{t("targets")}</legend>
-            <div className="grid grid-cols-2 gap-2 sb:grid-cols-4">
+            {/* two tiles a row only where a name and its badge fit on one line (a 390 phone gets one a row) */}
+            <div className="grid grid-cols-1 gap-2 @min-[24rem]:grid-cols-2 sb:grid-cols-4">
               {EDITOR_LOCALES.filter((l) => l !== sourceLocale).map((l) => {
                 const has = existing.includes(l);
                 const locked = has && !overwrite;
@@ -161,8 +162,10 @@ export function TranslatePanel({
                       onChange={(event) => toggleTarget(l, event.target.checked)}
                       className="size-4 accent-primary"
                     />
-                    <span lang={l}>{tLocales(l)}</span>
-                    {has && <span className="ml-auto font-input text-xs">{t("existing")}</span>}
+                    <span lang={l} className="min-w-0 truncate">
+                      {tLocales(l)}
+                    </span>
+                    {has && <span className="ml-auto shrink-0 font-input text-xs whitespace-nowrap">{t("existing")}</span>}
                   </label>
                 );
               })}

@@ -26,7 +26,7 @@ const FORBIDDEN = [
   "AI_GATEWAY_OIDC",
   "ai-gateway.vercel.sh",
   "ai-language-model-specification-version",
-  "claude-sonnet-5-5",
+  "claude-sonnet-5.5",
   "You translate the product texts",
   "застібка-карабін",
   "Karabinerverschluss",

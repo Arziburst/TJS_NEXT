@@ -145,6 +145,11 @@ test.describe("machine translation on the local stack", () => {
     for (const locale of OTHER_LOCALES) {
       expect(rows.get(locale), locale).toMatchObject({ source: "machine", reviewed_at: null, title: `[${locale}] ${title}` });
     }
+    // every target tile now carries its "has a text" badge, on one line (a 12 px line), desktop and phone
+    const badges = panel.getByRole("group", { name: tr.targets }).getByText(tr.existing, { exact: true });
+    await expect(badges).toHaveCount(10);
+    const heights = await badges.evaluateAll((spans) => spans.map((span) => span.getBoundingClientRect().height));
+    for (const height of heights) expect(height).toBeLessThan(24);
     // the form shows every locale filled, without a reload
     await expect(page.locator("details").filter({ hasText: localeName.cs }).getByText(ukAdmin.form.translation.filled)).toBeVisible();
     const deFields = page.locator("details").filter({ has: page.locator('input[name="tr.de.title"]') });

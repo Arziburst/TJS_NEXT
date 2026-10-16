@@ -19,6 +19,7 @@ describe("the translation gateway configuration", () => {
 
   it("translates with the model constant through the gateway", () => {
     const model = translationModel({ AI_GATEWAY_API_KEY: "key" });
-    expect(model).toMatchObject({ modelId: "anthropic/claude-sonnet-5-5", provider: "gateway" });
+    // the gateway's dotted id; the Anthropic API id "claude-sonnet-5-5" is a 404 there
+    expect(model).toMatchObject({ modelId: "anthropic/claude-sonnet-5.5", provider: "gateway" });
   });
 });

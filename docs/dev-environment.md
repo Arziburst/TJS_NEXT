@@ -345,7 +345,9 @@ searched and every estimate is the zone flat rate of `nova_post_zone_rates` (TBD
 The admin translates a product's texts (title, description, materials, care, clasp, lead-time note, meta
 title/description, alt texts) from one locale into the others in one structured-output call per product
 (`src/lib/translate/`, #19): AI SDK 7 through the Vercel AI Gateway, model `TRANSLATION_MODEL` in
-`src/lib/translate/core.ts` (`anthropic/claude-sonnet-5-5`, a gateway "provider/model" id; change it there), the
+`src/lib/translate/core.ts` (`anthropic/claude-sonnet-5.5`: the gateway's "provider/model" id with a dotted version,
+not the Anthropic API's `claude-sonnet-5-5`; typed against the gateway's list, so an unknown id fails the
+typecheck; change it there), the
 jewellery glossary in `src/lib/translate/glossary.ts` (data, corrected by PR; not yet checked by native speakers).
 Machine rows are saved as `source = machine`, `reviewed_at = null`: the shop shows them, but the product page is
 `noindex` and left out of hreflang (and of the sitemap, #30) until the admin marks the locale reviewed
