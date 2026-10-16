@@ -114,6 +114,9 @@ describe("message catalogs", () => {
       label: "17",
       // the page count of the order history (account)
       pages: 3,
+      // Auth's emails (#99): the shop's name and the new address of an email change
+      shop: "TJS",
+      newEmail: "olena.new@example.com",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

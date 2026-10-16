@@ -73,6 +73,45 @@
       "whatsapp": "WhatsApp",
       "email": "E-mail"
     },
-    "footer": "Otrzymujesz tę wiadomość, ponieważ w serwisie {site} wysłano zapytanie o zamówienie z tym adresem."
+    "footer": "Otrzymujesz tę wiadomość, ponieważ w serwisie {site} wysłano zapytanie o zamówienie z tym adresem.",
+    "auth": {
+      "signup": {
+        "subject": "Potwierdź swój adres e-mail",
+        "title": "Potwierdź swój adres e-mail",
+        "text": "Kliknij link, aby potwierdzić swój adres e-mail i dokończyć rejestrację w {shop}.",
+        "action": "Potwierdź adres e-mail",
+        "ignore": "Jeśli konto nie zostało założone przez Ciebie, zignoruj tę wiadomość."
+      },
+      "recovery": {
+        "subject": "Zresetuj hasło",
+        "title": "Zresetuj hasło",
+        "text": "Kliknij link, aby ustawić nowe hasło do swojego konta {shop}.",
+        "action": "Ustaw nowe hasło",
+        "ignore": "Jeśli to nie Ty prosisz o nowe hasło, zignoruj tę wiadomość: Twoje hasło pozostaje bez zmian."
+      },
+      "emailChangeCurrent": {
+        "subject": "Potwierdź zmianę adresu e-mail",
+        "title": "Potwierdź zmianę adresu e-mail",
+        "text": "Kliknij link, aby potwierdzić zmianę adresu e-mail Twojego konta {shop} z {email} na {newEmail}. Zmiana zacznie obowiązywać po potwierdzeniu z obu adresów.",
+        "action": "Potwierdź zmianę",
+        "ignore": "Jeśli to nie Ty prosisz o tę zmianę, zignoruj tę wiadomość: Twój adres pozostaje bez zmian."
+      },
+      "emailChangeNew": {
+        "subject": "Potwierdź nowy adres e-mail",
+        "title": "Potwierdź nowy adres e-mail",
+        "text": "Kliknij link, aby potwierdzić {newEmail} jako nowy adres e-mail Twojego konta {shop}.",
+        "action": "Potwierdź nowy adres",
+        "ignore": "Jeśli to nie Ty prosisz o tę zmianę, zignoruj tę wiadomość: Twój adres pozostaje bez zmian."
+      },
+      "magicLink": {
+        "subject": "Twój link do logowania w {shop}",
+        "title": "Zaloguj się do {shop}",
+        "text": "Kliknij link, aby zalogować się do swojego konta {shop}.",
+        "action": "Zaloguj się",
+        "ignore": "Jeśli to nie Ty chcesz się zalogować, zignoruj tę wiadomość."
+      },
+      "linkHint": "Jeśli przycisk nie działa, otwórz ten link:",
+      "footer": "Otrzymujesz tę wiadomość, ponieważ ten adres został użyty w serwisie {site}."
+    }
   }
 }

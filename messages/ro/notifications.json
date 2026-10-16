@@ -73,6 +73,45 @@
       "whatsapp": "WhatsApp",
       "email": "E-mail"
     },
-    "footer": "Primiți acest e-mail deoarece pe {site} a fost trimisă o cerere de comandă cu această adresă."
+    "footer": "Primiți acest e-mail deoarece pe {site} a fost trimisă o cerere de comandă cu această adresă.",
+    "auth": {
+      "signup": {
+        "subject": "Confirmați adresa de e-mail",
+        "title": "Confirmați adresa de e-mail",
+        "text": "Urmați linkul pentru a vă confirma adresa de e-mail și a finaliza înregistrarea la {shop}.",
+        "action": "Confirmați adresa de e-mail",
+        "ignore": "Dacă nu v-ați înregistrat, ignorați acest e-mail."
+      },
+      "recovery": {
+        "subject": "Resetați parola",
+        "title": "Resetați parola",
+        "text": "Urmați linkul pentru a alege o parolă nouă pentru contul dvs. {shop}.",
+        "action": "Alegeți o parolă nouă",
+        "ignore": "Dacă nu ați cerut o parolă nouă, ignorați acest e-mail: parola dvs. rămâne neschimbată."
+      },
+      "emailChangeCurrent": {
+        "subject": "Confirmați schimbarea adresei de e-mail",
+        "title": "Confirmați schimbarea adresei de e-mail",
+        "text": "Urmați linkul pentru a confirma că adresa de e-mail a contului dvs. {shop} se schimbă din {email} în {newEmail}. Schimbarea intră în vigoare după ce este confirmată de la ambele adrese.",
+        "action": "Confirmați schimbarea",
+        "ignore": "Dacă nu ați cerut această schimbare, ignorați acest e-mail: adresa dvs. rămâne neschimbată."
+      },
+      "emailChangeNew": {
+        "subject": "Confirmați noua adresă de e-mail",
+        "title": "Confirmați noua adresă de e-mail",
+        "text": "Urmați linkul pentru a confirma {newEmail} ca noua adresă de e-mail a contului dvs. {shop}.",
+        "action": "Confirmați noua adresă",
+        "ignore": "Dacă nu ați cerut această schimbare, ignorați acest e-mail: adresa dvs. rămâne neschimbată."
+      },
+      "magicLink": {
+        "subject": "Linkul dvs. de autentificare la {shop}",
+        "title": "Autentificare la {shop}",
+        "text": "Urmați linkul pentru a vă autentifica în contul dvs. {shop}.",
+        "action": "Autentificare",
+        "ignore": "Dacă nu ați cerut să vă autentificați, ignorați acest e-mail."
+      },
+      "linkHint": "Dacă butonul nu funcționează, deschideți acest link:",
+      "footer": "Primiți acest e-mail deoarece această adresă a fost folosită pe {site}."
+    }
   }
 }

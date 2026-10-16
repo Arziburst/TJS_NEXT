@@ -506,6 +506,9 @@ isOneToOne: false
         isOneToOne: false
         isSetofReturn: true
       } },
+"claim_webhook_receipt":
+{ Args: { "p_id": string }; Returns: boolean
+                           },
 "complete_outbox_event":
 { Args: { "p_claim_token": string,"p_email_status": Database["public"]['Enums']["notification_delivery"],"p_id": string,"p_last_error"?: string,"p_refund_attempt"?: boolean,"p_retry_in_seconds"?: number,"p_telegram_status": Database["public"]['Enums']["notification_delivery"] }; Returns: boolean
                            },

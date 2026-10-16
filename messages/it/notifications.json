@@ -73,6 +73,45 @@
       "whatsapp": "WhatsApp",
       "email": "Email"
     },
-    "footer": "Ricevi questa email perché su {site} è stata inviata una richiesta d’ordine con questo indirizzo."
+    "footer": "Ricevi questa email perché su {site} è stata inviata una richiesta d’ordine con questo indirizzo.",
+    "auth": {
+      "signup": {
+        "subject": "Conferma il tuo indirizzo email",
+        "title": "Conferma il tuo indirizzo email",
+        "text": "Segui il link per confermare il tuo indirizzo email e completare la registrazione su {shop}.",
+        "action": "Conferma l’indirizzo email",
+        "ignore": "Se la registrazione non è stata fatta da te, ignora questa email."
+      },
+      "recovery": {
+        "subject": "Reimposta la password",
+        "title": "Reimposta la password",
+        "text": "Segui il link per scegliere una nuova password per il tuo account {shop}.",
+        "action": "Scegli una nuova password",
+        "ignore": "Se non hai chiesto una nuova password, ignora questa email: la tua password resta invariata."
+      },
+      "emailChangeCurrent": {
+        "subject": "Conferma la modifica del tuo indirizzo email",
+        "title": "Conferma la modifica del tuo indirizzo email",
+        "text": "Segui il link per confermare che l’indirizzo email del tuo account {shop} cambia da {email} a {newEmail}. La modifica ha effetto quando viene confermata da entrambi gli indirizzi.",
+        "action": "Conferma la modifica",
+        "ignore": "Se non hai chiesto questa modifica, ignora questa email: il tuo indirizzo resta invariato."
+      },
+      "emailChangeNew": {
+        "subject": "Conferma il tuo nuovo indirizzo email",
+        "title": "Conferma il tuo nuovo indirizzo email",
+        "text": "Segui il link per confermare {newEmail} come nuovo indirizzo email del tuo account {shop}.",
+        "action": "Conferma il nuovo indirizzo",
+        "ignore": "Se non hai chiesto questa modifica, ignora questa email: il tuo indirizzo resta invariato."
+      },
+      "magicLink": {
+        "subject": "Il tuo link di accesso a {shop}",
+        "title": "Accedi a {shop}",
+        "text": "Segui il link per accedere al tuo account {shop}.",
+        "action": "Accedi",
+        "ignore": "Se non hai chiesto di accedere, ignora questa email."
+      },
+      "linkHint": "Se il pulsante non funziona, apri questo link:",
+      "footer": "Ricevi questa email perché questo indirizzo è stato usato su {site}."
+    }
   }
 }

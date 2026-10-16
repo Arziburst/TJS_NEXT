@@ -4,7 +4,8 @@ import type { Route } from "next";
 import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
 import { cache } from "react";
-import type { Locale } from "@/i18n/routing";
+import { hasLocale } from "next-intl";
+import { routing, type Locale } from "@/i18n/routing";
 import type { Database } from "@/lib/supabase/database.types";
 import { createSessionClient, type ServerSupabaseClient } from "@/lib/supabase/server";
 
@@ -16,6 +17,8 @@ export type CurrentUser = {
   name: string | null;
   phone: string | null;
   role: UserRole;
+  // the language of Auth's emails (user_metadata.locale, #99): set at sign-up, then on a change of language
+  locale: Locale | null;
 };
 
 /**
@@ -27,6 +30,7 @@ export async function resolveUser(client: ServerSupabaseClient): Promise<Current
     const { data, error } = await client.auth.getUser();
     if (error || !data.user) return null;
     const { user } = data;
+    const locale: unknown = user.user_metadata?.locale;
     const { data: profile } = await client
       .from("profiles")
       .select("name, phone, role")
@@ -39,6 +43,7 @@ export async function resolveUser(client: ServerSupabaseClient): Promise<Current
       phone: profile?.phone ?? null,
       // no readable profile means no role: never more than a customer
       role: profile?.role ?? "customer",
+      locale: typeof locale === "string" && hasLocale(routing.locales, locale) ? locale : null,
     };
   } catch {
     return null;

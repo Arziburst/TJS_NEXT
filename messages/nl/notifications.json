@@ -73,6 +73,45 @@
       "whatsapp": "WhatsApp",
       "email": "E-mail"
     },
-    "footer": "Je ontvangt deze e-mail omdat er op {site} een bestelaanvraag met dit adres is verstuurd."
+    "footer": "Je ontvangt deze e-mail omdat er op {site} een bestelaanvraag met dit adres is verstuurd.",
+    "auth": {
+      "signup": {
+        "subject": "Bevestig je e-mailadres",
+        "title": "Bevestig je e-mailadres",
+        "text": "Volg de link om je e-mailadres te bevestigen en je registratie bij {shop} af te ronden.",
+        "action": "E-mailadres bevestigen",
+        "ignore": "Heb je je niet geregistreerd? Negeer deze e-mail dan."
+      },
+      "recovery": {
+        "subject": "Stel je wachtwoord opnieuw in",
+        "title": "Stel je wachtwoord opnieuw in",
+        "text": "Volg de link om een nieuw wachtwoord te kiezen voor je {shop}-account.",
+        "action": "Nieuw wachtwoord kiezen",
+        "ignore": "Heb je geen nieuw wachtwoord aangevraagd? Negeer deze e-mail dan: je wachtwoord blijft ongewijzigd."
+      },
+      "emailChangeCurrent": {
+        "subject": "Bevestig de wijziging van je e-mailadres",
+        "title": "Bevestig de wijziging van je e-mailadres",
+        "text": "Volg de link om te bevestigen dat het e-mailadres van je {shop}-account wijzigt van {email} naar {newEmail}. De wijziging gaat in zodra ze vanaf beide adressen is bevestigd.",
+        "action": "Wijziging bevestigen",
+        "ignore": "Heb je deze wijziging niet aangevraagd? Negeer deze e-mail dan: je adres blijft ongewijzigd."
+      },
+      "emailChangeNew": {
+        "subject": "Bevestig je nieuwe e-mailadres",
+        "title": "Bevestig je nieuwe e-mailadres",
+        "text": "Volg de link om {newEmail} te bevestigen als het nieuwe e-mailadres van je {shop}-account.",
+        "action": "Nieuw e-mailadres bevestigen",
+        "ignore": "Heb je deze wijziging niet aangevraagd? Negeer deze e-mail dan: je adres blijft ongewijzigd."
+      },
+      "magicLink": {
+        "subject": "Je inloglink voor {shop}",
+        "title": "Inloggen bij {shop}",
+        "text": "Volg de link om in te loggen op je {shop}-account.",
+        "action": "Inloggen",
+        "ignore": "Heb je niet gevraagd om in te loggen? Negeer deze e-mail dan."
+      },
+      "linkHint": "Werkt de knop niet? Open dan deze link:",
+      "footer": "Je ontvangt deze e-mail omdat dit adres is gebruikt op {site}."
+    }
   }
 }
