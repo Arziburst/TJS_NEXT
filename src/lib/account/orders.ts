@@ -69,6 +69,8 @@ export type OrderDetailLine = {
   position: number;
   title: string;
   titleLocale: string;
+  // the size the customer chose (#66), as it was named when ordered; null for a product without sizes
+  variantLabel: { text: string; locale: string } | null;
   quantity: number;
   unitMinor: number;
   lineMinor: number;
@@ -110,7 +112,7 @@ export async function readOwnOrderDetail(client: ServerSupabaseClient, userId: s
       `number, created_at, status, first_name, last_name, phone, email, comment, country, delivery_carrier, delivery_method,
        delivery_destination, delivery_estimate_state, delivery_estimate_minor, delivery_estimate_currency,
        delivery_estimate_decimals, currency, currency_decimals, items_total_minor,
-       order_items(position, title, title_locale, quantity, unit_price_minor, line_total_minor)`,
+       order_items(position, title, title_locale, variant_label, variant_label_locale, quantity, unit_price_minor, line_total_minor)`,
     )
     .eq("user_id", userId)
     .eq("number", number)
@@ -142,6 +144,10 @@ export async function readOwnOrderDetail(client: ServerSupabaseClient, userId: s
       position: item.position,
       title: item.title,
       titleLocale: item.title_locale,
+      variantLabel:
+        item.variant_label !== null && item.variant_label_locale !== null
+          ? { text: item.variant_label, locale: item.variant_label_locale }
+          : null,
       quantity: item.quantity,
       unitMinor: item.unit_price_minor,
       lineMinor: item.line_total_minor,

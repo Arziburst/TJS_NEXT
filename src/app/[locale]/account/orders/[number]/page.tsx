@@ -6,6 +6,7 @@ import { AccountFrame, AccountSkeleton, SectionTitle } from "@/components/accoun
 import { DeliverySummary } from "@/components/account/delivery-summary";
 import { OrderStatusBadge, orderDate } from "@/components/account/order-status";
 import { ACCOUNT_ORDERS_HREF, accountOrderHref } from "@/components/account/paths";
+import { VariantLabel } from "@/components/cart/variant-label";
 import { Link } from "@/i18n/navigation";
 import { readOwnOrderDetail } from "@/lib/account/orders";
 import { requireUser } from "@/lib/auth/session";
@@ -114,6 +115,7 @@ async function OrderContents({ params }: Pick<PageProps<"/[locale]/account/order
                 <span lang={line.titleLocale !== locale ? line.titleLocale : undefined} className="font-sans font-semibold break-words">
                   {line.title}
                 </span>
+                {line.variantLabel && <VariantLabel label={line.variantLabel.text} />}
                 <span className="text-sm">{t("order.quantity", { quantity: line.quantity })}</span>
               </span>
               <Amount money={money(line.lineMinor)} locale={locale} className="shrink-0 font-sans text-accent-text" />

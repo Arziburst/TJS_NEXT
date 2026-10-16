@@ -1,13 +1,14 @@
-// The customer account (#28) on the local stack: its tests create users, addresses and orders of their own, so
-// they run only against a loopback stack (.env.local); in CI a missing stack fails instead. Orders use a seed
-// made-to-order product, which ordering leaves unchanged (the catalog tests still count the seed). Nova Poshta
-// answers from the recorded fixtures (playwright.config.ts).
+// The customer account (#28) on the local stack: its tests create users, addresses, orders and a sized ring of
+// their own, so they run only against a loopback stack (.env.local), after the catalog listings were checked (a
+// catalog writer, playwright.config.ts); in CI a missing stack fails instead. The history's orders use a seed
+// made-to-order product, which ordering leaves unchanged. Nova Poshta answers from the recorded fixtures.
 import { randomInt, randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import en from "../messages/en/account.json" with { type: "json" };
 import enCheckout from "../messages/en/checkout.json" with { type: "json" };
+import enCommon from "../messages/en/common.json" with { type: "json" };
 import enNav from "../messages/en/nav.json" with { type: "json" };
 import type { Database } from "../src/lib/supabase/database.types";
 
@@ -31,6 +32,29 @@ const MADE_TO_ORDER = { id: "a0000000-0000-4000-8000-000000000006", priceUsdMino
 
 const createdUsers: string[] = [];
 const usedEmails: string[] = [];
+const createdProducts: string[] = [];
+
+/** A published made-to-order ring of its own (no photo) in one size, "17" (#66). */
+async function createSizedRing() {
+  const { data: category, error } = await admin!.from("categories").select("id").eq("slug", "rings").single();
+  if (error) throw error;
+  const id = randomUUID();
+  const title = `E2E account ring ${id.slice(0, 4)}`;
+  const product = await admin!
+    .from("products")
+    .insert({ id, category_id: category.id, status: "published", fulfillment: "made_to_order", price_usd: 20, weight_g: 5 });
+  if (product.error) throw product.error;
+  createdProducts.push(id);
+  const translation = await admin!
+    .from("product_translations")
+    .insert({ product_id: id, locale: "en", slug: `e2e-account-${id.slice(0, 8)}`, title, source: "human" });
+  if (translation.error) throw translation.error;
+  const size = await admin!.from("product_variants").insert({ product_id: id, sku_suffix: "17" }).select("id").single();
+  if (size.error) throw size.error;
+  const label = await admin!.from("product_variant_translations").insert({ variant_id: size.data.id, locale: "en", label: "17" });
+  if (label.error) throw label.error;
+  return { id, title, variantId: size.data.id };
+}
 
 type User = { id: string; email: string; password: string };
 
@@ -50,7 +74,7 @@ async function createUser(name = "Olena Kovalenko"): Promise<User> {
 }
 
 /** An order request of `user`, written as the server writes one (the service role), with one line. */
-async function createOrder(user: User, createdAt: Date) {
+async function createOrder(user: User, createdAt: Date, variantLabel: string | null = null) {
   const { data, error } = await admin!
     .from("orders")
     .insert({
@@ -83,6 +107,9 @@ async function createOrder(user: User, createdAt: Date) {
     fulfillment: "made_to_order",
     title: "E2E bracelet",
     title_locale: "en",
+    // the size's name as ordered (#66); the size itself may be gone since
+    variant_label: variantLabel,
+    variant_label_locale: variantLabel === null ? null : "en",
     quantity: 2,
     unit_price_usd_minor: MADE_TO_ORDER.priceUsdMinor,
     unit_price_minor: MADE_TO_ORDER.priceUsdMinor,
@@ -154,6 +181,7 @@ test.describe("customer account on the local stack", () => {
 
   test.afterAll(async () => {
     if (usedEmails.length > 0) await admin?.from("orders").delete().in("email", usedEmails.splice(0));
+    if (createdProducts.length > 0) await admin?.from("products").delete().in("id", createdProducts.splice(0));
     for (const id of createdUsers.splice(0)) await admin?.auth.admin.deleteUser(id);
   });
 
@@ -265,11 +293,17 @@ test.describe("customer account on the local stack", () => {
     expect(data.user?.email).toBe(next);
   });
 
-  test("a saved address is the default of the checkout, and the order stores it", async ({ page }) => {
+  test("a saved address is the default of the checkout, and the order stores it with its sized line", async ({ page }) => {
     const errors = collectErrors(page);
     await useOwnClientIp(page);
     const user = await createUser();
-    expect((await admin!.from("cart_items").insert({ user_id: user.id, product_id: MADE_TO_ORDER.id, quantity: 1 })).error).toBeNull();
+    // a ring in size 17 next to a product without sizes (#66)
+    const ring = await createSizedRing();
+    const cart = await admin!.from("cart_items").insert([
+      { user_id: user.id, product_id: MADE_TO_ORDER.id, quantity: 1 },
+      { user_id: user.id, product_id: ring.id, variant_id: ring.variantId, quantity: 1 },
+    ]);
+    expect(cart.error).toBeNull();
     await signIn(page, user, "/en/account/addresses");
     await expect(page.getByTestId("addresses-empty")).toBeVisible();
 
@@ -298,6 +332,10 @@ test.describe("customer account on the local stack", () => {
     expect(delivery.kind).toBe("novaPoshtaWarehouse");
 
     await open(page, "/en/checkout");
+    await expect(page.getByTestId("checkout-line")).toHaveCount(2);
+    await expect(page.getByTestId("checkout-line").filter({ hasText: ring.title }).getByTestId("line-variant")).toHaveText(
+      enCommon.variant.replace("{label}", "17"),
+    );
     const choices = page.getByTestId("saved-addresses");
     await expect(choices.getByRole("radio", { name: /Home/ })).toBeChecked();
     await expect(choices).toContainText(delivery.warehouse.name);
@@ -317,13 +355,28 @@ test.describe("customer account on the local stack", () => {
       .single();
     expect(order).toMatchObject({ user_id: user.id, country: "UA", delivery_carrier: "nova_poshta", delivery_method: "warehouse" });
     expect((order!.delivery_destination as { warehouse: { ref: string } }).warehouse.ref).toBe(delivery.warehouse.ref);
+    const { data: lines } = await admin!
+      .from("order_items")
+      .select("product_id, variant_id, variant_label")
+      .eq("order_id", (await admin!.from("orders").select("id").eq("number", number).single()).data!.id);
+    expect(lines).toEqual(
+      expect.arrayContaining([
+        { product_id: MADE_TO_ORDER.id, variant_id: null, variant_label: null },
+        { product_id: ring.id, variant_id: ring.variantId, variant_label: "17" },
+      ]),
+    );
 
-    // the order history has it, with the stored destination
+    // the order history has it, with the stored destination and the ring's size
     await open(page, "/en/account/orders");
+    await expect(page.getByTestId("order-row").first()).toContainText("2 pieces");
     await page.getByRole("link", { name: en.orders.details.replace("{number}", String(number)) }).click();
     await expect(page).toHaveURL(new RegExp(`/en/account/orders/${number}$`));
     await expect(page.getByTestId("order-detail")).toContainText(en.orderStatus.new);
     await expect(page.getByTestId("delivery-summary")).toContainText(delivery.warehouse.name);
+    await expect(page.getByTestId("order-detail-line")).toHaveCount(2);
+    await expect(page.getByTestId("order-detail-line").filter({ hasText: ring.title }).getByTestId("line-variant")).toHaveText(
+      enCommon.variant.replace("{label}", "17"),
+    );
     expect(errors).toEqual([]);
   });
 
@@ -365,7 +418,7 @@ test.describe("customer account on the local stack", () => {
     const day = (n: number) => new Date(Date.UTC(2026, 8, n, 12));
     const own: number[] = [];
     // eleven orders: one more than a page
-    for (let n = 1; n <= 11; n++) own.push(await createOrder(customer, day(n)));
+    for (let n = 1; n <= 11; n++) own.push(await createOrder(customer, day(n), n === 1 ? "17" : null));
     const foreign = await createOrder(other, day(20));
 
     await signIn(page, customer, "/en/account/orders");
@@ -397,6 +450,12 @@ test.describe("customer account on the local stack", () => {
     await open(page, `/en/account/orders/${own[0]}`);
     await expect(page.getByTestId("order-detail")).toContainText(en.order.title.replace("{number}", String(own[0])));
     await expect(page.getByTestId("order-detail-line")).toContainText("E2E bracelet");
+    await expect(page.getByTestId("order-detail-line").getByTestId("line-variant")).toHaveText(enCommon.variant.replace("{label}", "17"));
+    // a line without a size names none
+    await open(page, `/en/account/orders/${own[1]}`);
+    await expect(page.getByTestId("order-detail-line")).toContainText("E2E bracelet");
+    await expect(page.getByTestId("line-variant")).toHaveCount(0);
+    await open(page, `/en/account/orders/${own[0]}`);
     await expect(page.getByTestId("order-detail-total").locator("data")).toHaveAttribute("value", "42.00");
 
     // another customer's number reads as no order (RLS), like an unknown one
