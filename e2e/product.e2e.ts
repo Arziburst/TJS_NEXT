@@ -65,6 +65,29 @@ test.describe("product page HTML (no JavaScript)", () => {
     expect((breadcrumbs.itemListElement as unknown[]).length).toBe(3);
   });
 
+  // React reveals a boundary that is not inline in the shell no earlier than 300 ms after the first paint, and
+  // moves a large finished boundary out of the shell (docs/standards.md §3): the main photo, the LCP element,
+  // stays in <main> of the shell, ahead of every hidden segment (#127)
+  test("keeps the main photo in the static shell", async ({ request }) => {
+    for (const path of [
+      UK_EARRINGS,
+      "/uk/product/bahatosharove-namysto-lantsiuzhok",
+      DE_EARRINGS,
+      "/pl/product/kolczyki-z-koralem",
+      "/fr/product/pearl-stud-earrings",
+    ]) {
+      const response = await request.get(path);
+      expect(response.status(), path).toBe(200);
+      const html = await response.text();
+      const photo = html.search(/<img [^>]*fetchPriority="high"/);
+      const mainEnd = html.indexOf("</main>");
+      expect(photo, `${path}: the main photo`).toBeGreaterThan(-1);
+      expect(photo, `${path}: the main photo inside <main> of the shell`).toBeLessThan(mainEnd);
+      const hidden = html.indexOf('<div hidden id="S:');
+      if (hidden !== -1) expect(mainEnd, `${path}: hidden segments come after the shell`).toBeLessThan(hidden);
+    }
+  });
+
   test("renders an unreviewed machine translation, but keeps it out of the index", async ({ request }) => {
     const response = await request.get("/pl/product/kolczyki-z-koralem");
     expect(response.status()).toBe(200);
