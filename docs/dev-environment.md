@@ -561,6 +561,7 @@ production deployment in the dashboard; the database is not rolled back with it.
 | `AI_GATEWAY_OIDC` | server only: `true` turns on the admin's machine translation through the AI Gateway with the deployment's OIDC token (#19); unset → "not configured". Not set yet: the owner decides on the gateway billing. `AI_GATEWAY_API_KEY` / `AI_GATEWAY_BASE_URL` stay unset in production |
 | `NOTIFICATIONS_SEND`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO` | server only: the order notifications (#26, see Notifications above); the values are TBD from the owner, and until they are set every message is `skipped_unconfigured` |
 | `SEND_EMAIL_HOOK_SECRET` | server only: the secret of Supabase Auth's Send Email Hook (#99, Auth emails in the user's language above), production only; set it before the hook is enabled in the dashboard |
+| `SENTRY_DSN` | server only, optional: a Sentry-compatible DSN the server errors are also reported to (#31, the provider is TBD by the owner); unset → the errors are only in the function logs |
 
 Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
 `VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`
@@ -582,6 +583,33 @@ renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the docume
 `VERCEL_ENV` is `production`: local builds, CI and `next dev` load neither script. Both are cookieless; the
 shop sends no custom events, so no personal data leaves through them. Visits and Web Vitals: the project's
 *Analytics* and *Speed Insights* tabs.
+
+## Launch, production smoke and server errors
+
+The manual steps to go live, in order: `docs/launch.md` (#31).
+
+**Production smoke** (`e2e/smoke-prod/`): read-only checks of any running deployment — the home, the shop, a
+product, search, a guest cart (a cookie only), the sign-in page, robots and the sitemap, the share image and the
+security headers. It starts no server and needs no stack:
+
+```sh
+E2E_BASE_URL=https://tjs-next.vercel.app npm run test:smoke-prod
+E2E_BASE_URL=http://localhost:<3000+n> npm run test:smoke-prod   # against your `next start`
+```
+
+On GitHub: Actions → **Production smoke** → Run workflow with the URL (`.github/workflows/smoke-prod.yml`).
+
+**Server errors** (`src/instrumentation.ts`, `src/lib/monitoring/`): every error Next captures on the server is
+logged once as a JSON line, `{"level":"error","event":"server_error","requestId":…,"path":…,"errorType":…,
+"message":…}`, without the query string and with e-mails, phones and tokens masked; Next prints its own line for
+the same error too. A page response carries its `x-request-id`, so a reported problem can be found in the logs.
+With `SENTRY_DSN` set the event is also sent to that endpoint (a Sentry envelope, 2 s timeout, never retried).
+
+**Legacy shop links** (`src/lib/redirects/`): the old react-router paths (`/shop/see-all`, `/shop/<type>`,
+`/product/<MongoDB id>`, `/about-us`, `/sign-in-and-up`, `/cart`, `/order-details`, `/add-item`, `/orders`, …)
+answer 308 to the new page in the visitor's locale (the locale cookie, else the browser language, else `en`). A
+product id resolves through `products.legacy_id` with the service role (cached 10 minutes per server); an unknown
+or unpublished one lands on the shop.
 
 ## Windows traps
 
