@@ -104,6 +104,12 @@ describe("message catalogs", () => {
       position: 2,
       current: 3,
       failed: 1,
+      // the notifications (#26): an order number, its status, money and the shop's host
+      number: 10042,
+      status: "Accepted",
+      amount: "80 ₴",
+      flat: "12",
+      site: "shop.example.test",
       // a size's name (#66)
       label: "17",
       link: (chunks: string) => `<a>${chunks}</a>`,

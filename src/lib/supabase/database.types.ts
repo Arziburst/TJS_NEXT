@@ -223,13 +223,13 @@ isOneToOne: false
                   ]
                 },"outbox_events": {
                   Row: {
-                    "attempts": number,"created_at": string,"event": string,"id": string,"last_error": string | null,"next_attempt_at": string,"order_id": string,"payload": NonNullable<Json>,"processed_at": string | null
+                    "attempts": number,"claim_token": string | null,"created_at": string,"email_status": Database["public"]['Enums']["notification_delivery"],"event": string,"id": string,"last_error": string | null,"next_attempt_at": string,"order_id": string,"payload": NonNullable<Json>,"processed_at": string | null,"telegram_status": Database["public"]['Enums']["notification_delivery"]
                   }
                   Insert: {
-                    "attempts"?: number,"created_at"?: string,"event": string,"id"?: string,"last_error"?: string | null,"next_attempt_at"?: string,"order_id": string,"payload"?: NonNullable<Json>,"processed_at"?: string | null
+                    "attempts"?: number,"claim_token"?: string | null,"created_at"?: string,"email_status"?: Database["public"]['Enums']["notification_delivery"],"event": string,"id"?: string,"last_error"?: string | null,"next_attempt_at"?: string,"order_id": string,"payload"?: NonNullable<Json>,"processed_at"?: string | null,"telegram_status"?: Database["public"]['Enums']["notification_delivery"]
                   }
                   Update: {
-                    "attempts"?: number,"created_at"?: string,"event"?: string,"id"?: string,"last_error"?: string | null,"next_attempt_at"?: string,"order_id"?: string,"payload"?: NonNullable<Json>,"processed_at"?: string | null
+                    "attempts"?: number,"claim_token"?: string | null,"created_at"?: string,"email_status"?: Database["public"]['Enums']["notification_delivery"],"event"?: string,"id"?: string,"last_error"?: string | null,"next_attempt_at"?: string,"order_id"?: string,"payload"?: NonNullable<Json>,"processed_at"?: string | null,"telegram_status"?: Database["public"]['Enums']["notification_delivery"]
                   }
                   Relationships: [
                     {
@@ -472,6 +472,30 @@ isOneToOne: false
 "admin_set_product_variant_available":
 { Args: { "p_available": boolean,"p_product_id": string,"p_variant_id": string }; Returns: boolean
                            },
+"claim_outbox_events":
+{ Args: { "p_lease_seconds": number,"p_limit": number }; Returns: {
+              "attempts": number,
+"claim_token": string | null,
+"created_at": string,
+"email_status": Database["public"]['Enums']["notification_delivery"],
+"event": string,
+"id": string,
+"last_error": string | null,
+"next_attempt_at": string,
+"order_id": string,
+"payload": NonNullable<Json>,
+"processed_at": string | null,
+"telegram_status": Database["public"]['Enums']["notification_delivery"]
+            }[]
+                          SetofOptions: {
+        from: "*"
+        to: "outbox_events"
+        isOneToOne: false
+        isSetofReturn: true
+      } },
+"complete_outbox_event":
+{ Args: { "p_claim_token": string,"p_email_status": Database["public"]['Enums']["notification_delivery"],"p_id": string,"p_last_error"?: string,"p_refund_attempt"?: boolean,"p_retry_in_seconds"?: number,"p_telegram_status": Database["public"]['Enums']["notification_delivery"] }; Returns: boolean
+                           },
 "consume_rate_limit":
 { Args: { "p_key": string,"p_max": number,"p_window_seconds": number }; Returns: boolean
                            },
@@ -498,7 +522,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "order_status": "new"|"pending_payment"|"paid"|"in_processing"|"accepted"|"closed"|"canceled"|"refunded","product_availability": "available"|"reserved"|"sold","product_fulfillment": "made_to_order"|"one_of_a_kind","product_status": "draft"|"published"|"archived","taxonomy_kind": "material"|"colour","translation_source": "human"|"machine","user_role": "customer"|"admin"
+            "notification_delivery": "pending"|"sent"|"skipped_unconfigured"|"skipped_expired"|"failed","order_status": "new"|"pending_payment"|"paid"|"in_processing"|"accepted"|"closed"|"canceled"|"refunded","product_availability": "available"|"reserved"|"sold","product_fulfillment": "made_to_order"|"one_of_a_kind","product_status": "draft"|"published"|"archived","taxonomy_kind": "material"|"colour","translation_source": "human"|"machine","user_role": "customer"|"admin"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -614,7 +638,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "order_status": ["new", "pending_payment", "paid", "in_processing", "accepted", "closed", "canceled", "refunded"],"product_availability": ["available", "reserved", "sold"],"product_fulfillment": ["made_to_order", "one_of_a_kind"],"product_status": ["draft", "published", "archived"],"taxonomy_kind": ["material", "colour"],"translation_source": ["human", "machine"],"user_role": ["customer", "admin"]
+            "notification_delivery": ["pending", "sent", "skipped_unconfigured", "skipped_expired", "failed"],"order_status": ["new", "pending_payment", "paid", "in_processing", "accepted", "closed", "canceled", "refunded"],"product_availability": ["available", "reserved", "sold"],"product_fulfillment": ["made_to_order", "one_of_a_kind"],"product_status": ["draft", "published", "archived"],"taxonomy_kind": ["material", "colour"],"translation_source": ["human", "machine"],"user_role": ["customer", "admin"]
           }
         }
 } as const

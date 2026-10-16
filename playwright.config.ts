@@ -12,6 +12,11 @@ const novaPostMockKey = "e2e-fixture-key";
 // The AI Gateway stand-in (e2e/ai-gateway-mock.ts) the admin's machine translation talks to
 const aiGatewayMockPort = Number(process.env.AI_GATEWAY_MOCK_PORT || port + 1500);
 const aiGatewayMockKey = "e2e-gateway-key";
+// The Telegram and Resend stand-in (e2e/notifications-mock.ts) the app sends the order notifications to; the
+// e2e tests read what it got (e2e/notifications.ts computes the same port)
+const notificationsMockPort = Number(process.env.NOTIFICATIONS_MOCK_PORT || port + 2000);
+const notificationsMockToken = "e2e-bot-token";
+const notificationsMockKey = "e2e-resend-key";
 // e2e files that write products of their own to the catalog (see the projects below)
 const CATALOG_WRITERS = [
   "**/cart.e2e.ts",
@@ -82,6 +87,17 @@ export default defineConfig({
           env: { AI_GATEWAY_MOCK_PORT: String(aiGatewayMockPort), AI_GATEWAY_MOCK_KEY: aiGatewayMockKey },
         },
         {
+          command: "node e2e/notifications-mock.ts",
+          url: `http://127.0.0.1:${notificationsMockPort}/health`,
+          reuseExistingServer: false,
+          timeout: 30_000,
+          env: {
+            NOTIFICATIONS_MOCK_PORT: String(notificationsMockPort),
+            NOTIFICATIONS_MOCK_BOT_TOKEN: notificationsMockToken,
+            NOTIFICATIONS_MOCK_API_KEY: notificationsMockKey,
+          },
+        },
+        {
           command: `npm run ${serverScript} -- --port ${port}`,
           url: baseURL,
           reuseExistingServer: false,
@@ -97,6 +113,14 @@ export default defineConfig({
             NOVA_POST_API_URL: `http://127.0.0.1:${novaPostMockPort}/v.1.0`,
             AI_GATEWAY_API_KEY: aiGatewayMockKey,
             AI_GATEWAY_BASE_URL: `http://127.0.0.1:${aiGatewayMockPort}/v4/ai`,
+            // the order notifications go to the stand-in above (read at request time); the flag lets them be sent
+            NOTIFICATIONS_SEND: "true",
+            TELEGRAM_BOT_TOKEN: notificationsMockToken,
+            TELEGRAM_CHAT_ID: "-1001234567890",
+            TELEGRAM_API_BASE_URL: `http://127.0.0.1:${notificationsMockPort}`,
+            RESEND_API_KEY: notificationsMockKey,
+            RESEND_API_URL: `http://127.0.0.1:${notificationsMockPort}`,
+            EMAIL_FROM: "TJS e2e <orders@example.test>",
           },
         },
       ],

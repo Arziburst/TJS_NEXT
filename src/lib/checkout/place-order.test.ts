@@ -196,15 +196,28 @@ describe("placeOrder", () => {
       expect(d.createOrder).not.toHaveBeenCalled();
     });
 
-    it("names a size that is no longer available with its label", async () => {
+    it("names a size switched off meanwhile as a size, never as a piece ordered by someone else", async () => {
       const { deps: d } = deps({
         readCart: vi.fn(async () => ({
           ...twoSizes(),
           items: [item(ring, 2, "available", SIZE_16), item(ring, 1, "unavailable", SIZE_18)],
         })),
       });
-      expect(await placeOrder(input({ expected }), d)).toEqual({ ok: false, reason: "unavailable", titles: ["Ring (18)"] });
+      expect(await placeOrder(input({ expected }), d)).toEqual({ ok: false, reason: "sizeUnavailable", titles: ["Ring (18)"] });
       expect(d.createOrder).not.toHaveBeenCalled();
+    });
+
+    it("names the sizes the database refused (switched off between the read and the write) as sizes", async () => {
+      const { deps: d } = deps({
+        readCart: vi.fn(async () => twoSizes()),
+        createOrder: vi.fn(async () => ({ ok: false as const, reason: "unavailable" as const, productIds: [EARRINGS] })),
+      });
+      expect(await placeOrder(input({ expected }), d)).toEqual({
+        ok: false,
+        reason: "sizeUnavailable",
+        titles: ["Ring (16)", "Ring (18)"],
+      });
+      expect(d.removeFromCart).not.toHaveBeenCalled();
     });
   });
 

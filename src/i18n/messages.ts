@@ -12,6 +12,7 @@ export const namespaces = [
   "account",
   "admin",
   "errors",
+  "notifications",
 ] as const;
 
 export type Namespace = (typeof namespaces)[number];
@@ -39,4 +40,5 @@ export type Messages = {
   account: typeof import("../../messages/en/account.json");
   admin: typeof import("../../messages/en/admin.json");
   errors: typeof import("../../messages/en/errors.json");
+  notifications: typeof import("../../messages/en/notifications.json");
 };

@@ -157,6 +157,11 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
           text: tr("errors.unavailable", { titles: result.titles.join(", ") }),
           refresh: result.titles.length < expected.length,
         };
+      case "sizeUnavailable":
+        return {
+          text: tr("errors.sizeUnavailable", { titles: result.titles.join(", ") }),
+          refresh: result.titles.length < expected.length,
+        };
       case "cartChanged":
         return { text: tr("errors.cartChanged"), refresh: true };
       case "emptyCart":

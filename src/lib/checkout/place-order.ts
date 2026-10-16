@@ -17,6 +17,8 @@ export type PlaceOrderResult =
   | { ok: false; reason: "invalid"; fields: CheckoutField[] }
   // pieces that were sold or reserved meanwhile (or unpublished): nothing was stored
   | { ok: false; reason: "unavailable"; titles: string[] }
+  // sizes switched off or removed meanwhile (#66), the product itself still orderable: nothing was stored
+  | { ok: false; reason: "sizeUnavailable"; titles: string[] }
   | {
       ok: false;
       reason:
@@ -58,15 +60,20 @@ function isOrderable(item: CartItem): item is Orderable {
  */
 function compareWithExpected(items: readonly CartItem[], expected: CheckoutRequest["expected"]): PlaceOrderResult | null {
   const unavailable: string[] = [];
+  const sizes: string[] = [];
   for (const line of expected) {
     const item = items.find((i) => sameLine(i.line, line));
     if (!item) return { ok: false, reason: "cartChanged" };
     if (!isOrderable(item)) {
-      if (item.product) unavailable.push(lineTitle(item.product.title, item.variant?.label));
-      else return { ok: false, reason: "cartChanged" };
+      if (!item.product) return { ok: false, reason: "cartChanged" };
+      const title = lineTitle(item.product.title, item.variant?.label);
+      // the piece can still be made, only its size cannot: not "ordered by someone else"
+      if (item.product.availability === "available" && line.variantId !== null) sizes.push(title);
+      else unavailable.push(title);
     } else if (item.quantity !== line.quantity) return { ok: false, reason: "cartChanged" };
   }
   if (unavailable.length > 0) return { ok: false, reason: "unavailable", titles: unavailable };
+  if (sizes.length > 0) return { ok: false, reason: "sizeUnavailable", titles: sizes };
   const extra = items.some((item) => isOrderable(item) && !expected.some((line) => sameLine(line, item.line)));
   return extra ? { ok: false, reason: "cartChanged" } : null;
 }
@@ -159,10 +166,11 @@ export async function placeOrder(input: unknown, deps: PlaceOrderDeps): Promise<
 
     if (!created.ok) {
       if (created.reason === "error") return { ok: false, reason: "unexpectedError" };
-      const titles = quote.lines
-        .filter((line) => created.productIds.includes(line.productId))
-        .map((line) => lineTitle(line.title, line.variantLabel?.text));
-      return { ok: false, reason: "unavailable", titles };
+      const refused = quote.lines.filter((line) => created.productIds.includes(line.productId));
+      const titles = refused.map((line) => lineTitle(line.title, line.variantLabel?.text));
+      // made-to-order work is never taken by someone else: a refused line of a size lost its size meanwhile
+      const sizesOnly = refused.every((line) => line.fulfillment === "made_to_order" && line.variantId !== null);
+      return { ok: false, reason: sizesOnly ? "sizeUnavailable" : "unavailable", titles };
     }
     if (created.replayed) return confirm(created, user?.id ?? null, request.attempt, deps);
 
