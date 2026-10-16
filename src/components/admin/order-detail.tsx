@@ -133,6 +133,9 @@ export async function OrderDetail({ order, locale }: { order: AdminOrder; locale
   const usd = (amountMinor: number): Money => ({ currency: "USD", amountMinor, decimals: 2 });
   const name = customerName(order.firstName, order.lastName);
   const contacts = contactLinks({ phone: order.phone, email: order.email });
+  // the rows link through the same checked and encoded hrefs as the contact buttons
+  const phoneLink = contacts.find((link) => link.kind === "phone");
+  const emailLink = contacts.find((link) => link.kind === "email");
   const markup = new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 2 }).format(order.markupBps / 10_000);
   const { delivery } = order;
 
@@ -174,14 +177,22 @@ export async function OrderDetail({ order, locale }: { order: AdminOrder; locale
           <dl className="grid gap-2">
             <Row label={t("detail.name")}>{name}</Row>
             <Row label={t("detail.phone")}>
-              <a href={`tel:${order.phone}`} className="underline underline-offset-4 hover:text-accent-text">
-                {order.phone}
-              </a>
+              {phoneLink ? (
+                <a href={phoneLink.href} className="underline underline-offset-4 hover:text-accent-text">
+                  {order.phone}
+                </a>
+              ) : (
+                order.phone
+              )}
             </Row>
             <Row label={t("detail.email")}>
-              <a href={`mailto:${order.email}`} className="break-all underline underline-offset-4 hover:text-accent-text">
-                {order.email}
-              </a>
+              {emailLink ? (
+                <a href={emailLink.href} className="break-all underline underline-offset-4 hover:text-accent-text">
+                  {order.email}
+                </a>
+              ) : (
+                order.email
+              )}
             </Row>
             <Row label={t("detail.account")}>{t(order.userId ? "detail.registered" : "detail.guest")}</Row>
             <Row label={t("detail.language")}>{languageName(order.locale, locale)}</Row>

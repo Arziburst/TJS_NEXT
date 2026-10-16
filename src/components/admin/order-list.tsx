@@ -1,12 +1,19 @@
 import { ChevronRightIcon, PhoneIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { contactLinks } from "@/lib/admin/contact-links";
 import type { AdminOrderListItem } from "@/lib/admin/orders";
 import { decimalString, formatMoney, type Money } from "@/lib/money/format";
 import { cn } from "@/lib/utils";
 import { countryName, customerName, formatOrderTime } from "./order-format";
 import { OrderStatusBadge } from "./order-status-badge";
 import { adminOrderHref } from "./paths";
+
+/** The call and email links of an order's customer, checked and encoded like on the order page. */
+function contactsOf(item: AdminOrderListItem) {
+  const links = contactLinks({ phone: item.phone, email: item.email });
+  return { phone: links.find((link) => link.kind === "phone"), email: links.find((link) => link.kind === "email") };
+}
 
 function Total({ item, locale, className }: { item: AdminOrderListItem; locale: string; className?: string }) {
   const money: Money = { currency: item.currency, amountMinor: item.totalMinor, decimals: item.decimals };
@@ -29,6 +36,7 @@ export async function OrderList({ items, locale }: { items: AdminOrderListItem[]
       <ul className="grid gap-3 sb:hidden" data-testid="order-cards">
         {items.map((item) => {
           const name = customerName(item.firstName, item.lastName);
+          const { phone } = contactsOf(item);
           return (
             <li key={item.number} data-testid="order-card" data-number={item.number} className="relative border-2 border-hairline p-3">
               <div className="flex items-start justify-between gap-3">
@@ -52,13 +60,15 @@ export async function OrderList({ items, locale }: { items: AdminOrderListItem[]
                   <span>{t("pieces", { count: item.quantity })}</span>
                   <Total item={item} locale={locale} className="font-sans font-semibold text-accent-text" />
                 </p>
-                <a
-                  href={`tel:${item.phone}`}
-                  aria-label={t("call", { name })}
-                  className="relative z-10 flex size-11 shrink-0 items-center justify-center border-2 border-primary outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                >
-                  <PhoneIcon aria-hidden className="size-5" />
-                </a>
+                {phone && (
+                  <a
+                    href={phone.href}
+                    aria-label={t("call", { name })}
+                    className="relative z-10 flex size-11 shrink-0 items-center justify-center border-2 border-primary outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  >
+                    <PhoneIcon aria-hidden className="size-5" />
+                  </a>
+                )}
               </div>
             </li>
           );
@@ -94,6 +104,7 @@ export async function OrderList({ items, locale }: { items: AdminOrderListItem[]
         <tbody>
           {items.map((item) => {
             const name = customerName(item.firstName, item.lastName);
+            const { phone, email } = contactsOf(item);
             return (
               <tr key={item.number} data-testid="order-row" data-number={item.number} className="border-b border-hairline align-top">
                 <td className="py-3 pr-3 font-sans font-bold tabular-nums">
@@ -105,12 +116,20 @@ export async function OrderList({ items, locale }: { items: AdminOrderListItem[]
                 <td className="py-3 pr-3">
                   <p className="font-sans font-semibold">{name}</p>
                   <p className="flex flex-wrap gap-x-3">
-                    <a href={`tel:${item.phone}`} className="underline-offset-4 hover:underline">
-                      {item.phone}
-                    </a>
-                    <a href={`mailto:${item.email}`} className="break-all underline-offset-4 hover:underline">
-                      {item.email}
-                    </a>
+                    {phone ? (
+                      <a href={phone.href} className="underline-offset-4 hover:underline">
+                        {item.phone}
+                      </a>
+                    ) : (
+                      <span>{item.phone}</span>
+                    )}
+                    {email ? (
+                      <a href={email.href} className="break-all underline-offset-4 hover:underline">
+                        {item.email}
+                      </a>
+                    ) : (
+                      <span className="break-all">{item.email}</span>
+                    )}
                   </p>
                 </td>
                 <td className="py-3 pr-3">{countryName(item.country, locale)}</td>

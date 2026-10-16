@@ -3,6 +3,141 @@
     "canceled": "Annullato",
     "inProcessing": "In elaborazione",
     "accepted": "Accettato",
-    "closed": "Chiuso"
+    "closed": "Chiuso",
+    "new": "Nuovo",
+    "pendingPayment": "In attesa di pagamento",
+    "paid": "Pagato",
+    "refunded": "Rimborsato"
+  },
+  "title": "Il mio account",
+  "sections": {
+    "label": "Sezioni dell’account",
+    "profile": "Profilo",
+    "orders": "Ordini",
+    "addresses": "Indirizzi",
+    "favorites": "Preferiti"
+  },
+  "loadError": "Impossibile caricare questa pagina. Riprova più tardi.",
+  "profile": {
+    "title": "Profilo",
+    "intro": "I tuoi dati compilano il modulo della richiesta d’ordine.",
+    "firstName": "Nome",
+    "lastName": "Cognome (facoltativo)",
+    "phone": "Telefono (facoltativo)",
+    "phoneHint": "Con il prefisso internazionale, ad esempio +39 312 345 6789",
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "saved": "I tuoi dati sono salvati.",
+    "errors": {
+      "firstName": "Inserisci il tuo nome (fino a 100 caratteri).",
+      "lastName": "Il cognome è troppo lungo.",
+      "phone": "Inserisci il numero di telefono con il prefisso internazionale, ad esempio +393123456789.",
+      "rateLimited": "Troppe modifiche. Attendi qualche minuto e riprova.",
+      "signedOut": "Sei uscito dall’account. Accedi di nuovo.",
+      "unexpected": "Impossibile salvare i tuoi dati. Riprova."
+    }
+  },
+  "email": {
+    "title": "Email",
+    "current": "Email attuale",
+    "new": "Nuova email",
+    "submit": "Cambia l’email",
+    "sending": "Invio…",
+    "hint": "Inviamo un link di conferma all’indirizzo attuale e a quello nuovo. L’email cambia quando entrambi i link sono stati aperti.",
+    "sent": "Controlla entrambe le caselle: abbiamo inviato i link di conferma al tuo indirizzo attuale e a {email}.",
+    "pending": "Il cambio in {email} attende conferma: apri i link delle email inviate al tuo indirizzo attuale e a quello nuovo.",
+    "errors": {
+      "invalid": "Inserisci un indirizzo email valido.",
+      "same": "Questa è già la tua email.",
+      "rateLimited": "Troppi tentativi. Attendi qualche minuto e riprova.",
+      "signedOut": "Sei uscito dall’account. Accedi di nuovo.",
+      "unexpected": "Impossibile cambiare l’email. Riprova."
+    }
+  },
+  "security": {
+    "title": "Password e uscita",
+    "changePassword": "Cambia la password",
+    "signOut": "Esci"
+  },
+  "orders": {
+    "title": "Ordini",
+    "intro": "Le tue richieste d’ordine e il loro stato, le più recenti per prime.",
+    "empty": "Non hai ancora inviato richieste d’ordine.",
+    "toShop": "Vai al negozio",
+    "number": "Ordine {number}",
+    "date": "Data",
+    "status": "Stato",
+    "total": "Totale",
+    "pieces": "{count, plural, one {# pezzo} other {# pezzi}}",
+    "details": "Dettagli dell’ordine {number}",
+    "pastEnd": "Non ci sono ordini in questa pagina.",
+    "lastPage": "Vai all’ultima pagina",
+    "pagination": {
+      "label": "Pagine degli ordini",
+      "previous": "Ordini più recenti",
+      "next": "Ordini meno recenti",
+      "page": "Pagina {page} di {pages}"
+    }
+  },
+  "order": {
+    "title": "Ordine {number}",
+    "back": "Tutti gli ordini",
+    "placed": "Inviato il {date}",
+    "status": "Stato",
+    "lines": "Pezzi ordinati",
+    "quantity": "Quantità: {quantity}",
+    "goodsTotal": "Totale dei pezzi",
+    "contact": "Dati di contatto",
+    "delivery": "Spedizione",
+    "estimate": "Spedizione (stima)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calcolata dal corriere",
+    "deliveryNote": "Il prezzo effettivo della spedizione lo paghi al corriere alla consegna.",
+    "comment": "Commento",
+    "notFound": {
+      "title": "Ordine non trovato",
+      "text": "Nel tuo account non c’è nessun ordine con questo numero."
+    }
+  },
+  "addresses": {
+    "title": "Indirizzi di spedizione",
+    "intro": "Salva fino a {max} indirizzi. Quello predefinito viene inserito quando invii una richiesta d’ordine.",
+    "empty": "Ancora nessun indirizzo salvato.",
+    "default": "Predefinito",
+    "makeDefault": "Imposta come predefinito",
+    "delete": "Elimina",
+    "deleteLabel": "Elimina l’indirizzo {name}",
+    "makeDefaultLabel": "Imposta {name} come indirizzo predefinito",
+    "add": "Aggiungi un indirizzo",
+    "label": "Nome dell’indirizzo (facoltativo)",
+    "labelHint": "Ad esempio: Casa, Ufficio",
+    "country": "Paese",
+    "countryPlaceholder": "Scegli un paese",
+    "method": "Spedizione",
+    "methods": {
+      "warehouse": "Filiale o armadietto",
+      "address": "Corriere all’indirizzo",
+      "division": "Filiale, armadietto o punto di ritiro"
+    },
+    "save": "Salva l’indirizzo",
+    "saving": "Salvataggio…",
+    "saved": "L’indirizzo è salvato.",
+    "full": "Hai {max} indirizzi: eliminane uno per aggiungerne un altro.",
+    "kinds": {
+      "novaPoshtaBranch": "Filiale Nova Poshta",
+      "novaPoshtaPostomat": "Armadietto Nova Poshta",
+      "novaPoshtaAddress": "Corriere Nova Poshta",
+      "novaPostDivision": "Punto Nova Post",
+      "novaPostAddress": "Corriere Nova Post"
+    },
+    "errors": {
+      "delivery": "Scegli il punto di consegna o compila l’indirizzo.",
+      "label": "Il nome è troppo lungo.",
+      "limitReached": "Hai già {max} indirizzi: eliminane uno per aggiungerne un altro.",
+      "notFound": "Questo indirizzo non esiste più.",
+      "rateLimited": "Troppe modifiche. Attendi qualche minuto e riprova.",
+      "signedOut": "Sei uscito dall’account. Accedi di nuovo.",
+      "unexpected": "Impossibile salvare l’indirizzo. Riprova."
+    }
   }
 }

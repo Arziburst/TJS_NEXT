@@ -28,6 +28,12 @@
       "email": "Correo electrónico"
     },
     "commentHint": "Opcional",
+    "saved": {
+      "label": "Direcciones guardadas",
+      "other": "Otra dirección",
+      "default": "predeterminada",
+      "manage": "Gestionar las direcciones"
+    },
     "summary": {
       "lines": "Piezas del pedido",
       "quantity": "Cantidad: {quantity}",

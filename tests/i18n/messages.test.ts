@@ -112,6 +112,8 @@ describe("message catalogs", () => {
       site: "shop.example.test",
       // a size's name (#66)
       label: "17",
+      // the page count of the order history (account)
+      pages: 3,
       // the admin's orders (#27)
       from: "New",
       to: "In processing",
