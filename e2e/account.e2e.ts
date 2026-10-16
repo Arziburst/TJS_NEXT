@@ -7,6 +7,7 @@ import { existsSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import en from "../messages/en/account.json" with { type: "json" };
+import enAdmin from "../messages/en/admin.json" with { type: "json" };
 import enCheckout from "../messages/en/checkout.json" with { type: "json" };
 import enCommon from "../messages/en/common.json" with { type: "json" };
 import enNav from "../messages/en/nav.json" with { type: "json" };
@@ -463,8 +464,99 @@ test.describe("customer account on the local stack", () => {
       await open(page, `/en/account/orders/${number}`);
       await expect(page.getByTestId("order-not-found")).toContainText(en.order.notFound.title);
       await expect(page.getByTestId("order-detail")).toHaveCount(0);
+      await expect(page.getByTestId("order-steps")).toHaveCount(0);
       await expect(page.getByText("Iryna")).toHaveCount(0);
     }
+    expect(errors).toEqual([]);
+  });
+
+  test("the customer follows the status history as the admin moves the order, on the next request, without the shop's notes", async ({
+    page,
+    browser,
+    baseURL,
+  }) => {
+    const errors = collectErrors(page);
+    await useOwnClientIp(page);
+    const customer = await createUser();
+    const owner = await createUser("Owner Secretname");
+    const role = await admin!.from("profiles").update({ role: "admin" }).eq("id", owner.id);
+    if (role.error) throw role.error;
+    const placedAt = new Date(Date.UTC(2026, 9, 15, 9, 30));
+    const number = await createOrder(customer, placedAt);
+    const { data: order, error } = await admin!.from("orders").select("id").eq("number", number).single();
+    if (error) throw error;
+    // an internal note the customer must never see
+    const note = await admin!.from("order_notes").insert({ order_id: order.id, author_id: owner.id, body: "Internal: call before shipping" });
+    if (note.error) throw note.error;
+
+    // date and time on the Kyiv clock, in the page's locale (en)
+    const kyiv = (iso: string) =>
+      new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Kyiv" }).format(new Date(iso));
+    const steps = page.getByTestId("order-step");
+    const timeline = page.getByRole("region", { name: en.order.history });
+
+    await signIn(page, customer, `/en/account/orders/${number}`);
+    await expect(timeline.getByRole("list")).toBeVisible();
+    await expect(steps).toHaveCount(1);
+    await expect(steps.first()).toContainText(en.orderStatus.new);
+    await expect(steps.first().locator("time")).toHaveAttribute("datetime", /^2026-10-15T09:30:00/);
+    // 09:30 UTC is 12:30 in Kyiv (summer time)
+    await expect(steps.first().locator("time")).toHaveText(/^Oct 15, 2026, 12:30\sPM$/);
+
+    // the admin moves it on, in their own browser
+    const adminContext = await browser.newContext({ baseURL });
+    const adminPage = await adminContext.newPage();
+    await useOwnClientIp(adminPage);
+    await signIn(adminPage, owner, `/en/admin/orders/${number}`);
+    const statusSection = adminPage.getByTestId("order-status-section");
+    const adminStatus = adminPage.getByTestId("order-detail").getByTestId("order-status").first();
+    await statusSection.getByRole("button", { name: enAdmin.orders.actions.to.in_processing }).click();
+    await expect(adminStatus).toHaveText(enAdmin.orderStatus.in_processing);
+
+    // the customer's next request shows it (the account pages render per request, nothing cached)
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+    await expect(steps).toHaveCount(2);
+    await expect(steps.nth(1)).toContainText(en.orderStatus.inProcessing);
+
+    await statusSection.getByRole("button", { name: enAdmin.orders.actions.to.accepted }).click();
+    await expect(adminStatus).toHaveText(enAdmin.orderStatus.accepted);
+    await adminContext.close();
+
+    // and so does a client-side navigation back to the order from the list
+    await page.getByRole("link", { name: en.order.back, exact: true }).click();
+    await expect(page).toHaveURL(/\/en\/account\/orders$/);
+    await page.getByRole("link", { name: en.orders.details.replace("{number}", String(number)) }).click();
+    await expect(page).toHaveURL(new RegExp(`/en/account/orders/${number}$`));
+    await expect(steps).toHaveCount(3);
+    expect(await steps.evaluateAll((items) => items.map((item) => item.getAttribute("data-status")))).toEqual([
+      "new",
+      "in_processing",
+      "accepted",
+    ]);
+    await expect(steps.nth(0)).toContainText(en.orderStatus.new);
+    await expect(steps.nth(1)).toContainText(en.orderStatus.inProcessing);
+    await expect(steps.nth(2)).toContainText(en.orderStatus.accepted);
+
+    // each change carries the time the database stored for it, newest last
+    const { data: history, error: historyError } = await admin!
+      .from("order_status_history")
+      .select("to_status, created_at")
+      .eq("order_id", order.id)
+      .order("created_at");
+    if (historyError) throw historyError;
+    expect(history.map((change) => change.to_status)).toEqual(["in_processing", "accepted"]);
+    for (const [index, change] of history.entries()) {
+      const time = steps.nth(index + 1).locator("time");
+      expect(new Date((await time.getAttribute("datetime"))!).getTime()).toBe(new Date(change.created_at).getTime());
+      await expect(time).toHaveText(kyiv(change.created_at));
+    }
+    // the current status badge agrees with the last step
+    await expect(page.getByTestId("order-detail").locator("[data-status]")).toHaveAttribute("data-status", "accepted");
+
+    // nothing the shop keeps for itself: neither the note nor who changed the status
+    await expect(page.getByText("Internal: call before shipping")).toHaveCount(0);
+    await expect(page.getByText("Secretname")).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 });

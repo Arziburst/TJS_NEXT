@@ -84,6 +84,8 @@
     "back": "Toate comenzile",
     "placed": "Trimisă pe {date}",
     "status": "Stare",
+    "history": "Istoricul stărilor",
+    "historyError": "Istoricul stărilor nu a putut fi încărcat. Încercați din nou mai târziu.",
     "lines": "Piese comandate",
     "quantity": "Cantitate: {quantity}",
     "goodsTotal": "Total pentru piese",

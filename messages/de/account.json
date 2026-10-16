@@ -84,6 +84,8 @@
     "back": "Alle Bestellungen",
     "placed": "Gesendet am {date}",
     "status": "Status",
+    "history": "Statusverlauf",
+    "historyError": "Der Statusverlauf konnte nicht geladen werden. Bitte versuchen Sie es später erneut.",
     "lines": "Bestellte Stücke",
     "quantity": "Menge: {quantity}",
     "goodsTotal": "Summe der Stücke",
