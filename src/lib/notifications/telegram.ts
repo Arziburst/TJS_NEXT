@@ -1,3 +1,4 @@
+import { lineTitle } from "@/lib/cart/lines";
 import type { Locale } from "@/i18n/routing";
 import { formatMoney } from "@/lib/money/format";
 import { escapeHtml, truncate } from "./escape";
@@ -33,7 +34,7 @@ export function renderTelegramOrder(
   const shown = order.lines.slice(0, TELEGRAM_MAX_LINES);
   const lines = shown.map(
     (line, index) =>
-      `${index + 1}. ${e(t("telegram.line", { title: truncate(line.title, TITLE_MAX), quantity: line.quantity, total: orderMoney(order, line.lineMinor, locale) }))}`,
+      `${index + 1}. ${e(t("telegram.line", { title: lineTitle(truncate(line.title, TITLE_MAX), line.variantLabel), quantity: line.quantity, total: orderMoney(order, line.lineMinor, locale) }))}`,
   );
   if (order.lines.length > shown.length) lines.push(e(t("telegram.moreLines", { count: order.lines.length - shown.length })));
 

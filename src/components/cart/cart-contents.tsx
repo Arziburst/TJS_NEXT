@@ -4,10 +4,11 @@ import { Price, PriceTotal } from "@/components/price";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { getCartView, orderableLines, type CartItem } from "@/lib/cart";
-import { maxQuantity } from "@/lib/cart/lines";
+import { getCartView, lineKey, orderableLines, type CartItem } from "@/lib/cart";
+import { lineTitle, maxQuantity } from "@/lib/cart/lines";
 import { cn } from "@/lib/utils";
 import { CartItemImage } from "./cart-item-image";
+import { VariantLabel } from "./variant-label";
 import { CartLineControls } from "./cart-line-controls";
 import { OrderRequestLink } from "./order-request-link";
 
@@ -37,7 +38,7 @@ export async function CartContents() {
     <div className="grid gap-10 sb:grid-cols-[minmax(0,1fr)_22rem] sb:items-start sb:gap-14">
       <ul aria-label={t("lines")} className="flex flex-col divide-y divide-hairline border-y border-hairline">
         {view.items.map((item) => (
-          <li key={`${item.line.productId}:${item.line.variantId ?? ""}`} data-testid="cart-line" data-status={item.status}>
+          <li key={lineKey(item.line)} data-testid="cart-line" data-status={item.status}>
             <CartRow item={item} />
           </li>
         ))}
@@ -72,7 +73,7 @@ export async function CartContents() {
 
 async function CartRow({ item }: { item: CartItem }) {
   const [t, locale] = await Promise.all([getTranslations("cart"), getLocale()]);
-  const { product, status, quantity } = item;
+  const { product, variant, status, quantity, unitUsdMinor } = item;
 
   if (!product) {
     return (
@@ -81,7 +82,13 @@ async function CartRow({ item }: { item: CartItem }) {
         <div className="flex grow flex-col gap-3">
           <p className="font-sans font-semibold">{t("unavailablePiece")}</p>
           <Badge variant="outline">{t("status.unavailable")}</Badge>
-          <CartLineControls productId={item.line.productId} title={t("unavailablePiece")} quantity={quantity} max={null} />
+          <CartLineControls
+            productId={item.line.productId}
+            variantId={item.line.variantId}
+            title={t("unavailablePiece")}
+            quantity={quantity}
+            max={null}
+          />
         </div>
       </div>
     );
@@ -112,14 +119,15 @@ async function CartRow({ item }: { item: CartItem }) {
             >
               {product.title}
             </Link>
+            {variant && <VariantLabel label={variant.label} />}
             <span className="text-sm">{t(product.fulfillment === "one_of_a_kind" ? "oneOfAKind" : "madeToOrder")}</span>
           </div>
           {available ? (
             <span className="flex flex-col items-end font-sans">
-              <PriceTotal lines={[{ usdMinor: product.priceUsdMinor, quantity }]} className="text-lg text-accent-text" />
+              <PriceTotal lines={[{ usdMinor: unitUsdMinor, quantity }]} className="text-lg text-accent-text" />
               {quantity > 1 && (
                 <span className="text-sm">
-                  {t("each", { quantity })} <Price usdMinor={product.priceUsdMinor} />
+                  {t("each", { quantity })} <Price usdMinor={unitUsdMinor} />
                 </span>
               )}
             </span>
@@ -128,7 +136,13 @@ async function CartRow({ item }: { item: CartItem }) {
           )}
         </div>
         {available && max === 1 && <p className="text-sm">{t("singlePiece")}</p>}
-        <CartLineControls productId={product.id} title={product.title} quantity={quantity} max={max} />
+        <CartLineControls
+          productId={product.id}
+          variantId={item.line.variantId}
+          title={lineTitle(product.title, variant?.label)}
+          quantity={quantity}
+          max={max}
+        />
       </div>
     </div>
   );

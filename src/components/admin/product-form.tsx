@@ -29,6 +29,8 @@ type ProductFormProps = {
   saveProduct: (previous: SaveProductState, formData: FormData) => Promise<SaveProductState>;
   /** The photos section, rendered by the page (it saves on its own, outside this form's save). */
   photos?: ReactNode;
+  /** The sizes section (#66), rendered by the page; it saves on its own too. */
+  variants?: ReactNode;
   /** The delete button of an existing product, rendered by the page. */
   deleteButton?: ReactNode;
   /** The materials and colours to choose from, and the product's (#25), rendered by the page. */
@@ -54,6 +56,7 @@ export function ProductForm({
   categories,
   saveProduct,
   photos,
+  variants,
   deleteButton,
   taxonomy,
   translation,
@@ -286,6 +289,8 @@ export function ProductForm({
       {taxonomy}
 
       {photos}
+
+      {variants}
 
       <fieldset className="grid gap-4 sb:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <legend className="mb-3 font-sans text-lg font-semibold">{t("sections.publication")}</legend>

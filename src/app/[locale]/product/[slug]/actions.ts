@@ -3,29 +3,30 @@
 import { refresh } from "next/cache";
 import { z } from "zod";
 import { addLine } from "@/lib/cart/lines";
-import { changeCart, readProductForCart, type MutationFailure } from "@/lib/cart/mutations";
+import { changeCart, readProductForCart, refuseLine, type MutationFailure } from "@/lib/cart/mutations";
 
-type AddRefusal = "unavailable" | "alreadyInCart" | "maxQuantity" | "cartFull" | "unexpectedError";
+type AddRefusal = "unavailable" | "variantRequired" | "alreadyInCart" | "maxQuantity" | "cartFull" | "unexpectedError";
 
 export type AddToCartResult = { ok: true; quantity: number } | { ok: false; reason: "invalid" | AddRefusal | MutationFailure };
 
-// variants come with #66; until then a line never names one
-const addToCartInput = z.object({ productId: z.uuid(), variantId: z.null().optional() });
+const addToCartInput = z.object({ productId: z.uuid(), variantId: z.uuid().nullable().default(null) });
 
 /**
  * Adds one piece to the visitor's cart (a guest's cookie or the signed-in cart). Needs no account (guest
- * checkout, D12); the visitor is re-read from the session by the cart itself. The product's availability
- * and kind come from the database: a one-of-a-kind piece is added once, made-to-order work up to 10 (D36).
+ * checkout, D12); the visitor is re-read from the session by the cart itself. The product's availability, kind
+ * and variants come from the database: a product with variants takes one of its sizes that can be ordered (#66),
+ * each size its own line; a one-of-a-kind piece is added once, made-to-order work up to 10 per line (D36).
  */
 export async function addToCart(input: unknown): Promise<AddToCartResult> {
   const parsed = addToCartInput.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
-  const ref = { productId: parsed.data.productId, variantId: null };
+  const ref = { productId: parsed.data.productId, variantId: parsed.data.variantId };
 
   const outcome = await changeCart<number, AddRefusal>(async (lines) => {
     const product = await readProductForCart(ref.productId);
     if (product === "error") return { refused: "unexpectedError" };
-    if (!product || product.availability !== "available") return { refused: "unavailable" };
+    const refused = refuseLine(product, ref.variantId);
+    if (refused || !product) return { refused: refused ?? "unavailable" };
     const added = addLine(lines, ref, product.fulfillment);
     if (!added.ok) return { refused: added.reason };
     return { lines: added.lines, result: added.quantity };

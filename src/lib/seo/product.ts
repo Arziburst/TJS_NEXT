@@ -73,8 +73,21 @@ export type ProductJsonLdInput = {
   availability: ProductAvailability;
   /** One currency per URL: the locale's default currency (D5); null when no rate is available. */
   price: JsonLdPrice | null;
+  /** A product with sizes (#66) states one Offer per size at its own price instead of `price`; empty without sizes. */
+  variants: readonly JsonLdVariant[];
   /** From the home page down to the product itself, with absolute URLs. */
   breadcrumbs: readonly { name: string; url: string }[];
+};
+
+export type JsonLdVariant = {
+  /** The size's label, e.g. "17". */
+  name: string;
+  /** The product's SKU with the size's suffix. */
+  sku: string | null;
+  /** In the same currency as `price`; null when no rate is available. */
+  price: JsonLdPrice | null;
+  /** False: a size the owner cannot make now. */
+  available: boolean;
 };
 
 /** The Product (with its Offer) and BreadcrumbList nodes of a product page. */
@@ -90,7 +103,24 @@ export function productJsonLd(input: ProductJsonLdInput): Record<string, unknown
   if (input.images.length > 0) product.image = [...input.images];
   if (input.sku) product.sku = input.sku;
   // an Offer without a price is invalid for rich results; the page then states no offer at all
-  if (input.price) {
+  if (input.variants.length > 0) {
+    // one Offer per size at the size's price (a size that cannot be made now is out of stock)
+    const offers = input.variants.flatMap((variant) => {
+      if (!variant.price) return [];
+      const offer: Record<string, unknown> = {
+        "@type": "Offer",
+        name: variant.name,
+        url: input.url,
+        price: variant.price.price,
+        priceCurrency: variant.price.priceCurrency,
+        availability: variant.available ? schemaAvailability(input.fulfillment, input.availability) : `${SCHEMA}/OutOfStock`,
+        itemCondition: `${SCHEMA}/NewCondition`,
+      };
+      if (variant.sku) offer.sku = variant.sku;
+      return [offer];
+    });
+    if (offers.length > 0) product.offers = offers;
+  } else if (input.price) {
     product.offers = {
       "@type": "Offer",
       url: input.url,

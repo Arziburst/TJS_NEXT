@@ -106,7 +106,7 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
         items_total_usd_minor: 1000,
         items_total_minor: 990,
       },
-      [{ product_id: productId, variant_id: null, position: 0, title: "Outbox ring", title_locale: "de", quantity: 1, unit_price_usd_minor: 1000, unit_price_minor: 990 }],
+      [{ product_id: productId, variant_id: null, position: 0, title: "Outbox ring", title_locale: "de", variant_label: null, variant_label_locale: null, quantity: 1, unit_price_usd_minor: 1000, unit_price_minor: 990 }],
     );
     if (!created.ok) throw new Error(`the test order was not stored: ${JSON.stringify(created)}`);
     return { orderId: created.orderId, number: created.number };
@@ -151,6 +151,60 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
     expect(processed.processed_at).not.toBeNull();
     expect(apis.telegram.filter((sent) => sent === number)).toHaveLength(1);
     expect(apis.email.filter((key) => key === `${processed.id}/email`)).toHaveLength(1);
+  });
+
+  it("a line of a size (#66) reaches the owner and the customer with the size it was ordered in", async () => {
+    const productId = await madeToOrderProduct();
+    const size = await service.from("product_variants").insert({ product_id: productId, sku_suffix: "17" }).select("id").single();
+    if (size.error) throw size.error;
+    const attempt = randomUUID();
+    attempts.push(attempt);
+    const created = await createOrderRequest(
+      service,
+      {
+        idempotency_key: attempt,
+        user_id: null,
+        locale: "uk",
+        first_name: "Olena",
+        last_name: null,
+        phone: "+380501234567",
+        email: `outbox-${attempt}@example.test`,
+        comment: null,
+        country: "UA",
+        delivery_carrier: "nova_poshta",
+        delivery_method: "warehouse",
+        delivery_destination: { warehouse: "test" },
+        delivery_estimate_state: "tbd",
+        delivery_estimate_source: "flat_rate",
+        delivery_estimate_minor: null,
+        delivery_estimate_currency: null,
+        delivery_estimate_decimals: null,
+        currency: "USD",
+        currency_decimals: 2,
+        fx_rate: "1",
+        fx_rate_date: null,
+        markup_bps: 300,
+        items_total_usd_minor: 1000,
+        items_total_minor: 1000,
+      },
+      [
+        {
+          product_id: productId,
+          variant_id: size.data.id,
+          position: 0,
+          title: "Каблучка",
+          title_locale: "uk",
+          variant_label: "17",
+          variant_label_locale: "uk",
+          quantity: 1,
+          unit_price_usd_minor: 1000,
+          unit_price_minor: 1000,
+        },
+      ],
+    );
+    if (!created.ok) throw new Error(`the test order was not stored: ${JSON.stringify(created)}`);
+    const order = await readNotificationOrder(service, created.orderId);
+    expect(order?.lines.map((line) => [line.title, line.variantLabel])).toEqual([["Каблучка", "17"]]);
   });
 
   it("two processors running at the same time never send a message twice", async () => {

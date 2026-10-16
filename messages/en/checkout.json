@@ -53,7 +53,8 @@
       "cartChanged": "Your cart has changed in the meantime. Please check the order and send it again.",
       "emptyCart": "There is nothing in the cart that can be ordered.",
       "pricesUnavailable": "The prices cannot be calculated right now. Please try again later.",
-      "unexpected": "The request could not be sent. Please try again."
+      "unexpected": "The request could not be sent. Please try again.",
+      "sizeUnavailable": "Sorry, these sizes cannot be ordered right now: {titles}. Nothing was sent. Choose another size or remove them from the cart, then send the request again."
     }
   },
   "done": {

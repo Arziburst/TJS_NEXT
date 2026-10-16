@@ -26,6 +26,7 @@ function item(overrides: Partial<QuoteItem> = {}): QuoteItem {
     fulfillment: "made_to_order",
     title: "Earrings",
     titleLocale: "en",
+    variantLabel: null,
     sku: "TEST-001",
     priceUsdMinor: 2490,
     weightGrams: 6,
@@ -66,6 +67,21 @@ describe("buildQuote", () => {
     expect(quote.totalUsdMinor).toBe(2490 * 2 + 2990);
     // charm rounding of the main pair: whole hryvnias ending in 9
     for (const line of quote.lines) expect(line.unitMinor % 1000).toBe(900);
+  });
+
+  it("prices two sizes of one product as two lines at their own prices (#66)", () => {
+    const sizes = [
+      item({ variantId: "c6000000-0000-4000-8000-000000000016", variantLabel: { text: "16", locale: "uk" }, quantity: 2 }),
+      item({ variantId: "c6000000-0000-4000-8000-000000000018", variantLabel: { text: "18", locale: "uk" }, priceUsdMinor: 2990 }),
+    ];
+    const result = buildQuote(sizes, "EUR", tables);
+    if (!result.ok) throw new Error("expected a quote");
+    // 24.90 → €22.90 and 29.90 → €26.90, as the cart shows them
+    expect(result.quote.lines.map((line) => [line.variantLabel?.text, line.unitMinor, line.lineMinor, line.lineUsdMinor])).toEqual([
+      ["16", 2290, 4580, 4980],
+      ["18", 2690, 2690, 2990],
+    ]);
+    expect([result.quote.totalUsdMinor, result.quote.totalMinor]).toEqual([4980 + 2990, 4580 + 2690]);
   });
 
   it("prices USD at the rate 1 with no rate date", () => {

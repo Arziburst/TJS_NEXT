@@ -63,8 +63,13 @@ export const IMAGE_ALT_LIMIT = 300;
 
 export type TranslationTexts = Record<TranslatableField, string | null>;
 export type ImageAlt = { imageId: string; alt: string };
-/** What is translated: the source locale's texts (null = the field is empty) and its image alts. */
-export type TranslationContent = { texts: TranslationTexts; imageAlts: ImageAlt[] };
+/** A size's name in the source locale (#66), e.g. "17" or "45 cm". */
+export type VariantLabel = { variantId: string; label: string };
+/** What is translated: the source locale's texts (null = the field is empty), its image alts and size names. */
+export type TranslationContent = { texts: TranslationTexts; imageAlts: ImageAlt[]; variantLabels?: VariantLabel[] };
+
+// VARIANT_LABEL_MAX_LENGTH of the size editor (src/lib/admin/variant-form.ts; a test keeps them equal)
+export const VARIANT_LABEL_LIMIT = 100;
 
 export type TranslateFailure =
   | "authFailed"
@@ -143,8 +148,13 @@ function filledFields(content: TranslationContent): TranslatableField[] {
 }
 
 const imageRef = (index: number) => `image${index + 1}`;
+const sizeRef = (index: number) => `size${index + 1}`;
 
-/** The shape the model fills: per target locale, a string for every filled source field and image alt. */
+function sizesOf(content: TranslationContent): VariantLabel[] {
+  return content.variantLabels ?? [];
+}
+
+/** The shape the model fills: per target locale, a string for every filled source field, image alt and size name. */
 function modelSchema(content: TranslationContent, targets: readonly Locale[]) {
   const fields = filledFields(content);
   const localeShape: Record<string, z.ZodType> = {};
@@ -153,6 +163,11 @@ function modelSchema(content: TranslationContent, targets: readonly Locale[]) {
     localeShape.imageAlts = z.object(
       Object.fromEntries(content.imageAlts.map((_, i) => [imageRef(i), z.string()])),
     );
+  }
+  if (sizesOf(content).length > 0) {
+    localeShape.sizes = z
+      .object(Object.fromEntries(sizesOf(content).map((_, i) => [sizeRef(i), z.string()])))
+      .describe("the names of the product's sizes or lengths (ring sizes, chain lengths); keep numbers and units");
   }
   const localeSchema = z.object(localeShape);
   return z.object({ translations: z.object(Object.fromEntries(targets.map((l) => [l, localeSchema]))) });
@@ -165,6 +180,11 @@ function strictLocaleSchema(content: TranslationContent) {
   if (content.imageAlts.length > 0) {
     shape.imageAlts = z.object(
       Object.fromEntries(content.imageAlts.map((_, i) => [imageRef(i), z.string().trim().min(1).max(IMAGE_ALT_LIMIT)])),
+    );
+  }
+  if (sizesOf(content).length > 0) {
+    shape.sizes = z.object(
+      Object.fromEntries(sizesOf(content).map((_, i) => [sizeRef(i), z.string().trim().min(1).max(VARIANT_LABEL_LIMIT)])),
     );
   }
   return z.object(shape);
@@ -198,6 +218,9 @@ export function buildPrompt(options: Pick<TranslateOptions, "sourceLocale" | "ta
   for (const field of filledFields(content)) source[field] = content.texts[field];
   if (content.imageAlts.length > 0) {
     source.imageAlts = Object.fromEntries(content.imageAlts.map((image, i) => [imageRef(i), image.alt]));
+  }
+  if (sizesOf(content).length > 0) {
+    source.sizes = Object.fromEntries(sizesOf(content).map((size, i) => [sizeRef(i), size.label]));
   }
   const prompt = [
     `Source locale: ${sourceLocale} (${LANGUAGE_NAMES[sourceLocale]})`,
@@ -238,9 +261,13 @@ export function readTranslations(
       TRANSLATABLE_FIELDS.map((field) => [field, content.texts[field] === null ? null : (data[field] as string)]),
     ) as TranslationTexts;
     const alts = (data.imageAlts ?? {}) as Record<string, string>;
+    const sizes = (data.sizes ?? {}) as Record<string, string>;
     translations[locale] = {
       texts,
       imageAlts: content.imageAlts.map((image, i) => ({ imageId: image.imageId, alt: alts[imageRef(i)] })),
+      ...(content.variantLabels
+        ? { variantLabels: content.variantLabels.map((size, i) => ({ variantId: size.variantId, label: sizes[sizeRef(i)]! })) }
+        : {}),
     };
   }
   return { translations, failed };
@@ -418,7 +445,10 @@ function roughTokens(text: string): number {
 /** A pessimistic estimate of one call, for the batch script's dry run. */
 export function estimateCall(options: Pick<TranslateOptions, "sourceLocale" | "targets" | "content" | "glossary" | "rules">): TokenUsage & { usd: number } {
   const { system, prompt } = buildPrompt(options);
-  const sourceChars = JSON.stringify(options.content.texts).length + JSON.stringify(options.content.imageAlts).length;
+  const sourceChars =
+    JSON.stringify(options.content.texts).length +
+    JSON.stringify(options.content.imageAlts).length +
+    JSON.stringify(options.content.variantLabels ?? []).length;
   const inputTokens = roughTokens(system) + roughTokens(prompt) + 200;
   // other languages run longer than the source; the JSON structure repeats per locale
   const outputTokens = Math.ceil((sourceChars / 3.5) * 1.3 * options.targets.length) + 100;

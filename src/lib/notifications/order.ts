@@ -22,6 +22,8 @@ export type DeliveryEstimate =
 export type NotificationOrderLine = {
   title: string;
   titleLocale: string;
+  /** The size it was ordered in (#66), as the customer saw it; absent or null without a size. */
+  variantLabel?: string | null;
   quantity: number;
   lineMinor: number;
 };

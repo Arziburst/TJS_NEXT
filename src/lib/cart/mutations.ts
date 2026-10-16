@@ -6,7 +6,7 @@ import { clientIp } from "@/lib/auth/rate-limit";
 import { getCurrentUser } from "@/lib/auth/session";
 import type { ProductAvailability, ProductFulfillment } from "@/lib/catalog/types";
 import { createPublicServerClient, createServiceClient, createSessionClient } from "@/lib/supabase/server";
-import { clampQuantity, mergeLines, type CartLine } from "./lines";
+import { checkLineVariant, clampQuantity, mergeLines, type CartLine } from "./lines";
 import { readAccountLines, readGuestLines, saveAccountLines, writeGuestLines } from "./store";
 
 // Technical: generous for a person (one cart click a second, sustained), tight enough for a script.
@@ -38,39 +38,64 @@ export async function allowVisitorAction(scope: string, limit: VisitorRateLimit,
   }
 }
 
-export type OrderableProduct = { id: string; fulfillment: ProductFulfillment; availability: ProductAvailability };
+export type OrderableProduct = {
+  id: string;
+  fulfillment: ProductFulfillment;
+  availability: ProductAvailability;
+  /** Its live variants (RLS hides the deleted ones). */
+  variants: { id: string; available: boolean }[];
+};
 
 /** A published product as the public sees it (RLS hides drafts and deleted ones), or null; read fresh. */
 export async function readProductForCart(productId: string): Promise<OrderableProduct | null | "error"> {
   try {
     const { data, error } = await createPublicServerClient()
       .from("products")
-      .select("id, fulfillment, availability")
+      .select("id, fulfillment, availability, product_variants(id, is_available)")
       .eq("id", productId)
       .eq("status", "published")
       .maybeSingle();
     if (error) return "error";
-    return data;
+    if (!data) return null;
+    const { product_variants: variants, ...product } = data;
+    return { ...product, variants: variants.map((v) => ({ id: v.id, available: v.is_available })) };
   } catch {
     return "error";
   }
 }
 
 /**
- * The products among `ids` that the public can see, with their fulfillment: anything else cannot be written to
- * an account (the cart_items and favorites policies refuse it) and is dropped when a guest list is merged.
- * Null when the read fails.
+ * Refuses a line the product cannot take now: the product is unpublished, sold or reserved, or the line's variant
+ * is missing (a product with variants), gone, off, or named for a product without variants (#66).
  */
-export async function visibleProducts(ids: readonly string[]): Promise<Map<string, ProductFulfillment> | null> {
+export function refuseLine(
+  product: OrderableProduct | null,
+  variantId: string | null,
+): "unavailable" | "variantRequired" | null {
+  if (!product || product.availability !== "available") return "unavailable";
+  const check = checkLineVariant(product.variants, variantId);
+  return check.ok ? null : check.reason;
+}
+
+export type VisibleProduct = { fulfillment: ProductFulfillment; variantIds: ReadonlySet<string> };
+
+/**
+ * The products among `ids` that the public can see, with their fulfillment and live variants: anything else cannot
+ * be written to an account (the cart_items and favorites policies refuse it) and is dropped when a guest list is
+ * merged. Null when the read fails.
+ */
+export async function visibleProducts(ids: readonly string[]): Promise<Map<string, VisibleProduct> | null> {
   if (ids.length === 0) return new Map();
   try {
     const { data, error } = await createPublicServerClient()
       .from("products")
-      .select("id, fulfillment")
+      .select("id, fulfillment, product_variants(id)")
       .in("id", [...new Set(ids)])
       .eq("status", "published");
     if (error) return null;
-    return new Map(data.map((row) => [row.id, row.fulfillment]));
+    return new Map(
+      data.map((row) => [row.id, { fulfillment: row.fulfillment, variantIds: new Set(row.product_variants.map((v) => v.id)) }]),
+    );
   } catch {
     return null;
   }
@@ -110,8 +135,10 @@ export async function changeCart<R, F extends string>(
     const base = mergeLines(
       account,
       guest.flatMap((line) => {
-        const fulfillment = visible.get(line.productId);
-        return fulfillment ? [{ ...line, quantity: clampQuantity(line.quantity, fulfillment) }] : [];
+        const product = visible.get(line.productId);
+        // the policies take only a live variant of the line's product
+        if (!product || (line.variantId !== null && !product.variantIds.has(line.variantId))) return [];
+        return [{ ...line, quantity: clampQuantity(line.quantity, product.fulfillment) }];
       }),
     );
 

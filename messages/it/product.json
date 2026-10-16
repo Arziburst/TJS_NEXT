@@ -11,7 +11,8 @@
     "unavailable": "Questo pezzo non può più essere ordinato.",
     "rateLimited": "Troppe modifiche in poco tempo. Attendi un momento e riprova.",
     "inCart": "Nel tuo carrello: {count}",
-    "viewCart": "Vedi il carrello"
+    "viewCart": "Vedi il carrello",
+    "variantRequired": "Scegli prima una misura."
   },
   "card": {
     "onlyOrder": "Su ordinazione",
@@ -69,5 +70,11 @@
   },
   "recentlyViewed": {
     "title": "Visti di recente"
+  },
+  "variants": {
+    "legend": "Misura",
+    "unavailable": "non disponibile ora",
+    "choose": "Scegli una misura per aggiungere il pezzo al carrello.",
+    "noneAvailable": "Al momento nessuna misura è ordinabile."
   }
 }

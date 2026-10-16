@@ -110,6 +110,8 @@ describe("message catalogs", () => {
       amount: "80 ₴",
       flat: "12",
       site: "shop.example.test",
+      // a size's name (#66)
+      label: "17",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

@@ -68,6 +68,11 @@ export async function ProductList({ items, categories }: { items: AdminProductLi
                     {tAdmin(`availability.${item.availability}`)}
                   </Badge>
                 )}
+                {item.variantCount > 0 && (
+                  <Badge variant="outline" data-testid="variant-count">
+                    {t("variants", { count: item.variantCount })}
+                  </Badge>
+                )}
               </p>
               {item.missingLocales.length > 0 && (
                 <p className="font-input text-xs">

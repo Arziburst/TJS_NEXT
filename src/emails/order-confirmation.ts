@@ -1,3 +1,4 @@
+import { lineTitle } from "@/lib/cart/lines";
 import type { ShopContacts } from "@/lib/notifications/contacts";
 import type { NotificationOrder } from "@/lib/notifications/order";
 import {
@@ -39,7 +40,7 @@ export function renderOrderConfirmation(
   const notes = [t("email.deliveryNote"), ...(order.carrier === "nova_post" ? [t("email.customsNotice")] : [])];
 
   const lines = order.lines.map((line) =>
-    amountRow(line.title, orderMoney(order, line.lineMinor, locale), { note: t("email.quantity", { quantity: line.quantity }) }),
+    amountRow(lineTitle(line.title, line.variantLabel), orderMoney(order, line.lineMinor, locale), { note: t("email.quantity", { quantity: line.quantity }) }),
   );
 
   const body = [
@@ -64,7 +65,7 @@ export function renderOrderConfirmation(
     `${t("email.number")}: ${order.number}`,
     "",
     `${t("email.lines")}:`,
-    ...order.lines.map((line) => `- ${line.title} × ${line.quantity}: ${orderMoney(order, line.lineMinor, locale)}`),
+    ...order.lines.map((line) => `- ${lineTitle(line.title, line.variantLabel)} × ${line.quantity}: ${orderMoney(order, line.lineMinor, locale)}`),
     `${t("email.goodsTotal")}: ${total}`,
     "",
     `${t("email.delivery")}: ${method}`,

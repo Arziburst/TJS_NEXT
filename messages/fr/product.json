@@ -11,7 +11,8 @@
     "unavailable": "Cette pièce ne peut plus être commandée.",
     "rateLimited": "Trop de modifications en peu de temps. Veuillez patienter un instant et réessayer.",
     "inCart": "Dans votre panier : {count}",
-    "viewCart": "Voir le panier"
+    "viewCart": "Voir le panier",
+    "variantRequired": "Choisissez d’abord une taille."
   },
   "card": {
     "onlyOrder": "Fait sur commande",
@@ -69,5 +70,11 @@
   },
   "recentlyViewed": {
     "title": "Vus récemment"
+  },
+  "variants": {
+    "legend": "Taille",
+    "unavailable": "indisponible pour le moment",
+    "choose": "Choisissez une taille pour ajouter la pièce au panier.",
+    "noneAvailable": "Aucune taille ne peut être commandée pour le moment."
   }
 }
