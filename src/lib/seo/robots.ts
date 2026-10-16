@@ -11,7 +11,7 @@ import { locales } from "@/i18n/routing";
 const PRIVATE_PATHS = [
   routes.admin.path,
   // the customer's account (#28)
-  "/account",
+  routes.account.path,
   routes.cart.path,
   routes.orderRequest.path,
   // the delivery demo and the dev-only UI kit

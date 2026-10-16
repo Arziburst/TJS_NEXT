@@ -1,5 +1,5 @@
 # Production migrations. A push to main that touches supabase/migrations runs the dry run against the
-# production project (link, migration list, db push --dry-run), so main shows whether its migrations
+# production project (link, migration list, db push --include-all --dry-run), so main shows whether its migrations
 # would apply cleanly. A manual run from main with confirm = "apply" pushes them. Runs only code already
 # on main; never on pull requests. See docs/ci.md.
 
@@ -84,9 +84,11 @@ jobs:
         if: steps.secrets.outputs.configured == 'true'
         run: npx supabase migration list
 
-      - name: db push --dry-run
+      - name: db push --include-all --dry-run
         if: steps.secrets.outputs.configured == 'true'
-        run: npx supabase db push --dry-run
+        # --include-all: a PR's slot can be older than a migration merged and applied before it (parallel
+        # branches); without it the push refuses such a version. See docs/ci.md.
+        run: npx supabase db push --include-all --dry-run
 
   apply:
     name: Apply to production
@@ -119,8 +121,9 @@ jobs:
       - name: Link the production project
         run: npx supabase link --project-ref "$SUPABASE_PROJECT_REF"
 
-      - name: db push
-        run: npx supabase db push
+      - name: db push --include-all
+        # the same push as the dry run of the plan job
+        run: npx supabase db push --include-all
 
       - name: Migration list after the push
         run: npx supabase migration list

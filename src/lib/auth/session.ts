@@ -1,5 +1,6 @@
 import "server-only";
 
+import { isAuthRetryableFetchError } from "@supabase/supabase-js";
 import type { Route } from "next";
 import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
@@ -22,43 +23,52 @@ export type CurrentUser = {
 };
 
 /**
- * The signed-in user of `client`, verified with the Auth server (a deleted user or a revoked session reads
- * as signed out, never as an error), with name, phone and role from their profile. Null for a guest.
+ * Auth or the profile could not be read (the network, or the server answering 5xx): it is not known who is
+ * signed in. Thrown, never read as signed out: a page then shows the error page (reload to retry), a client
+ * calling an action shows its "try again" message.
  */
-export async function resolveUser(client: ServerSupabaseClient): Promise<CurrentUser | null> {
-  try {
-    const { data, error } = await client.auth.getUser();
-    if (error || !data.user) return null;
-    const { user } = data;
-    const locale: unknown = user.user_metadata?.locale;
-    const { data: profile } = await client
-      .from("profiles")
-      .select("name, phone, role")
-      .eq("id", user.id)
-      .maybeSingle();
-    return {
-      id: user.id,
-      email: user.email ?? null,
-      name: profile?.name ?? null,
-      phone: profile?.phone ?? null,
-      // no readable profile means no role: never more than a customer
-      role: profile?.role ?? "customer",
-      locale: typeof locale === "string" && hasLocale(routing.locales, locale) ? locale : null,
-    };
-  } catch {
-    return null;
+export class SessionUnavailableError extends Error {
+  constructor(options?: ErrorOptions) {
+    super("the session could not be verified", options);
+    this.name = "SessionUnavailableError";
   }
 }
 
-/** The current request's user, or null for a guest; read once per request. */
+/**
+ * The signed-in user of `client`, verified with the Auth server (a deleted user or a revoked session reads
+ * as signed out), with name, phone and role from their profile. Null for a guest. A failed request to Auth
+ * is tried once more; if it fails again, or the profile cannot be read, it throws SessionUnavailableError.
+ */
+export async function resolveUser(client: ServerSupabaseClient): Promise<CurrentUser | null> {
+  let answer = await client.auth.getUser();
+  if (isAuthRetryableFetchError(answer.error)) answer = await client.auth.getUser();
+  if (isAuthRetryableFetchError(answer.error)) throw new SessionUnavailableError({ cause: answer.error });
+  const { data, error } = answer;
+  if (error || !data.user) return null;
+  const { user } = data;
+  const locale: unknown = user.user_metadata?.locale;
+  const { data: profile, error: profileError } = await client
+    .from("profiles")
+    .select("name, phone, role")
+    .eq("id", user.id)
+    .maybeSingle();
+  if (profileError) throw new SessionUnavailableError({ cause: profileError });
+  return {
+    id: user.id,
+    email: user.email ?? null,
+    name: profile?.name ?? null,
+    phone: profile?.phone ?? null,
+    // no readable profile means no role: never more than a customer
+    role: profile?.role ?? "customer",
+    locale: typeof locale === "string" && hasLocale(routing.locales, locale) ? locale : null,
+  };
+}
+
+/** The current request's user, or null for a guest; read once per request. Throws SessionUnavailableError. */
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   // request time only: the Auth client reads the clock (token expiry), which a prerender must not do
   await connection();
-  try {
-    return await resolveUser(await createSessionClient());
-  } catch {
-    return null;
-  }
+  return resolveUser(await createSessionClient());
 });
 
 export function signInPath(locale: Locale, next?: string): Route {

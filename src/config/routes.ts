@@ -12,7 +12,7 @@ export const routes = {
   // #16: /product/<slug>; product cards link here, the shell does not
   product: { path: "/product", enabled: true },
   // #21
-  aboutUs: { path: "/about-us", enabled: false },
+  aboutUs: { path: "/about", enabled: true },
   // #20
   cart: { path: "/cart", enabled: true },
   // #29

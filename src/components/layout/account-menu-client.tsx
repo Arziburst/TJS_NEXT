@@ -107,11 +107,11 @@ export function AccountMenuClient({ displayName, adminLinks, savedLocale, classN
             <Menu.Separator className="my-1 h-0.5 bg-hairline" />
             {adminLinks && (
               <>
-                <Menu.LinkItem render={<Link href={ADMIN_PRODUCTS_HREF} />} className={itemClass}>
+                <Menu.LinkItem closeOnClick render={<Link href={ADMIN_PRODUCTS_HREF} />} className={itemClass}>
                   <LayoutDashboardIcon aria-hidden className="size-4" />
                   {adminLinks.admin}
                 </Menu.LinkItem>
-                <Menu.LinkItem render={<Link href={NEW_PRODUCT_HREF} />} className={itemClass}>
+                <Menu.LinkItem closeOnClick render={<Link href={NEW_PRODUCT_HREF} />} className={itemClass}>
                   <PlusIcon aria-hidden className="size-4" />
                   {adminLinks.addProduct}
                 </Menu.LinkItem>

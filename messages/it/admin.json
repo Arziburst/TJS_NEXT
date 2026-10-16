@@ -33,7 +33,8 @@
     "attributes": "Materiali e colori",
     "viewShop": "Negozio",
     "orders": "Ordini",
-    "ordersWithNew": "Ordini, {count, plural, one {# nuova richiesta} other {# nuove richieste}}"
+    "ordersWithNew": "Ordini, {count, plural, one {# nuova richiesta} other {# nuove richieste}}",
+    "settings": "Impostazioni"
   },
   "status": {
     "draft": "Bozza",
@@ -523,6 +524,108 @@
       "historyPlaced": "Richiesta effettuata",
       "historyChange": "{from} → {to}",
       "historyBy": "{date}, {name}"
+    }
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "intro": "Come i clienti ti contattano, come vengono convertiti i prezzi e la tua storia. Una modifica salvata appare sul sito al successivo caricamento della pagina.",
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "saved": "Salvato. Il sito lo mostra già.",
+    "loadError": "Impossibile caricare le impostazioni. Ricarica la pagina.",
+    "errorSummary": "{count, plural, one {# campo richiede attenzione} other {# campi richiedono attenzione}}",
+    "errors": {
+      "notAuthorized": "Solo l’amministratore può farlo. Accedi di nuovo.",
+      "unexpectedError": "Impossibile salvare le impostazioni. Riprova."
+    },
+    "contacts": {
+      "title": "Contatti",
+      "hint": "Mostrati in fondo a ogni pagina, nella conferma d’ordine e nelle email ai clienti. Lascia un campo vuoto per nascondere quel canale.",
+      "shopName": "Nome del negozio",
+      "shopNameHint": "Usato nella conferma d’ordine e nelle email.",
+      "instagram": "Instagram",
+      "instagramHint": "Il nome del tuo account (@name) o il link al tuo profilo.",
+      "email": "Email",
+      "emailHint": "Per esempio shop@example.com.",
+      "phone": "Telefono",
+      "phoneHint": "Con il prefisso internazionale, per esempio +38 (066) 123 45 67. Mostrato come lo scrivi.",
+      "telegram": "Chat Telegram",
+      "telegramHint": "Il tuo nome utente (@name) o un link t.me.",
+      "viber": "Chat Viber",
+      "viberHint": "Il tuo numero di telefono con il prefisso internazionale, o un link di invito Viber.",
+      "whatsapp": "Chat WhatsApp",
+      "whatsappHint": "Il tuo numero di telefono con il prefisso internazionale, o un link wa.me.",
+      "notifications": "Notifiche",
+      "telegramChatId": "ID della chat Telegram per i nuovi ordini",
+      "telegramChatIdHint": "La chat in cui il bot del negozio annuncia i nuovi ordini: un numero (l’ID di un gruppo inizia con -100). Mai mostrato sul sito.",
+      "tooLong": "Al massimo {max} caratteri",
+      "invalid": {
+        "shopName": "Inserisci un nome",
+        "instagram": "Inserisci un nome account come @name o un link al profilo instagram.com",
+        "email": "Inserisci un indirizzo email come shop@example.com",
+        "phone": "Inserisci un numero con il prefisso internazionale: cifre, spazi, parentesi e trattini",
+        "telegram": "Inserisci un nome utente come @name (almeno 5 caratteri) o un link t.me",
+        "viber": "Inserisci un numero con il prefisso internazionale o un link di invito Viber",
+        "whatsapp": "Inserisci un numero con il prefisso internazionale o un link wa.me",
+        "telegramChatId": "Inserisci l’ID della chat come numero, per esempio -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Prezzi in altre valute",
+      "hint": "Imposti ogni prezzo in USD. I visitatori lo vedono convertito al cambio della BNU più il ricarico, arrotondato per eccesso a un prezzo tondo.",
+      "markup": "Ricarico, %",
+      "markupHint": "Aggiunto al cambio della BNU in ogni valuta, USD compreso. 3 significa 3 %.",
+      "rulesTitle": "Arrotondamento",
+      "rulesHint": "Un prezzo viene arrotondato per eccesso al gradino successivo più la terminazione: gradino 10 e terminazione 9 danno 1 289, 1 299 e così via. I prezzi sotto la soglia facoltativa usano il gradino piccolo: gradino 1 e terminazione 0.90 danno 29.90.",
+      "step": "Gradino",
+      "ending": "Terminazione",
+      "smallBelow": "Prezzi piccoli sotto",
+      "smallStep": "Gradino piccolo",
+      "smallEnding": "Terminazione piccola",
+      "example": "Prezzo di esempio, USD",
+      "exampleHint": "Ogni valuta qui sotto mostra come appare questo prezzo con i valori sopra.",
+      "shownAs": "Mostrato come",
+      "noRate": "Nessun cambio ancora",
+      "errors": {
+        "required": "Questo campo è obbligatorio",
+        "invalidNumber": "Inserisci un numero, per esempio 9.90",
+        "outOfRange": "Questo valore è fuori intervallo",
+        "endingTooLarge": "Deve essere minore del gradino",
+        "smallTierIncomplete": "Compila tutti e tre i campi dei prezzi piccoli, o nessuno"
+      }
+    },
+    "about": {
+      "cardHint": "La tua storia, in ogni lingua.",
+      "edit": "Modifica la pagina «Chi siamo»",
+      "back": "Impostazioni",
+      "title": "Pagina «Chi siamo»",
+      "hint": "Scrivi la tua storia in ucraino (obbligatorio per pubblicare) e in qualsiasi altra lingua. Una lingua senza testo proprio mostra quello inglese, altrimenti quello ucraino; una pagina così è nascosta ai motori di ricerca.",
+      "state": "Pagina",
+      "text": "Testo",
+      "editorHint": "Solo titoli, paragrafi, elenchi e link; tutto il resto viene rimosso al salvataggio.",
+      "metaDescription": "Descrizione per i motori di ricerca",
+      "metaDescriptionHint": "Fino a 500 caratteri. Se vuota, si usa l’inizio del testo.",
+      "filled": "Scritto",
+      "empty": "Vuoto",
+      "requiredToPublish": "Obbligatorio per pubblicare",
+      "hasErrors": "Contiene errori",
+      "view": "Vedi la pagina",
+      "toolbar": {
+        "label": "Formattazione",
+        "heading": "Titolo",
+        "subheading": "Sottotitolo",
+        "paragraph": "Paragrafo",
+        "bulletList": "Elenco puntato",
+        "numberedList": "Elenco numerato",
+        "link": "Link",
+        "unlink": "Rimuovi link",
+        "linkPrompt": "Indirizzo del link: https://…, mailto:… o tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Scrivi il testo in ucraino prima di pubblicare",
+        "tooLong": "Questo testo è troppo lungo",
+        "textRequired": "Scrivi il testo in questa lingua o cancella la sua descrizione"
+      }
     }
   }
 }

@@ -11,6 +11,7 @@ import sharp from "sharp";
 import type { Database } from "../src/lib/supabase/database.types";
 import ukAdmin from "../messages/uk/admin.json" with { type: "json" };
 import ukErrors from "../messages/uk/errors.json" with { type: "json" };
+import ukNav from "../messages/uk/nav.json" with { type: "json" };
 import ukProduct from "../messages/uk/product.json" with { type: "json" };
 
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
@@ -158,7 +159,7 @@ test.describe("admin on the local stack", () => {
     await page.waitForLoadState("networkidle");
     await page.getByTestId("product-terms").getByText(ukName, { exact: true }).click();
     await page.getByRole("button", { name: ukAdmin.form.save }).click();
-    await expect(page.getByText(ukAdmin.form.saved)).toBeVisible();
+    await expect(page.getByText(ukAdmin.form.saved, { exact: true })).toBeVisible();
 
     // the shop lists the new material with its one product
     await page.goto(`/en/shop?material=${term!.slug}`);
@@ -182,9 +183,9 @@ test.describe("admin on the local stack", () => {
     expect(errors).toEqual([]);
   });
 
-  test("a guest is sent to sign in, a customer gets the not-found page, an admin gets the admin", async ({ page, browser, request }) => {
+  test("a guest is sent to sign in, a customer gets the not-found page, an admin gets the admin", async ({ page, browser, request, isMobile }) => {
     const draftTitle = `Чернетка ${randomUUID().slice(0, 8)}`;
-    await insertDraft(draftTitle);
+    const draft = await insertDraft(draftTitle);
 
     // guest: no admin text and no draft in the HTML or the RSC payload, then on to the sign-in page
     await expectNothingOfTheAdmin(request, "/uk/admin", [draftTitle]);
@@ -202,12 +203,23 @@ test.describe("admin on the local stack", () => {
     await expectNothingOfTheAdmin(customerContext.request, "/uk/admin/products/new", []);
     await customerContext.close();
 
-    // admin
+    // admin: the list searched for this test's own draft, so it shows no other test's photos (the photo tests
+    // delete theirs meanwhile, and a deleted photo's thumbnail answers 400 on the console)
     const errors = collectErrors(page);
-    await signIn(page, await createUser("admin"), "/uk/admin");
+    await signIn(page, await createUser("admin"), `/uk/admin?q=${draft.sku}`);
     await expect(page.getByRole("heading", { level: 1, name: ukAdmin.list.title })).toBeVisible();
     await expect(page.getByRole("navigation", { name: ukAdmin.shell.nav })).toBeVisible();
     await expect(page.getByRole("link", { name: draftTitle })).toBeVisible();
+
+    // the account menu's admin entries close the menu with their client navigation, as its account entries do
+    await page.waitForLoadState("networkidle");
+    if (isMobile) await page.getByRole("button", { name: ukNav.openMenu }).click();
+    const accountScope = isMobile ? page.getByRole("dialog") : page.locator("header");
+    await accountScope.getByRole("button", { name: ukNav.account }).click();
+    await page.getByRole("menu").getByRole("menuitem", { name: ukAdmin.list.add }).click();
+    await page.waitForURL("/uk/admin/products/new");
+    await expect(page.getByRole("heading", { level: 1, name: ukAdmin.form.newTitle })).toBeVisible();
+    await expect(page.getByRole("menu")).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 
@@ -362,7 +374,7 @@ test.describe("admin on the local stack", () => {
       const form = await openEditForm(page);
       await form.getByLabel(priceLabel).fill("99.00");
       await form.getByRole("button", { name: ukAdmin.form.save }).click();
-      await expect(page.getByText(ukAdmin.form.saved)).toBeVisible();
+      await expect(page.getByText(ukAdmin.form.saved, { exact: true })).toBeVisible();
       await page.goto(productPath);
       await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
       await expect(shownPrice(page)).not.toHaveText(priceBefore ?? "");
@@ -374,7 +386,7 @@ test.describe("admin on the local stack", () => {
       const form = await openEditForm(page);
       await form.getByText(ukAdmin.status.archived, { exact: true }).click();
       await form.getByRole("button", { name: ukAdmin.form.save }).click();
-      await expect(page.getByText(ukAdmin.form.saved)).toBeVisible();
+      await expect(page.getByText(ukAdmin.form.saved, { exact: true })).toBeVisible();
       await page.goto("/uk/shop");
       await expect(page.getByRole("link", { name: title })).toHaveCount(0);
 
@@ -389,9 +401,13 @@ test.describe("admin on the local stack", () => {
       await expect(page.getByRole("link", { name: title })).toHaveCount(0);
       const { data: deleted } = await db!.from("products").select("deleted_at").eq("id", productId).single();
       expect(deleted?.deleted_at).not.toBeNull();
-      await page.goto(productPath);
-      await expect(page.getByRole("heading", { name: ukErrors.notFound.title })).toBeVisible();
       expect(errors).toEqual([]);
+      // the deleted product's page answers 404 at once (rendered anew, not the build's shell): the browser logs
+      // that status of the document itself, and nothing else
+      const response = await page.goto(productPath);
+      expect(response?.status()).toBe(404);
+      await expect(page.getByRole("heading", { name: ukErrors.notFound.title })).toBeVisible();
+      expect(errors).toEqual(["console: Failed to load resource: the server responded with a status of 404 (Not Found)"]);
     });
   });
 
@@ -517,6 +533,26 @@ test.describe("admin on the local stack", () => {
       await expect.poll(async () => (await photoRows()).map((r) => r.id)).toEqual([first!.id, second!.id]);
       await expect(button(ukAdmin.images.moveEarlier, 1)).toBeFocused();
       await expect(photos.getByText(announced(1))).toBeAttached();
+      expect(errors).toEqual([]);
+    });
+
+    test("two moves to the same position are both announced", async ({ page }) => {
+      const errors = collectErrors(page);
+      const [first, second] = await photoRows();
+      const photos = await openPhotos(page);
+      const moveFirstLater = photos.getByRole("button", { name: ukAdmin.images.moveLater.replace("{index}", "1") });
+      const text = ukAdmin.images.moved.replace("{position}", "2").replace("{count}", "2");
+
+      await moveFirstLater.click();
+      await expect.poll(async () => (await photoRows()).map((r) => r.id)).toEqual([second!.id, first!.id]);
+      const firstAnnouncement = await photos.getByText(text).elementHandle();
+      // the other photo goes to position 2 now: the same text, which the live region must announce again
+      await expect(moveFirstLater).toBeEnabled();
+      await moveFirstLater.click();
+      await expect.poll(async () => (await photoRows()).map((r) => r.id)).toEqual([first!.id, second!.id]);
+      // a screen reader announces what is added to the live region: the text is a new node, not the old one kept
+      await expect.poll(() => firstAnnouncement!.evaluate((node) => node.isConnected)).toBe(false);
+      await expect(photos.getByText(text)).toBeAttached();
       expect(errors).toEqual([]);
     });
 

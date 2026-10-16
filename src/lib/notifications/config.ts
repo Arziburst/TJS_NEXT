@@ -1,5 +1,6 @@
 import "server-only";
 
+import { readShopSettingsAsService } from "@/lib/settings/store";
 import type { EmailConfig } from "./resend";
 import type { TelegramConfig } from "./telegram";
 
@@ -26,15 +27,18 @@ function missing(names: string[]): string {
   return `not configured (${names.join(", ")} unset)`;
 }
 
-export function notificationConfig(env: Env = process.env): NotificationConfig {
+/**
+ * The channels' settings. The owner's Telegram chat is the one set in the admin settings (#21,
+ * `settingsChatId`); TELEGRAM_CHAT_ID is the fallback while none is set there.
+ */
+export function notificationConfig(env: Env = process.env, settingsChatId: string | null = null): NotificationConfig {
   if (env.NOTIFICATIONS_SEND !== "true") {
     const off = { ok: false as const, reason: "sending is off here (NOTIFICATIONS_SEND is not \"true\")" };
     return { telegram: off, email: off };
   }
 
   const token = value(env, "TELEGRAM_BOT_TOKEN");
-  // the owner's group; moves to the admin settings with #21 (shop_settings.telegram_chat_id)
-  const chatId = value(env, "TELEGRAM_CHAT_ID");
+  const chatId = settingsChatId?.trim() || value(env, "TELEGRAM_CHAT_ID");
   const telegram: ChannelConfig<TelegramConfig> =
     token && chatId
       ? { ok: true, config: { token, chatId, apiBaseUrl: value(env, "TELEGRAM_API_BASE_URL") ?? TELEGRAM_API } }
@@ -51,4 +55,14 @@ export function notificationConfig(env: Env = process.env): NotificationConfig {
       : { ok: false, reason: missing([...(apiKey ? [] : ["RESEND_API_KEY"]), ...(from ? [] : ["EMAIL_FROM"])]) };
 
   return { telegram, email };
+}
+
+/**
+ * The configuration of a run: the owner's chat id read from the admin settings with the service role (no Data API
+ * role can read it), only when sending is on. A failed read falls back to TELEGRAM_CHAT_ID.
+ */
+export async function loadNotificationConfig(env: Env = process.env): Promise<NotificationConfig> {
+  if (env.NOTIFICATIONS_SEND !== "true") return notificationConfig(env);
+  const settings = await readShopSettingsAsService();
+  return notificationConfig(env, settings?.telegram_chat_id ?? null);
 }
