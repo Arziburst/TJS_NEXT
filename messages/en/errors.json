@@ -18,5 +18,13 @@
     "nameMaxLength": "Name must be at most {max} characters long",
     "passwordMaxLength": "Password must be at most {max} characters long",
     "passwordsDontMatch": "Passwords do not match"
+  },
+  "boundary": {
+    "title": "Something went wrong",
+    "description": "We could not show this page right now. Please try again in a moment.",
+    "retry": "Try again",
+    "home": "Go to the home page",
+    "reference": "Error code for support: {digest}",
+    "accountUnavailable": "Your account is unavailable right now. Try again in a moment."
   }
 }

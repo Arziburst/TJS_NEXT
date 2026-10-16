@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { startTransition, useActionState, type ComponentProps, type FormEvent } from "react";
+import { startTransition, type ComponentProps, type FormEvent } from "react";
 import type { ContactsFormState } from "@/app/[locale]/admin/settings/actions";
 import {
   CONTACT_INPUT_MAX_LENGTH,
@@ -9,6 +9,7 @@ import {
   type ContactErrorCode,
   type ContactField,
 } from "@/lib/settings/contacts";
+import { useFormActionState } from "./form-action";
 import { TextField } from "./form-fields";
 import { SaveButton, SettingsFeedback } from "./settings-form-parts";
 
@@ -18,6 +19,7 @@ type ContactsFormProps = {
 };
 
 const idle: ContactsFormState = { status: "idle" };
+const unexpected: ContactsFormState = { status: "error", error: "unexpectedError" };
 
 // the keyboard each field needs on a phone; links and names are typed as they are, never auto-corrected
 const INPUTS: Record<ContactField, ComponentProps<"input">> = {
@@ -36,7 +38,7 @@ const CHANNELS = ["instagram", "phone", "email", "telegram", "viber", "whatsapp"
 /** The shop's name, its contact channels (D19) and the chat of the owner's notifications (D11). */
 export function ContactsForm({ values, saveContacts }: ContactsFormProps) {
   const t = useTranslations("admin.settings.contacts");
-  const [state, dispatch, pending] = useActionState(saveContacts, idle);
+  const [state, dispatch, pending] = useFormActionState(saveContacts, idle, unexpected);
   const fields = state.status === "error" ? (state.fields ?? {}) : {};
   // after a save the fields show what was stored (a link typed as @name comes back as https://t.me/name)
   const current = state.status === "saved" ? (state.values as Record<ContactField, string>) : values;

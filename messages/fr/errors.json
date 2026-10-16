@@ -18,5 +18,13 @@
     "nameMaxLength": "Le nom doit comporter au plus {max} caractères",
     "passwordMaxLength": "Le mot de passe doit comporter au plus {max} caractères",
     "passwordsDontMatch": "Les mots de passe ne correspondent pas"
+  },
+  "boundary": {
+    "title": "Un problème est survenu",
+    "description": "Nous ne pouvons pas afficher cette page pour le moment. Veuillez réessayer dans un instant.",
+    "retry": "Réessayer",
+    "home": "Aller à la page d’accueil",
+    "reference": "Code d’erreur pour l’assistance : {digest}",
+    "accountUnavailable": "Votre compte est indisponible pour le moment. Réessayez dans un instant."
   }
 }

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { routes } from "@/config/routes";
 import { Link } from "@/i18n/navigation";
+import { unlessSessionUnavailable } from "@/lib/auth/session";
 import { getCartView, lineKey, orderableLines, regularLines, type CartItem, type CartView } from "@/lib/cart";
 import { cn } from "@/lib/utils";
 import { CartIcon } from "./cart-icon";
@@ -33,7 +34,13 @@ export function CartHeaderSlot() {
 }
 
 async function CartHeaderValue() {
-  const [view, t, format] = await Promise.all([getCartView(), getTranslations("nav"), getFormatter()]);
+  const [view, t, format] = await Promise.all([
+    // the plain bag link while the session cannot be read (#112): the header must not fail the page
+    unlessSessionUnavailable(getCartView(), null),
+    getTranslations("nav"),
+    getFormatter(),
+  ]);
+  if (!view) return <CartSlot />;
   const count = view.ok ? view.pieces : 0;
   const label = t("cartCount", { count });
   const icon = <CartIcon count={count} formatted={format.number(count)} />;
