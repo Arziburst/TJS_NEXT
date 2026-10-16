@@ -36,7 +36,9 @@ price; the legacy app had no such texts beyond `errors.form.chooseCity` / `choos
 locales by machine, unreviewed; from #18 the admin's photo editor `admin.images.*` (`admin.form.photosReadOnly`
 removed), written in en, uk and the other 9 locales by machine, unreviewed; from #24 `checkout.request.*` (the
 order request form and its errors) and `checkout.done.*` (its confirmation), written in en, uk and the other 9
-locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
+locales by machine, unreviewed; from #27 the admin's orders `admin.orders.*`, `admin.orderStatus.*` (the four
+legacy statuses keep the `account.orderStatus` wording) and `admin.shell.orders`, `ordersWithNew`, written in
+en, uk and the other 9 locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the
 admin enters USD).
 
