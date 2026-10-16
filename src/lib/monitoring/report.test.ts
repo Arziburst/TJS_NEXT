@@ -14,7 +14,8 @@ describe("scrub", () => {
   it("masks e-mails, phones, tokens and long numbers", () => {
     expect(scrub("user olena.k+1@example.com failed")).toBe("user <email> failed");
     expect(scrub("call +38 (066) 830 10 29 now")).toBe("call <phone> now");
-    expect(scrub("np 0668301029")).toBe("np <number>");
+    expect(scrub("np 0668301029")).toBe("np <phone>");
+    expect(scrub("ttn 20450123456789")).toBe("ttn <number>");
     expect(scrub("auth Bearer abc.def-ghi")).toBe("auth Bearer <token>");
     expect(scrub("jwt eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.c2lnbmF0dXJl x")).toBe("jwt <jwt> x");
     expect(scrub("key tjs_test_0123456789abcdefghijklmnopqrstuv")).toBe("key <token>");

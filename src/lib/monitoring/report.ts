@@ -1,5 +1,6 @@
 // Server code (src/instrumentation.ts); no "server-only": instrumentation is not built with the react-server
 // condition. SENTRY_DSN is read at run time and never sent to a client.
+import { scrub } from "./mask";
 
 /*
  * Server errors the app did not handle (#31): Next hands every one to onRequestError (src/instrumentation.ts) —
@@ -35,20 +36,7 @@ export type ErrorEvent = {
   stack?: string;
 };
 
-const MASKS: [RegExp, string][] = [
-  [/[\w.+-]+@[\w-]+(\.[\w-]+)+/g, "<email>"],
-  // JWTs and bearer tokens before the generic long tokens
-  [/eyJ[\w-]+\.[\w-]+\.[\w-]+/g, "<jwt>"],
-  [/\b(bearer|basic)\s+[\w.~+/=-]+/gi, "$1 <token>"],
-  [/\+\d[\d\s().-]{7,}\d/g, "<phone>"],
-  [/\b\d{10,}\b/g, "<number>"],
-  [/\b[A-Za-z0-9_-]{32,}\b/g, "<token>"],
-];
-
-/** The text with personal data and secrets masked. */
-export function scrub(text: string): string {
-  return MASKS.reduce((value, [pattern, mask]) => value.replace(pattern, mask), text);
-}
+export { scrub };
 
 function pathOnly(path: string): string {
   const end = path.search(/[?#]/);
