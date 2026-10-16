@@ -2,6 +2,7 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
 import { getProductPage } from "@/lib/catalog/product";
+import type { ListPrice } from "@/lib/catalog/types";
 import { getMoneyTables } from "@/lib/money/cache";
 import { localeDefaultCurrency } from "@/lib/money/currencies";
 import { formatMoney, priceIn } from "@/lib/money/format";
@@ -26,10 +27,13 @@ export async function generateImageMetadata({ params }: { params: Params }) {
   return [{ id: "share", alt, size: OG_IMAGE_SIZE, contentType: "image/png" }];
 }
 
-async function priceText(usdMinor: number, locale: Locale): Promise<string | null> {
-  const tables = await getMoneyTables();
+// the price the shop's cards show: the lowest variant's, "from …" when the sizes differ in price (#66)
+async function priceText({ usdMinor, from }: ListPrice, locale: Locale): Promise<string | null> {
+  const [tables, t] = await Promise.all([getMoneyTables(), getTranslations({ locale, namespace: "common.price" })]);
   const money = tables && priceIn(usdMinor, localeDefaultCurrency[locale], tables);
-  return money ? formatMoney(money, locale) : null;
+  if (!money) return null;
+  const text = formatMoney(money, locale);
+  return from ? t("from", { price: text }) : text;
 }
 
 export default async function Image({ params }: { params: Promise<Params> }) {
@@ -45,7 +49,7 @@ export default async function Image({ params }: { params: Promise<Params> }) {
   const { product } = page;
   const mainPhoto = product.images[0];
   const [price, photo] = await Promise.all([
-    priceText(product.priceUsdMinor, locale),
+    priceText(product.listPrice, locale),
     mainPhoto ? productPhoto(mainPhoto.url) : null,
   ]);
   return shareImage({
