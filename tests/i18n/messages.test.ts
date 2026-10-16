@@ -104,8 +104,13 @@ describe("message catalogs", () => {
       position: 2,
       current: 3,
       failed: 1,
-      // an order number and the page count of the order history (account)
-      number: 10001,
+      // the notifications (#26): an order number, its status, money and the shop's host
+      number: 10042,
+      status: "Accepted",
+      amount: "80 ₴",
+      flat: "12",
+      site: "shop.example.test",
+      // the page count of the order history (account)
       pages: 3,
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
