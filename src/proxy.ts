@@ -6,6 +6,7 @@ import { rewriteUnknownCategory } from "./lib/catalog/unknown-category";
 import { legacyRedirect } from "./lib/redirects/proxy";
 import { securePageRequest } from "./lib/security/proxy";
 import { refreshSession } from "./lib/supabase/proxy";
+import { collectionNotFoundOrRedirect } from "./proxy/collection-not-found";
 import { productNotFoundOrRedirect } from "./proxy/product-not-found";
 
 const intl = createMiddleware(routing);
@@ -30,6 +31,7 @@ export default async function proxy(request: NextRequest) {
       (await legacyRedirect(request)) ??
         rewriteUnknownCategory(request) ??
         (await productNotFoundOrRedirect(request)) ??
+        (await collectionNotFoundOrRedirect(request)) ??
         intl(withSupportedLanguages(request)),
     ),
   );

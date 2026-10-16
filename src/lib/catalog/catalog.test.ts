@@ -99,6 +99,8 @@ function productRow(overrides: Record<string, unknown> = {}) {
       { id: "i1", storage_path: "p1/a.jpg", position: 0, width: 800, height: 1000, blur_data_url: null, product_image_alts: [] },
     ],
     product_variants: [],
+    product_sales: null,
+    collection_products: [],
     ...overrides,
   };
 }

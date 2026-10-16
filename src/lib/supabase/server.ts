@@ -68,3 +68,17 @@ export function createServiceClient(): ServerSupabaseClient {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
   });
 }
+
+/**
+ * The service-role client for a read inside a `"use cache"` entry (the next sale change, #67): like
+ * createServiceClient, but never fetch-cached, as the public client (see uncachedFetch).
+ */
+export function createUncachedServiceClient(): ServerSupabaseClient {
+  const { url } = publicConfig();
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceRoleKey) throw new Error("SUPABASE_SERVICE_ROLE_KEY must be set");
+  return createClient<Database>(url, serviceRoleKey, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    global: { fetch: uncachedFetch },
+  });
+}

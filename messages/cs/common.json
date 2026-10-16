@@ -5,7 +5,9 @@
   "price": {
     "unavailable": "Cena není k dispozici",
     "none": "—",
-    "from": "od {price}"
+    "from": "od {price}",
+    "regular": "Běžná cena:",
+    "sale": "Zlevněná cena:"
   },
   "pagination": {
     "of": "z"

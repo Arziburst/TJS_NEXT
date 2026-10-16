@@ -51,8 +51,8 @@ type CheckoutFormProps = {
   // abroad: the cart's goods for the Nova Post estimate (goodsOf on the server)
   goods: OrderGoods | null;
   novaPostLive: boolean;
-  // the lines shown in the summary: the server checks that the cart still holds exactly these
-  expected: { productId: string; variantId: string | null; quantity: number }[];
+  // the lines shown in the summary: the server checks that the cart still holds exactly these, at these prices
+  expected: { productId: string; variantId: string | null; quantity: number; unitUsdMinor: number }[];
   // the server-rendered total next to the button
   total: ReactNode;
 };
@@ -189,6 +189,8 @@ export function CheckoutForm({ countries, defaultCountry, prefill, saved, parcel
         };
       case "cartChanged":
         return { text: tr("errors.cartChanged"), refresh: true };
+      case "pricesChanged":
+        return { text: tr("errors.pricesChanged"), refresh: true };
       case "emptyCart":
         return { text: tr("errors.emptyCart"), refresh: true };
       case "rateLimited":

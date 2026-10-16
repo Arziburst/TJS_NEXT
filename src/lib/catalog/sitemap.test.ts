@@ -61,6 +61,8 @@ beforeEach(() => {
   cacheTag.mockClear();
   ranges.length = 0;
   for (const table of Object.keys(responses)) delete responses[table];
+  // no published collection (#67) unless a test says otherwise
+  responses.collections = [{ data: [], error: null }, { data: [], error: null }, { data: [], error: null }];
 });
 
 describe("getSitemapCatalog", () => {
@@ -111,5 +113,36 @@ describe("getSitemapCatalog", () => {
     expect((await getSitemapCatalog()).ok).toBe(false);
     expect(cacheLife).toHaveBeenLastCalledWith(FAILED_READ_LIFE);
     expect(cacheLife).not.toHaveBeenCalledWith("hours");
+  });
+
+  it("lists the published collections with their translations, tagged with the collections (#67)", async () => {
+    responses.products = [{ data: [productRow(1)], error: null }];
+    responses.categories = [categories];
+    responses.collections = [
+      {
+        data: [
+          {
+            id: "c1",
+            updated_at: "2026-10-14T00:00:00Z",
+            collection_translations: [{ locale: "uk", slug: "vesna", source: "human", reviewed_at: null, updated_at: "2026-10-15T00:00:00Z" }],
+          },
+        ],
+        error: null,
+      },
+    ];
+    const result = await getSitemapCatalog();
+    expect(result.ok && result.data.collections).toEqual([
+      {
+        updatedAt: "2026-10-14T00:00:00Z",
+        translations: [{ locale: "uk", slug: "vesna", source: "human", reviewedAt: null, updatedAt: "2026-10-15T00:00:00Z" }],
+      },
+    ]);
+    expect(cacheTag).toHaveBeenCalledWith("collections");
+
+    responses.products = [{ data: [productRow(1)], error: null }];
+    responses.categories = [categories];
+    responses.collections = [{ data: null, error: { message: "boom" } }];
+    expect((await getSitemapCatalog()).ok).toBe(false);
+    expect(cacheLife).toHaveBeenLastCalledWith(FAILED_READ_LIFE);
   });
 });

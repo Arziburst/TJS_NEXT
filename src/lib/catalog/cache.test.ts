@@ -42,6 +42,8 @@ vi.mock("@/lib/supabase/server", () => ({
       }),
     },
   }),
+  // the next sale change (#67) is read through the service role only
+  createUncachedServiceClient: () => ({ rpc: (fn: string) => builder(`rpc:${fn}`) }),
 }));
 
 const { FAILED_READ_LIFE } = await import("@/lib/failed-read");
@@ -53,6 +55,7 @@ const failure: Response = { data: null, error: { message: "boom" } };
 const listing = (categorySlug: string | null) => ({
   locale: "de" as const,
   categorySlug,
+  collectionId: null,
   terms: [],
   materials: [],
   colours: [],
@@ -108,6 +111,8 @@ const productRow = {
   ],
   product_images: [],
   product_variants: [],
+  product_sales: null,
+  collection_products: [],
 };
 
 const slugMatches: Response = {
@@ -138,8 +143,12 @@ function isExcludedFromPrerender(life: { revalidate?: number; expire?: number })
   return life.revalidate === 0 || (life.expire ?? Infinity) < 300;
 }
 
+const noSaleChange: Response = { data: null, error: null };
+
 beforeEach(() => {
   for (const key of Object.keys(responses)) delete responses[key];
+  // no sale starts or ends: the entries keep their own lifetimes (#67)
+  responses["rpc:next_sale_change"] = [noSaleChange, noSaleChange];
   cacheLife.mockClear();
   cacheTag.mockClear();
 });
@@ -286,5 +295,44 @@ describe("getProductPage", () => {
     expect(await getProductPage("de", "korallen-ohrringe")).toMatchObject({ kind: "ok", categoryName: "Ohrringe" });
     expect(cacheLife.mock.calls).toEqual([["daysNoSwr"]]);
     expect(cacheTag).toHaveBeenCalledWith("product:p1");
+  });
+});
+
+describe("entries with prices and the sales (#67)", () => {
+  it("live no longer than until the next sale starts or ends", async () => {
+    const inTenMinutes = new Date(Date.now() + 600_000).toISOString();
+    responses["rpc:next_sale_change"] = [{ data: inTenMinutes, error: null }];
+    responses["rpc:shop_search"] = [noIds];
+    expect(await getCachedListingPage(listing(null), "newest", 1, 24)).toMatchObject({ ok: true });
+    const [life] = cacheLife.mock.calls.at(-1)!;
+    expect(life.revalidate).toBeGreaterThan(590);
+    expect(life.revalidate).toBeLessThanOrEqual(600);
+    expect(life.expire).toBe(life.revalidate);
+
+    cacheLife.mockClear();
+    productReads();
+    responses.categories = [categoryRows];
+    responses["rpc:next_sale_change"] = [{ data: inTenMinutes, error: null }];
+    expect(await getProductPage("de", "korallen-ohrringe")).toMatchObject({ kind: "ok" });
+    expect(cacheLife.mock.calls).toHaveLength(1);
+    expect(cacheLife.mock.calls[0]?.[0].expire).toBeLessThanOrEqual(600);
+  });
+
+  it("are failed reads when the next sale change cannot be read", async () => {
+    responses["rpc:next_sale_change"] = [failure, failure, failure];
+    responses["rpc:shop_search"] = [noIds];
+    await getCachedListingPage(listing(null), "newest", 1, 24);
+    responses["rpc:shop_facets"] = [{ data: [], error: null }];
+    await getCachedFacets(listing(null));
+    productReads();
+    responses.categories = [categoryRows];
+    await getProductPage("de", "korallen-ohrringe");
+    expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE], [FAILED_READ_LIFE], [FAILED_READ_LIFE]]);
+  });
+
+  it("tag a collection's listing with the collection", async () => {
+    responses["rpc:shop_search"] = [noIds];
+    await getCachedListingPage({ ...listing(null), collectionId: "d6700000-0000-4000-8000-000000000001" }, "position", 1, 24);
+    expect(cacheTag).toHaveBeenCalledWith("collection:d6700000-0000-4000-8000-000000000001");
   });
 });

@@ -81,6 +81,8 @@ describe("mapProduct", () => {
       },
     ],
     product_variants: [],
+    product_sales: null,
+    collection_products: [],
   };
   const urlFor = (path: string) => `https://cdn.test/${path}`;
 
@@ -121,10 +123,30 @@ describe("mapProduct", () => {
       ["v2", "18", "uk", 5790],
     ]);
     expect(p?.priceUsdMinor).toBe(5490);
-    expect(p?.listPrice).toEqual({ usdMinor: 5390, from: true });
+    expect(p?.listPrice).toEqual({ usdMinor: 5390, regularUsdMinor: 5390, saleEndsAt: null, from: true });
     // a one-of-a-kind piece never shows variants, and a product without any lists its own price
     expect(mapProduct({ ...sized, fulfillment: "one_of_a_kind" }, "en", urlFor)?.variants).toEqual([]);
-    expect(mapProduct(row, "en", urlFor)?.listPrice).toEqual({ usdMinor: 5490, from: false });
+    expect(mapProduct(row, "en", urlFor)?.listPrice).toEqual({ usdMinor: 5490, regularUsdMinor: 5490, saleEndsAt: null, from: false });
+  });
+
+  it("prices a product under its own and its collections' running sales, the lowest winning (#67)", () => {
+    const now = Date.parse("2026-10-16T12:00:00Z");
+    const onSale: ProductRow = {
+      ...row,
+      product_sales: { percent_off: null, price_usd_minor: 4990, starts_at: null, ends_at: "2026-10-30T00:00:00Z" },
+      collection_products: [
+        { collections: { collection_sales: { percent_off: 20, starts_at: "2026-10-01T00:00:00Z", ends_at: "2026-10-20T00:00:00Z" } } },
+        { collections: { collection_sales: null } },
+        { collections: null },
+      ],
+    };
+    const p = mapProduct(onSale, "en", urlFor, now);
+    // 5490 × 0.8 = 4392 beats the fixed 4990
+    expect(p?.offer).toEqual({ usdMinor: 4392, regularUsdMinor: 5490, saleEndsAt: "2026-10-20T00:00:00Z" });
+    expect(p?.listPrice).toEqual({ usdMinor: 4392, regularUsdMinor: 5490, saleEndsAt: "2026-10-20T00:00:00Z", from: false });
+    expect(p?.priceUsdMinor).toBe(5490);
+    // after the collection's sale ends, the product's own one applies
+    expect(mapProduct(onSale, "en", urlFor, Date.parse("2026-10-21T00:00:00Z"))?.offer.usdMinor).toBe(4990);
   });
 
   it("drops a product without a usable translation or price", () => {

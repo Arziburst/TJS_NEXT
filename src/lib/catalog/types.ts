@@ -1,5 +1,8 @@
 import type { Database } from "@/lib/supabase/database.types";
 import type { Locale } from "@/i18n/routing";
+import type { PriceOffer } from "./sale";
+
+export type { PriceOffer } from "./sale";
 
 type Enums = Database["public"]["Enums"];
 
@@ -52,9 +55,11 @@ export type ProductSummary = {
   availability: ProductAvailability;
   /** Made-to-order work only: how many days making it takes (a fixed time has minDays = maxDays). */
   leadTime: LeadTime | null;
-  /** USD in cents (minor units); the database keeps numeric(10,2). A variant adds its difference to it. */
+  /** The regular price, USD in cents (minor units); the database keeps numeric(10,2). A variant adds its difference to it. */
   priceUsdMinor: number;
-  /** The price a listing shows: the lowest variant price ("from …" when the variants differ), else `priceUsdMinor`. */
+  /** The product's own price as the shopper pays it now, with a running sale (#67); `priceUsdMinor` without one. */
+  offer: PriceOffer;
+  /** The price a listing shows: the lowest variant price ("from …" when the variants differ), else `offer`. */
   listPrice: ListPrice;
   weightG: number;
   createdAt: string;
@@ -70,13 +75,18 @@ export type ProductVariant = {
   /** The requested locale, or the fallback the variant has a label in. */
   labelLocale: Locale;
   skuSuffix: string | null;
-  /** The product's price plus the variant's difference, in USD cents (always above zero). */
+  /** The price as the shopper pays it now, in USD cents: the regular price under a running sale (#67). */
   priceUsdMinor: number;
+  /** The product's price plus the variant's difference, in USD cents (always above zero). */
+  regularPriceUsdMinor: number;
+  /** The end of the sale that gave `priceUsdMinor`; null without a sale or for a sale without an end. */
+  saleEndsAt: string | null;
   /** False: a size the owner cannot make for now; shown, not orderable. */
   available: boolean;
 };
 
-export type ListPrice = { usdMinor: number; from: boolean };
+/** A listing's price: the lowest one the shopper pays now, its regular price and whether it is "from …". */
+export type ListPrice = PriceOffer & { from: boolean };
 
 /** A product page's data; its texts (`materials`, `care`, `clasp`, `leadTimeNote`) are in `translation.locale`. */
 export type Product = ProductSummary & {
@@ -99,8 +109,8 @@ export type ProductFilters = {
 /** Newest first (the legacy default), or by price. */
 export type ProductSort = "newest" | "price_asc" | "price_desc";
 
-/** A search result list adds its relevance order (the default there). */
-export type ListingSort = ProductSort | "relevance";
+/** A search result list adds its relevance order (the default there), a collection its owner's order (#67). */
+export type ListingSort = ProductSort | "relevance" | "position";
 
 /** "in_stock": a one-of-a-kind piece still available; "made_to_order": work made after the order. */
 export type AvailabilityFilter = "in_stock" | "made_to_order";
@@ -114,6 +124,8 @@ export type TaxonomyKind = Enums["taxonomy_kind"];
 export type ListingFilters = {
   locale: Locale;
   categorySlug: string | null;
+  /** A collection's page (#67): only its pieces. */
+  collectionId: string | null;
   /** Search words (src/lib/search/query.ts); empty for a plain listing. */
   terms: string[];
   materials: string[];

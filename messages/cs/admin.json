@@ -34,7 +34,8 @@
     "viewShop": "Obchod",
     "orders": "Objednávky",
     "ordersWithNew": "Objednávky, {count, plural, one {# nová žádost} few {# nové žádosti} many {# nové žádosti} other {# nových žádostí}}",
-    "settings": "Nastavení"
+    "settings": "Nastavení",
+    "collections": "Kolekce"
   },
   "status": {
     "draft": "Koncept",
@@ -626,6 +627,128 @@
         "tooLong": "Tento text je příliš dlouhý",
         "textRequired": "Napište text v tomto jazyce, nebo smažte jeho popis"
       }
+    }
+  },
+  "collections": {
+    "title": "Kolekce",
+    "intro": "Seskupte šperky do kolekcí s vlastní stránkou v obchodě. Na zveřejněné vedou odkazy z úvodní stránky a z obchodu.",
+    "new": "Nová kolekce",
+    "newTitle": "Nová kolekce",
+    "editTitle": "Úprava kolekce",
+    "editTitleOf": "Úprava: {name}",
+    "back": "Zpět na kolekce",
+    "empty": "Zatím žádné kolekce.",
+    "loadError": "Kolekce se nepodařilo načíst. Zkuste to prosím později.",
+    "productCount": "{count, plural, =0 {Žádné kusy} one {# kus} few {# kusy} many {# kusu} other {# kusů}}",
+    "onSale": "Ve výprodeji",
+    "viewInShop": "Zobrazit v obchodě",
+    "saveFirst": "Nejdřív kolekci uložte, potom přidejte kusy, titulní fotku a výprodej.",
+    "sections": {
+      "details": "Název a popis",
+      "publication": "Zveřejnění",
+      "cover": "Titulní fotka",
+      "products": "Kusy",
+      "danger": "Smazání"
+    },
+    "fields": {
+      "name": "Název",
+      "slug": "Slug adresy URL",
+      "slugHint": "Nechte prázdné, aby se vytvořil z názvu.",
+      "description": "Popis",
+      "position": "Místo v seznamu",
+      "positionHint": "Menší čísla jsou první.",
+      "published": "Zveřejněno v obchodě",
+      "publishedHint": "Vyžaduje ukrajinský název."
+    },
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "saved": "Kolekce uložena",
+    "created": "Kolekce vytvořena",
+    "publishedNow": "Kolekce je zveřejněna",
+    "unpublishedNow": "Kolekce je v obchodě skrytá",
+    "errors": {
+      "required": "Zadejte název.",
+      "invalidSlug": "Použijte malá latinková písmena, číslice a spojovníky.",
+      "slugTaken": "Tento slug už má jiná kolekce.",
+      "notAuthorized": "To může udělat jen správce. Přihlaste se znovu.",
+      "notFound": "Tato kolekce už neexistuje.",
+      "needsUk": "Zveřejněná kolekce potřebuje ukrajinský název.",
+      "invalid": "Zkontrolujte formulář.",
+      "tooManyRequests": "Příliš mnoho změn v krátké době. Počkejte několik minut a zkuste to znovu.",
+      "unexpectedError": "Nepovedlo se. Zkuste to znovu."
+    },
+    "products": {
+      "add": "Přidat kusy",
+      "pickerTitle": "Přidat kusy do kolekce",
+      "pickerDescription": "Klepnutím kus přidáte na konec seznamu.",
+      "search": "Hledat podle názvu nebo kódu",
+      "noResults": "Nenalezeny žádné kusy.",
+      "empty": "Tato kolekce zatím nemá žádné kusy.",
+      "inCollection": "V kolekci",
+      "remove": "Odebrat {title}",
+      "moveUp": "Posunout {title} výš",
+      "moveDown": "Posunout {title} níž",
+      "added": "{title}: přidáno",
+      "removed": "{title}: odebráno",
+      "moved": "Přesunuto na místo {position} z {count}",
+      "done": "Hotovo",
+      "notInShop": "V obchodě se nezobrazuje"
+    },
+    "cover": {
+      "hint": "Široká fotka pro úvodní stránku a záhlaví stránky kolekce. JPEG, PNG nebo WebP, do {maxMb} MB.",
+      "upload": "Nahrát titulní fotku",
+      "replace": "Vyměnit titulní fotku",
+      "remove": "Odebrat titulní fotku",
+      "uploading": "Nahrávání…",
+      "uploaded": "Titulní fotka uložena",
+      "removed": "Titulní fotka odebrána",
+      "none": "Zatím bez titulní fotky."
+    },
+    "delete": {
+      "button": "Smazat kolekci",
+      "title": "Smazat „{name}“?",
+      "description": "Kolekce a její výprodej budou odstraněny; její kusy zůstanou v obchodě.",
+      "confirm": "Smazat",
+      "deleted": "Kolekce smazána"
+    }
+  },
+  "sale": {
+    "title": "Výprodej",
+    "introProduct": "Procentní sleva nebo pevná zlevněná cena pro každou velikost. Obchod zobrazuje běžnou cenu přeškrtnutou a účtuje zlevněnou cenu, dokud výprodej trvá.",
+    "introCollection": "Procentní sleva na každý kus této kolekce, dokud je zveřejněná. Má-li kus vlastní nižší výprodej, platí nižší cena.",
+    "kind": "Sleva",
+    "kinds": {
+      "percent": "Procenta",
+      "price": "Pevná zlevněná cena"
+    },
+    "percent": "Sleva v procentech",
+    "price": "Zlevněná cena, USD",
+    "priceHint": "Běžná cena {price}; každá velikost si ponechá svůj rozdíl.",
+    "startsAt": "Začátek (kyjevský čas)",
+    "endsAt": "Konec (kyjevský čas)",
+    "windowHint": "Bez začátku výprodej začne hned, bez konce trvá, dokud ho neukončíte.",
+    "save": "Použít výprodej",
+    "remove": "Ukončit výprodej",
+    "saved": "Výprodej uložen",
+    "removed": "Výprodej ukončen",
+    "none": "Bez výprodeje.",
+    "summaryPercent": "Sleva {percent} %",
+    "summaryPrice": "Zlevněná cena {price}",
+    "state": {
+      "running": "Probíhá",
+      "scheduled": "Začne později",
+      "ended": "Skončil"
+    },
+    "errors": {
+      "required": "Zadejte hodnotu.",
+      "invalid": "Zadejte platnou hodnotu.",
+      "notBelowPrice": "Zlevněná cena musí být nižší než běžná.",
+      "endBeforeStart": "Konec musí být po začátku.",
+      "collectionPercentOnly": "Výprodej kolekce je procentní sleva.",
+      "notAuthorized": "To může udělat jen správce. Přihlaste se znovu.",
+      "notFound": "Tento produkt nebo kolekce už neexistuje.",
+      "tooManyRequests": "Příliš mnoho změn v krátké době. Počkejte několik minut a zkuste to znovu.",
+      "unexpectedError": "Nepovedlo se. Zkuste to znovu."
     }
   }
 }

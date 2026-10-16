@@ -34,7 +34,8 @@
     "viewShop": "Shop",
     "orders": "Bestellungen",
     "ordersWithNew": "Bestellungen, {count, plural, one {# neue Anfrage} other {# neue Anfragen}}",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "collections": "Kollektionen"
   },
   "status": {
     "draft": "Entwurf",
@@ -626,6 +627,128 @@
         "tooLong": "Dieser Text ist zu lang",
         "textRequired": "Schreiben Sie den Text für diese Sprache oder löschen Sie ihre Beschreibung"
       }
+    }
+  },
+  "collections": {
+    "title": "Kollektionen",
+    "intro": "Fassen Sie Stücke zu Kollektionen mit eigener Seite im Shop zusammen. Die veröffentlichten sind von der Startseite und vom Shop aus verlinkt.",
+    "new": "Neue Kollektion",
+    "newTitle": "Neue Kollektion",
+    "editTitle": "Kollektion bearbeiten",
+    "editTitleOf": "Bearbeiten: {name}",
+    "back": "Zurück zu den Kollektionen",
+    "empty": "Noch keine Kollektionen.",
+    "loadError": "Die Kollektionen konnten nicht geladen werden. Bitte versuchen Sie es später erneut.",
+    "productCount": "{count, plural, =0 {Keine Stücke} one {# Stück} other {# Stücke}}",
+    "onSale": "Im Sale",
+    "viewInShop": "Im Shop ansehen",
+    "saveFirst": "Speichern Sie die Kollektion zuerst, dann fügen Sie Stücke, Titelfoto und Sale hinzu.",
+    "sections": {
+      "details": "Name und Beschreibung",
+      "publication": "Veröffentlichung",
+      "cover": "Titelfoto",
+      "products": "Stücke",
+      "danger": "Löschen"
+    },
+    "fields": {
+      "name": "Name",
+      "slug": "URL-Slug",
+      "slugHint": "Leer lassen, um ihn aus dem Namen zu bilden.",
+      "description": "Beschreibung",
+      "position": "Platz in der Liste",
+      "positionHint": "Kleinere Zahlen stehen zuerst.",
+      "published": "Im Shop veröffentlicht",
+      "publishedHint": "Benötigt den ukrainischen Namen."
+    },
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Kollektion gespeichert",
+    "created": "Kollektion angelegt",
+    "publishedNow": "Die Kollektion ist veröffentlicht",
+    "unpublishedNow": "Die Kollektion ist im Shop ausgeblendet",
+    "errors": {
+      "required": "Geben Sie einen Namen ein.",
+      "invalidSlug": "Verwenden Sie lateinische Kleinbuchstaben, Ziffern und Bindestriche.",
+      "slugTaken": "Eine andere Kollektion hat diesen Slug bereits.",
+      "notAuthorized": "Nur eine Administratorin oder ein Administrator kann das. Melden Sie sich erneut an.",
+      "notFound": "Diese Kollektion gibt es nicht mehr.",
+      "needsUk": "Eine veröffentlichte Kollektion braucht ihren ukrainischen Namen.",
+      "invalid": "Bitte prüfen Sie das Formular.",
+      "tooManyRequests": "Zu viele Änderungen in kurzer Zeit. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      "unexpectedError": "Das hat nicht geklappt. Versuchen Sie es erneut."
+    },
+    "products": {
+      "add": "Stücke hinzufügen",
+      "pickerTitle": "Stücke zur Kollektion hinzufügen",
+      "pickerDescription": "Tippen Sie auf ein Stück, um es ans Ende der Liste zu setzen.",
+      "search": "Nach Name oder Artikelnummer suchen",
+      "noResults": "Keine Stücke gefunden.",
+      "empty": "Diese Kollektion hat noch keine Stücke.",
+      "inCollection": "In der Kollektion",
+      "remove": "{title} entfernen",
+      "moveUp": "{title} nach oben",
+      "moveDown": "{title} nach unten",
+      "added": "{title} hinzugefügt",
+      "removed": "{title} entfernt",
+      "moved": "Auf Platz {position} von {count} verschoben",
+      "done": "Fertig",
+      "notInShop": "Nicht im Shop sichtbar"
+    },
+    "cover": {
+      "hint": "Ein breites Foto für die Startseite und den Kopf der Kollektionsseite. JPEG, PNG oder WebP, bis {maxMb} MB.",
+      "upload": "Titelfoto hochladen",
+      "replace": "Titelfoto ersetzen",
+      "remove": "Titelfoto entfernen",
+      "uploading": "Wird hochgeladen…",
+      "uploaded": "Titelfoto gespeichert",
+      "removed": "Titelfoto entfernt",
+      "none": "Noch kein Titelfoto."
+    },
+    "delete": {
+      "button": "Kollektion löschen",
+      "title": "„{name}“ löschen?",
+      "description": "Die Kollektion und ihr Sale werden entfernt; ihre Stücke bleiben im Shop.",
+      "confirm": "Löschen",
+      "deleted": "Kollektion gelöscht"
+    }
+  },
+  "sale": {
+    "title": "Sale",
+    "introProduct": "Ein Prozentrabatt oder ein fester Sonderpreis für jede Größe. Der Shop zeigt den regulären Preis durchgestrichen und berechnet den Sonderpreis, solange der Sale läuft.",
+    "introCollection": "Ein Prozentrabatt auf jedes Stück dieser Kollektion, solange sie veröffentlicht ist. Hat ein Stück einen eigenen günstigeren Sale, gilt der niedrigere Preis.",
+    "kind": "Rabatt",
+    "kinds": {
+      "percent": "Prozentrabatt",
+      "price": "Fester Sonderpreis"
+    },
+    "percent": "Rabatt in Prozent",
+    "price": "Sonderpreis, USD",
+    "priceHint": "Regulärer Preis {price}; jede Größe behält ihren Aufpreis.",
+    "startsAt": "Beginn (Kyjiwer Zeit)",
+    "endsAt": "Ende (Kyjiwer Zeit)",
+    "windowHint": "Ohne Beginn startet der Sale sofort, ohne Ende läuft er, bis Sie ihn beenden.",
+    "save": "Sale übernehmen",
+    "remove": "Sale beenden",
+    "saved": "Sale gespeichert",
+    "removed": "Sale beendet",
+    "none": "Kein Sale.",
+    "summaryPercent": "{percent} % Rabatt",
+    "summaryPrice": "Sonderpreis {price}",
+    "state": {
+      "running": "Läuft",
+      "scheduled": "Beginnt später",
+      "ended": "Beendet"
+    },
+    "errors": {
+      "required": "Geben Sie einen Wert ein.",
+      "invalid": "Geben Sie einen gültigen Wert ein.",
+      "notBelowPrice": "Der Sonderpreis muss unter dem regulären Preis liegen.",
+      "endBeforeStart": "Das Ende muss nach dem Beginn liegen.",
+      "collectionPercentOnly": "Der Sale einer Kollektion ist ein Prozentrabatt.",
+      "notAuthorized": "Nur eine Administratorin oder ein Administrator kann das. Melden Sie sich erneut an.",
+      "notFound": "Dieses Produkt oder diese Kollektion gibt es nicht mehr.",
+      "tooManyRequests": "Zu viele Änderungen in kurzer Zeit. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      "unexpectedError": "Das hat nicht geklappt. Versuchen Sie es erneut."
     }
   }
 }

@@ -5,6 +5,7 @@ import { locales, type Locale } from "@/i18n/routing";
 import type { ProductAvailability, ProductFulfillment, ProductTranslation } from "@/lib/catalog/types";
 import { fallbackLocale } from "@/lib/catalog/mappers";
 import type { TranslationSlug } from "@/lib/catalog/product-path";
+import { businessDate } from "@/lib/money/business-date";
 import { isIndexable, type TranslationReview } from "./indexing";
 import { OG_LOCALES } from "./open-graph";
 
@@ -73,6 +74,8 @@ export type ProductJsonLdInput = {
   availability: ProductAvailability;
   /** One currency per URL: the locale's default currency (D5); null when no rate is available. */
   price: JsonLdPrice | null;
+  /** The last day `price` holds (a sale's end, #67, as YYYY-MM-DD); null for a price without an end. */
+  priceValidUntil?: string | null;
   /** A product with sizes (#66) states one Offer per size at its own price instead of `price`; empty without sizes. */
   variants: readonly JsonLdVariant[];
   /** From the home page down to the product itself, with absolute URLs. */
@@ -86,6 +89,8 @@ export type JsonLdVariant = {
   sku: string | null;
   /** In the same currency as `price`; null when no rate is available. */
   price: JsonLdPrice | null;
+  /** As the product's `priceValidUntil`. */
+  priceValidUntil?: string | null;
   /** False: a size the owner cannot make now. */
   available: boolean;
 };
@@ -117,6 +122,7 @@ export function productJsonLd(input: ProductJsonLdInput): Record<string, unknown
         itemCondition: `${SCHEMA}/NewCondition`,
       };
       if (variant.sku) offer.sku = variant.sku;
+      if (variant.priceValidUntil) offer.priceValidUntil = variant.priceValidUntil;
       return [offer];
     });
     if (offers.length > 0) product.offers = offers;
@@ -128,6 +134,7 @@ export function productJsonLd(input: ProductJsonLdInput): Record<string, unknown
       priceCurrency: input.price.priceCurrency,
       availability: schemaAvailability(input.fulfillment, input.availability),
       itemCondition: `${SCHEMA}/NewCondition`,
+      ...(input.priceValidUntil ? { priceValidUntil: input.priceValidUntil } : {}),
     };
   }
 
@@ -142,6 +149,16 @@ export function productJsonLd(input: ProductJsonLdInput): Record<string, unknown
   };
 
   return { "@context": SCHEMA, "@graph": [product, breadcrumbs] };
+}
+
+/**
+ * schema.org priceValidUntil of a sale price (#67): the last Kyiv business day the sale runs, the day of its end
+ * instant itself excluded when it ends at midnight; null for a price without an end.
+ */
+export function priceValidUntil(saleEndsAt: string | null): string | null {
+  if (saleEndsAt === null) return null;
+  const end = Date.parse(saleEndsAt);
+  return Number.isNaN(end) ? null : businessDate(new Date(end - 1));
 }
 
 /** JSON for a <script type="application/ld+json">: `<` escaped so no text can close the script element. */

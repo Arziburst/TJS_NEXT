@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
+import { HomeCollections } from "@/components/collections/home-collections";
 import { getCategoryEntries } from "@/components/catalog/category-entries";
 import { SEE_ALL_IMAGE, STATIC_BLUR } from "@/components/catalog/category-images";
 import { CategoryTiles } from "@/components/catalog/category-tiles";
@@ -59,6 +60,10 @@ export default async function HomePage() {
           />
         </Link>
       </div>
+      {/* the published collections stream in; the rest of the page stays prerendered */}
+      <Suspense>
+        <HomeCollections locale={locale as Locale} />
+      </Suspense>
     </main>
   );
 }

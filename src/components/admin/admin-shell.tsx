@@ -57,6 +57,9 @@ export async function AdminShell({ children }: { children: ReactNode }) {
               <AdminNavLink entry="add" label={t("newProduct")} />
             </li>
             <li>
+              <AdminNavLink entry="collections" label={t("collections")} />
+            </li>
+            <li>
               <AdminNavLink entry="attributes" label={t("attributes")} />
             </li>
             <li>
