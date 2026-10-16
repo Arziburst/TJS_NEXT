@@ -1,6 +1,7 @@
 {
   "telegram": {
     "newOrder": "Cerere nouă de comandă nr. {number}",
+    "statusChange": "Comanda nr. {number}: {from} → {to}",
     "placed": "Primită: {date}",
     "customer": "Client",
     "phone": "Telefon",

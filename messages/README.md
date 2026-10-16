@@ -43,10 +43,14 @@ en, uk and the other 9 locales by machine, unreviewed; from #66 the sizes (`comm
 `admin.form.sections.variants`, `admin.form.errors.hasVariants` / `variantPriceNotPositive`, `checkout.request.errors.sizeUnavailable`; the legacy app had no
 sizes), written in en, uk and the other 9 locales by machine, unreviewed; from #28 the customer account `account.*` (except the legacy
 `account.orderStatus.canceled` / `inProcessing` / `accepted` / `closed`), `nav.profile`, `nav.addresses` and
-`checkout.request.saved.*`, written in en, uk and the other 9 locales by machine, unreviewed; from #21 the
+`checkout.request.saved.*`, written in en, uk and the other 9 locales by machine, unreviewed; from #27 the admin's orders
+`admin.orders.*`, `admin.orderStatus.*` (the four legacy statuses keep the `account.orderStatus` wording) and
+`admin.shell.orders`, `ordersWithNew`, and the owner's Telegram line of a status change
+`notifications.telegram.statusChange`, written in en, uk and the other 9 locales by machine, unreviewed; from #21 the
 settings pages (`admin.shell.settings`, `admin.settings.*`), the footer's channel names (`common.contact.instagram`,
 `telegram`, `viber`, `whatsapp`: brand names, the same in every locale) and the About page's `common.about.tbd` and
-`fallbackNote` — written in en, uk and the other 9 locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
+`fallbackNote` — written in en, uk and the other 9 locales by machine, unreviewed. Legacy
+`{{ index }}` arguments became named ICU
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the
 admin enters USD).
 

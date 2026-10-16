@@ -62,6 +62,44 @@ describe("channelSenders", () => {
     expect(weekLater.fetchImpl).toHaveBeenCalledWith("http://telegram.test/bot123:test/sendMessage", expect.anything());
   });
 
+  it("tells the customer the status of an admin's change (#27) and the owner what changed", async () => {
+    const { fetchImpl, send } = senders(placed.getTime() + 60_000);
+    const change: ClaimedEvent = { ...event(), event: "order_status_changed", payload: { number: 10042, from: "in_processing", to: "accepted" } };
+    // the order has moved on since: the email still names the status of this change
+    const order = kyivBranchOrder({ status: "closed" });
+    expect(await send.email(change, order)).toEqual({ status: "sent" });
+    const email = JSON.parse(String(fetchImpl.mock.calls[0][1]?.body));
+    expect(email.subject).toBe("Замовлення № 10042: Прийнято");
+    expect(email.to).toEqual(["olena@example.test"]);
+    expect(fetchImpl.mock.calls[0][1]?.headers).toMatchObject({ "Idempotency-Key": "event-1/email" });
+
+    expect(await send.telegram(change, order)).toEqual({ status: "sent" });
+    const message = JSON.parse(String(fetchImpl.mock.calls[1][1]?.body));
+    expect(message.text).toContain("<b>Замовлення № 10042: В обробці → Прийнято</b>");
+    // the customer's name is escaped like every value from the order
+    expect(message.text).toContain("Олена &lt;b&gt; Коваль &amp; Co");
+    expect(message.text).toContain('href="');
+    expect(message.text).toContain("/uk/admin/orders/10042");
+  });
+
+  it("fails a status change without its statuses instead of sending a wrong one", async () => {
+    const { fetchImpl, send } = senders(placed.getTime());
+    const broken: ClaimedEvent = { ...event(), event: "order_status_changed", payload: { number: 10042 } };
+    expect(await send.email(broken, kyivBranchOrder())).toEqual({ status: "error", error: "the status change has no statuses" });
+    expect(await send.telegram(broken, kyivBranchOrder())).toEqual({ status: "error", error: "the status change has no statuses" });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("sends no late status email either", async () => {
+    const { fetchImpl, send } = senders(placed.getTime() + CONFIRMATION_EMAIL_MAX_AGE_MS + 1);
+    const change: ClaimedEvent = { ...event(), event: "order_status_changed", payload: { number: 10042, from: "new", to: "canceled" } };
+    expect(await send.email(change, kyivBranchOrder())).toEqual({
+      status: "skipped_expired",
+      reason: "the status change is older than 24 hours: no late email",
+    });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
   it("reports an unconfigured channel before its age", async () => {
     const off = channelSenders(
       { telegram: { ok: false, reason: "off" }, email: { ok: false, reason: "off" } },

@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
+import { countNewOrders } from "@/lib/admin/orders";
 import { AdminNavLink } from "./admin-nav-link";
 
 /**
@@ -19,7 +20,7 @@ export function AdminPending() {
  * sidebar left of the content.
  */
 export async function AdminShell({ children }: { children: ReactNode }) {
-  const [t, messages] = await Promise.all([getTranslations("admin.shell"), getMessages()]);
+  const [t, messages, newOrders] = await Promise.all([getTranslations("admin.shell"), getMessages(), countNewOrders()]);
 
   return (
     <NextIntlClientProvider
@@ -42,6 +43,13 @@ export async function AdminShell({ children }: { children: ReactNode }) {
           </p>
           <ul className="grid grid-cols-5 sb:grid-cols-1 sb:gap-1">
             <li>
+              <AdminNavLink
+                entry="orders"
+                label={t("orders")}
+                badge={newOrders ? { count: newOrders, label: t("ordersWithNew", { count: newOrders }) } : undefined}
+              />
+            </li>
+            <li>
               <AdminNavLink entry="products" label={t("products")} />
             </li>
             <li>
@@ -53,7 +61,8 @@ export async function AdminShell({ children }: { children: ReactNode }) {
             <li>
               <AdminNavLink entry="settings" label={t("settings")} />
             </li>
-            <li>
+            {/* five tabs fit a phone's bar; there the logo above leads to the shop */}
+            <li className="hidden sb:block">
               <AdminNavLink entry="shop" label={t("viewShop")} />
             </li>
           </ul>
