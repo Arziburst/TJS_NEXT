@@ -47,7 +47,7 @@ export async function OrderList({ items, locale }: { items: AdminOrderListItem[]
                 <OrderStatusBadge status={item.status} label={tStatus(item.status)} />
               </div>
               <div className="mt-3 flex items-center justify-between gap-3">
-                <p className="flex flex-wrap items-baseline gap-x-2 font-input text-sm [&>*+*]:before:mr-2 [&>*+*]:before:content-['·']">
+                <p className="flex flex-wrap items-baseline gap-x-4 font-input text-sm">
                   <span>{countryName(item.country, locale)}</span>
                   <span>{t("pieces", { count: item.quantity })}</span>
                   <Total item={item} locale={locale} className="font-sans font-semibold text-accent-text" />

@@ -457,6 +457,7 @@
       "carrier": "Corriere",
       "method": "Modalità",
       "estimate": "Stima",
+      "estimateNote": "Il cliente paga il prezzo effettivo della spedizione al corriere alla consegna.",
       "notes": "Note interne",
       "notesHint": "Solo gli amministratori vedono queste note, mai il cliente.",
       "noNotes": "Ancora nessuna nota.",

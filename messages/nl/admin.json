@@ -457,6 +457,7 @@
       "carrier": "Vervoerder",
       "method": "Manier",
       "estimate": "Schatting",
+      "estimateNote": "De klant betaalt de werkelijke bezorgprijs bij ontvangst aan de vervoerder.",
       "notes": "Interne notities",
       "notesHint": "Alleen beheerders zien deze notities, de klant nooit.",
       "noNotes": "Nog geen notities.",

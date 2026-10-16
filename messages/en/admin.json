@@ -457,6 +457,7 @@
       "carrier": "Carrier",
       "method": "Method",
       "estimate": "Estimate",
+      "estimateNote": "The customer pays the actual delivery price to the carrier on receipt.",
       "notes": "Internal notes",
       "notesHint": "Only admins see these notes; the customer never does.",
       "noNotes": "No notes yet.",

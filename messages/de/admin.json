@@ -457,6 +457,7 @@
       "carrier": "Versanddienst",
       "method": "Art",
       "estimate": "Schätzung",
+      "estimateNote": "Der Kunde zahlt den tatsächlichen Versandpreis bei Erhalt an den Versanddienst.",
       "notes": "Interne Notizen",
       "notesHint": "Nur Admins sehen diese Notizen, der Kunde nie.",
       "noNotes": "Noch keine Notizen.",

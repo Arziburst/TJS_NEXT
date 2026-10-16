@@ -457,6 +457,7 @@
       "carrier": "Transportista",
       "method": "Modalidad",
       "estimate": "Estimación",
+      "estimateNote": "El cliente paga el precio real del envío al transportista al recibirlo.",
       "notes": "Notas internas",
       "notesHint": "Solo los administradores ven estas notas; el cliente nunca.",
       "noNotes": "Aún no hay notas.",

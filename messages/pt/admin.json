@@ -457,6 +457,7 @@
       "carrier": "Transportadora",
       "method": "Modalidade",
       "estimate": "Estimativa",
+      "estimateNote": "O cliente paga o preço real da entrega à transportadora na receção.",
       "notes": "Notas internas",
       "notesHint": "Só os administradores veem estas notas; o cliente nunca.",
       "noNotes": "Ainda não há notas.",

@@ -457,6 +457,7 @@
       "carrier": "Przewoźnik",
       "method": "Sposób",
       "estimate": "Szacunek",
+      "estimateNote": "Klient płaci rzeczywistą cenę dostawy przewoźnikowi przy odbiorze.",
       "notes": "Notatki wewnętrzne",
       "notesHint": "Te notatki widzą tylko administratorzy, nigdy klient.",
       "noNotes": "Nie ma jeszcze notatek.",

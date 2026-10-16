@@ -457,6 +457,7 @@
       "carrier": "Dopravce",
       "method": "Způsob",
       "estimate": "Odhad",
+      "estimateNote": "Skutečnou cenu dopravy zákazník platí dopravci při převzetí.",
       "notes": "Interní poznámky",
       "notesHint": "Tyto poznámky vidí jen administrátoři, zákazník nikdy.",
       "noNotes": "Zatím žádné poznámky.",

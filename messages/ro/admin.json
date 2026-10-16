@@ -457,6 +457,7 @@
       "carrier": "Curier",
       "method": "Mod",
       "estimate": "Estimare",
+      "estimateNote": "Clientul plătește prețul real al livrării curierului la primire.",
       "notes": "Note interne",
       "notesHint": "Doar administratorii văd aceste note, clientul niciodată.",
       "noNotes": "Încă nu există note.",

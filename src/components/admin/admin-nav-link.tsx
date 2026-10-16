@@ -53,7 +53,7 @@ export function AdminNavLink({ entry, label, badge }: AdminNavLinkProps) {
         active ? "text-accent-text" : "hover:text-accent-text",
       )}
     >
-      <span className="relative shrink-0">
+      <span className={cn("relative shrink-0", count && "sb:mr-2")}>
         <Icon aria-hidden className="size-5" />
         {count && (
           <span

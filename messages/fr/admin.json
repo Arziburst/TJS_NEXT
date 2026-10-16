@@ -457,6 +457,7 @@
       "carrier": "Transporteur",
       "method": "Mode",
       "estimate": "Estimation",
+      "estimateNote": "Le client paie le prix réel de la livraison au transporteur à la réception.",
       "notes": "Notes internes",
       "notesHint": "Seuls les administrateurs voient ces notes, jamais le client.",
       "noNotes": "Aucune note pour l’instant.",

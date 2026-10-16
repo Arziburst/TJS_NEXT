@@ -233,7 +233,7 @@ export async function OrderDetail({ order, locale }: { order: AdminOrder; locale
               </li>
             ))}
           </ul>
-          <dl className="grid gap-2">
+          <dl className="grid gap-2 font-input">
             <div className="flex items-baseline justify-between gap-4 border-t-2 border-primary pt-3" data-testid="order-total">
               <dt>{t("detail.goodsTotal")}</dt>
               <dd className="font-sans text-xl text-accent-text">
@@ -280,7 +280,7 @@ export async function OrderDetail({ order, locale }: { order: AdminOrder; locale
           </dl>
           <p className="flex items-start gap-2 font-input text-sm">
             <InfoIcon aria-hidden className="mt-0.5 size-4 shrink-0" />
-            {tCheckout("done.deliveryNote")}
+            {t("detail.estimateNote")}
           </p>
         </Section>
 
