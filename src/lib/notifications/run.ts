@@ -17,8 +17,17 @@ export function adminOrderUrl(number: number): string {
   return new URL(`/${TELEGRAM_LOCALE}${routes.admin.path}/orders/${number}`, getMetadataBase()).toString();
 }
 
+// The customer's confirmation goes out only for an order placed at most this long ago: a request stored while
+// sending was down or not yet configured (the backlog before this sender existed) gets no confirmation days late.
+// The owner's Telegram message has no limit: every order request reaches the owner.
+export const CONFIRMATION_EMAIL_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+
 /** The senders of the real channels: Telegram to the owner's group, the email to the customer. */
-export function channelSenders(config: NotificationConfig, fetchImpl: typeof fetch = fetch): ProcessorDeps["send"] {
+export function channelSenders(
+  config: NotificationConfig,
+  fetchImpl: typeof fetch = fetch,
+  now: () => Date = () => new Date(),
+): ProcessorDeps["send"] {
   return {
     telegram: async (_event, order) => {
       if (!config.telegram.ok) return { status: "skipped_unconfigured", reason: config.telegram.reason };
@@ -29,6 +38,9 @@ export function channelSenders(config: NotificationConfig, fetchImpl: typeof fet
     },
     email: async (event, order) => {
       if (!config.email.ok) return { status: "skipped_unconfigured", reason: config.email.reason };
+      if (now().getTime() - new Date(event.createdAt).getTime() > CONFIRMATION_EMAIL_MAX_AGE_MS) {
+        return { status: "skipped_expired", reason: "the order is older than 24 hours: no late confirmation" };
+      }
       const [t, contacts] = await Promise.all([notificationsTranslator(order.locale), readShopContacts()]);
       const email = renderOrderConfirmation(order, { t, contacts, siteUrl: getMetadataBase() });
       const sent = await sendEmail(config.email.config, { to: order.email, ...email, idempotencyKey: `${event.id}/email` }, fetchImpl);

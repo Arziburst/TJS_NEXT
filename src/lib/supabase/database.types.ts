@@ -457,7 +457,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "notification_delivery": "pending"|"sent"|"skipped_unconfigured"|"failed","order_status": "new"|"pending_payment"|"paid"|"in_processing"|"accepted"|"closed"|"canceled"|"refunded","product_availability": "available"|"reserved"|"sold","product_fulfillment": "made_to_order"|"one_of_a_kind","product_status": "draft"|"published"|"archived","taxonomy_kind": "material"|"colour","translation_source": "human"|"machine","user_role": "customer"|"admin"
+            "notification_delivery": "pending"|"sent"|"skipped_unconfigured"|"skipped_expired"|"failed","order_status": "new"|"pending_payment"|"paid"|"in_processing"|"accepted"|"closed"|"canceled"|"refunded","product_availability": "available"|"reserved"|"sold","product_fulfillment": "made_to_order"|"one_of_a_kind","product_status": "draft"|"published"|"archived","taxonomy_kind": "material"|"colour","translation_source": "human"|"machine","user_role": "customer"|"admin"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -573,7 +573,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "notification_delivery": ["pending", "sent", "skipped_unconfigured", "failed"],"order_status": ["new", "pending_payment", "paid", "in_processing", "accepted", "closed", "canceled", "refunded"],"product_availability": ["available", "reserved", "sold"],"product_fulfillment": ["made_to_order", "one_of_a_kind"],"product_status": ["draft", "published", "archived"],"taxonomy_kind": ["material", "colour"],"translation_source": ["human", "machine"],"user_role": ["customer", "admin"]
+            "notification_delivery": ["pending", "sent", "skipped_unconfigured", "skipped_expired", "failed"],"order_status": ["new", "pending_payment", "paid", "in_processing", "accepted", "closed", "canceled", "refunded"],"product_availability": ["available", "reserved", "sold"],"product_fulfillment": ["made_to_order", "one_of_a_kind"],"product_status": ["draft", "published", "archived"],"taxonomy_kind": ["material", "colour"],"translation_source": ["human", "machine"],"user_role": ["customer", "admin"]
           }
         }
 } as const

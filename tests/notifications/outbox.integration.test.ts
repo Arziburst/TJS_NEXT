@@ -171,6 +171,25 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
     expect(new Set(apis.email).size).toBe(apis.email.length);
   });
 
+  it("an order older than 24 hours (the backlog) reaches the owner, but its customer gets no late confirmation", async () => {
+    const productId = await madeToOrderProduct();
+    const { orderId, number } = await placeOrder(productId);
+    const backdated = await service
+      .from("outbox_events")
+      .update({ created_at: new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString() })
+      .eq("order_id", orderId);
+    if (backdated.error) throw backdated.error;
+    const apis = fakeApis();
+
+    await processor(configured, apis.fetchImpl);
+    const event = await eventOf(orderId);
+    expect(event).toMatchObject({ telegram_status: "sent", email_status: "skipped_expired", attempts: 1 });
+    expect(event.processed_at).not.toBeNull();
+    expect(event.last_error).toBe("email: the order is older than 24 hours: no late confirmation");
+    expect(apis.telegram.filter((sent) => sent === number)).toHaveLength(1);
+    expect(apis.email.filter((key) => key === `${event.id}/email`)).toHaveLength(0);
+  });
+
   it("without settings the events are skipped, not failed, and nothing is sent", async () => {
     const productId = await madeToOrderProduct();
     const { orderId } = await placeOrder(productId);

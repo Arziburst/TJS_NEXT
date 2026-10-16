@@ -10,13 +10,14 @@ import type { ClaimedEvent, Completion } from "./processor";
 // The outbox and the orders as the processor sees them (supabase/migrations/…_notification_outbox.sql), through
 // the service-role client: nobody else reaches the outbox.
 
-const delivery = z.enum(["pending", "sent", "skipped_unconfigured", "failed"]);
+const delivery = z.enum(["pending", "sent", "skipped_unconfigured", "skipped_expired", "failed"]);
 
 const claimedRow = z.object({
   id: z.uuid(),
   claim_token: z.uuid(),
   event: z.string(),
   order_id: z.uuid(),
+  created_at: z.string(),
   attempts: z.number().int().positive(),
   telegram_status: delivery,
   email_status: delivery,
@@ -33,6 +34,7 @@ export async function claimOutboxEvents(service: ServerSupabaseClient, limit: nu
       claimToken: row.claim_token,
       event: row.event,
       orderId: row.order_id,
+      createdAt: row.created_at,
       attempts: row.attempts,
       telegram: row.telegram_status,
       email: row.email_status,

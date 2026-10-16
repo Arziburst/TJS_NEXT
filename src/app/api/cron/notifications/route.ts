@@ -1,8 +1,9 @@
 import { isAuthorizedCron } from "@/lib/money/cron-auth";
 import { runNotifications } from "@/lib/notifications/run";
 
-// The daily pass over the notifications outbox (vercel.json crons): sends what the run after an order could not,
-// once its retry is due. Every placed order also starts a run right away (after() in the checkout action).
+// The pass over the notifications outbox every six hours (four daily vercel.json crons of this path): sends what
+// the run after an order could not, once its retry is due. Every placed order also starts a run right away
+// (after() in the checkout action).
 // Called by Vercel Cron only; answers 401 to anyone without CRON_SECRET.
 export async function GET(request: Request) {
   if (!isAuthorizedCron(request.headers.get("authorization"), process.env.CRON_SECRET)) {

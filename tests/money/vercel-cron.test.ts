@@ -22,18 +22,29 @@ describe("vercel.json crons", () => {
     expect(config.crons).toContainEqual({ path: "/api/cron/staged-uploads", schedule: "45 3 * * *" });
   });
 
-  it("passes over the notifications outbox daily at 06:00 UTC", () => {
-    // the morning in Kyiv (08:00 or 09:00): retries that came due overnight reach the owner and the customers then
-    expect(config.crons).toContainEqual({ path: "/api/cron/notifications", schedule: "0 6 * * *" });
+  it("passes over the notifications outbox every six hours, as four daily crons", () => {
+    // Hobby runs each cron entry once a day; four entries of one path (allowed by Vercel) retry a failed message
+    // within about six hours instead of the next day
+    expect(config.crons.filter((cron) => cron.path === "/api/cron/notifications").map((cron) => cron.schedule)).toEqual([
+      "0 0 * * *",
+      "0 6 * * *",
+      "0 12 * * *",
+      "0 18 * * *",
+    ]);
   });
 
   it("has no other cron", () => {
-    expect(config.crons.map((cron) => cron.path).sort()).toEqual([
+    expect([...new Set(config.crons.map((cron) => cron.path))].sort()).toEqual([
       "/api/cron/fx-rates",
       "/api/cron/notifications",
       "/api/cron/nova-poshta",
       "/api/cron/staged-uploads",
     ]);
+  });
+
+  it("has no duplicate entry", () => {
+    const entries = config.crons.map((cron) => `${cron.path} ${cron.schedule}`);
+    expect(new Set(entries).size).toBe(entries.length);
   });
 
   it("runs each cron at most once a day (Vercel Hobby, D32)", () => {

@@ -45,7 +45,16 @@ function outbox(count: number, event = "order_created") {
         .map((row) => {
           row.attempts += 1;
           row.claimToken = `claim-${(token += 1)}`;
-          return { id: row.id, claimToken: row.claimToken, event, orderId: row.orderId, attempts: row.attempts, telegram: row.telegram, email: row.email };
+          return {
+            id: row.id,
+            claimToken: row.claimToken,
+            event,
+            orderId: row.orderId,
+            createdAt: "2026-10-16T09:05:00Z",
+            attempts: row.attempts,
+            telegram: row.telegram,
+            email: row.email,
+          };
         }),
     complete: async (completion: Completion): Promise<boolean> => {
       completions.push(completion);
@@ -154,6 +163,13 @@ describe("processOutbox", () => {
       email: "sent",
       lastError: "telegram: not configured (TELEGRAM_BOT_TOKEN unset)",
     });
+  });
+
+  it("marks a message that is too late skipped_expired and still sends the other channel", async () => {
+    const store = outbox(1);
+    const run = deps(store, { email: async () => ({ status: "skipped_expired", reason: "too old" }) });
+    expect(await processOutbox(run)).toMatchObject({ processed: 1, skipped: 1, sent: 1, failed: 0 });
+    expect(store.rows[0]).toMatchObject({ processed: true, telegram: "sent", email: "skipped_expired", lastError: "email: too old" });
   });
 
   it("treats a sender that throws like a failed send", async () => {

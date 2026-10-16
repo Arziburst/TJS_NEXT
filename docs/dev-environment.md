@@ -352,16 +352,22 @@ processor (`src/lib/notifications/`, #26) sends it to two channels and keeps eac
   settings of #21 provide them). Templates: `src/emails/` (confirmation, and the status change for #27);
   rendered examples: `tests/notifications/__snapshots__/`.
 
-**When it runs.** Right after a placed order (`after()` in the checkout action) and daily at `0 6 * * *` UTC
-(`GET /api/cron/notifications`, `CRON_SECRET`). A run claims up to 5 × 10 due events (`claim_outbox_events`:
-`FOR UPDATE SKIP LOCKED`, a 5-minute lease, a claim token), so two runs never send one message twice; a run that
-dies leaves its events due again when the lease ends. A failed send is retried after 1, 2, 4 … minutes (at most
-6 hours) by the next run, and marked `failed` at the 8th attempt; with the daily cron on Hobby, a retry waits for
-the next order or the next morning. The order itself is never changed by a send.
+**When it runs.** Right after a placed order (`after()` in the checkout action) and every six hours from
+`GET /api/cron/notifications` (`CRON_SECRET`): four `vercel.json` entries of that path at `0 0`, `0 6`, `0 12` and
+`0 18` UTC, because Hobby runs each entry once a day (somewhere within its hour). A run claims up to 5 × 10 due
+events (`claim_outbox_events`: `FOR UPDATE SKIP LOCKED`, a 5-minute lease, a claim token), so two runs never send
+one message twice; a run that dies leaves its events due again when the lease ends. A failed send is retried after
+1, 2, 4 … minutes (at most 6 hours) by the next run (the next order's or the next cron's), and marked `failed` at
+the 8th attempt. The order itself is never changed by a send.
+
+**Late confirmations.** The customer's email goes out only for an order placed at most 24 hours ago
+(`CONFIRMATION_EMAIL_MAX_AGE_MS`); an older one, e.g. the requests stored before this sender was configured, is
+marked `skipped_expired`. The owner's Telegram message has no limit: every order request reaches the owner.
 
 **Outcomes** (`telegram_status`, `email_status`, `last_error` on the outbox row; the admin's view comes with #27):
 `pending` → `sent`, or `skipped_unconfigured` (sending is off or the channel's settings are missing; not retried,
-the reason in `last_error`), or `failed` (the last attempt failed too). To see them locally:
+the reason in `last_error`), or `skipped_expired` (the confirmation would be over 24 hours late), or `failed` (the
+last attempt failed too). To see them locally:
 
 ```sql
 select o.number, e.telegram_status, e.email_status, e.attempts, e.next_attempt_at, e.last_error
@@ -430,8 +436,9 @@ fires a daily cron at some minute within that hour, always after NBU publishes a
 `GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), with the same
 secret. `GET /api/cron/staged-uploads` (#92) removes photo uploads older than a day that never left the private
 `product-image-uploads` staging bucket, daily at `45 3 * * *` (UTC), and `GET /api/cron/notifications` (#26) sends
-the due retries of the notifications outbox daily at `0 6 * * *` (UTC), both with the same secret (Hobby allows up
-to 100 crons a project, each at most once a day; `tests/money/vercel-cron.test.ts` checks every schedule). Runs and
+the due retries of the notifications outbox at `0 0`, `0 6`, `0 12` and `0 18` UTC (four entries of the same path),
+all with the same secret (Hobby allows up to 100 crons a project, each at most once a day; the same path may have
+several entries; `tests/money/vercel-cron.test.ts` checks every schedule). Runs and
 their logs: the project's *Cron Jobs* settings and the function logs.
 
 **Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`

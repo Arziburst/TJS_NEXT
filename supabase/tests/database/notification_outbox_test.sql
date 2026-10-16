@@ -4,7 +4,7 @@
 -- tests/notifications/outbox.integration.test.ts (one pgTAP transaction cannot hold two sessions).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(27);
+select plan(28);
 
 -- Fixture: one guest order request for the seed's made-to-order TEST-001 ($24.90; test values below).
 select is(
@@ -40,6 +40,11 @@ select results_eq(
     from public.outbox_events where id = (select event_id from fixture)$$,
   $$values ('pending', 'pending', 0, true, true)$$,
   'a new event waits with both channels pending'
+);
+
+select enum_has_labels(
+  'public', 'notification_delivery', array['pending', 'sent', 'skipped_unconfigured', 'skipped_expired', 'failed'],
+  'a channel is pending, sent, skipped (not configured, or too late) or failed'
 );
 
 -- Access -----------------------------------------------------------------------------------------------------

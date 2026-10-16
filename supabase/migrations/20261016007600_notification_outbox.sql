@@ -13,8 +13,10 @@
 
 -- pending: not sent yet (or retried later); sent: the provider accepted it; skipped_unconfigured: sending is not
 -- configured where it ran (no key, chat id or sender, or sending is off), visible to the admin, never retried;
--- failed: the last attempt (MAX_ATTEMPTS) failed too
-create type public.notification_delivery as enum ('pending', 'sent', 'skipped_unconfigured', 'failed');
+-- skipped_expired: the customer's confirmation was not sent because the order is older than the app's limit (a
+-- backlog sent late, e.g. the requests stored before this sender existed); failed: the last attempt
+-- (MAX_ATTEMPTS) failed too
+create type public.notification_delivery as enum ('pending', 'sent', 'skipped_unconfigured', 'skipped_expired', 'failed');
 
 alter table public.outbox_events
   add column telegram_status public.notification_delivery not null default 'pending',

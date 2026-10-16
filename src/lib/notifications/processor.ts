@@ -3,12 +3,12 @@ import "server-only";
 import type { NotificationOrder } from "./order";
 
 // The outbox processor (D11: sending never blocks or loses an order). It runs after an order is placed (after())
-// and by the daily cron; each run claims the due events (claim_outbox_events: FOR UPDATE SKIP LOCKED and a
+// and by the cron every six hours; each run claims the due events (claim_outbox_events: FOR UPDATE SKIP LOCKED and a
 // lease), sends every channel still pending and writes the outcome back with the claim's token
 // (complete_outbox_event). A failed channel is retried with exponential backoff until MAX_ATTEMPTS; a channel
 // that is not configured is skipped. The order is only read here, never changed.
 
-export type Delivery = "pending" | "sent" | "skipped_unconfigured" | "failed";
+export type Delivery = "pending" | "sent" | "skipped_unconfigured" | "skipped_expired" | "failed";
 export type Channel = "telegram" | "email";
 
 export const CHANNELS = ["telegram", "email"] as const satisfies readonly Channel[];
@@ -34,13 +34,19 @@ export type ClaimedEvent = {
   claimToken: string;
   event: string;
   orderId: string;
+  // when the event was written, i.e. when the order was placed
+  createdAt: string;
   // counts this claim
   attempts: number;
   telegram: Delivery;
   email: Delivery;
 };
 
-export type SendOutcome = { status: "sent" } | { status: "skipped_unconfigured"; reason: string } | { status: "error"; error: string };
+export type SendOutcome =
+  | { status: "sent" }
+  // not sent and never retried: sending is not configured, or the message is too late to be useful
+  | { status: "skipped_unconfigured" | "skipped_expired"; reason: string }
+  | { status: "error"; error: string };
 
 export type Completion = {
   id: string;
@@ -92,7 +98,7 @@ async function deliver(
   }
 
   if (outcome.status === "sent") return { status: "sent", note: null, sentNow: true };
-  if (outcome.status === "skipped_unconfigured") return { status: "skipped_unconfigured", note: `${channel}: ${outcome.reason}`, sentNow: false };
+  if (outcome.status !== "error") return { status: outcome.status, note: `${channel}: ${outcome.reason}`, sentNow: false };
   const final = event.attempts >= MAX_ATTEMPTS;
   return { status: final ? "failed" : "pending", note: `${channel}: ${outcome.error}`, sentNow: false };
 }
@@ -123,7 +129,7 @@ async function processEvent(event: ClaimedEvent, deps: ProcessorDeps, report: Pr
   for (const channel of CHANNELS) {
     const result = results[channel];
     if (result.sentNow) report.sent += 1;
-    if (event[channel] === "pending" && result.status === "skipped_unconfigured") report.skipped += 1;
+    if (event[channel] === "pending" && result.status.startsWith("skipped_")) report.skipped += 1;
     if (event[channel] === "pending" && result.status === "failed") report.failed += 1;
   }
   if (!completed) report.lostClaims += 1;
