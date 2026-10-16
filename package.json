@@ -17,6 +17,7 @@
     "test:unit": "vitest run",
     "test:integration": "vitest run integration",
     "test:e2e": "playwright test",
+    "test:smoke-prod": "playwright test -c e2e/smoke-prod/playwright.config.ts",
     "presupabase:start": "pwsh -NoProfile -File scripts/dev/Assert-NotSharedMainFromWorktree.ps1",
     "supabase:start": "supabase start",
     "presupabase:stop": "pwsh -NoProfile -File scripts/dev/Assert-NotSharedMainFromWorktree.ps1",

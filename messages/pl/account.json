@@ -84,6 +84,8 @@
     "back": "Wszystkie zamówienia",
     "placed": "Wysłano {date}",
     "status": "Status",
+    "history": "Historia statusów",
+    "historyError": "Nie udało się wczytać historii statusów. Spróbuj ponownie później.",
     "lines": "Zamówione produkty",
     "quantity": "Ilość: {quantity}",
     "goodsTotal": "Razem za produkty",

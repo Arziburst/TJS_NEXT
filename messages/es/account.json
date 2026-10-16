@@ -84,6 +84,8 @@
     "back": "Todos los pedidos",
     "placed": "Enviado el {date}",
     "status": "Estado",
+    "history": "Historial de estados",
+    "historyError": "No se pudo cargar el historial de estados. Inténtalo de nuevo más tarde.",
     "lines": "Piezas pedidas",
     "quantity": "Cantidad: {quantity}",
     "goodsTotal": "Total de las piezas",

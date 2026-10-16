@@ -1,6 +1,12 @@
 import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import {
+  BASE_SECURITY_HEADERS,
+  contentSecurityPolicy,
+  cspOptionsFromEnv,
+  HSTS_HEADER,
+} from "./src/lib/security/headers";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
@@ -52,6 +58,16 @@ const nextConfig: NextConfig = {
   experimental: {
     // the root layout is app/[locale]/layout.tsx, so an unknown locale needs a layout-free 404
     globalNotFound: true,
+  },
+  // #31: security headers on every response (pages, API routes, assets, redirects); the strict report-only
+  // policy with a nonce comes from src/proxy.ts on pages. Rules: src/lib/security/headers.ts
+  async headers() {
+    const csp = contentSecurityPolicy(cspOptionsFromEnv());
+    return [
+      { source: "/:path*", headers: [...BASE_SECURITY_HEADERS, { key: "Content-Security-Policy", value: csp }] },
+      // HSTS only where the request came over https (behind a proxy or a CDN that says so), never on local http
+      { source: "/:path*", has: [{ type: "header", key: "x-forwarded-proto", value: "https" }], headers: [HSTS_HEADER] },
+    ];
   },
 };
 
