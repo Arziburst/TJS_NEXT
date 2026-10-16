@@ -28,6 +28,12 @@
       "email": "E-mail"
     },
     "commentHint": "Nepovinné",
+    "saved": {
+      "label": "Uložené adresy",
+      "other": "Jiná adresa",
+      "default": "výchozí",
+      "manage": "Spravovat adresy"
+    },
     "summary": {
       "lines": "Kusy v objednávce",
       "quantity": "Množství: {quantity}",

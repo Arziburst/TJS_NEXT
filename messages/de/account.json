@@ -3,6 +3,141 @@
     "canceled": "Storniert",
     "inProcessing": "In Bearbeitung",
     "accepted": "Angenommen",
-    "closed": "Abgeschlossen"
+    "closed": "Abgeschlossen",
+    "new": "Neu",
+    "pendingPayment": "Zahlung ausstehend",
+    "paid": "Bezahlt",
+    "refunded": "Erstattet"
+  },
+  "title": "Mein Konto",
+  "sections": {
+    "label": "Bereiche des Kontos",
+    "profile": "Profil",
+    "orders": "Bestellungen",
+    "addresses": "Adressen",
+    "favorites": "Favoriten"
+  },
+  "loadError": "Diese Seite konnte nicht geladen werden. Bitte versuchen Sie es später erneut.",
+  "profile": {
+    "title": "Profil",
+    "intro": "Ihre Angaben werden in das Formular der Bestellanfrage übernommen.",
+    "firstName": "Vorname",
+    "lastName": "Nachname (optional)",
+    "phone": "Telefon (optional)",
+    "phoneHint": "Mit Ländervorwahl, zum Beispiel +49 30 1234567",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Ihre Angaben sind gespeichert.",
+    "errors": {
+      "firstName": "Geben Sie Ihren Vornamen ein (bis zu 100 Zeichen).",
+      "lastName": "Der Nachname ist zu lang.",
+      "phone": "Geben Sie die Telefonnummer mit Ländervorwahl ein, zum Beispiel +49301234567.",
+      "rateLimited": "Zu viele Änderungen. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      "signedOut": "Sie sind abgemeldet. Bitte melden Sie sich erneut an.",
+      "unexpected": "Ihre Angaben konnten nicht gespeichert werden. Bitte versuchen Sie es erneut."
+    }
+  },
+  "email": {
+    "title": "E-Mail",
+    "current": "Aktuelle E-Mail",
+    "new": "Neue E-Mail",
+    "submit": "E-Mail ändern",
+    "sending": "Wird gesendet…",
+    "hint": "Wir senden einen Bestätigungslink an die aktuelle und an die neue Adresse. Die E-Mail ändert sich, sobald beide Links geöffnet wurden.",
+    "sent": "Prüfen Sie beide Postfächer: Wir haben Bestätigungslinks an Ihre aktuelle Adresse und an {email} gesendet.",
+    "pending": "Die Änderung auf {email} wartet auf Bestätigung: Öffnen Sie die Links in den E-Mails an Ihre aktuelle und an die neue Adresse.",
+    "errors": {
+      "invalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "same": "Das ist bereits Ihre E-Mail.",
+      "rateLimited": "Zu viele Versuche. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      "signedOut": "Sie sind abgemeldet. Bitte melden Sie sich erneut an.",
+      "unexpected": "Die E-Mail konnte nicht geändert werden. Bitte versuchen Sie es erneut."
+    }
+  },
+  "security": {
+    "title": "Passwort und Abmeldung",
+    "changePassword": "Passwort ändern",
+    "signOut": "Abmelden"
+  },
+  "orders": {
+    "title": "Bestellungen",
+    "intro": "Ihre Bestellanfragen und ihr Status, die neuesten zuerst.",
+    "empty": "Sie haben noch keine Bestellanfragen gesendet.",
+    "toShop": "Zum Shop",
+    "number": "Bestellung {number}",
+    "date": "Datum",
+    "status": "Status",
+    "total": "Summe",
+    "pieces": "{count, plural, one {# Stück} other {# Stück}}",
+    "details": "Details der Bestellung {number}",
+    "pastEnd": "Auf dieser Seite gibt es keine Bestellungen.",
+    "lastPage": "Zur letzten Seite",
+    "pagination": {
+      "label": "Seiten der Bestellungen",
+      "previous": "Neuere Bestellungen",
+      "next": "Ältere Bestellungen",
+      "page": "Seite {page} von {pages}"
+    }
+  },
+  "order": {
+    "title": "Bestellung {number}",
+    "back": "Alle Bestellungen",
+    "placed": "Gesendet am {date}",
+    "status": "Status",
+    "lines": "Bestellte Stücke",
+    "quantity": "Menge: {quantity}",
+    "goodsTotal": "Summe der Stücke",
+    "contact": "Kontaktdaten",
+    "delivery": "Lieferung",
+    "estimate": "Versand (Schätzung)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "wird vom Zusteller berechnet",
+    "deliveryNote": "Den tatsächlichen Versandpreis bezahlen Sie beim Empfang an den Zusteller.",
+    "comment": "Kommentar",
+    "notFound": {
+      "title": "Bestellung nicht gefunden",
+      "text": "In Ihrem Konto gibt es keine Bestellung mit dieser Nummer."
+    }
+  },
+  "addresses": {
+    "title": "Lieferadressen",
+    "intro": "Speichern Sie bis zu {max} Adressen. Die Standardadresse wird eingetragen, wenn Sie eine Bestellanfrage senden.",
+    "empty": "Noch keine gespeicherten Adressen.",
+    "default": "Standard",
+    "makeDefault": "Als Standard festlegen",
+    "delete": "Löschen",
+    "deleteLabel": "Adresse {name} löschen",
+    "makeDefaultLabel": "{name} als Standardadresse festlegen",
+    "add": "Adresse hinzufügen",
+    "label": "Name der Adresse (optional)",
+    "labelHint": "Zum Beispiel: Zuhause, Büro",
+    "country": "Land",
+    "countryPlaceholder": "Land auswählen",
+    "method": "Lieferung",
+    "methods": {
+      "warehouse": "Filiale oder Paketstation",
+      "address": "Kurier an die Adresse",
+      "division": "Filiale, Paketstation oder Abholpunkt"
+    },
+    "save": "Adresse speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Die Adresse ist gespeichert.",
+    "full": "Sie haben {max} Adressen: Löschen Sie eine, um eine weitere hinzuzufügen.",
+    "kinds": {
+      "novaPoshtaBranch": "Nova-Poshta-Filiale",
+      "novaPoshtaPostomat": "Nova-Poshta-Paketstation",
+      "novaPoshtaAddress": "Nova-Poshta-Kurier",
+      "novaPostDivision": "Nova-Post-Punkt",
+      "novaPostAddress": "Nova-Post-Kurier"
+    },
+    "errors": {
+      "delivery": "Wählen Sie den Lieferpunkt oder füllen Sie die Adresse aus.",
+      "label": "Der Name ist zu lang.",
+      "limitReached": "Sie haben bereits {max} Adressen: Löschen Sie eine, um eine weitere hinzuzufügen.",
+      "notFound": "Diese Adresse gibt es nicht mehr.",
+      "rateLimited": "Zu viele Änderungen. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      "signedOut": "Sie sind abgemeldet. Bitte melden Sie sich erneut an.",
+      "unexpected": "Die Adresse konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
+    }
   }
 }

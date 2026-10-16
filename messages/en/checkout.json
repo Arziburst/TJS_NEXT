@@ -28,6 +28,12 @@
       "email": "Email"
     },
     "commentHint": "Optional",
+    "saved": {
+      "label": "Saved addresses",
+      "other": "Another address",
+      "default": "default",
+      "manage": "Manage the addresses"
+    },
     "summary": {
       "lines": "Pieces in the order",
       "quantity": "Quantity: {quantity}",

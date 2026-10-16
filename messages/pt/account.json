@@ -3,6 +3,141 @@
     "canceled": "Cancelada",
     "inProcessing": "Em processamento",
     "accepted": "Aceite",
-    "closed": "Concluída"
+    "closed": "Concluída",
+    "new": "Nova",
+    "pendingPayment": "A aguardar pagamento",
+    "paid": "Paga",
+    "refunded": "Reembolsada"
+  },
+  "title": "A minha conta",
+  "sections": {
+    "label": "Secções da conta",
+    "profile": "Perfil",
+    "orders": "Encomendas",
+    "addresses": "Moradas",
+    "favorites": "Favoritos"
+  },
+  "loadError": "Não foi possível carregar esta página. Tente novamente mais tarde.",
+  "profile": {
+    "title": "Perfil",
+    "intro": "Os seus dados preenchem o formulário do pedido de encomenda.",
+    "firstName": "Nome",
+    "lastName": "Apelido (opcional)",
+    "phone": "Telefone (opcional)",
+    "phoneHint": "Com o indicativo do país, por exemplo +351 912 345 678",
+    "save": "Guardar",
+    "saving": "A guardar…",
+    "saved": "Os seus dados foram guardados.",
+    "errors": {
+      "firstName": "Indique o seu nome (até 100 caracteres).",
+      "lastName": "O apelido é demasiado longo.",
+      "phone": "Indique o número de telefone com o indicativo do país, por exemplo +351912345678.",
+      "rateLimited": "Demasiadas alterações. Aguarde alguns minutos e tente novamente.",
+      "signedOut": "Terminou a sessão. Inicie sessão novamente.",
+      "unexpected": "Não foi possível guardar os seus dados. Tente novamente."
+    }
+  },
+  "email": {
+    "title": "Email",
+    "current": "Email atual",
+    "new": "Novo email",
+    "submit": "Alterar o email",
+    "sending": "A enviar…",
+    "hint": "Enviamos uma ligação de confirmação para o endereço atual e para o novo. O email muda quando ambas as ligações forem abertas.",
+    "sent": "Verifique as duas caixas: enviámos ligações de confirmação para o seu endereço atual e para {email}.",
+    "pending": "A alteração para {email} aguarda confirmação: abra as ligações dos emails enviados para o endereço atual e para o novo.",
+    "errors": {
+      "invalid": "Indique um endereço de email válido.",
+      "same": "Este já é o seu email.",
+      "rateLimited": "Demasiadas tentativas. Aguarde alguns minutos e tente novamente.",
+      "signedOut": "Terminou a sessão. Inicie sessão novamente.",
+      "unexpected": "Não foi possível alterar o email. Tente novamente."
+    }
+  },
+  "security": {
+    "title": "Palavra-passe e saída",
+    "changePassword": "Alterar a palavra-passe",
+    "signOut": "Terminar sessão"
+  },
+  "orders": {
+    "title": "Encomendas",
+    "intro": "Os seus pedidos de encomenda e o respetivo estado, os mais recentes primeiro.",
+    "empty": "Ainda não enviou nenhum pedido de encomenda.",
+    "toShop": "Ir para a loja",
+    "number": "Encomenda {number}",
+    "date": "Data",
+    "status": "Estado",
+    "total": "Total",
+    "pieces": "{count, plural, one {# peça} other {# peças}}",
+    "details": "Detalhes da encomenda {number}",
+    "pastEnd": "Não há encomendas nesta página.",
+    "lastPage": "Ir para a última página",
+    "pagination": {
+      "label": "Páginas das encomendas",
+      "previous": "Encomendas mais recentes",
+      "next": "Encomendas mais antigas",
+      "page": "Página {page} de {pages}"
+    }
+  },
+  "order": {
+    "title": "Encomenda {number}",
+    "back": "Todas as encomendas",
+    "placed": "Enviada a {date}",
+    "status": "Estado",
+    "lines": "Peças encomendadas",
+    "quantity": "Quantidade: {quantity}",
+    "goodsTotal": "Total das peças",
+    "contact": "Dados de contacto",
+    "delivery": "Envio",
+    "estimate": "Envio (estimativa)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calculado pela transportadora",
+    "deliveryNote": "O preço real do envio é pago à transportadora na receção.",
+    "comment": "Comentário",
+    "notFound": {
+      "title": "Encomenda não encontrada",
+      "text": "Não existe nenhuma encomenda com este número na sua conta."
+    }
+  },
+  "addresses": {
+    "title": "Moradas de entrega",
+    "intro": "Guarde até {max} moradas. A morada predefinida é preenchida quando envia um pedido de encomenda.",
+    "empty": "Ainda não há moradas guardadas.",
+    "default": "Predefinida",
+    "makeDefault": "Tornar predefinida",
+    "delete": "Eliminar",
+    "deleteLabel": "Eliminar a morada {name}",
+    "makeDefaultLabel": "Tornar {name} a morada predefinida",
+    "add": "Adicionar uma morada",
+    "label": "Nome da morada (opcional)",
+    "labelHint": "Por exemplo: Casa, Escritório",
+    "country": "País",
+    "countryPlaceholder": "Escolha um país",
+    "method": "Envio",
+    "methods": {
+      "warehouse": "Balcão ou cacifo",
+      "address": "Estafeta para a morada",
+      "division": "Balcão, cacifo ou ponto de recolha"
+    },
+    "save": "Guardar a morada",
+    "saving": "A guardar…",
+    "saved": "A morada foi guardada.",
+    "full": "Tem {max} moradas: elimine uma para adicionar outra.",
+    "kinds": {
+      "novaPoshtaBranch": "Balcão Nova Poshta",
+      "novaPoshtaPostomat": "Cacifo Nova Poshta",
+      "novaPoshtaAddress": "Estafeta Nova Poshta",
+      "novaPostDivision": "Ponto Nova Post",
+      "novaPostAddress": "Estafeta Nova Post"
+    },
+    "errors": {
+      "delivery": "Escolha o ponto de entrega ou preencha a morada.",
+      "label": "O nome é demasiado longo.",
+      "limitReached": "Já tem {max} moradas: elimine uma para adicionar outra.",
+      "notFound": "Esta morada já não existe.",
+      "rateLimited": "Demasiadas alterações. Aguarde alguns minutos e tente novamente.",
+      "signedOut": "Terminou a sessão. Inicie sessão novamente.",
+      "unexpected": "Não foi possível guardar a morada. Tente novamente."
+    }
   }
 }

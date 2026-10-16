@@ -3,6 +3,141 @@
     "canceled": "Canceled",
     "inProcessing": "In processing",
     "accepted": "Accepted",
-    "closed": "Closed"
+    "closed": "Closed",
+    "new": "New",
+    "pendingPayment": "Pending payment",
+    "paid": "Paid",
+    "refunded": "Refunded"
+  },
+  "title": "My account",
+  "sections": {
+    "label": "Account sections",
+    "profile": "Profile",
+    "orders": "Orders",
+    "addresses": "Addresses",
+    "favorites": "Favorites"
+  },
+  "loadError": "This page could not be loaded. Please try again later.",
+  "profile": {
+    "title": "Profile",
+    "intro": "Your details fill in the order request form.",
+    "firstName": "First name",
+    "lastName": "Last name (optional)",
+    "phone": "Phone (optional)",
+    "phoneHint": "With the country code, for example +380 50 123 45 67",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Your details are saved.",
+    "errors": {
+      "firstName": "Enter your first name (up to 100 characters).",
+      "lastName": "The last name is too long.",
+      "phone": "Enter the phone number with the country code, for example +380501234567.",
+      "rateLimited": "Too many changes. Please wait a few minutes and try again.",
+      "signedOut": "You are signed out. Please sign in again.",
+      "unexpected": "Your details could not be saved. Please try again."
+    }
+  },
+  "email": {
+    "title": "Email",
+    "current": "Current email",
+    "new": "New email",
+    "submit": "Change the email",
+    "sending": "Sending…",
+    "hint": "We send a confirmation link to the current and to the new address. The email changes once both links are followed.",
+    "sent": "Check both mailboxes: we sent confirmation links to your current address and to {email}.",
+    "pending": "The change to {email} waits for confirmation: follow the links in the emails to your current and to the new address.",
+    "errors": {
+      "invalid": "Enter a valid email address.",
+      "same": "This is already your email.",
+      "rateLimited": "Too many attempts. Please wait a few minutes and try again.",
+      "signedOut": "You are signed out. Please sign in again.",
+      "unexpected": "The email could not be changed. Please try again."
+    }
+  },
+  "security": {
+    "title": "Password and sign-out",
+    "changePassword": "Change the password",
+    "signOut": "Sign out"
+  },
+  "orders": {
+    "title": "Orders",
+    "intro": "Your order requests and their status, the newest first.",
+    "empty": "You have not sent any order requests yet.",
+    "toShop": "Go to the shop",
+    "number": "Order {number}",
+    "date": "Date",
+    "status": "Status",
+    "total": "Total",
+    "pieces": "{count, plural, one {# piece} other {# pieces}}",
+    "details": "Details of order {number}",
+    "pastEnd": "There are no orders on this page.",
+    "lastPage": "To the last page",
+    "pagination": {
+      "label": "Pages of the orders",
+      "previous": "Newer orders",
+      "next": "Older orders",
+      "page": "Page {page} of {pages}"
+    }
+  },
+  "order": {
+    "title": "Order {number}",
+    "back": "All orders",
+    "placed": "Sent on {date}",
+    "status": "Status",
+    "lines": "Ordered pieces",
+    "quantity": "Quantity: {quantity}",
+    "goodsTotal": "Total for the pieces",
+    "contact": "Contact details",
+    "delivery": "Delivery",
+    "estimate": "Delivery (estimate)",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calculated by the carrier",
+    "deliveryNote": "You pay the actual delivery price to the carrier on receipt.",
+    "comment": "Comment",
+    "notFound": {
+      "title": "Order not found",
+      "text": "There is no order with this number in your account."
+    }
+  },
+  "addresses": {
+    "title": "Delivery addresses",
+    "intro": "Keep up to {max} addresses. The default one is filled in when you send an order request.",
+    "empty": "No saved addresses yet.",
+    "default": "Default",
+    "makeDefault": "Make default",
+    "delete": "Delete",
+    "deleteLabel": "Delete the address {name}",
+    "makeDefaultLabel": "Make {name} the default address",
+    "add": "Add an address",
+    "label": "Name of the address (optional)",
+    "labelHint": "For example: Home, Office",
+    "country": "Country",
+    "countryPlaceholder": "Choose the country",
+    "method": "Delivery",
+    "methods": {
+      "warehouse": "Branch or parcel locker",
+      "address": "Courier to the address",
+      "division": "Branch, locker or pick-up point"
+    },
+    "save": "Save the address",
+    "saving": "Saving…",
+    "saved": "The address is saved.",
+    "full": "You have {max} addresses: delete one to add another.",
+    "kinds": {
+      "novaPoshtaBranch": "Nova Poshta branch",
+      "novaPoshtaPostomat": "Nova Poshta parcel locker",
+      "novaPoshtaAddress": "Nova Poshta courier",
+      "novaPostDivision": "Nova Post point",
+      "novaPostAddress": "Nova Post courier"
+    },
+    "errors": {
+      "delivery": "Choose the delivery point or fill in the address.",
+      "label": "The name is too long.",
+      "limitReached": "You already have {max} addresses: delete one to add another.",
+      "notFound": "This address no longer exists.",
+      "rateLimited": "Too many changes. Please wait a few minutes and try again.",
+      "signedOut": "You are signed out. Please sign in again.",
+      "unexpected": "The address could not be saved. Please try again."
+    }
   }
 }
