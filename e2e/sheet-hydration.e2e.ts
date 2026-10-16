@@ -7,7 +7,7 @@
 // (`--repeat-each 10`).
 import { randomInt, randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, test as base, type Cookie, type Locator, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../src/lib/supabase/database.types";
 import ukAdmin from "../messages/uk/admin.json" with { type: "json" };
@@ -25,7 +25,42 @@ const stack = (() => {
 const db = stack
   ? createClient<Database>(stack.url, stack.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } })
   : null;
-const createdUsers: string[] = [];
+
+const test = base.extend<object, { adminCookies: Cookie[] }>({
+  // a new admin signed in through the form once per worker, from a client address of its own, and deleted after:
+  // Supabase Auth limits the sign-ins from the app server's address (30 in 5 minutes), which 10 repeats of a
+  // sign-in per test would use up
+  adminCookies: [
+    async ({ browser }, provide, workerInfo) => {
+      const email = `e2e-sheet-${randomUUID()}@example.test`;
+      const password = `pw-${randomUUID()}`;
+      const { data, error } = await db!.auth.admin.createUser({ email, password, email_confirm: true });
+      if (error) throw error;
+      try {
+        const { error: roleError } = await db!.from("profiles").update({ role: "admin" }).eq("id", data.user.id);
+        if (roleError) throw roleError;
+        const context = await browser.newContext({
+          baseURL: workerInfo.project.use.baseURL,
+          extraHTTPHeaders: { "x-forwarded-for": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}` },
+        });
+        const page = await context.newPage();
+        await page.goto("/uk/sign-in-and-up?next=%2Fuk");
+        await page.waitForLoadState("networkidle");
+        const form = page.getByRole("tabpanel", { name: "Увійти" });
+        await form.getByLabel("Ел. пошта").fill(email);
+        await form.getByLabel("Пароль").fill(password);
+        await form.getByRole("button", { name: "Увійти" }).click();
+        await page.waitForURL("/uk");
+        const cookies = await context.cookies();
+        await context.close();
+        await provide(cookies);
+      } finally {
+        await db!.auth.admin.deleteUser(data.user.id);
+      }
+    },
+    { scope: "worker" },
+  ],
+});
 
 // every script chunk answers this much later, so the taps land before the page has hydrated
 const CHUNK_DELAY_MS = 1500;
@@ -94,10 +129,6 @@ async function expectNoProblems(page: Page, problems: Problems) {
 test.describe("sheets opened before the page hydrates (#113)", () => {
   test.skip(({ isMobile }) => !isMobile, "the sheets' triggers exist below 1024px");
 
-  test.afterAll(async () => {
-    for (const id of createdUsers.splice(0)) await db?.auth.admin.deleteUser(id);
-  });
-
   test("the menu on the shop", async ({ page }) => {
     const problems = await watch(page);
     await throttleChunks(page);
@@ -135,37 +166,25 @@ test.describe("sheets opened before the page hydrates (#113)", () => {
     await expect(filters).toHaveCount(0);
   });
 
-  test("the menu in the admin", async ({ page }) => {
+  test.describe("in the admin", () => {
+    test.beforeAll(() => {
+      if (!stack && process.env.CI === "true") throw new Error("CI=true but no local Supabase stack in .env.local");
+    });
     test.skip(!stack, "needs the local Supabase stack (npm run supabase:start:worktree)");
-    const email = `e2e-sheet-${randomUUID()}@example.test`;
-    const password = `pw-${randomUUID()}`;
-    const { data, error } = await db!.auth.admin.createUser({ email, password, email_confirm: true });
-    if (error) throw error;
-    createdUsers.push(data.user.id);
-    const { error: roleError } = await db!.from("profiles").update({ role: "admin" }).eq("id", data.user.id);
-    if (roleError) throw roleError;
 
-    // signed in through the form, from a client address of its own (the auth rate limit is per IP)
-    await page
-      .context()
-      .setExtraHTTPHeaders({ "x-forwarded-for": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}` });
-    await page.goto("/uk/sign-in-and-up?next=%2Fuk");
-    await page.waitForLoadState("networkidle");
-    const form = page.getByRole("tabpanel", { name: "Увійти" });
-    await form.getByLabel("Ел. пошта").fill(email);
-    await form.getByLabel("Пароль").fill(password);
-    await form.getByRole("button", { name: "Увійти" }).click();
-    await page.waitForURL("/uk");
-
-    const problems = await watch(page);
-    await throttleChunks(page);
-    await page.goto("/uk/admin", { waitUntil: "commit" });
-    const menu = page.getByRole("dialog");
-    await tapUntilOpen(page.locator("header").getByRole("button", { name: ukNav.openMenu }), menu);
-    await expect(menu.getByRole("navigation", { name: ukNav.main })).toBeVisible();
-    await expectNoProblems(page, problems);
-    await menu.getByRole("button", { name: ukNav.closeMenu }).click();
-    await expect(menu).toHaveCount(0);
-    await expect(page.getByRole("heading", { level: 1, name: ukAdmin.list.title })).toBeVisible();
+    // the admin's page streams its list, with live regions in it (#96: where the mismatch was seen in next dev)
+    test("the menu in the admin", async ({ page, adminCookies }) => {
+      await page.context().addCookies(adminCookies);
+      const problems = await watch(page);
+      await throttleChunks(page);
+      await page.goto("/uk/admin", { waitUntil: "commit" });
+      const menu = page.getByRole("dialog");
+      await tapUntilOpen(page.locator("header").getByRole("button", { name: ukNav.openMenu }), menu);
+      await expect(menu.getByRole("navigation", { name: ukNav.main })).toBeVisible();
+      await expectNoProblems(page, problems);
+      await menu.getByRole("button", { name: ukNav.closeMenu }).click();
+      await expect(menu).toHaveCount(0);
+      await expect(page.getByRole("heading", { level: 1, name: ukAdmin.list.title })).toBeVisible();
+    });
   });
 });
