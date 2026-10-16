@@ -342,8 +342,9 @@ TJS_UI_KIT=true E2E_PORT=<3000+n> E2E_SERVER=start E2E_SEND_EMAIL_HOOK=true npx 
 ```
 
 Only that file: with the hook on, the other auth e2e tests find no email in Mailpit. Restart the stack without the
-two overrides to return to the default. CI runs the stack with the hook off (`e2e/auth-emails.e2e.ts` then checks
-the stored locale only).
+two overrides to return to the default. CI runs both modes: the `ci` job's stack has the hook off
+(`e2e/auth-emails.e2e.ts` checks the stored locale only there), and the `auth-hook-e2e` job runs this file on a stack
+of its own with the hook on (#119, `docs/ci.md`).
 
 **Production** (owner or coordinator; launch checklist #31). In this order, so no sign-up meets a hook that
 cannot send:

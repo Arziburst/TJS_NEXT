@@ -123,3 +123,85 @@ jobs:
       - name: Stop the local Supabase stack
         if: always()
         run: npx supabase stop --no-backup
+
+  # Auth's emails in the user's language (#99, #119): the Send Email Hook's e2e on a stack of its own, in
+  # parallel with `ci`. With the hook on, Auth hands every email to the built app's /api/auth/send-email, which
+  # sends it through the notifications stand-in; the other auth tests read Auth's own templates from Mailpit, so
+  # this mode cannot share the stack of the main e2e run. Only e2e/auth-emails.e2e.ts runs here (docs/ci.md).
+  auth-hook-e2e:
+    name: auth-hook-e2e
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      # The same build and stack values as the `ci` job (see there).
+      E2E_SERVER: start
+      E2E_PORT: "3000"
+      TJS_UI_KIT: "true"
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:40901
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+      # A test-only value, not a secret: the stack signs the hook's calls with it ([auth.hook.send_email] secrets
+      # in supabase/config.toml) and the app started by playwright.config.ts checks them with it.
+      SEND_EMAIL_HOOK_SECRET: v1,whsec_dGpzLWUyZS1zZW5kLWVtYWlsLWhvb2stc2VjcmV0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node from .nvmrc
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Start the local Supabase stack with the Send Email Hook on
+        # The CLI's SUPABASE_AUTH_* overrides of config.toml. The Auth container reaches the app that Playwright
+        # serves on E2E_PORT through host.docker.internal (the CLI maps it to the host gateway on Linux).
+        env:
+          SUPABASE_AUTH_HOOK_SEND_EMAIL_ENABLED: "true"
+          SUPABASE_AUTH_HOOK_SEND_EMAIL_URI: http://host.docker.internal:3000/api/auth/send-email
+        run: npx supabase start -x studio,postgres-meta,imgproxy,edge-runtime,logflare,vector,realtime,supavisor
+
+      - name: Reset the database (every migration, then the seed)
+        run: npm run db:reset
+
+      - name: Write the stack's values to .env.local
+        run: pwsh -NoProfile -File scripts/ci/Write-StackEnv.ps1
+
+      - name: Install the Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E tests of the auth emails through the hook (built app on the local stack)
+        env:
+          E2E_SEND_EMAIL_HOOK: "true"
+        run: npx playwright test e2e/auth-emails.e2e.ts
+
+      - name: Upload the Playwright report
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-report-auth-hook
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Upload the Playwright traces
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-traces-auth-hook
+          path: test-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Stop the local Supabase stack
+        if: always()
+        run: npx supabase stop --no-backup

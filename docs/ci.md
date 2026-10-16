@@ -5,8 +5,9 @@ The repository is public: no job runs pull-request code with a secret.
 
 ## `ci.yml` — the required check `ci`
 
-Runs on every `pull_request` (any base, no paths filter) and every push to `main`. One job, named `ci`,
-on `ubuntu-24.04` with Node from `.nvmrc`; this is the check branch protection requires.
+Runs on every `pull_request` (any base, no paths filter) and every push to `main`. The job named `ci`,
+on `ubuntu-24.04` with Node from `.nvmrc`, is the check branch protection requires; the job `auth-hook-e2e`
+(below) runs next to it in parallel.
 
 | # | Step | Command |
 |---|---|---|
@@ -41,6 +42,27 @@ on `ubuntu-24.04` with Node from `.nvmrc`; this is the check branch protection r
   earlier commit). A fork PR from a branch named `main` never shares a group with the push-to-main runs.
 - Permissions: `contents: read`, `pull-requests: read`. `check:migrations` reads the open PRs with the
   workflow's own `GITHUB_TOKEN`; in CI a `gh` failure is an error, not a warning.
+
+### Job `auth-hook-e2e` — Auth's emails through the Send Email Hook (#119)
+
+The emails of sign-up, password reset and email change in the user's language (#99, `docs/dev-environment.md`
+"Auth emails in the user's language") are proven on a stack with the hook on. That stack cannot be the `ci` job's:
+with the hook on, Auth sends nothing to Mailpit, where the other auth tests read its English templates. So a second
+job runs in parallel with `ci`, on `ubuntu-24.04`:
+
+| # | Step | Command |
+|---|---|---|
+| 1 | install, build | `npm ci`, `npm run build` (the same job `env` as `ci`) |
+| 2 | stack with the hook on | `npx supabase start -x …` (the same services as `ci`) with `SUPABASE_AUTH_HOOK_SEND_EMAIL_ENABLED=true` and `SUPABASE_AUTH_HOOK_SEND_EMAIL_URI=http://host.docker.internal:3000/api/auth/send-email` (the app Playwright serves) |
+| 3 | database, the app's values | `npm run db:reset`, `pwsh -File scripts/ci/Write-StackEnv.ps1` |
+| 4 | e2e of the hook mode | `npx playwright test e2e/auth-emails.e2e.ts` with `E2E_SEND_EMAIL_HOOK=true`, desktop and mobile: the emails go through the app's hook to the notifications stand-in (`e2e/notifications-mock.ts`), where the tests read them |
+| 5 | evidence, cleanup | artifacts `playwright-report-auth-hook` and `playwright-traces-auth-hook` (7 days); `npx supabase stop --no-backup` (always) |
+
+- `SEND_EMAIL_HOOK_SECRET` in the job `env` is a test value, not a secret: the stack signs the hook's calls with it
+  (`[auth.hook.send_email] secrets` in `config.toml`) and the app started by `playwright.config.ts` checks them with
+  it (the config's default is the same value). A stack that signs with another secret gets 401 from the hook, the
+  sign-up fails and so does the job.
+- The job builds on its own instead of waiting for `ci`'s build, so the workflow's wall time stays that of `ci`.
 
 ## `production-migrations.yml` — production migrations
 
