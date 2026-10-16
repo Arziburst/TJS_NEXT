@@ -68,14 +68,18 @@ const CHUNK_DELAY_MS = 1500;
 type Problems = { console: string[]; unhydratedHidden: () => Promise<string[]> };
 
 /**
- * Collects the console errors and warnings, and every element below `<body>`'s own children that gets
+ * Collects the console errors and hydration warnings, and every element below `<body>`'s own children that gets
  * `aria-hidden="true"` while React has not hydrated it yet (no React fiber on it at that moment).
  */
 async function watch(page: Page): Promise<Problems> {
   const messages: string[] = [];
   page.on("pageerror", (error) => messages.push(`pageerror: ${error.message}`));
   page.on("console", (message) => {
-    if (message.type() === "error" || message.type() === "warning") messages.push(`${message.type()}: ${message.text()}`);
+    // every error, and every warning about hydration (the browser's own warnings, e.g. on a header, are not this
+    // flow's: CI's Chromium warns on the Permissions-Policy feature `bluetooth`)
+    if (message.type() === "error" || (message.type() === "warning" && /hydrat/i.test(message.text()))) {
+      messages.push(`${message.type()}: ${message.text()}`);
+    }
   });
   await page.addInitScript(() => {
     const marks: string[] = [];
