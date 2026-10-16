@@ -159,7 +159,7 @@ function CollectionHeader({ collection, lang, note }: { collection: Collection; 
         {collection.name}
       </h1>
       {collection.description && (
-        <p lang={lang} className="max-w-3xl whitespace-pre-line">
+        <p lang={lang} className="max-w-3xl text-center whitespace-pre-line sb:text-left">
           {collection.description}
         </p>
       )}
