@@ -3,7 +3,7 @@
 import { ArrowDownIcon, ArrowUpIcon, CircleAlertIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useOptimistic, useRef, useState, useTransition, type FormEvent } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import type {
   SaveVariantResult,
   VariantActionError,

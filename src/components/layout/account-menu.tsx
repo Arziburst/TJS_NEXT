@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { getCurrentUser, unlessSessionUnavailable } from "@/lib/auth/session";
 import { testErrorRequested } from "@/lib/test-error";
-import { AccountMenuClient } from "./account-menu-lazy";
+import { AccountMenuClient } from "./account-menu-client";
 import { AccountSlot, AccountUnavailableSlot } from "./header-slots";
 
 /**

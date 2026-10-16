@@ -224,10 +224,12 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   (`npx next analyze --output`, then `next analyze export`).
   - A sheet, dialog or menu that is closed on load is code loaded on first use: a plain trigger button with
     the same look and ARIA, and the Base UI part behind `next/dynamic` (`src/components/layout/lazy-sheet.ts`;
-    the mobile menu, the mini-cart and the filter sheet). A client island only some visitors see is a chunk
-    of its own (the account menu).
-  - Storefront toasts go through `src/components/layout/toast.ts` (sonner loads with the first toast);
-    the toaster mounts on that toast or once the page is idle.
+    the mobile menu, the mini-cart and the filter sheet; the account menu the same way with Base UI's menu).
+    No `next/dynamic` with server rendering in the header: a lazy component still loading when a render
+    switches to the not-found page fails its boundary (React #419).
+  - Every toast goes through `src/components/layout/toast.ts`: sonner loads with the first toast and the
+    toaster mounts for it, never on its own (a state update while a page still hydrates fails a bailed-out
+    boundary, React #419). ESLint refuses a direct `sonner` or `@/components/ui/sonner` import.
   - A Server Component that styles a link as a button imports `buttonVariants` from
     `@/components/ui/button-variants`, never from `button.tsx` (its Base UI primitive would join the
     route's client JS).

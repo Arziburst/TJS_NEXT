@@ -3,7 +3,7 @@
 import { ChevronDownIcon, CircleAlertIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { startTransition, useEffect, useRef, useState, useTransition, type FormEvent } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import type { DeleteTermResult, SaveTermState } from "@/app/[locale]/admin/attributes/actions";
 import { Button } from "@/components/ui/button";
 import {

@@ -49,6 +49,23 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+  {
+    // toasts load sonner on first use (#105): a direct import puts it in the first load, and a toaster mounted
+    // apart from a toast updates the page while it may still hydrate (React #419 on a not-found page)
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/components/layout/toast.ts", "src/components/layout/lazy-toaster.tsx", "src/components/ui/sonner.tsx"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            { name: "sonner", message: "import { toast } from \"@/components/layout/toast\" (sonner loads on first use, #105)" },
+            { name: "@/components/ui/sonner", message: "the toaster is LazyToaster in the site shell (#105)" },
+          ],
+        },
+      ],
+    },
+  },
   globalIgnores([
     ".next/**",
     "out/**",
