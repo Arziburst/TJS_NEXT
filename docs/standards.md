@@ -101,8 +101,11 @@ Business values (prices, markets, locales, statuses …) are not here — they l
     talking to it; whether that cache has the same race is not known (no test can reach it). Admin writes need
     nothing else: they keep calling `revalidateProduct` / `revalidatePieces` (`src/lib/admin/revalidate.ts`),
     and a new tag for the storefront goes through there too.
-  - Left as is: a request that arrives during such a render shares its result (Next's per-route request
-    batching); the render is not stored, so the request after it is fresh.
+  - Left as is: a request that arrives while such a render is still running shares its result (Next batches
+    the renders of one route); the render is not stored, so the request after it is fresh. A page first
+    served from its fallback shell is rendered in the background after the response, so a request right
+    after it can still join that render: the product and category routes' `unstable_paramMatching`
+    "blocking" (#21) renders them in the request instead, and the race e2e relies on it.
   - Check: `e2e/cache-race.e2e.ts` holds a render after its catalog read (`src/lib/catalog/render-hold.ts`,
     a test-only hook switched on by `TJS_TEST_RENDER_HOLD_DIR`, which only the e2e server gets), renames the
     product in the admin meanwhile and asserts the next request shows the new title (product page, category
