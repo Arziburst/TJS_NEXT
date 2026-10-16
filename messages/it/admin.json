@@ -31,7 +31,9 @@
     "products": "Prodotti",
     "newProduct": "Aggiungi",
     "attributes": "Materiali e colori",
-    "viewShop": "Negozio"
+    "viewShop": "Negozio",
+    "orders": "Ordini",
+    "ordersWithNew": "Ordini, {count, plural, one {# nuova richiesta} other {# nuove richieste}}"
   },
   "status": {
     "draft": "Bozza",
@@ -376,6 +378,151 @@
       "priceNotPositive": "Il prezzo della misura deve restare sopra zero",
       "invalidSuffix": "Lettere latine e cifre, con punti o trattini tra di esse",
       "suffixTaken": "Un’altra misura di questo prodotto ha questo suffisso"
+    }
+  },
+  "orderStatus": {
+    "new": "Nuovo",
+    "pending_payment": "In attesa di pagamento",
+    "paid": "Pagato",
+    "in_processing": "In elaborazione",
+    "accepted": "Accettato",
+    "closed": "Chiuso",
+    "canceled": "Annullato",
+    "refunded": "Rimborsato"
+  },
+  "orders": {
+    "title": "Ordini",
+    "count": "{count, plural, one {# ordine} other {# ordini}}",
+    "newCount": "{count, plural, =0 {Nessuna nuova richiesta} one {# nuova richiesta} other {# nuove richieste}}",
+    "searchLabel": "Cerca",
+    "searchPlaceholder": "Numero, nome, telefono o email",
+    "status": "Stato",
+    "allStatuses": "Tutti gli stati",
+    "country": "Paese",
+    "allCountries": "Tutti i paesi",
+    "dateFrom": "Dal",
+    "dateTo": "Al",
+    "apply": "Applica",
+    "reset": "Reimposta",
+    "loadError": "Impossibile caricare gli ordini. Ricarica la pagina.",
+    "noMatch": "Nessun ordine corrisponde ai filtri.",
+    "empty": "Ancora nessun ordine. Le nuove richieste del negozio compaiono qui.",
+    "number": "n. {number}",
+    "pieces": "{count, plural, one {# pezzo} other {# pezzi}}",
+    "call": "Chiama {name}",
+    "open": "Apri l’ordine n. {number} di {name}",
+    "columns": {
+      "number": "Numero",
+      "date": "Data",
+      "customer": "Cliente",
+      "country": "Paese",
+      "total": "Totale",
+      "status": "Stato",
+      "open": "Apri"
+    },
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "Filiale",
+      "postomat": "Armadietto automatico",
+      "doors": "Corriere all’indirizzo",
+      "division": "Filiale o punto di ritiro",
+      "address": "Corriere all’indirizzo"
+    },
+    "destination": {
+      "city": "Città",
+      "warehouse": "Filiale",
+      "postomat": "Armadietto automatico",
+      "division": "Punto",
+      "address": "Indirizzo",
+      "street": "{street} {house}",
+      "flat": "Interno {flat}",
+      "postCity": "{postCode} {city}",
+      "raw": "Destinazione"
+    },
+    "actions": {
+      "changed": "Ordine n. {number}: {status}",
+      "final": "Questo ordine è {status}; il suo stato non cambia più.",
+      "to": {
+        "in_processing": "Prendi in carico",
+        "accepted": "Accetta",
+        "closed": "Chiudi",
+        "canceled": "Annulla ordine"
+      },
+      "hint": {
+        "in_processing": "Prendi in carico la richiesta dopo aver parlato con il cliente. Il cliente riceve un’email a ogni cambio di stato.",
+        "accepted": "Accettare vende i pezzi unici dell’ordine: il negozio li mostra come venduti.",
+        "closed": "Chiudi l’ordine quando il cliente lo ha ricevuto."
+      },
+      "cancelTitle": "Annullare l’ordine n. {number}?",
+      "cancelDescription": "L’ordine viene annullato definitivamente, i suoi pezzi unici tornano in vendita e il cliente riceve un’email.",
+      "keep": "Mantieni l’ordine",
+      "cancelConfirm": "Annulla ordine"
+    },
+    "errors": {
+      "notAuthorized": "Solo un amministratore può farlo. Accedi di nuovo.",
+      "invalid": "Questa richiesta non è valida.",
+      "tooManyRequests": "Troppe modifiche in poco tempo. Attendi qualche minuto.",
+      "notFound": "Questo ordine non esiste più.",
+      "stale": "L’ordine è stato modificato nel frattempo; la pagina ora mostra il suo stato attuale.",
+      "illegal": "Questo cambio di stato non è possibile.",
+      "conflict": "Un pezzo unico di questo ordine è già stato venduto con un altro ordine.",
+      "unexpectedError": "Non ha funzionato. Riprova."
+    },
+    "detail": {
+      "back": "Tutti gli ordini",
+      "title": "Ordine n. {number}",
+      "placed": "Effettuato il {date}",
+      "loadError": "Impossibile caricare l’ordine. Ricarica la pagina.",
+      "notFoundTitle": "Ordine non trovato",
+      "notFound": "Non esiste l’ordine n. {number}.",
+      "status": "Stato",
+      "customer": "Cliente",
+      "contact": "Contatta il cliente",
+      "contactAction": {
+        "phone": "Chiama",
+        "email": "Email",
+        "instagram": "Instagram",
+        "telegram": "Telegram",
+        "viber": "Viber",
+        "whatsapp": "WhatsApp"
+      },
+      "name": "Nome",
+      "phone": "Telefono",
+      "email": "Email",
+      "account": "Account",
+      "registered": "Cliente registrato",
+      "guest": "Ospite",
+      "language": "Lingua",
+      "comment": "Commento",
+      "noComment": "Nessun commento",
+      "lines": "Articoli",
+      "sku": "Cod. {sku}",
+      "productGone": "Il prodotto è stato eliminato",
+      "quantity": "{quantity} × {price}",
+      "goodsTotal": "Totale articoli",
+      "usdTotal": "In USD (prezzi dell’amministratore)",
+      "rate": "Cambio {rate} del {date}, ricarico {markup}",
+      "delivery": "Spedizione",
+      "country": "Paese",
+      "carrier": "Corriere",
+      "method": "Modalità",
+      "estimate": "Stima",
+      "estimateNote": "Il cliente paga il prezzo effettivo della spedizione al corriere alla consegna.",
+      "notes": "Note interne",
+      "notesHint": "Solo gli amministratori vedono queste note, mai il cliente.",
+      "noNotes": "Ancora nessuna nota.",
+      "noteLabel": "Nuova nota",
+      "addNote": "Aggiungi nota",
+      "noteAdded": "Nota aggiunta",
+      "noteBy": "{author}, {date}",
+      "unknownAuthor": "Un ex amministratore",
+      "history": "Cronologia degli stati",
+      "historyPlaced": "Richiesta effettuata",
+      "historyChange": "{from} → {to}",
+      "historyBy": "{date}, {name}"
     }
   }
 }

@@ -31,7 +31,9 @@
     "products": "Products",
     "newProduct": "Add",
     "attributes": "Materials & colours",
-    "viewShop": "Shop"
+    "viewShop": "Shop",
+    "orders": "Orders",
+    "ordersWithNew": "Orders, {count, plural, one {# new request} other {# new requests}}"
   },
   "status": {
     "draft": "Draft",
@@ -376,6 +378,151 @@
       "priceNotPositive": "The size’s price must stay above zero",
       "invalidSuffix": "Latin letters and digits, with dots or hyphens between them",
       "suffixTaken": "Another size of this product has this suffix"
+    }
+  },
+  "orderStatus": {
+    "new": "New",
+    "pending_payment": "Pending payment",
+    "paid": "Paid",
+    "in_processing": "In processing",
+    "accepted": "Accepted",
+    "closed": "Closed",
+    "canceled": "Canceled",
+    "refunded": "Refunded"
+  },
+  "orders": {
+    "title": "Orders",
+    "count": "{count, plural, one {# order} other {# orders}}",
+    "newCount": "{count, plural, =0 {No new requests} one {# new request} other {# new requests}}",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Number, name, phone or email",
+    "status": "Status",
+    "allStatuses": "All statuses",
+    "country": "Country",
+    "allCountries": "All countries",
+    "dateFrom": "From",
+    "dateTo": "To",
+    "apply": "Apply",
+    "reset": "Reset",
+    "loadError": "The orders could not be loaded. Please reload the page.",
+    "noMatch": "No order matches the filters.",
+    "empty": "No orders yet. New requests from the shop appear here.",
+    "number": "#{number}",
+    "pieces": "{count, plural, one {# piece} other {# pieces}}",
+    "call": "Call {name}",
+    "open": "Open order #{number} of {name}",
+    "columns": {
+      "number": "Number",
+      "date": "Date",
+      "customer": "Customer",
+      "country": "Country",
+      "total": "Total",
+      "status": "Status",
+      "open": "Open"
+    },
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "Branch",
+      "postomat": "Parcel locker",
+      "doors": "Courier to the address",
+      "division": "Branch or pick-up point",
+      "address": "Courier to the address"
+    },
+    "destination": {
+      "city": "City",
+      "warehouse": "Branch",
+      "postomat": "Parcel locker",
+      "division": "Point",
+      "address": "Address",
+      "street": "{street} {house}",
+      "flat": "Flat {flat}",
+      "postCity": "{postCode} {city}",
+      "raw": "Destination"
+    },
+    "actions": {
+      "changed": "Order #{number}: {status}",
+      "final": "This order is {status}; its status no longer changes.",
+      "to": {
+        "in_processing": "Take into processing",
+        "accepted": "Accept",
+        "closed": "Close",
+        "canceled": "Cancel order"
+      },
+      "hint": {
+        "in_processing": "Take the request into work once you have talked to the customer. The customer gets an email about every status change.",
+        "accepted": "Accepting sells the order's one-of-a-kind pieces: the shop shows them as sold.",
+        "closed": "Close the order once the customer has received it."
+      },
+      "cancelTitle": "Cancel order #{number}?",
+      "cancelDescription": "The order is canceled for good, its one-of-a-kind pieces go back on sale and the customer gets an email.",
+      "keep": "Keep the order",
+      "cancelConfirm": "Cancel order"
+    },
+    "errors": {
+      "notAuthorized": "Only an admin can do this. Please sign in again.",
+      "invalid": "This request is not valid.",
+      "tooManyRequests": "Too many changes in a short time. Please wait a few minutes.",
+      "notFound": "This order no longer exists.",
+      "stale": "The order was changed meanwhile; the page now shows its current status.",
+      "illegal": "This status change is not possible.",
+      "conflict": "A one-of-a-kind piece of this order was already sold with another order.",
+      "unexpectedError": "That did not work. Try again."
+    },
+    "detail": {
+      "back": "All orders",
+      "title": "Order #{number}",
+      "placed": "Placed {date}",
+      "loadError": "The order could not be loaded. Please reload the page.",
+      "notFoundTitle": "Order not found",
+      "notFound": "There is no order #{number}.",
+      "status": "Status",
+      "customer": "Customer",
+      "contact": "Contact the customer",
+      "contactAction": {
+        "phone": "Call",
+        "email": "Email",
+        "instagram": "Instagram",
+        "telegram": "Telegram",
+        "viber": "Viber",
+        "whatsapp": "WhatsApp"
+      },
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "account": "Account",
+      "registered": "Registered customer",
+      "guest": "Guest",
+      "language": "Language",
+      "comment": "Comment",
+      "noComment": "No comment",
+      "lines": "Items",
+      "sku": "SKU {sku}",
+      "productGone": "The product was deleted",
+      "quantity": "{quantity} × {price}",
+      "goodsTotal": "Goods total",
+      "usdTotal": "In USD (the admin's prices)",
+      "rate": "Rate {rate} of {date}, markup {markup}",
+      "delivery": "Delivery",
+      "country": "Country",
+      "carrier": "Carrier",
+      "method": "Method",
+      "estimate": "Estimate",
+      "estimateNote": "The customer pays the actual delivery price to the carrier on receipt.",
+      "notes": "Internal notes",
+      "notesHint": "Only admins see these notes; the customer never does.",
+      "noNotes": "No notes yet.",
+      "noteLabel": "New note",
+      "addNote": "Add note",
+      "noteAdded": "Note added",
+      "noteBy": "{author}, {date}",
+      "unknownAuthor": "A former admin",
+      "history": "Status history",
+      "historyPlaced": "Request placed",
+      "historyChange": "{from} → {to}",
+      "historyBy": "{date}, {name}"
     }
   }
 }

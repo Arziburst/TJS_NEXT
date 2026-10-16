@@ -31,7 +31,9 @@
     "products": "Produkty",
     "newProduct": "Dodaj",
     "attributes": "Materiały i kolory",
-    "viewShop": "Sklep"
+    "viewShop": "Sklep",
+    "orders": "Zamówienia",
+    "ordersWithNew": "Zamówienia, {count, plural, one {# nowe zgłoszenie} few {# nowe zgłoszenia} many {# nowych zgłoszeń} other {# nowego zgłoszenia}}"
   },
   "status": {
     "draft": "Szkic",
@@ -376,6 +378,151 @@
       "priceNotPositive": "Cena rozmiaru musi pozostać większa od zera",
       "invalidSuffix": "Litery łacińskie i cyfry, z kropkami lub łącznikami między nimi",
       "suffixTaken": "Inny rozmiar tego produktu ma ten przyrostek"
+    }
+  },
+  "orderStatus": {
+    "new": "Nowe",
+    "pending_payment": "Oczekuje na płatność",
+    "paid": "Opłacone",
+    "in_processing": "W realizacji",
+    "accepted": "Przyjęte",
+    "closed": "Zamknięte",
+    "canceled": "Anulowane",
+    "refunded": "Zwrócone"
+  },
+  "orders": {
+    "title": "Zamówienia",
+    "count": "{count, plural, one {# zamówienie} few {# zamówienia} many {# zamówień} other {# zamówienia}}",
+    "newCount": "{count, plural, =0 {Brak nowych zgłoszeń} one {# nowe zgłoszenie} few {# nowe zgłoszenia} many {# nowych zgłoszeń} other {# nowego zgłoszenia}}",
+    "searchLabel": "Szukaj",
+    "searchPlaceholder": "Numer, imię, telefon lub e-mail",
+    "status": "Status",
+    "allStatuses": "Wszystkie statusy",
+    "country": "Kraj",
+    "allCountries": "Wszystkie kraje",
+    "dateFrom": "Od",
+    "dateTo": "Do",
+    "apply": "Zastosuj",
+    "reset": "Wyczyść",
+    "loadError": "Nie udało się wczytać zamówień. Odśwież stronę.",
+    "noMatch": "Żadne zamówienie nie pasuje do filtrów.",
+    "empty": "Nie ma jeszcze zamówień. Nowe zgłoszenia ze sklepu pojawią się tutaj.",
+    "number": "nr {number}",
+    "pieces": "{count, plural, one {# sztuka} few {# sztuki} many {# sztuk} other {# sztuki}}",
+    "call": "Zadzwoń: {name}",
+    "open": "Otwórz zamówienie nr {number}, {name}",
+    "columns": {
+      "number": "Numer",
+      "date": "Data",
+      "customer": "Klient",
+      "country": "Kraj",
+      "total": "Suma",
+      "status": "Status",
+      "open": "Otwórz"
+    },
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "Oddział",
+      "postomat": "Paczkomat",
+      "doors": "Kurier pod adres",
+      "division": "Oddział lub punkt odbioru",
+      "address": "Kurier pod adres"
+    },
+    "destination": {
+      "city": "Miasto",
+      "warehouse": "Oddział",
+      "postomat": "Paczkomat",
+      "division": "Punkt",
+      "address": "Adres",
+      "street": "{street} {house}",
+      "flat": "Mieszkanie {flat}",
+      "postCity": "{postCode} {city}",
+      "raw": "Miejsce dostawy"
+    },
+    "actions": {
+      "changed": "Zamówienie nr {number}: {status}",
+      "final": "To zamówienie ma status „{status}”; jego status już się nie zmienia.",
+      "to": {
+        "in_processing": "Przyjmij do realizacji",
+        "accepted": "Przyjmij",
+        "closed": "Zamknij",
+        "canceled": "Anuluj zamówienie"
+      },
+      "hint": {
+        "in_processing": "Przyjmij zgłoszenie do realizacji po rozmowie z klientem. Klient dostaje e-mail przy każdej zmianie statusu.",
+        "accepted": "Przyjęcie sprzedaje unikatowe egzemplarze z zamówienia: sklep pokazuje je jako sprzedane.",
+        "closed": "Zamknij zamówienie, gdy klient je otrzyma."
+      },
+      "cancelTitle": "Anulować zamówienie nr {number}?",
+      "cancelDescription": "Zamówienie zostanie anulowane na stałe, jego unikatowe egzemplarze wrócą do sprzedaży, a klient dostanie e-mail.",
+      "keep": "Zostaw zamówienie",
+      "cancelConfirm": "Anuluj zamówienie"
+    },
+    "errors": {
+      "notAuthorized": "Może to zrobić tylko administrator. Zaloguj się ponownie.",
+      "invalid": "To żądanie jest nieprawidłowe.",
+      "tooManyRequests": "Zbyt wiele zmian w krótkim czasie. Poczekaj kilka minut.",
+      "notFound": "To zamówienie już nie istnieje.",
+      "stale": "Zamówienie zostało w międzyczasie zmienione; strona pokazuje teraz jego aktualny status.",
+      "illegal": "Taka zmiana statusu nie jest możliwa.",
+      "conflict": "Unikatowy egzemplarz z tego zamówienia został już sprzedany w innym zamówieniu.",
+      "unexpectedError": "Nie udało się. Spróbuj ponownie."
+    },
+    "detail": {
+      "back": "Wszystkie zamówienia",
+      "title": "Zamówienie nr {number}",
+      "placed": "Złożono {date}",
+      "loadError": "Nie udało się wczytać zamówienia. Odśwież stronę.",
+      "notFoundTitle": "Nie znaleziono zamówienia",
+      "notFound": "Nie ma zamówienia nr {number}.",
+      "status": "Status",
+      "customer": "Klient",
+      "contact": "Kontakt z klientem",
+      "contactAction": {
+        "phone": "Zadzwoń",
+        "email": "E-mail",
+        "instagram": "Instagram",
+        "telegram": "Telegram",
+        "viber": "Viber",
+        "whatsapp": "WhatsApp"
+      },
+      "name": "Imię",
+      "phone": "Telefon",
+      "email": "E-mail",
+      "account": "Konto",
+      "registered": "Zarejestrowany klient",
+      "guest": "Gość",
+      "language": "Język",
+      "comment": "Komentarz",
+      "noComment": "Bez komentarza",
+      "lines": "Produkty",
+      "sku": "Kod {sku}",
+      "productGone": "Produkt został usunięty",
+      "quantity": "{quantity} × {price}",
+      "goodsTotal": "Suma za produkty",
+      "usdTotal": "W USD (ceny administratora)",
+      "rate": "Kurs {rate} z {date}, marża {markup}",
+      "delivery": "Dostawa",
+      "country": "Kraj",
+      "carrier": "Przewoźnik",
+      "method": "Sposób",
+      "estimate": "Szacunek",
+      "estimateNote": "Klient płaci rzeczywistą cenę dostawy przewoźnikowi przy odbiorze.",
+      "notes": "Notatki wewnętrzne",
+      "notesHint": "Te notatki widzą tylko administratorzy, nigdy klient.",
+      "noNotes": "Nie ma jeszcze notatek.",
+      "noteLabel": "Nowa notatka",
+      "addNote": "Dodaj notatkę",
+      "noteAdded": "Dodano notatkę",
+      "noteBy": "{author}, {date}",
+      "unknownAuthor": "Były administrator",
+      "history": "Historia statusów",
+      "historyPlaced": "Zgłoszenie złożone",
+      "historyChange": "{from} → {to}",
+      "historyBy": "{date}, {name}"
     }
   }
 }

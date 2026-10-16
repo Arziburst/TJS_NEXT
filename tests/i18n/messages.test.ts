@@ -114,6 +114,16 @@ describe("message catalogs", () => {
       label: "17",
       // the page count of the order history (account)
       pages: 3,
+      // the admin's orders (#27)
+      from: "New",
+      to: "In processing",
+      author: "Olena",
+      rate: "41.5",
+      markup: "3%",
+      city: "Berlin",
+      postCode: "10115",
+      street: "Invalidenstr.",
+      house: "1",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };
