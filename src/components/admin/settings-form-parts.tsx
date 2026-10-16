@@ -3,7 +3,7 @@
 import { CircleAlertIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import { Button } from "@/components/ui/button";
 import { fieldId } from "./form-fields";
 

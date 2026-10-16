@@ -259,6 +259,24 @@ Business values (prices, markets, locales, statuses …) are not here — they l
     The levers are the ones above: two qualities, two formats, `sizes` that pick small widths, the long
     TTL, and no transformation of decorative or already-small images. Check the usage in the Vercel
     dashboard after launch before adding a quality, a format or a width.
+- **Client JavaScript budget (#105).** Lighthouse mobile (simulated 4G) counts every request that ends
+  before the largest paint, so first-load JS and fonts decide the score. `e2e/client-js-budget.e2e.ts`
+  fails CI when the gzip first-load JS of the home, the shop or a product page grows past its budget
+  (180 / 190 / 190 KB, of which ~137 KB is React and Next). Raise a budget only with a bundle audit in the PR
+  (`npx next analyze --output`, then `next analyze export`).
+  - A sheet, dialog or menu that is closed on load is code loaded on first use: a plain trigger button with
+    the same look and ARIA, and the Base UI part behind `next/dynamic` (`src/components/layout/lazy-sheet.ts`;
+    the mobile menu, the mini-cart and the filter sheet; the account menu the same way with Base UI's menu,
+    which Enter and ArrowDown open with the focus on its first item, as Base UI's own trigger does).
+    No `next/dynamic` with server rendering in the header: a lazy component still loading when a render
+    switches to the not-found page fails its boundary (React #419).
+  - Every toast goes through `src/components/layout/toast.ts`: sonner loads with the first toast and the
+    toaster mounts for it, never on its own (a state update while a page still hydrates fails a bailed-out
+    boundary, React #419). ESLint refuses a direct `sonner` or `@/components/ui/sonner` import.
+  - A Server Component that styles a link as a button imports `buttonVariants` from
+    `@/components/ui/button-variants`, never from `button.tsx` (its Base UI primitive would join the
+    route's client JS).
+  - Fonts: no preload for a face that is not above the fold (a preload fetches every style of the call).
 
 ## 6. Testing
 

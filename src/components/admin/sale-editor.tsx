@@ -2,7 +2,7 @@
 
 import { useFormatter, useTranslations } from "next-intl";
 import { useId, useState, useTransition, type KeyboardEvent } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {

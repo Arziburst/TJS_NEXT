@@ -4,7 +4,7 @@ import { ImageUpIcon, Trash2Icon } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useId, useRef, useState, useTransition, type ChangeEvent } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import type { CollectionActionResult, CoverUploadResult, FinishCoverResult } from "@/app/[locale]/admin/collections/actions";
 import { Button } from "@/components/ui/button";
 

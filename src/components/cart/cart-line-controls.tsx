@@ -3,7 +3,7 @@
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import { removeFromCart, updateCartQuantity } from "@/app/[locale]/cart/actions";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

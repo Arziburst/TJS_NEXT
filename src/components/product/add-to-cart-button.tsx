@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import type { AddToCartResult } from "@/app/[locale]/product/[slug]/actions";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/config/routes";

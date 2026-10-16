@@ -1,7 +1,8 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
+import { cn } from "@/lib/utils";
 
 export type ErrorBoundaryProps = {
   error: Error & { digest?: string };
@@ -27,7 +28,10 @@ export function ErrorView({ error, retry }: ErrorBoundaryProps) {
       <h1 className="font-display text-4xl uppercase sb:text-5xl">{t("title")}</h1>
       <p className="text-muted-foreground">{t("description")}</p>
       <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
-        <Button onClick={() => retry()}>{t("retry")}</Button>
+        {/* a plain button with the Button's look (#105): every page loads this view with its error boundaries */}
+        <button type="button" data-slot="button" onClick={() => retry()} className={cn(buttonVariants())}>
+          {t("retry")}
+        </button>
         {/* a full load: it starts the app afresh, whatever failed */}
         <a href={`/${locale}`} className="underline underline-offset-4 hover:text-accent-text">
           {t("home")}

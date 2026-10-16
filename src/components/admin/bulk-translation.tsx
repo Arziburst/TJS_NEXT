@@ -3,7 +3,7 @@
 import { CheckCheckIcon, CircleAlertIcon, LanguagesIcon, LoaderCircleIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { createContext, use, useRef, useState, type ReactNode } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import type { ReviewActionResult, TranslateActionResult } from "@/app/[locale]/admin/actions";
 import { Button } from "@/components/ui/button";
 

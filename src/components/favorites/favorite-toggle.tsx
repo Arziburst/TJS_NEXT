@@ -2,7 +2,7 @@
 
 import { HeartIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import { setFavorite } from "@/app/[locale]/favorites/actions";
 import { cn } from "@/lib/utils";
 import { settleFavorite, useIsFavorite, wishFavorite } from "./favorites-store";
