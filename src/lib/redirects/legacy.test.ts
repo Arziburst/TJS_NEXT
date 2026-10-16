@@ -67,10 +67,10 @@ describe("legacyRedirect", () => {
     return new NextRequest(`http://localhost${path}`, { headers });
   }
 
-  it("answers 308 to the localized path and drops the query", async () => {
-    const response = await legacyRedirect(request("/shop/necklace?page=2", { "accept-language": "uk" }));
+  it("answers 308 to the localized path and keeps the query", async () => {
+    const response = await legacyRedirect(request("/shop/necklace?sort=priceAsc", { "accept-language": "uk" }));
     expect(response?.status).toBe(308);
-    expect(response?.headers.get("location")).toBe("http://localhost/uk/shop/necklaces");
+    expect(response?.headers.get("location")).toBe("http://localhost/uk/shop/necklaces?sort=priceAsc");
   });
 
   it("sends a product to its slug in the visitor's locale and an unknown or unreachable one to the shop", async () => {

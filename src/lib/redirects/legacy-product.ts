@@ -50,12 +50,6 @@ export async function findLegacyProduct(legacyId: string): Promise<LegacyProduct
   }
 }
 
-/** The product's slug in this locale, else in the default one, else any. */
-export function slugFor(product: LegacyProduct, locale: string, fallbackLocale: string): string | null {
-  const bySlug = (l: string) => product.slugs.find((s) => s.locale === l)?.slug;
-  return bySlug(locale) ?? bySlug(fallbackLocale) ?? product.slugs[0]?.slug ?? null;
-}
-
 /** Empties the lookup cache (tests). */
 export function clearLegacyProductLookups(): void {
   lookups.clear();
