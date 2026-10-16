@@ -18,5 +18,13 @@
     "nameMaxLength": "De naam mag maximaal {max} tekens lang zijn",
     "passwordMaxLength": "Het wachtwoord mag maximaal {max} tekens lang zijn",
     "passwordsDontMatch": "De wachtwoorden komen niet overeen"
+  },
+  "boundary": {
+    "title": "Er is iets misgegaan",
+    "description": "We kunnen deze pagina nu niet tonen. Probeer het zo meteen opnieuw.",
+    "retry": "Opnieuw proberen",
+    "home": "Naar de startpagina",
+    "reference": "Foutcode voor de klantenservice: {digest}",
+    "accountUnavailable": "Je account is nu niet beschikbaar. Probeer het zo meteen opnieuw."
   }
 }

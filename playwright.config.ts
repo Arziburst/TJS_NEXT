@@ -144,6 +144,8 @@ export default defineConfig({
             SEND_EMAIL_HOOK_SECRET: sendEmailHookSecret,
             // the test-only hold of a storefront render (src/lib/catalog/render-hold.ts, e2e/cache-race.e2e.ts)
             TJS_TEST_RENDER_HOLD_DIR: RENDER_HOLD_DIR,
+            // the test-only server failures behind a cookie (src/lib/test-error.ts, e2e/error-boundary.e2e.ts)
+            TJS_TEST_ERROR_TRIGGER: "true",
           },
         },
       ],

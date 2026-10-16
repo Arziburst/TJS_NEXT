@@ -127,6 +127,8 @@ describe("message catalogs", () => {
       postCode: "10115",
       street: "Invalidenstr.",
       house: "1",
+      // the error page's reference for support (#112)
+      digest: "2843159067",
       // a sale's percentage off (#67)
       percent: 20,
       link: (chunks: string) => `<a>${chunks}</a>`,

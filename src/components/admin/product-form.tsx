@@ -2,7 +2,7 @@
 
 import { CircleAlertIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { startTransition, useActionState, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { startTransition, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { toast } from "sonner";
 import type { SaveProductState } from "@/app/[locale]/admin/actions";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import {
   type FieldErrors,
 } from "@/lib/admin/product-form";
 import type { AdminProduct } from "@/lib/admin/products";
+import { useFormActionState } from "./form-action";
 import { ChoiceField, FieldShell, TextField, fieldId, useFieldErrorText } from "./form-fields";
 import { editProductHref } from "./paths";
 import { selectClass } from "./styles";
@@ -40,6 +41,7 @@ type ProductFormProps = {
 };
 
 const idle: SaveProductState = { status: "idle" };
+const unexpected: SaveProductState = { status: "error", error: "unexpectedError" };
 
 function localesWithErrors(fields: FieldErrors | undefined): Locale[] {
   if (!fields) return [];
@@ -65,7 +67,7 @@ export function ProductForm({
   const tAdmin = useTranslations("admin");
   const errorText = useFieldErrorText();
   const router = useRouter();
-  const [state, dispatch, pending] = useActionState(saveProduct, idle);
+  const [state, dispatch, pending] = useFormActionState(saveProduct, idle, unexpected);
   const [fulfillment, setFulfillment] = useState<string>(product?.fulfillment ?? "made_to_order");
   const [status, setStatus] = useState<string>(product?.status ?? "draft");
   const [openLocales, setOpenLocales] = useState<ReadonlySet<Locale>>(() => new Set([PUBLISH_LOCALE]));

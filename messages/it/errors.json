@@ -18,5 +18,13 @@
     "nameMaxLength": "Il nome deve contenere al massimo {max} caratteri",
     "passwordMaxLength": "La password deve contenere al massimo {max} caratteri",
     "passwordsDontMatch": "Le password non coincidono"
+  },
+  "boundary": {
+    "title": "Qualcosa è andato storto",
+    "description": "Al momento non riusciamo a mostrare questa pagina. Riprova tra un attimo.",
+    "retry": "Riprova",
+    "home": "Vai alla home page",
+    "reference": "Codice di errore per l’assistenza: {digest}",
+    "accountUnavailable": "Il tuo account non è disponibile al momento. Riprova tra un attimo."
   }
 }

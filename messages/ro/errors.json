@@ -18,5 +18,13 @@
     "nameMaxLength": "Numele poate avea cel mult {max} caractere",
     "passwordMaxLength": "Parola poate avea cel mult {max} caractere",
     "passwordsDontMatch": "Parolele nu coincid"
+  },
+  "boundary": {
+    "title": "Ceva nu a funcționat",
+    "description": "Nu putem afișa această pagină acum. Încercați din nou peste câteva momente.",
+    "retry": "Încercați din nou",
+    "home": "Mergeți la pagina principală",
+    "reference": "Codul erorii pentru asistență: {digest}",
+    "accountUnavailable": "Contul dvs. nu este disponibil acum. Încercați din nou peste câteva momente."
   }
 }

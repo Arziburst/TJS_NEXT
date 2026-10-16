@@ -2,11 +2,12 @@
 
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { startTransition, useActionState, useEffect, useState, type FormEvent } from "react";
+import { startTransition, useEffect, useState, type FormEvent } from "react";
 import type { AboutFieldErrors, AboutFormState } from "@/app/[locale]/admin/settings/actions";
 import type { Locale } from "@/i18n/routing";
 import { ABOUT_EDITOR_LOCALES, ABOUT_PUBLISH_LOCALE, type AboutContent } from "@/lib/settings/about";
 import { cn } from "@/lib/utils";
+import { useFormActionState } from "./form-action";
 import { ChoiceField, FieldShell, fieldId } from "./form-fields";
 import { RichTextEditor } from "./rich-text-editor";
 import { SaveButton, SettingsFeedback } from "./settings-form-parts";
@@ -18,6 +19,7 @@ type AboutFormProps = {
 };
 
 const idle: AboutFormState = { status: "idle" };
+const unexpected: AboutFormState = { status: "error", error: "unexpectedError" };
 const META_MAX_LENGTH = 500;
 
 function bodyName(locale: Locale): string {
@@ -40,7 +42,7 @@ export function AboutForm({ content, saveAbout }: AboutFormProps) {
   const t = useTranslations("admin.settings.about");
   const tStatus = useTranslations("admin.status");
   const tLocales = useTranslations("nav.localeNames");
-  const [state, dispatch, pending] = useActionState(saveAbout, idle);
+  const [state, dispatch, pending] = useFormActionState(saveAbout, idle, unexpected);
   const [published, setPublished] = useState(content.published ? "published" : "draft");
   const [openLocales, setOpenLocales] = useState<ReadonlySet<Locale>>(() => new Set([ABOUT_PUBLISH_LOCALE]));
   const [filled, setFilled] = useState<ReadonlySet<Locale>>(() => new Set(content.translations.map((tr) => tr.locale)));

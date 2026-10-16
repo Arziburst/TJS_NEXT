@@ -18,5 +18,13 @@
     "nameMaxLength": "Der Name darf höchstens {max} Zeichen lang sein",
     "passwordMaxLength": "Das Passwort darf höchstens {max} Zeichen lang sein",
     "passwordsDontMatch": "Die Passwörter stimmen nicht überein"
+  },
+  "boundary": {
+    "title": "Etwas ist schiefgelaufen",
+    "description": "Diese Seite kann gerade nicht angezeigt werden. Bitte versuchen Sie es gleich noch einmal.",
+    "retry": "Erneut versuchen",
+    "home": "Zur Startseite",
+    "reference": "Fehlercode für den Support: {digest}",
+    "accountUnavailable": "Ihr Konto ist gerade nicht erreichbar. Versuchen Sie es gleich noch einmal."
   }
 }
