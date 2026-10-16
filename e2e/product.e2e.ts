@@ -26,7 +26,7 @@ function jsonLd(html: string): { "@graph": Record<string, unknown>[] } {
 }
 
 test.describe("product page HTML (no JavaScript)", () => {
-  test("is server-rendered with its title, canonical, hreflang of translated locales and JSON-LD", async ({ request }) => {
+  test("is server-rendered with its title, canonical, hreflang of indexable translations and JSON-LD", async ({ request }) => {
     const response = await request.get(DE_EARRINGS);
     expect(response.status()).toBe(200);
     const html = await response.text();
@@ -34,14 +34,16 @@ test.describe("product page HTML (no JavaScript)", () => {
     expect(html).toContain('<html lang="de"');
     expect(html).toContain(`<title>Korallen-Tropfenohrringe | ${deCommon.brand}</title>`);
     expect(html).toMatch(/<link rel="canonical" href="[^"]*\/de\/product\/korallen-tropfenohrringe"/);
+    // de is a reviewed machine translation: indexable
+    expect(html).not.toContain('<meta name="robots"');
     const hreflangs = [...html.matchAll(/<link rel="alternate" hrefLang="([^"]+)" href="([^"]+)"/g)].map(
       ([, lang, href]) => [lang, new URL(href).pathname],
     );
+    // pl is an unreviewed machine translation (supabase/seed.sql): out of hreflang
     expect(Object.fromEntries(hreflangs)).toEqual({
       uk: "/uk/product/serezhky-krapli-z-koralom",
       en: "/en/product/coral-drop-earrings",
       de: "/de/product/korallen-tropfenohrringe",
-      pl: "/pl/product/kolczyki-z-koralem",
       "x-default": "/en/product/coral-drop-earrings",
     });
 
@@ -61,6 +63,16 @@ test.describe("product page HTML (no JavaScript)", () => {
     expect((product.offers as { price: string }).price).toMatch(/^\d+(\.\d{1,2})?$/);
     expect(breadcrumbs).toMatchObject({ "@type": "BreadcrumbList" });
     expect((breadcrumbs.itemListElement as unknown[]).length).toBe(3);
+  });
+
+  test("renders an unreviewed machine translation, but keeps it out of the index", async ({ request }) => {
+    const response = await request.get("/pl/product/kolczyki-z-koralem");
+    expect(response.status()).toBe(200);
+    const html = await response.text();
+    expect(html).toContain("Kolczyki z koralem");
+    expect(html).toContain('<meta name="robots" content="noindex, follow"/>');
+    expect(html).toMatch(/<link rel="canonical" href="[^"]*\/pl\/product\/kolczyki-z-koralem"/);
+    expect(html).not.toContain('hrefLang="pl"');
   });
 
   test("shows the en content of an untranslated product, canonicalized to the en page", async ({ request }) => {

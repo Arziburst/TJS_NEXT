@@ -79,7 +79,8 @@
       "previous": "Pagina precedente",
       "next": "Pagina successiva",
       "page": "Pagina {page} di {count}"
-    }
+    },
+    "unreviewed": "{count, plural, one {# traduzione automatica non revisionata} other {# traduzioni automatiche non revisionate}}: {locales}"
   },
   "actionErrors": {
     "notAuthorized": "Solo la gestione può farlo. Accedi di nuovo.",
@@ -184,6 +185,64 @@
       "leadTimeOrder": "Non può essere inferiore a «Da»",
       "titleRequired": "Inserisci un titolo in questa lingua o svuota gli altri suoi testi",
       "requiredToPublish": "Per pubblicare serve un titolo ucraino"
+    },
+    "translateAfterSave": "Salvate prima il prodotto; poi potrà essere tradotto automaticamente nelle altre lingue."
+  },
+  "translate": {
+    "title": "Traduzione automatica",
+    "hint": "Compila le altre lingue da un solo testo, in un’unica esecuzione. I testi automatici sono mostrati nel negozio, ma i motori di ricerca non li indicizzano finché non li segnate come revisionati.",
+    "notConfigured": "La traduzione automatica non è configurata su questo server. Compilate le lingue a mano o chiedete allo sviluppatore di collegare l’AI Gateway.",
+    "saveFirst": "Salvate prima le modifiche: la traduzione parte dal testo salvato.",
+    "source": "Traduci da",
+    "noSourceOption": "Ancora nessun testo",
+    "targets": "In",
+    "existing": "ha un testo",
+    "overwrite": "Sostituisci anche i testi esistenti",
+    "submit": "{count, plural, =0 {Traduci} one {Traduci in # lingua} other {Traduci in # lingue}}",
+    "running": "Traduzione in {count, plural, one {# lingua} other {# lingue}} in corso… Ci vogliono uno o due minuti.",
+    "done": "Tradotto in: {locales}.",
+    "doneToast": "{count, plural, one {Tradotto in # lingua} other {Tradotto in # lingue}}",
+    "partial": "Non tradotto: {locales}. Riprovate.",
+    "review": {
+      "title": "Revisione",
+      "hint": "Leggete ogni testo automatico e segnatelo come revisionato: solo allora i motori di ricerca indicizzano la pagina in quella lingua.",
+      "none": "Nessuna traduzione automatica da revisionare.",
+      "reviewed": "Revisionato",
+      "notReviewed": "Non revisionato",
+      "label": "{language}: revisionato",
+      "markedToast": "{language}: segnato come revisionato",
+      "unmarkedToast": "{language}: di nuovo non revisionato"
+    },
+    "errors": {
+      "notAuthorized": "Solo l’amministratore può farlo. Accedete di nuovo.",
+      "invalid": "Questa richiesta non è valida.",
+      "notConfigured": "La traduzione automatica non è configurata su questo server.",
+      "tooManyRequests": "Troppe traduzioni in poco tempo. Attendete un po’ e riprovate.",
+      "notFound": "Questo prodotto non esiste più.",
+      "noSource": "La lingua scelta non ha un testo da tradurre.",
+      "nothingToTranslate": "Niente da tradurre: ogni lingua scelta ha già un testo.",
+      "conflict": "Nel frattempo un altro prodotto ha preso uno dei nuovi indirizzi di pagina. Riprovate.",
+      "authFailed": "Il servizio di traduzione ha rifiutato la chiave di accesso. Chiedete allo sviluppatore di controllarla.",
+      "rateLimited": "Il servizio di traduzione è sovraccarico. Riprovate tra qualche minuto.",
+      "timeout": "La traduzione ha richiesto troppo tempo. Riprovate o scegliete meno lingue.",
+      "unavailable": "Il servizio di traduzione non è disponibile in questo momento. Riprovate più tardi.",
+      "rejected": "Il servizio di traduzione ha rifiutato la richiesta. Chiedete allo sviluppatore di controllare i log.",
+      "invalidOutput": "La traduzione è tornata inutilizzabile. Riprovate.",
+      "unexpectedError": "Qualcosa è andato storto. Riprovate."
+    },
+    "bulk": {
+      "label": "Traduzione dei prodotti selezionati",
+      "selectAll": "Seleziona tutti in questa pagina",
+      "select": "Seleziona {title}",
+      "selected": "{count, plural, =0 {Nessuna selezione} one {# selezionato} other {# selezionati}}",
+      "translate": "{count, plural, =0 {Traduci le lingue mancanti} other {Traduci le lingue mancanti (#)}}",
+      "markReviewed": "{count, plural, =0 {Segna le traduzioni come revisionate} other {Segna le traduzioni come revisionate (#)}}",
+      "stop": "Fermati dopo questo prodotto",
+      "progress": "Traduzione {current} di {total}: {title}",
+      "report": "Risultati della traduzione",
+      "translatedLine": "{count, plural, one {# lingua tradotta} other {# lingue tradotte}}, {failed} non tradotte",
+      "summary": "{done, plural, one {# prodotto tradotto} other {# prodotti tradotti}}, {failed, plural, =0 {nessun errore} one {# errore} other {# errori}}",
+      "reviewedToast": "{count, plural, =0 {Nessuna traduzione attendeva revisione} one {# traduzione segnata come revisionata} other {# traduzioni segnate come revisionate}}"
     }
   },
   "taxonomy": {

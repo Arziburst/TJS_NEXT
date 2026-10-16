@@ -11,7 +11,7 @@ export const PRODUCT_SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 export type TranslationSlug = { locale: string; slug: string };
 
 /** A translation whose slug is the requested one, with every translation of its (published) product. */
-export type SlugMatch = TranslationSlug & { productId: string; productSlugs: TranslationSlug[] };
+export type SlugMatch<T extends TranslationSlug = TranslationSlug> = TranslationSlug & { productId: string; productSlugs: T[] };
 
 export type ProductPathResolution =
   | { kind: "ok"; productId: string }
