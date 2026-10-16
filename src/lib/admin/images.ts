@@ -18,7 +18,6 @@ import { STAGING_BUCKET } from "./staged-sweep";
  * public bucket under a new path (the image optimizer caches by URL for 31 days: a path is never reused).
  */
 
-
 export type ImageWriteError = "notFound" | "conflict" | "notAuthorized" | "unexpectedError";
 export type UploadError = "uploadMissing" | "tooLarge" | "unsupportedType" | "invalidImage";
 
