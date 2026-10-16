@@ -5,6 +5,7 @@ import deErrors from "../messages/de/errors.json" with { type: "json" };
 import enCatalog from "../messages/en/catalog.json" with { type: "json" };
 import enCommon from "../messages/en/common.json" with { type: "json" };
 import ukCatalog from "../messages/uk/catalog.json" with { type: "json" };
+import ukProduct from "../messages/uk/product.json" with { type: "json" };
 import { fixtureTitle } from "./catalog-fixtures";
 
 // Needs the local stack: the seed plus the 30 brooches of e2e/catalog-fixtures.ts (31 brooches in all).
@@ -166,6 +167,42 @@ test("the new badge marks products younger than 7 days (D9)", async ({ page }) =
   await expect(cards(page).filter({ hasText: "Pearl stud earrings" }).getByTestId("new-badge")).toBeVisible();
   await expect(cards(page).filter({ hasText: "Gold-tone hoop earrings" }).getByTestId("new-badge")).toHaveCount(0);
 });
+
+for (const path of ["/uk/shop", "/uk/shop/earrings"]) {
+  test(`${path}: made-to-order cards carry the product page's badge, one-of-a-kind cards do not (#72)`, async ({ page }) => {
+    const errors = collectErrors(page);
+    await page.goto(path);
+    // seed: TEST-001 made to order, TEST-003 one of a kind
+    const madeToOrder = cards(page).filter({ hasText: "Сережки-краплі з коралом" });
+    await expect(madeToOrder.getByTestId("made-to-order-badge")).toHaveText(ukProduct.card.onlyOrder);
+    await expect(cards(page).filter({ hasText: "Сережки-кільця золотисті" }).getByTestId("made-to-order-badge")).toHaveCount(0);
+    // drawn over the photo's fixed box: out of the flow and inside it, so the card keeps its height
+    const placement = await madeToOrder.getByTestId("made-to-order-badge").evaluate((element) => {
+      const badge = element.getBoundingClientRect();
+      const box = element.parentElement!.getBoundingClientRect();
+      return {
+        position: getComputedStyle(element).position,
+        inside: badge.left >= box.left && badge.right <= box.right && badge.top >= box.top && badge.bottom <= box.bottom,
+      };
+    });
+    expect(placement).toEqual({ position: "absolute", inside: true });
+    // the TJS yellow behind the TJS brown text: WCAG AA for small text (4.5:1)
+    const contrast = await madeToOrder.getByTestId("made-to-order-badge").evaluate((element) => {
+      const luminance = (color: string) => {
+        const [r, g, b] = color.match(/\d+(\.\d+)?/g)!.slice(0, 3).map((value) => {
+          const channel = Number(value) / 255;
+          return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!;
+      };
+      const style = getComputedStyle(element);
+      const [light, dark] = [luminance(style.backgroundColor), luminance(style.color)].sort((a, b) => b - a);
+      return (light! + 0.05) / (dark! + 0.05);
+    });
+    expect(contrast).toBeGreaterThanOrEqual(4.5);
+    expect(errors).toEqual([]);
+  });
+}
 
 test("a page past the end shows the empty state with a way back", async ({ page }) => {
   await page.goto("/en/shop/rings?page=9");
