@@ -246,6 +246,7 @@ Supabase Auth with email/password and Google (D12); the app side is `src/lib/aut
   Host). Open the link on that host: the session cookie is set there (locally `127.0.0.1:3000+n`, not
   `localhost`). Production needs the same three templates and subjects in the dashboard (Authentication → Email
   Templates), the site URL and `https://<domain>/**` in the redirect URLs.
+- **Auth emails in the user's language** (#99): see the section of that name below.
 - **Google.** Off in `config.toml` until the OAuth client exists. To try it locally: put `GOOGLE_CLIENT_ID` and
   `GOOGLE_CLIENT_SECRET` into `supabase/.env` (git-ignored), set `enabled = true` under
   `[auth.external.google]` in the worktree's `config.toml` (not committed: the start script keeps it
@@ -283,6 +284,67 @@ Supabase Auth with email/password and Google (D12); the app side is `src/lib/aut
   `127.0.0.1:3000+n`. `e2e/admin.e2e.ts` creates its own admin and customer; it runs in the
   `desktop-catalog-writers` and `mobile-catalog-writers` projects after the storefront tests, because it publishes
   products the listings count.
+
+### Auth emails in the user's language
+
+Supabase Auth's templates have one language. With the **Send Email Hook** on, Auth hands every email to
+`POST /api/auth/send-email` instead (`src/lib/auth/send-email-hook.ts`), which:
+
+1. checks the Standard Webhooks signature (`webhook-id`, `webhook-timestamp`, `webhook-signature`) with
+   `SEND_EMAIL_HOOK_SECRET`, refuses a call signed more than 5 minutes away from now, and refuses an id it has
+   seen before (`public.claim_webhook_receipt`, service role only): 401 for all of them, 500 while the secret is
+   unset;
+2. renders the email of the action type (`signup`, `recovery`, `email_change` — one to the current and one to the
+   new address, each with its own token — and `magiclink`, unused today) in the user's locale: `user_metadata.locale`,
+   else the locale of the page it was asked from (`redirect_to`), else `en`. The texts are
+   `notifications.email.auth.*` (11 locales, machine translation, unreviewed), with HTML and plain-text parts, the
+   shop's name and contacts from the admin settings when there are some (#21), and the token-hash link to
+   `/<locale>/auth/confirm` on `NEXT_PUBLIC_SITE_URL` (never the payload's host);
+3. sends it through the order emails' Resend transport (Notifications below: `NOTIFICATIONS_SEND`,
+   `RESEND_API_KEY`, `EMAIL_FROM`). Sending off or unconfigured → 500, so Auth reports the failure (a sign-up is
+   then refused) instead of creating an account nobody can confirm. Any other email type → 400.
+
+Answers: `{}` with 200 on success, `{ "error": { "http_code", "message" } }` otherwise. The token and the link are
+never logged. The locale is stored at sign-up (`options.data.locale`) and, while signed in, when the page's locale
+differs from the stored one (the account menu calls `rememberLocale`, at most 20 changes an hour per account).
+
+**Locally the hook is off** (`[auth.hook.send_email] enabled = false` in `config.toml`): Auth sends the English
+templates of `supabase/templates/` to Mailpit as before, and nothing needs a secret or email keys. To try it, start
+the stack with the hook on (the CLI reads `SUPABASE_AUTH_*` overrides of `config.toml`), from Git Bash:
+
+```sh
+export SEND_EMAIL_HOOK_SECRET="v1,whsec_$(node -e "console.log(Buffer.from('a local secret').toString('base64'))")"
+npm run supabase:stop:worktree -- <n>
+SUPABASE_AUTH_HOOK_SEND_EMAIL_ENABLED=true \
+SUPABASE_AUTH_HOOK_SEND_EMAIL_URI=http://host.docker.internal:<3000+n>/api/auth/send-email \
+  npm run supabase:start:worktree -- <n>
+```
+
+The Auth container reaches the dev server through `host.docker.internal` (Docker Desktop; on Linux it needs a
+host-gateway entry). Run the app with the same secret and the notifications stand-in as the transport (the dev walk
+command of Notifications below, plus `SEND_EMAIL_HOOK_SECRET`), then read the emails at
+`GET http://127.0.0.1:<stand-in port>/sent?to=<address>`. The integration e2e of this mode, on that stack, against
+the production build:
+
+```sh
+TJS_UI_KIT=true npm run build
+TJS_UI_KIT=true E2E_PORT=<3000+n> E2E_SERVER=start E2E_SEND_EMAIL_HOOK=true npx playwright test e2e/auth-emails.e2e.ts --workers 2
+```
+
+Only that file: with the hook on, the other auth e2e tests find no email in Mailpit. Restart the stack without the
+two overrides to return to the default. CI runs the stack with the hook off (`e2e/auth-emails.e2e.ts` then checks
+the stored locale only).
+
+**Production** (owner or coordinator; launch checklist #31). In this order, so no sign-up meets a hook that
+cannot send:
+
+1. The email transport works: `NOTIFICATIONS_SEND=true`, `RESEND_API_KEY`, `EMAIL_FROM` on the Vercel production
+   environment (the sender address and domain are **TBD, the owner decides**; the domain verified in Resend).
+2. Dashboard → Authentication → Auth Hooks → **Send Email** → HTTPS: URL `https://<domain>/api/auth/send-email`,
+   generate the secret. Copy it (`v1,whsec_…`) into `SEND_EMAIL_HOOK_SECRET` on the Vercel **production**
+   environment only (server only, never `NEXT_PUBLIC_*`); redeploy.
+3. Enable the hook. Sign up, ask for a password reset and change an email in two languages and check the emails.
+   To undo: disable the hook; Auth sends its dashboard templates again (keep them set, docs above).
 
 ## Nova Poshta (delivery in Ukraine)
 
@@ -449,7 +511,8 @@ local runs and CI without it mark every event `skipped_unconfigured`, even with 
 | `TELEGRAM_API_BASE_URL`, `RESEND_API_URL` | local and e2e only: the stand-in below; unset in production |
 
 **Stand-in.** `e2e/notifications-mock.ts` answers `POST /bot<token>/sendMessage` and `POST /emails` and lists what
-it got at `GET /sent?number=<order number>`. Playwright starts it on `E2E_PORT + 2000` (CI: 5000) and points the
+it got at `GET /sent?number=<order number>` (and every email to one address at `GET /sent?to=<address>`, for
+Auth's emails through the hook). Playwright starts it on `E2E_PORT + 2000` (CI: 5000) and points the
 app at it with `NOTIFICATIONS_SEND=true` and test keys (`playwright.config.ts`). For a dev walk, from Git Bash:
 
 ```sh
@@ -487,6 +550,7 @@ production deployment in the dashboard; the database is not rolled back with it.
 | `NOVA_POST_API_KEY` | server only: Nova Post international delivery (#23); unset → zone flat rates only. `NOVA_POST_API_URL` stays unset in production |
 | `AI_GATEWAY_OIDC` | server only: `true` turns on the admin's machine translation through the AI Gateway with the deployment's OIDC token (#19); unset → "not configured". Not set yet: the owner decides on the gateway billing. `AI_GATEWAY_API_KEY` / `AI_GATEWAY_BASE_URL` stay unset in production |
 | `NOTIFICATIONS_SEND`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO` | server only: the order notifications (#26, see Notifications above); the values are TBD from the owner, and until they are set every message is `skipped_unconfigured` |
+| `SEND_EMAIL_HOOK_SECRET` | server only: the secret of Supabase Auth's Send Email Hook (#99, Auth emails in the user's language above), production only; set it before the hook is enabled in the dashboard |
 
 Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
 `VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`

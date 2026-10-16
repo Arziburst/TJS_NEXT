@@ -43,7 +43,9 @@ en, uk and the other 9 locales by machine, unreviewed; from #66 the sizes (`comm
 `admin.form.sections.variants`, `admin.form.errors.hasVariants` / `variantPriceNotPositive`, `checkout.request.errors.sizeUnavailable`; the legacy app had no
 sizes), written in en, uk and the other 9 locales by machine, unreviewed; from #28 the customer account `account.*` (except the legacy
 `account.orderStatus.canceled` / `inProcessing` / `accepted` / `closed`), `nav.profile`, `nav.addresses` and
-`checkout.request.saved.*`, written in en, uk and the other 9 locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
+`checkout.request.saved.*`, written in en, uk and the other 9 locales by machine, unreviewed; from #99 Auth's emails
+`notifications.email.auth.*` (sign-up confirmation, password reset, email change, sign-in link; the Supabase
+templates they replace were English only), written in en, uk and the other 9 locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the
 admin enters USD).
 
