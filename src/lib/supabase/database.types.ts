@@ -243,13 +243,13 @@ isOneToOne: false
                   ]
                 },"order_items": {
                   Row: {
-                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id": string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id": string | null,"quantity": number,"regular_unit_price_minor": number,"regular_unit_price_usd_minor": number,"sku": string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id": string | null,"variant_label": string | null,"variant_label_locale": string | null
+                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id": string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id": string | null,"quantity": number,"regular_unit_price_minor": number | null,"regular_unit_price_usd_minor": number | null,"sku": string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id": string | null,"variant_label": string | null,"variant_label_locale": string | null
                   }
                   Insert: {
-                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id"?: string | null,"quantity": number,"regular_unit_price_minor": number,"regular_unit_price_usd_minor": number,"sku"?: string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
+                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id"?: string | null,"quantity": number,"regular_unit_price_minor"?: number | null,"regular_unit_price_usd_minor"?: number | null,"sku"?: string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
                   }
                   Update: {
-                    "fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor"?: number,"line_total_usd_minor"?: number,"order_id"?: string,"position"?: number,"product_id"?: string | null,"quantity"?: number,"regular_unit_price_minor"?: number,"regular_unit_price_usd_minor"?: number,"sku"?: string | null,"title"?: string,"title_locale"?: string,"unit_price_minor"?: number,"unit_price_usd_minor"?: number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
+                    "fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor"?: number,"line_total_usd_minor"?: number,"order_id"?: string,"position"?: number,"product_id"?: string | null,"quantity"?: number,"regular_unit_price_minor"?: number | null,"regular_unit_price_usd_minor"?: number | null,"sku"?: string | null,"title"?: string,"title_locale"?: string,"unit_price_minor"?: number,"unit_price_usd_minor"?: number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
                   }
                   Relationships: [
                     {
@@ -269,6 +269,56 @@ isOneToOne: false
       columns: ["variant_id"]
 isOneToOne: false
       referencedRelation: "product_variants"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"order_notes": {
+                  Row: {
+                    "author_id": string | null,"body": string,"created_at": string,"id": string,"order_id": string
+                  }
+                  Insert: {
+                    "author_id"?: string | null,"body": string,"created_at"?: string,"id"?: string,"order_id": string
+                  }
+                  Update: {
+                    "author_id"?: string | null,"body"?: string,"created_at"?: string,"id"?: string,"order_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "order_notes_author_id_fkey"
+      columns: ["author_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "order_notes_order_id_fkey"
+      columns: ["order_id"]
+isOneToOne: false
+      referencedRelation: "orders"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"order_status_history": {
+                  Row: {
+                    "changed_by": string | null,"created_at": string,"from_status": Database["public"]['Enums']["order_status"],"id": string,"order_id": string,"to_status": Database["public"]['Enums']["order_status"]
+                  }
+                  Insert: {
+                    "changed_by"?: string | null,"created_at"?: string,"from_status": Database["public"]['Enums']["order_status"],"id"?: string,"order_id": string,"to_status": Database["public"]['Enums']["order_status"]
+                  }
+                  Update: {
+                    "changed_by"?: string | null,"created_at"?: string,"from_status"?: Database["public"]['Enums']["order_status"],"id"?: string,"order_id"?: string,"to_status"?: Database["public"]['Enums']["order_status"]
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "order_status_history_changed_by_fkey"
+      columns: ["changed_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "order_status_history_order_id_fkey"
+      columns: ["order_id"]
+isOneToOne: false
+      referencedRelation: "orders"
       referencedColumns: ["id"]
     }
                   ]
@@ -476,13 +526,26 @@ isOneToOne: false
                   ]
                 },"profiles": {
                   Row: {
-                    "created_at": string,"id": string,"name": string | null,"phone": string | null,"role": Database["public"]['Enums']["user_role"],"updated_at": string
+                    "created_at": string,"first_name": string | null,"id": string,"last_name": string | null,"name": string | null,"phone": string | null,"role": Database["public"]['Enums']["user_role"],"updated_at": string
                   }
                   Insert: {
-                    "created_at"?: string,"id": string,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
+                    "created_at"?: string,"first_name"?: string | null,"id": string,"last_name"?: string | null,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
+                    "created_at"?: string,"first_name"?: string | null,"id"?: string,"last_name"?: string | null,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"saved_addresses": {
+                  Row: {
+                    "country": string,"created_at": string,"delivery": NonNullable<Json>,"id": string,"is_default": boolean,"label": string | null,"updated_at": string,"user_id": string
+                  }
+                  Insert: {
+                    "country": string,"created_at"?: string,"delivery": NonNullable<Json>,"id"?: string,"is_default"?: boolean,"label"?: string | null,"updated_at"?: string,"user_id"?: string
+                  }
+                  Update: {
+                    "country"?: string,"created_at"?: string,"delivery"?: NonNullable<Json>,"id"?: string,"is_default"?: boolean,"label"?: string | null,"updated_at"?: string,"user_id"?: string
                   }
                   Relationships: [
                     
@@ -540,6 +603,9 @@ isOneToOne: false
 "admin_delete_taxonomy_term":
 { Args: { "p_id": string }; Returns: string
                            },
+"admin_list_orders":
+{ Args: { "p_country"?: string,"p_date_from"?: string,"p_date_to"?: string,"p_limit"?: number,"p_offset"?: number,"p_query"?: string,"p_status"?: Database["public"]['Enums']["order_status"] }; Returns: Json
+                           },
 "admin_reorder_product_images":
 { Args: { "p_image_ids": (string)[],"p_product_id": string }; Returns: undefined
                            },
@@ -575,6 +641,9 @@ isOneToOne: false
                            },
 "admin_set_collection_published":
 { Args: { "p_id": string,"p_published": boolean }; Returns: boolean
+                           },
+"admin_set_order_status":
+{ Args: { "p_from": Database["public"]['Enums']["order_status"],"p_number": number,"p_to": Database["public"]['Enums']["order_status"] }; Returns: Json
                            },
 "admin_set_product_status":
 { Args: { "p_id": string,"p_status": Database["public"]['Enums']["product_status"] }; Returns: boolean

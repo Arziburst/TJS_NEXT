@@ -36,6 +36,7 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
   /** A fake of both APIs that records what each order got; `telegramUp` false answers Telegram with a 502. */
   function fakeApis({ delayMs = 0 } = {}) {
     const telegram: number[] = [];
+    const telegramTexts: string[] = [];
     const email: string[] = [];
     const state = { telegramUp: true };
     const fetchImpl: typeof fetch = async (input, init) => {
@@ -45,6 +46,7 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
         if (!state.telegramUp) return Response.json({ ok: false, description: "Bad Gateway" }, { status: 502 });
         const text = JSON.parse(String(init?.body)).text as string;
         telegram.push(Number(/№ (\d+)/.exec(text)?.[1]));
+        telegramTexts.push(text);
         return Response.json({ ok: true, result: { message_id: telegram.length } });
       }
       if (url === "http://resend.test/emails") {
@@ -53,7 +55,7 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
       }
       return new Response("unexpected", { status: 404 });
     };
-    return { telegram, email, state, fetchImpl };
+    return { telegram, telegramTexts, email, state, fetchImpl };
   }
 
   function processor(config: NotificationConfig, fetchImpl: typeof fetch) {
@@ -106,7 +108,7 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
         items_total_usd_minor: 1000,
         items_total_minor: 990,
       },
-      [{ product_id: productId, variant_id: null, position: 0, title: "Outbox ring", title_locale: "de", variant_label: null, variant_label_locale: null, quantity: 1, unit_price_usd_minor: 1000, unit_price_minor: 990, regular_unit_price_usd_minor: 1000, regular_unit_price_minor: 990 }],
+      [{ product_id: productId, variant_id: null, position: 0, title: "Outbox ring", title_locale: "de", variant_label: null, variant_label_locale: null, quantity: 1, unit_price_usd_minor: 1000, unit_price_minor: 990 }],
     );
     if (!created.ok) throw new Error(`the test order was not stored: ${JSON.stringify(created)}`);
     return { orderId: created.orderId, number: created.number };
@@ -198,9 +200,7 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
           variant_label_locale: "uk",
           quantity: 1,
           unit_price_usd_minor: 1000,
-          regular_unit_price_usd_minor: 1000,
           unit_price_minor: 1000,
-          regular_unit_price_minor: 1000,
         },
       ],
     );
@@ -224,8 +224,9 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
       expect(apis.telegram.filter((sent) => sent === number), String(number)).toHaveLength(1);
       expect(apis.email.filter((key) => key === `${event.id}/email`), String(number)).toHaveLength(1);
     }
-    // and nobody sent anything twice at all
-    expect(new Set(apis.telegram).size).toBe(apis.telegram.length);
+    // and nobody sent anything twice at all (the run also sends what other tests left due, e.g. several status
+    // changes of one order (#27): one order may have several messages, never the same one twice)
+    expect(new Set(apis.telegramTexts).size).toBe(apis.telegramTexts.length);
     expect(new Set(apis.email).size).toBe(apis.email.length);
   });
 

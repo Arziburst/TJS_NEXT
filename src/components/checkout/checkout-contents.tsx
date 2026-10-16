@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
+import { deliveryKind, deliveryLang, deliveryLines } from "@/components/account/delivery-lines";
 import { CartItemImage } from "@/components/cart/cart-item-image";
 import { VariantLabel } from "@/components/cart/variant-label";
 import { countryOptions } from "@/components/delivery/nova-post/country-options";
@@ -10,6 +11,10 @@ import { routes } from "@/config/routes";
 import { Link } from "@/i18n/navigation";
 import { hasLocale } from "next-intl";
 import { routing, type Locale } from "@/i18n/routing";
+import { listSavedAddresses } from "@/lib/account/addresses";
+import type { ContactNames } from "@/lib/account/names";
+import { toChoiceInput } from "@/lib/account/order-delivery";
+import { readContactNames } from "@/lib/account/profile";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getCartView, lineKey, orderableLines, regularLines, type CartItem, type CartProduct } from "@/lib/cart";
 import { parcelFromCart } from "@/lib/delivery/nova-poshta/parcel";
@@ -20,7 +25,8 @@ import { getMoneyTables } from "@/lib/money/cache";
 import { priceIn } from "@/lib/money/format";
 import type { MoneyTables } from "@/lib/money/store";
 import { cn } from "@/lib/utils";
-import { CheckoutForm, type CheckoutCountry } from "./checkout-form";
+import { createSessionClient } from "@/lib/supabase/server";
+import { CheckoutForm, type CheckoutCountry, type SavedDeliveryOption } from "./checkout-form";
 
 // Vercel sets the visitor's country on every request (D5)
 const COUNTRY_HEADER = "x-vercel-ip-country";
@@ -46,10 +52,21 @@ function defaultCountry(country: string | null, locale: Locale): CheckoutCountry
   return locale === "uk" ? "UA" : null;
 }
 
-/** "Olena Kovalenko" → first and last name, as the profile keeps one name field. */
-function splitName(name: string | null): { firstName: string; lastName: string } {
-  const [first = "", ...rest] = (name ?? "").trim().split(/\s+/);
-  return { firstName: first, lastName: rest.join(" ") };
+/** A signed-in customer's first and last name and saved destinations (#28); nothing for a guest. */
+async function readAccount(userId: string | null, locale: Locale): Promise<{ names: ContactNames | null; saved: SavedDeliveryOption[] }> {
+  if (!userId) return { names: null, saved: [] };
+  const [client, t] = await Promise.all([createSessionClient(), getTranslations("account.addresses.kinds")]);
+  const [names, addresses] = await Promise.all([readContactNames(client, userId), listSavedAddresses(client)]);
+  const regions = new Intl.DisplayNames([locale], { type: "region" });
+  const saved = (addresses.ok ? addresses.addresses : []).map((address) => ({
+    id: address.id,
+    title: address.label ?? t(deliveryKind(address.delivery)),
+    lines: deliveryLines(address.delivery, (code) => regions.of(code) ?? code),
+    lang: deliveryLang(address.delivery),
+    isDefault: address.isDefault,
+    choice: toChoiceInput(address.delivery),
+  }));
+  return { names, saved };
 }
 
 /*
@@ -101,8 +118,9 @@ export async function CheckoutContents() {
     orderable.map(({ product, unitUsdMinor, quantity }) => ({ priceUsdMinor: unitUsdMinor, weightGrams: product.weightGrams, quantity })),
     tables,
   );
+  const account = await readAccount(user?.id ?? null, locale);
   const prefill = user
-    ? { ...splitName(user.name), phone: user.phone ?? "", email: user.email ?? "" }
+    ? { ...(account.names ?? { firstName: "", lastName: "" }), phone: user.phone ?? "", email: user.email ?? "" }
     : { firstName: "", lastName: "", phone: "", email: "" };
   const pieces = orderable.reduce((sum, item) => sum + item.quantity, 0);
   const hasUnavailable = view.items.length > orderable.length;
@@ -174,6 +192,7 @@ export async function CheckoutContents() {
             countries={countries}
             defaultCountry={defaultCountry(headerList.get(COUNTRY_HEADER), locale)}
             prefill={prefill}
+            saved={account.saved}
             parcel={parcel}
             goods={goods}
             novaPostLive={getNovaPostClient() !== null}

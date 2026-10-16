@@ -25,6 +25,13 @@ export const routes = {
   orderRequestDone: { path: "/checkout/done", enabled: true },
   // #13
   signIn: { path: "/sign-in-and-up", enabled: true },
+  // #13: a signed-in user's new password; the account page links here
+  updatePassword: { path: "/update-password", enabled: true },
+  // #28: signed-in only (noindex); the account menu links here, the shell's guest slot does not
+  account: { path: "/account", enabled: true },
+  // #28: the order history; /account/orders/<number> is one order, linked from the history
+  accountOrders: { path: "/account/orders", enabled: true },
+  accountAddresses: { path: "/account/addresses", enabled: true },
   // #17: admins only (noindex); the account menu links here for an admin, the shell does not
   admin: { path: "/admin", enabled: true },
 } as const satisfies Record<string, { path: string; enabled: boolean }>;

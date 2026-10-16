@@ -293,6 +293,12 @@ describe("processOutbox", () => {
     expect((await processOutbox(deps(store))).claimed).toBe(3);
   });
 
+  it("sends an admin's status change (#27) like a new order", async () => {
+    const store = outbox(1, "order_status_changed");
+    expect(await processOutbox(deps(store))).toMatchObject({ processed: 1, sent: 2, retried: 0 });
+    expect(store.rows[0]).toMatchObject({ telegram: "sent", email: "sent", processed: true });
+  });
+
   it("refuses an event it does not know", async () => {
     const store = outbox(1, "order_paid");
     const run = deps(store);

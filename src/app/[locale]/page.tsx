@@ -7,26 +7,44 @@ import { getCategoryEntries } from "@/components/catalog/category-entries";
 import { SEE_ALL_IMAGE, STATIC_BLUR } from "@/components/catalog/category-images";
 import { CategoryTiles } from "@/components/catalog/category-tiles";
 import { SHOP_HREF } from "@/components/catalog/links";
-import { getAlternates } from "@/i18n/metadata";
-import { Link } from "@/i18n/navigation";
+import { JsonLd } from "@/components/seo/json-ld";
+import { getAlternates, getMetadataBase } from "@/i18n/metadata";
+import { getPathname, Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import { pageOpenGraph } from "@/lib/seo/open-graph";
+import { siteJsonLd } from "@/lib/seo/organization";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [t, locale] = await Promise.all([getTranslations("home"), getLocale()]);
+  const [t, tCommon, locale] = await Promise.all([getTranslations("home"), getTranslations("common"), getLocale()]);
   return {
     title: { absolute: t("meta.title") },
     description: t("meta.description"),
     alternates: getAlternates("/", locale),
+    openGraph: pageOpenGraph({
+      locale: locale as Locale,
+      url: getPathname({ href: "/", locale }),
+      title: t("meta.title"),
+      description: t("meta.description"),
+      siteName: tCommon("brand"),
+    }),
   };
 }
 
 export default async function HomePage() {
-  const [t, locale] = await Promise.all([getTranslations("home"), getLocale()]);
+  const [t, tCommon, locale] = await Promise.all([getTranslations("home"), getTranslations("common"), getLocale()]);
   // static: the category names come from the messages, so the whole page is prerendered
   const categories = await getCategoryEntries(locale as Locale);
+  // the shop's contacts join it once the admin settings (#21) exist
+  const structuredData = siteJsonLd({
+    base: getMetadataBase(),
+    locale: locale as Locale,
+    name: tCommon("brand"),
+    description: t("meta.description"),
+  });
 
   return (
     <main className="page-container flex flex-1 flex-col gap-10 overflow-x-clip py-8 sb:gap-14 sb:py-12">
+      <JsonLd data={structuredData} />
       <h1 className="sr-only">{t("meta.title")}</h1>
       <CategoryTiles categories={categories} />
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">

@@ -155,7 +155,11 @@ async function AdminProducts({ params, searchParams }: PageProps<"/[locale]/admi
             >
               <ProductList items={products.data.items} categories={categoryList} />
             </BulkTranslation>
-            <AdminPagination page={products.data.page} pageCount={products.data.pageCount} filters={filters} />
+            <AdminPagination
+              page={products.data.page}
+              pageCount={products.data.pageCount}
+              search={{ q: filters.query, category: filters.categoryId, status: filters.status }}
+            />
           </>
         )}
       </div>

@@ -52,9 +52,10 @@ export type NewOrderItem = {
   // the price charged: the sale price while a sale ran (#67)
   unit_price_usd_minor: number;
   unit_price_minor: number;
-  // the regular price next to it, as the customer saw it struck through (equal without a sale)
-  regular_unit_price_usd_minor: number;
-  regular_unit_price_minor: number;
+  // the regular price next to it, as the customer saw it struck through; left out, the database stores the unit
+  // price (no sale). The checkout always sends both
+  regular_unit_price_usd_minor?: number;
+  regular_unit_price_minor?: number;
 };
 
 export type CreateOrderResult =

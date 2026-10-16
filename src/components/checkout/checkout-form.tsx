@@ -3,11 +3,12 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useId, useRef, useState, useTransition, type ReactNode } from "react";
 import { placeOrderAction } from "@/app/[locale]/checkout/actions";
+import { ACCOUNT_ADDRESSES_HREF } from "@/components/account/paths";
 import { InternationalDelivery, type NovaPostSelection } from "@/components/delivery/nova-post/international-delivery";
 import { NovaPoshtaDelivery, type NovaPoshtaSelection } from "@/components/delivery/nova-poshta-delivery";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import type { PlaceOrderResult } from "@/lib/checkout/place-order";
 import {
   COMMENT_MAX_LENGTH,
@@ -21,15 +22,30 @@ import {
 } from "@/lib/checkout/schema";
 import type { DeliveryCountry } from "@/lib/delivery/nova-post/countries";
 import type { OrderGoods } from "@/lib/delivery/nova-post/parcel";
+import { cn } from "@/lib/utils";
 import { orderDoneHref } from "./paths";
+import { SavedDeliveryQuote } from "./saved-delivery-quote";
 
 export type CheckoutCountry = "UA" | DeliveryCountry;
+
+// A signed-in customer's saved destination (#28), described on the server
+export type SavedDeliveryOption = {
+  id: string;
+  // the customer's name for it, else the service ("Nova Poshta branch")
+  title: string;
+  lines: [string, string];
+  lang?: string;
+  isDefault: boolean;
+  choice: DeliveryChoiceInput;
+};
 
 type CheckoutFormProps = {
   countries: { code: CheckoutCountry; label: string }[];
   defaultCountry: CheckoutCountry | null;
   // a signed-in customer's profile; empty for a guest
   prefill: { firstName: string; lastName: string; phone: string; email: string };
+  // a signed-in customer's saved destinations, the default one chosen at first; empty for a guest
+  saved: SavedDeliveryOption[];
   // Ukraine: the cart's parcel for the Nova Poshta estimate (parcelFromCart on the server)
   parcel: { weightGrams: number; declaredValueMinor: number };
   // abroad: the cart's goods for the Nova Post estimate (goodsOf on the server)
@@ -84,7 +100,7 @@ function novaPostChoice(selection: NovaPostSelection): DeliveryChoiceInput {
  * gets the focus. The delivery pieces contain a form of their own (the address abroad), so this form's fields
  * sit outside the <form> element and join it through their `form` attribute.
  */
-export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods, novaPostLive, expected, total }: CheckoutFormProps) {
+export function CheckoutForm({ countries, defaultCountry, prefill, saved, parcel, goods, novaPostLive, expected, total }: CheckoutFormProps) {
   const t = useTranslations("checkout");
   const tr = useTranslations("checkout.request");
   const tInt = useTranslations("checkout.internationalDelivery");
@@ -95,6 +111,10 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
   const commentId = useId();
   const [attempt] = useState(() => crypto.randomUUID());
   const [contact, setContact] = useState(prefill);
+  const savedName = useId();
+  // a saved destination (the default one at first), or null for another address chosen below
+  const [savedId, setSavedId] = useState<string | null>(() => (saved.find((option) => option.isDefault) ?? saved[0])?.id ?? null);
+  const savedChoice = saved.find((option) => option.id === savedId) ?? null;
   const [country, setCountry] = useState<CheckoutCountry | null>(defaultCountry);
   const [novaPoshta, setNovaPoshta] = useState<NovaPoshtaSelection | null>(null);
   const [novaPost, setNovaPost] = useState<NovaPostSelection | null>(null);
@@ -109,8 +129,13 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
   // a second click before the button re-renders as busy sends nothing (the server is idempotent anyway)
   const sending = useRef(false);
 
-  const delivery: DeliveryChoiceInput | null =
-    country === "UA" ? (novaPoshta && novaPoshtaChoice(novaPoshta)) : country && novaPost ? novaPostChoice(novaPost) : null;
+  const delivery: DeliveryChoiceInput | null = savedChoice
+    ? savedChoice.choice
+    : country === "UA"
+      ? novaPoshta && novaPoshtaChoice(novaPoshta)
+      : country && novaPost
+        ? novaPostChoice(novaPost)
+        : null;
   // an error stays until its field changes; the delivery error until a destination is chosen
   const shown: Partial<Record<CheckoutField, true>> = delivery ? { ...errors, delivery: undefined } : errors;
   const invalidCount = Object.values(shown).filter(Boolean).length;
@@ -269,51 +294,107 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
         <h2 id={`${formId}-shipping`} className="font-sans text-base font-semibold tracking-[0.2em] uppercase">
           {t("shippingDetails")}
         </h2>
-        <div className="grid gap-2">
-          <label htmlFor={countryId} className="font-sans text-sm font-semibold">
-            {tInt("country")}
-          </label>
-          <select
-            ref={(element) => {
-              fields.current.set("delivery", element);
-            }}
-            id={countryId}
-            value={country ?? ""}
-            onChange={(event) => {
-              const next = countries.find((option) => option.code === event.target.value);
-              if (!next) return;
-              setCountry(next.code);
-              setNovaPoshta(null);
-              setNovaPost(null);
-              setAddressPending(false);
-            }}
-            className="h-11 w-full cursor-pointer rounded-none border-2 border-input bg-transparent px-2.5 font-input text-base text-foreground transition outline-none hover:opacity-70 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-invalid:border-accent sm:text-sm"
-            {...errorProps("delivery")}
-          >
-            <option value="" disabled>
-              {tInt("countryPlaceholder")}
-            </option>
-            {countries.map((option) => (
-              <option key={option.code} value={option.code}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {country === "UA" ? (
-          <NovaPoshtaDelivery parcel={parcel} onChange={setNovaPoshta} />
-        ) : country ? (
-          <InternationalDelivery
-            key={country}
-            countries={countries.filter((option): option is { code: DeliveryCountry; label: string } => option.code !== "UA")}
-            live={novaPostLive}
-            goods={goods}
-            fixedCountry={country}
-            onChange={setNovaPost}
-            onAddressPendingChange={setAddressPending}
-          />
+        {saved.length > 0 ? (
+          <fieldset className="grid gap-2" data-testid="saved-addresses">
+            <legend className="mb-2 font-sans text-sm font-semibold">{tr("saved.label")}</legend>
+            {[...saved, null].map((option) => {
+              const value = option?.id ?? "";
+              const checked = (savedId ?? "") === value;
+              return (
+                <label
+                  key={value || "other"}
+                  className={cn(
+                    "flex min-h-11 cursor-pointer items-start gap-3 border-2 border-input px-3 py-2 font-input text-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring",
+                    checked && "border-foreground",
+                  )}
+                >
+                  <input
+                    type="radio"
+                    name={savedName}
+                    value={value}
+                    checked={checked}
+                    onChange={() => {
+                      setSavedId(option?.id ?? null);
+                      clearError("delivery");
+                    }}
+                    className="mt-0.5 size-4 shrink-0 accent-primary"
+                  />
+                  {option ? (
+                    <span className="flex min-w-0 flex-col gap-0.5">
+                      <span className="font-sans font-semibold break-words">
+                        {option.title}
+                        {option.isDefault ? <span className="ml-2 text-xs font-medium uppercase">{tr("saved.default")}</span> : null}
+                      </span>
+                      <span lang={option.lang} className="break-words">
+                        {option.lines[0]}
+                      </span>
+                      <span lang={option.lang} className="text-xs break-words">
+                        {option.lines[1]}
+                      </span>
+                    </span>
+                  ) : (
+                    <span className="font-sans font-semibold">{tr("saved.other")}</span>
+                  )}
+                </label>
+              );
+            })}
+            <Link href={ACCOUNT_ADDRESSES_HREF} className="w-fit text-sm underline underline-offset-4 hover:text-accent-text">
+              {tr("saved.manage")}
+            </Link>
+          </fieldset>
         ) : null}
+
+        {savedChoice ? (
+          <SavedDeliveryQuote choice={savedChoice.choice} parcel={parcel} goods={goods} />
+        ) : (
+          <>
+            <div className="grid gap-2">
+              <label htmlFor={countryId} className="font-sans text-sm font-semibold">
+                {tInt("country")}
+              </label>
+              <select
+                ref={(element) => {
+                  fields.current.set("delivery", element);
+                }}
+                id={countryId}
+                value={country ?? ""}
+                onChange={(event) => {
+                  const next = countries.find((option) => option.code === event.target.value);
+                  if (!next) return;
+                  setCountry(next.code);
+                  setNovaPoshta(null);
+                  setNovaPost(null);
+                  setAddressPending(false);
+                }}
+                className="h-11 w-full cursor-pointer rounded-none border-2 border-input bg-transparent px-2.5 font-input text-base text-foreground transition outline-none hover:opacity-70 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-invalid:border-accent sm:text-sm"
+                {...errorProps("delivery")}
+              >
+                <option value="" disabled>
+                  {tInt("countryPlaceholder")}
+                </option>
+                {countries.map((option) => (
+                  <option key={option.code} value={option.code}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {country === "UA" ? (
+              <NovaPoshtaDelivery parcel={parcel} onChange={setNovaPoshta} />
+            ) : country ? (
+              <InternationalDelivery
+                key={country}
+                countries={countries.filter((option): option is { code: DeliveryCountry; label: string } => option.code !== "UA")}
+                live={novaPostLive}
+                goods={goods}
+                fixedCountry={country}
+                onChange={setNovaPost}
+                onAddressPendingChange={setAddressPending}
+              />
+            ) : null}
+          </>
+        )}
         {fieldError("delivery")}
       </section>
 

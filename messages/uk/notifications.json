@@ -1,6 +1,7 @@
 {
   "telegram": {
     "newOrder": "Новий запит на замовлення № {number}",
+    "statusChange": "Замовлення № {number}: {from} → {to}",
     "placed": "Створено: {date}",
     "customer": "Покупець",
     "phone": "Телефон",

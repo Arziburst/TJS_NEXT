@@ -28,6 +28,12 @@
       "email": "E-mail"
     },
     "commentHint": "Opțional",
+    "saved": {
+      "label": "Adrese salvate",
+      "other": "Altă adresă",
+      "default": "implicită",
+      "manage": "Gestionați adresele"
+    },
     "summary": {
       "lines": "Piese din comandă",
       "quantity": "Cantitate: {quantity}",

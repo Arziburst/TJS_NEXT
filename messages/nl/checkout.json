@@ -28,6 +28,12 @@
       "email": "E-mail"
     },
     "commentHint": "Optioneel",
+    "saved": {
+      "label": "Opgeslagen adressen",
+      "other": "Een ander adres",
+      "default": "standaard",
+      "manage": "Adressen beheren"
+    },
     "summary": {
       "lines": "Stuks in de bestelling",
       "quantity": "Aantal: {quantity}",

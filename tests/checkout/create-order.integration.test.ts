@@ -73,9 +73,7 @@ describe.skipIf(!stack)("order requests on the local stack", async () => {
           variant_label_locale: null,
           quantity: 1,
           unit_price_usd_minor: 1000,
-          regular_unit_price_usd_minor: 1000,
           unit_price_minor: 990,
-          regular_unit_price_minor: 990,
         },
       ],
     );

@@ -579,11 +579,12 @@ create trigger order_items_regular_prices
   before insert or update on public.order_items
   for each row execute function private.default_regular_prices();
 
+-- always set (the trigger above fills them); a check rather than NOT NULL keeps them optional for writers that
+-- leave them out (the generated Insert types follow NOT NULL, not checks)
 alter table public.order_items
-  alter column regular_unit_price_usd_minor set not null,
-  alter column regular_unit_price_minor set not null,
   add constraint order_items_regular_price
-    check (regular_unit_price_usd_minor >= unit_price_usd_minor and regular_unit_price_minor >= unit_price_minor);
+    check (regular_unit_price_usd_minor is not null and regular_unit_price_minor is not null
+           and regular_unit_price_usd_minor >= unit_price_usd_minor and regular_unit_price_minor >= unit_price_minor);
 
 -- create_order_request (20261016007700) stores the regular unit prices the server priced the line with.
 create or replace function public.create_order_request(p_order jsonb, p_items jsonb)

@@ -7,11 +7,14 @@ import { createServiceClient } from "@/lib/supabase/server";
  * Rate limits of the admin's paid or bulk actions, per admin (the same counter as the auth limits,
  * public.consume_rate_limit). Technical guards against a runaway loop or a stolen session, not business values:
  * a translation costs a model call, so an hour allows a little more than two full list pages of bulk translation;
- * the whole catalogue goes through the batch script (scripts/translate/missing.mjs) instead.
+ * the whole catalogue goes through the batch script (scripts/translate/missing.mjs) instead. An order's status
+ * change sends the customer an email (#26) and a note is a write: far more than one person taps in ten minutes.
  */
 export const ADMIN_RATE_LIMITS = {
   translate: { max: 120, windowSeconds: 3600 },
   review: { max: 300, windowSeconds: 600 },
+  orderStatus: { max: 120, windowSeconds: 600 },
+  orderNote: { max: 120, windowSeconds: 600 },
   // collections and sales (#67): each tap is one write that expires shop caches; far above a person's pace
   merchandising: { max: 300, windowSeconds: 600 },
 } as const;

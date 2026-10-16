@@ -28,6 +28,12 @@
       "email": "E-mail"
     },
     "commentHint": "Facoltativo",
+    "saved": {
+      "label": "Indirizzi salvati",
+      "other": "Un altro indirizzo",
+      "default": "predefinito",
+      "manage": "Gestisci gli indirizzi"
+    },
     "summary": {
       "lines": "Pezzi nell’ordine",
       "quantity": "Quantità: {quantity}",

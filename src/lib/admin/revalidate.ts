@@ -27,6 +27,16 @@ export function revalidateProduct({
 }
 
 /**
+ * Expires the storefront entries that show the availability of these one-of-a-kind pieces (sold or back on sale
+ * after an order's status change): the listings and their product pages, which every slug of a product shares.
+ */
+export function revalidatePieces(productIds: readonly string[]): void {
+  if (productIds.length === 0) return;
+  updateTag(CATALOG_TAG);
+  for (const id of new Set(productIds)) updateTag(productCacheTag(id));
+}
+
+/**
  * Expires every storefront entry a collection write can change (#67): the listings and counts (CATALOG_TAG: a
  * collection's sale changes its pieces' prices everywhere), the collection lists of the home page and the shop
  * (COLLECTIONS_TAG), the collection's page and listing, every slug it had or has, and the product pages of every

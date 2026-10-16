@@ -24,6 +24,9 @@ const CATALOG_WRITERS = [
   "**/favorites.e2e.ts",
   "**/checkout.e2e.ts",
   "**/translation.e2e.ts",
+  // a ring with a size of its own, ordered with a saved address (#28)
+  "**/account.e2e.ts",
+  "**/admin-orders.e2e.ts",
 ];
 
 export default defineConfig({

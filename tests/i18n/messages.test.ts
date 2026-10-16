@@ -112,6 +112,18 @@ describe("message catalogs", () => {
       site: "shop.example.test",
       // a size's name (#66)
       label: "17",
+      // the page count of the order history (account)
+      pages: 3,
+      // the admin's orders (#27)
+      from: "New",
+      to: "In processing",
+      author: "Olena",
+      rate: "41.5",
+      markup: "3%",
+      city: "Berlin",
+      postCode: "10115",
+      street: "Invalidenstr.",
+      house: "1",
       // a sale's percentage off (#67)
       percent: 20,
       link: (chunks: string) => `<a>${chunks}</a>`,

@@ -28,6 +28,12 @@
       "email": "E-mail"
     },
     "commentHint": "Opcjonalnie",
+    "saved": {
+      "label": "Zapisane adresy",
+      "other": "Inny adres",
+      "default": "domyślny",
+      "manage": "Zarządzaj adresami"
+    },
     "summary": {
       "lines": "Produkty w zamówieniu",
       "quantity": "Ilość: {quantity}",
