@@ -6,6 +6,8 @@ import type { ClaimedEvent } from "@/lib/notifications/processor";
 import { kyivBranchOrder } from "./fixtures";
 
 vi.mock("server-only", () => ({}));
+// the shop's channels come from the settings (#21, a database read): none here, the emails show their TBD line
+vi.mock("@/lib/notifications/contacts", () => ({ readShopContacts: async () => null }));
 
 const { CONFIRMATION_EMAIL_MAX_AGE_MS, channelSenders } = await import("@/lib/notifications/run");
 
