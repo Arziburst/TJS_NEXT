@@ -1,4 +1,5 @@
-// The order request with a sale window (#67), on the local stack: the cart is read from the database at the moment
+// The order request with a sale window (#67), on the local stack (its ring is translated into pt only, so the
+// listings other suites count in en and de never see it): the cart is read from the database at the moment
 // of the request, so a sale running then is charged and its regular price stored next to it; a sale that ended
 // between the page and the submit answers pricesChanged before anything is stored, and the next submit (at the new
 // price the page then shows) is charged the regular price. Skipped without a stack.
@@ -49,7 +50,7 @@ describe.skipIf(!stack)("the order request with a sale window on the local stack
     if (product.error) throw product.error;
     const translation = await service
       .from("product_translations")
-      .insert({ product_id: productId, locale: "en", slug: `sale-window-${productId}`, title: "Sale window ring" });
+      .insert({ product_id: productId, locale: "pt", slug: `sale-window-${productId}`, title: "Sale window ring" });
     if (translation.error) throw translation.error;
     const sale = await service
       .from("product_sales")
@@ -59,7 +60,7 @@ describe.skipIf(!stack)("the order request with a sale window on the local stack
 
   // the visitor's cart: one ring, priced from the database now, as readCartView builds it
   async function readCart() {
-    const read = await getCartProducts([productId], "en");
+    const read = await getCartProducts([productId], "pt");
     if (!read.ok) return { ok: false as const };
     const product = read.products.get(productId)!;
     return {
@@ -86,7 +87,7 @@ describe.skipIf(!stack)("the order request with a sale window on the local stack
     return placeOrder(
       {
         attempt,
-        locale: "en",
+        locale: "pt",
         contact: { firstName: "Sale", lastName: "", phone: "+380501234567", email: "sale@example.test" },
         delivery: { kind: "novaPostAddress", country: "DE", city: "Berlin", postCode: "10115", street: "Invalidenstr.", building: "1", flat: "" },
         comment: "",
