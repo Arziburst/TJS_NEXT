@@ -1,0 +1,79 @@
+{
+  "telegram": {
+    "newOrder": "Neue Bestellanfrage Nr. {number}",
+    "statusChange": "Bestellung Nr. {number}: {from} → {to}",
+    "placed": "Eingegangen: {date}",
+    "customer": "Kunde",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "language": "Sprache",
+    "lines": "Stücke",
+    "line": "{title} × {quantity} — {total}",
+    "moreLines": "…und {count, plural, one {# weitere Zeile} other {# weitere Zeilen}}",
+    "goodsTotal": "Summe der Stücke",
+    "delivery": "Versand",
+    "estimate": "Schätzung",
+    "comment": "Kommentar",
+    "openAdmin": "Bestellung im Adminbereich öffnen"
+  },
+  "delivery": {
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "in eine Filiale",
+      "postomat": "an eine Paketstation",
+      "doors": "per Kurier an die Adresse",
+      "division": "in eine Filiale, Paketstation oder Abholstelle",
+      "address": "per Kurier an die Adresse"
+    },
+    "flat": "Wohnung {flat}",
+    "estimateAmount": "≈ {amount}",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "wird vom Zusteller berechnet"
+  },
+  "status": {
+    "new": "Neu",
+    "pending_payment": "Zahlung ausstehend",
+    "paid": "Bezahlt",
+    "in_processing": "In Bearbeitung",
+    "accepted": "Angenommen",
+    "closed": "Abgeschlossen",
+    "canceled": "Storniert",
+    "refunded": "Erstattet"
+  },
+  "email": {
+    "confirmation": {
+      "subject": "Ihre Bestellanfrage Nr. {number} ist eingegangen",
+      "title": "Bestellanfrage eingegangen",
+      "thanks": "Danke, {name}! Ihre Bestellanfrage ist eingegangen.",
+      "next": "Der Shop meldet sich bald bei Ihnen, um die Bestellung und den Versand zu bestätigen."
+    },
+    "statusChange": {
+      "subject": "Bestellung Nr. {number}: {status}",
+      "title": "Ihre Bestellung hat einen neuen Status",
+      "greeting": "Hallo {name}!",
+      "text": "Der Status Ihrer Bestellung Nr. {number} ist jetzt: {status}."
+    },
+    "number": "Bestellnummer",
+    "lines": "Bestellte Stücke",
+    "quantity": "Menge: {quantity}",
+    "goodsTotal": "Summe der Stücke",
+    "delivery": "Versand",
+    "deliveryEstimate": "Versand (Schätzung)",
+    "deliveryNote": "Der Versand ist in der Summe nicht enthalten: Den tatsächlichen Versandpreis bezahlen Sie beim Empfang an den Zusteller.",
+    "customsNotice": "Bei der Zustellung können für den Empfänger Einfuhrumsatzsteuer und Zoll anfallen.",
+    "contactTitle": "Den Shop kontaktieren",
+    "contactTbd": "Kontaktkanäle: TBD",
+    "channel": {
+      "phone": "Telefon",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "whatsapp": "WhatsApp",
+      "email": "E-Mail"
+    },
+    "footer": "Sie erhalten diese E-Mail, weil auf {site} eine Bestellanfrage mit dieser Adresse gesendet wurde."
+  }
+}

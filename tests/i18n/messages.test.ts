@@ -104,9 +104,15 @@ describe("message catalogs", () => {
       position: 2,
       current: 3,
       failed: 1,
-      // the admin's orders (#27)
-      number: 10001,
+      // the notifications (#26): an order number, its status, money and the shop's host
+      number: 10042,
       status: "Accepted",
+      amount: "80 ₴",
+      flat: "12",
+      site: "shop.example.test",
+      // a size's name (#66)
+      label: "17",
+      // the admin's orders (#27)
       from: "New",
       to: "In processing",
       author: "Olena",
@@ -116,7 +122,6 @@ describe("message catalogs", () => {
       postCode: "10115",
       street: "Invalidenstr.",
       house: "1",
-      flat: "4",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

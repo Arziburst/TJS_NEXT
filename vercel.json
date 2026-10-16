@@ -18,6 +18,22 @@
     {
       "path": "/api/cron/staged-uploads",
       "schedule": "45 3 * * *"
+    },
+    {
+      "path": "/api/cron/notifications",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/notifications",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/notifications",
+      "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cron/notifications",
+      "schedule": "0 18 * * *"
     }
   ]
 }

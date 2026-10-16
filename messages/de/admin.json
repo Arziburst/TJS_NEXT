@@ -82,7 +82,8 @@
       "next": "Nächste Seite",
       "page": "Seite {page} von {count}"
     },
-    "unreviewed": "{count, plural, one {# maschinelle Übersetzung nicht geprüft} other {# maschinelle Übersetzungen nicht geprüft}}: {locales}"
+    "unreviewed": "{count, plural, one {# maschinelle Übersetzung nicht geprüft} other {# maschinelle Übersetzungen nicht geprüft}}: {locales}",
+    "variants": "{count, plural, one {# Größe} other {# Größen}}"
   },
   "actionErrors": {
     "notAuthorized": "Nur die Verwaltung darf das. Bitte melden Sie sich erneut an.",
@@ -111,7 +112,8 @@
       "translations": "Texte in allen Sprachen",
       "taxonomy": "Materialien und Farben",
       "photos": "Fotos",
-      "publication": "Veröffentlichung"
+      "publication": "Veröffentlichung",
+      "variants": "Größen"
     },
     "chooseCategory": "Kategorie wählen",
     "sku": "Artikelnummer",
@@ -186,7 +188,9 @@
       "skuTaken": "Ein anderes Produkt nutzt diese Artikelnummer bereits",
       "leadTimeOrder": "Darf nicht kleiner als „Von“ sein",
       "titleRequired": "Geben Sie einen Titel in dieser Sprache ein oder leeren Sie ihre anderen Texte",
-      "requiredToPublish": "Zum Veröffentlichen ist ein ukrainischer Titel nötig"
+      "requiredToPublish": "Zum Veröffentlichen ist ein ukrainischer Titel nötig",
+      "hasVariants": "Ein Stück mit Größen bleibt eine Auftragsarbeit; löschen Sie zuerst seine Größen",
+      "variantPriceNotPositive": "Eine Größe dieses Produkts würde null oder weniger kosten; ändern Sie zuerst ihren Preisunterschied"
     },
     "translateAfterSave": "Speichern Sie das Produkt zuerst; danach kann es maschinell in die anderen Sprachen übersetzt werden."
   },
@@ -325,6 +329,55 @@
       "notFound": "Dieses Produkt oder Foto existiert nicht mehr.",
       "conflict": "Die Fotos wurden in einem anderen Fenster geändert; jetzt werden die aktuellen angezeigt.",
       "unexpectedError": "Das hat nicht geklappt. Versuchen Sie es erneut."
+    }
+  },
+  "variants": {
+    "hint": "Jede Größe, aus der die Kundin wählt, mit ihrem eigenen Preisunterschied zum Produktpreis. Ein Produkt mit Größen wird nur in einer davon bestellt.",
+    "saveFirst": "Speichern Sie zuerst das Produkt, dann fügen Sie seine Größen hinzu.",
+    "oneOfAKind": "Ein Unikat hat keine Größen.",
+    "empty": "Keine Größen: Das Stück wird so bestellt, wie es ist.",
+    "add": "Größe hinzufügen",
+    "newTitle": "Neue Größe",
+    "editTitle": "Größe {label} bearbeiten",
+    "labels": "Name in jeder Sprache",
+    "labelsHint": "Ukrainisch ist Pflicht. Eine leere Sprache zeigt den englischen Namen, sonst den ukrainischen.",
+    "priceDelta": "Preisunterschied, USD",
+    "priceDeltaHint": "Wird zum Produktpreis addiert: 0 für denselben Preis, z. B. 5 für eine teurere Größe oder -2.50 für eine günstigere.",
+    "skuSuffix": "SKU-Zusatz",
+    "skuSuffixHint": "Optional; wird in Bestellungen an die SKU des Produkts angehängt, z. B. 17 → TJS-001-17.",
+    "price": "Preis: {price}",
+    "available": "Bestellbar",
+    "availableOf": "{label} ist bestellbar",
+    "off": "Derzeit nicht verfügbar",
+    "edit": "{label} bearbeiten",
+    "moveEarlier": "{label} nach oben verschieben",
+    "moveLater": "{label} nach unten verschieben",
+    "delete": "{label} löschen",
+    "deleteTitle": "Diese Größe löschen?",
+    "deleteDescription": "{label} verschwindet aus dem Shop; Warenkörbe, die sie enthalten, zeigen sie als nicht mehr verfügbar.",
+    "deleteConfirm": "Löschen",
+    "ordered": "Bereits bestellt: Sie kann nicht gelöscht werden, schalten Sie sie stattdessen aus.",
+    "save": "Größe speichern",
+    "saved": "Größe gespeichert",
+    "deleted": "Größe gelöscht",
+    "moved": "Auf Platz {position} von {count} verschoben",
+    "switchedOn": "{label} ist wieder bestellbar",
+    "switchedOff": "{label} ist ausgeschaltet",
+    "errors": {
+      "notAuthorized": "Nur die Administratorin kann das. Bitte melden Sie sich erneut an.",
+      "notFound": "Dieses Produkt oder diese Größe existiert nicht mehr. Bitte laden Sie die Seite neu.",
+      "conflict": "Die Größen wurden in einem anderen Tab geändert: Die aktuelle Liste wird angezeigt.",
+      "ordered": "Diese Größe wurde bestellt: Schalten Sie sie aus, statt sie zu löschen.",
+      "tooMany": "Ein Produkt kann höchstens 50 Größen haben.",
+      "oneOfAKind": "Ein Unikat hat keine Größen.",
+      "invalid": "Bitte prüfen Sie die Felder.",
+      "unexpectedError": "Die Größen konnten nicht geändert werden. Bitte versuchen Sie es erneut.",
+      "labelRequired": "Geben Sie den ukrainischen Namen ein",
+      "tooLong": "Höchstens {max} Zeichen",
+      "invalidDelta": "Geben Sie einen Betrag ein, z. B. 5 oder -2.50",
+      "priceNotPositive": "Der Preis der Größe muss über null bleiben",
+      "invalidSuffix": "Lateinische Buchstaben und Ziffern, dazwischen Punkte oder Bindestriche",
+      "suffixTaken": "Eine andere Größe dieses Produkts hat diesen Zusatz"
     }
   },
   "orderStatus": {

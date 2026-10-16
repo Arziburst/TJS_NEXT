@@ -238,6 +238,8 @@ export type AdminOrderLine = {
   availability: ProductAvailability | null;
   title: string;
   titleLocale: string;
+  /** the size it was ordered in (#66), as the customer saw it */
+  variantLabel: string | null;
   quantity: number;
   unitMinor: number;
   lineMinor: number;
@@ -283,7 +285,7 @@ const DETAIL_COLUMNS = `id, number, status, created_at, updated_at, locale, user
   comment, country, delivery_carrier, delivery_method, delivery_destination, delivery_estimate_state,
   delivery_estimate_source, delivery_estimate_minor, delivery_estimate_currency, delivery_estimate_decimals,
   currency, currency_decimals, fx_rate_text:fx_rate::text, fx_rate_date, markup_bps, items_total_minor, items_total_usd_minor,
-  order_items(position, product_id, sku, fulfillment, title, title_locale, quantity, unit_price_minor, line_total_minor,
+  order_items(position, product_id, sku, fulfillment, title, title_locale, variant_label, quantity, unit_price_minor, line_total_minor,
     unit_price_usd_minor, line_total_usd_minor, products(availability)),
   order_notes(id, body, created_at, author:profiles(name)),
   order_status_history(id, from_status, to_status, created_at, admin:profiles(name))`;
@@ -325,6 +327,7 @@ const detailRow = z.object({
       fulfillment: z.enum(["made_to_order", "one_of_a_kind"]),
       title: z.string(),
       title_locale: z.string(),
+      variant_label: z.string().nullable(),
       quantity: z.number().int(),
       unit_price_minor: minor,
       line_total_minor: minor,
@@ -417,6 +420,7 @@ export async function getAdminOrder(number: number): Promise<AdminOrdersResult<A
             availability: item.products?.availability ?? null,
             title: item.title,
             titleLocale: item.title_locale,
+            variantLabel: item.variant_label,
             quantity: item.quantity,
             unitMinor: item.unit_price_minor,
             lineMinor: item.line_total_minor,

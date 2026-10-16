@@ -7,7 +7,10 @@ import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import enCart from "../messages/en/cart.json" with { type: "json" };
 import en from "../messages/en/checkout.json" with { type: "json" };
+import enNotifications from "../messages/en/notifications.json" with { type: "json" };
+import ukNotifications from "../messages/uk/notifications.json" with { type: "json" };
 import type { Database } from "../src/lib/supabase/database.types";
+import { sentFor } from "./notifications";
 
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 
@@ -210,6 +213,33 @@ test.describe("order request on the local stack", () => {
     expect(piece?.availability).toBe("reserved");
     const { count } = await admin!.from("outbox_events").select("id", { count: "exact", head: true }).eq("order_id", order!.id).eq("event", "order_created");
     expect(count).toBe(1);
+
+    // right after the answer the owner's Telegram group and the customer's inbox get the order (the stand-ins of
+    // playwright.config.ts), each once, and the outbox marks both channels sent
+    await expect
+      .poll(async () => {
+        const { telegram, email: emails } = await sentFor(number);
+        return [telegram.length, emails.length];
+      })
+      .toEqual([1, 1]);
+    const sent = await sentFor(number);
+    expect(sent.telegram[0]).toMatchObject({ chatId: "-1001234567890", parseMode: "HTML" });
+    // the owner reads the group in Ukrainian, whatever the customer's language
+    expect(sent.telegram[0].text).toContain(`<b>${ukNotifications.telegram.newOrder.replace("{number}", String(number))}</b>`);
+    expect(sent.telegram[0].text).toContain(ordered.title);
+    expect(sent.telegram[0].text).toContain("Gift wrapping, please");
+    expect(sent.telegram[0].text).toContain(`/admin/orders/${number}"`);
+    expect(sent.email[0]).toMatchObject({
+      to: [email],
+      subject: enNotifications.email.confirmation.subject.replace("{number}", String(number)),
+    });
+    expect(sent.email[0].html).toContain('<html lang="en"');
+    expect(sent.email[0].text).toContain(enNotifications.email.confirmation.thanks.replace("{name}", "Olena"));
+    expect(sent.email[0].text).toContain(unique.title);
+    expect(sent.email[0].text).toContain(enNotifications.email.contactTbd);
+    await expect
+      .poll(async () => (await admin!.from("outbox_events").select("telegram_status, email_status, processed_at").eq("order_id", order!.id).single()).data)
+      .toMatchObject({ telegram_status: "sent", email_status: "sent", processed_at: expect.any(String) });
 
     // another visitor with the same URL sees no order data
     const stranger = await browser.newContext();
@@ -434,6 +464,120 @@ test.describe("order request on the local stack", () => {
     // the page shows the cart as it is now: the piece is left out
     await expect(page.getByTestId("checkout-line")).toHaveCount(1);
     await expect(page.getByRole("note")).toHaveText(t.summary.unavailableNote);
+    expect(errors).toEqual([]);
+  });
+
+  // #66: a size the owner switches off while the form is open is named as a size, not as a piece someone else took
+  test("a size switched off meanwhile refuses the request with a size message; nothing is stored", async ({ page, baseURL }) => {
+    const errors = collectErrors(page);
+    await useOwnClientIp(page);
+    const ring = await createProduct({ fulfillment: "made_to_order", priceUsd: 20 });
+    const size = await admin!.from("product_variants").insert({ product_id: ring.id, sku_suffix: "17" }).select("id").single();
+    if (size.error) throw size.error;
+    const label = await admin!.from("product_variant_translations").insert({ variant_id: size.data.id, locale: "en", label: "17" });
+    if (label.error) throw label.error;
+    await page.context().addCookies([
+      { name: "TJS_CART", value: encodeURIComponent(JSON.stringify([{ p: ring.id, v: size.data.id, q: 1 }])), url: baseURL! },
+    ]);
+    await open(page, "/en/checkout");
+    const email = uniqueEmail();
+    await fillContact(page, email);
+    await chooseKyivBranch(page);
+
+    expect((await admin!.from("product_variants").update({ is_available: false }).eq("id", size.data.id)).error).toBeNull();
+    await page.getByRole("button", { name: t.submit }).click();
+    await expect(page.getByTestId("checkout-error")).toHaveText(t.errors.sizeUnavailable.replace("{titles}", `${ring.title} (17)`));
+    await expect(page.getByTestId("checkout-error")).not.toContainText("someone else");
+    expect(await ordersOf(email)).toEqual([]);
+    expect(errors).toEqual([]);
+  });
+
+  // #66: one ring in two sizes is two lines, each at its own size's price, from the cart to the stored order
+  test("two sizes of one product: two lines in the cart, two order lines with their sizes and prices", async ({ page, baseURL }) => {
+    const errors = collectErrors(page);
+    await useOwnClientIp(page);
+    const ring = await createProduct({ fulfillment: "made_to_order", priceUsd: 20 });
+    const sizes = await admin!
+      .from("product_variants")
+      .insert([
+        { product_id: ring.id, sku_suffix: "16", price_delta_usd_minor: 0, position: 0 },
+        { product_id: ring.id, sku_suffix: "18", price_delta_usd_minor: 250, position: 1 },
+      ])
+      .select("id, sku_suffix");
+    if (sizes.error) throw sizes.error;
+    const [small, large] = ["16", "18"].map((suffix) => sizes.data.find((s) => s.sku_suffix === suffix)!);
+    const labels = await admin!.from("product_variant_translations").insert([
+      { variant_id: small!.id, locale: "en", label: "16" },
+      { variant_id: large!.id, locale: "en", label: "18" },
+    ]);
+    if (labels.error) throw labels.error;
+    await page.context().addCookies([
+      {
+        name: "TJS_CART",
+        value: encodeURIComponent(JSON.stringify([{ p: ring.id, v: small!.id, q: 2 }, { p: ring.id, v: large!.id, q: 1 }])),
+        url: baseURL!,
+      },
+    ]);
+
+    // the cart: two lines of one product, each with its size and its own price
+    await open(page, "/en/cart");
+    const cartLines = page.getByTestId("cart-line");
+    await expect(cartLines).toHaveCount(2);
+    await expect(cartLines.nth(0).getByTestId("line-variant")).toHaveText("Size: 16");
+    await expect(cartLines.nth(1).getByTestId("line-variant")).toHaveText("Size: 18");
+    const smallLine = await minorOf(cartLines.nth(0).locator("[data-slot=price]").first());
+    const largeLine = await minorOf(cartLines.nth(1).locator("[data-slot=price]").first());
+    expect(largeLine).toBeGreaterThan(smallLine / 2);
+
+    await open(page, "/en/checkout");
+    await expect(page.getByTestId("checkout-line")).toHaveCount(2);
+    const total = await minorOf(page.getByTestId("checkout-total").locator("[data-slot=price]"));
+    expect(total).toBe(smallLine + largeLine);
+    const email = uniqueEmail();
+    await fillContact(page, email);
+    await chooseKyivBranch(page);
+    await page.getByRole("button", { name: t.submit }).click();
+
+    // the confirmation shows both sizes with their prices
+    await expect(page).toHaveURL(/\/en\/checkout\/done\?order=\d+$/);
+    const orderLines = page.getByTestId("order-line");
+    await expect(orderLines).toHaveCount(2);
+    await expect(orderLines.nth(0).getByTestId("line-variant")).toHaveText("Size: 16");
+    await expect(orderLines.nth(1).getByTestId("line-variant")).toHaveText("Size: 18");
+    expect(await minorOf(page.getByTestId("order-total").locator("[data-slot=price]"))).toBe(total);
+
+    // the stored lines: the size's label as the customer saw it, its SKU and its price, nothing from the client
+    const [order] = await ordersOf(email);
+    const { data, error } = await admin!
+      .from("order_items")
+      .select("position, variant_id, variant_label, variant_label_locale, sku, quantity, unit_price_usd_minor, line_total_minor")
+      .eq("order_id", order!.id)
+      .order("position");
+    if (error) throw error;
+    expect(data).toEqual([
+      {
+        position: 0,
+        variant_id: small!.id,
+        variant_label: "16",
+        variant_label_locale: "en",
+        sku: null,
+        quantity: 2,
+        unit_price_usd_minor: 2000,
+        line_total_minor: smallLine,
+      },
+      {
+        position: 1,
+        variant_id: large!.id,
+        variant_label: "18",
+        variant_label_locale: "en",
+        sku: null,
+        quantity: 1,
+        unit_price_usd_minor: 2250,
+        line_total_minor: largeLine,
+      },
+    ]);
+    // the ordered lines left the cart
+    await expect(page.locator("header").getByRole("link", { name: "Cart, empty" }).or(page.locator("header").getByRole("button", { name: "Cart, empty" }))).toBeVisible();
     expect(errors).toEqual([]);
   });
 });

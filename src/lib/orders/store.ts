@@ -45,6 +45,9 @@ export type NewOrderItem = {
   position: number;
   title: string;
   title_locale: Locale;
+  // the size as the customer saw it (#66), only with a variant
+  variant_label: string | null;
+  variant_label_locale: Locale | null;
   quantity: number;
   unit_price_usd_minor: number;
   unit_price_minor: number;
@@ -109,6 +112,8 @@ export type OrderLineView = {
   productId: string | null;
   title: string;
   titleLocale: string;
+  /** The ordered size and the locale of its label (#66); null without a variant. */
+  variantLabel: { text: string; locale: string } | null;
   fulfillment: ProductFulfillment;
   quantity: number;
   unitMinor: number;
@@ -139,7 +144,8 @@ export type OrderView = {
 const ORDER_COLUMNS = `number, status, created_at, first_name, email, phone, country, delivery_carrier,
   delivery_estimate_state, delivery_estimate_source, delivery_estimate_minor, delivery_estimate_currency,
   delivery_estimate_decimals, currency, currency_decimals, items_total_minor,
-  order_items(position, product_id, title, title_locale, fulfillment, quantity, unit_price_minor, line_total_minor)`;
+  order_items(position, product_id, title, title_locale, variant_label, variant_label_locale, fulfillment, quantity,
+    unit_price_minor, line_total_minor)`;
 
 type OrderRow = {
   number: number;
@@ -163,6 +169,8 @@ type OrderRow = {
     product_id: string | null;
     title: string;
     title_locale: string;
+    variant_label: string | null;
+    variant_label_locale: string | null;
     fulfillment: ProductFulfillment;
     quantity: number;
     unit_price_minor: number;
@@ -205,6 +213,10 @@ function toView(row: OrderRow): OrderView | null {
         productId: item.product_id,
         title: item.title,
         titleLocale: item.title_locale,
+        variantLabel:
+          item.variant_label !== null && item.variant_label_locale !== null
+            ? { text: item.variant_label, locale: item.variant_label_locale }
+            : null,
         fulfillment: item.fulfillment,
         quantity: item.quantity,
         unitMinor: item.unit_price_minor,

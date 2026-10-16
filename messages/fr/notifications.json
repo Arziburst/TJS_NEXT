@@ -1,0 +1,79 @@
+{
+  "telegram": {
+    "newOrder": "Nouvelle demande de commande n° {number}",
+    "statusChange": "Commande n° {number} : {from} → {to}",
+    "placed": "Reçue : {date}",
+    "customer": "Client",
+    "phone": "Téléphone",
+    "email": "E-mail",
+    "language": "Langue",
+    "lines": "Pièces",
+    "line": "{title} × {quantity} — {total}",
+    "moreLines": "…et {count, plural, one {# autre ligne} other {# autres lignes}}",
+    "goodsTotal": "Total des pièces",
+    "delivery": "Livraison",
+    "estimate": "Estimation",
+    "comment": "Commentaire",
+    "openAdmin": "Ouvrir la commande dans l’administration"
+  },
+  "delivery": {
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "en agence",
+      "postomat": "en consigne automatique",
+      "doors": "par coursier à l’adresse",
+      "division": "en agence, consigne automatique ou point relais",
+      "address": "par coursier à l’adresse"
+    },
+    "flat": "appartement {flat}",
+    "estimateAmount": "≈ {amount}",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calculée par le transporteur"
+  },
+  "status": {
+    "new": "Nouvelle",
+    "pending_payment": "En attente de paiement",
+    "paid": "Payée",
+    "in_processing": "En cours de traitement",
+    "accepted": "Acceptée",
+    "closed": "Clôturée",
+    "canceled": "Annulée",
+    "refunded": "Remboursée"
+  },
+  "email": {
+    "confirmation": {
+      "subject": "Votre demande de commande n° {number} a bien été reçue",
+      "title": "Demande de commande reçue",
+      "thanks": "Merci, {name} ! Votre demande de commande a bien été reçue.",
+      "next": "La boutique vous contactera bientôt pour confirmer la commande et la livraison."
+    },
+    "statusChange": {
+      "subject": "Commande n° {number} : {status}",
+      "title": "Votre commande a un nouveau statut",
+      "greeting": "Bonjour {name} !",
+      "text": "Le statut de votre commande n° {number} est désormais : {status}."
+    },
+    "number": "Numéro de commande",
+    "lines": "Pièces commandées",
+    "quantity": "Quantité : {quantity}",
+    "goodsTotal": "Total des pièces",
+    "delivery": "Livraison",
+    "deliveryEstimate": "Livraison (estimation)",
+    "deliveryNote": "La livraison n’est pas incluse dans le total : vous payez le prix réel de la livraison au transporteur à la réception.",
+    "customsNotice": "La TVA à l’importation et les droits de douane peuvent être à la charge du destinataire à la livraison.",
+    "contactTitle": "Contacter la boutique",
+    "contactTbd": "Moyens de contact : TBD",
+    "channel": {
+      "phone": "Téléphone",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "whatsapp": "WhatsApp",
+      "email": "E-mail"
+    },
+    "footer": "Vous recevez cet e-mail parce qu’une demande de commande avec cette adresse a été envoyée sur {site}."
+  }
+}

@@ -77,7 +77,7 @@ async function FavoriteRow({ item }: { item: FavoriteItem }) {
         </Link>
         {product.availability === "available" ? (
           <span className="font-sans text-lg text-accent-text">
-            <Price usdMinor={product.priceUsdMinor} />
+            <Price usdMinor={product.listPrice.usdMinor} from={product.listPrice.from} />
           </span>
         ) : (
           <Badge variant="outline">{tStatus(product.availability)}</Badge>

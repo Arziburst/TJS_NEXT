@@ -7,13 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { routes } from "@/config/routes";
 import { Link } from "@/i18n/navigation";
-import { getCartView, orderableLines, type CartItem, type CartView } from "@/lib/cart";
+import { getCartView, lineKey, orderableLines, type CartItem, type CartView } from "@/lib/cart";
 import { cn } from "@/lib/utils";
 import { CartIcon } from "./cart-icon";
 import { CartItemImage } from "./cart-item-image";
 import { MergeGuestCart } from "./merge-guest-cart";
 import { MiniCartSheet } from "./mini-cart-sheet";
 import { OrderRequestLink } from "./order-request-link";
+import { VariantLabel } from "./variant-label";
 
 const iconBox =
   "relative inline-flex size-11 items-center justify-center transition-opacity hover:opacity-70 focus-visible:opacity-70 [&_svg]:size-5";
@@ -72,7 +73,7 @@ async function MiniCartContents({ view }: { view: CartView }) {
     <div className="flex grow flex-col gap-5">
       <ul aria-label={t("lines")} className="flex flex-col divide-y divide-hairline border-y border-hairline">
         {view.items.map((item) => (
-          <li key={`${item.line.productId}:${item.line.variantId ?? ""}`} className="py-3" data-testid="mini-cart-line">
+          <li key={lineKey(item.line)} className="py-3" data-testid="mini-cart-line">
             <MiniCartRow item={item} />
           </li>
         ))}
@@ -116,9 +117,10 @@ async function MiniCartRow({ item }: { item: CartItem }) {
         >
           {product.title}
         </Link>
+        {item.variant && <VariantLabel label={item.variant.label} />}
         {status === "available" ? (
           <span className="text-sm">
-            {t("each", { quantity })} <Price usdMinor={product.priceUsdMinor} />
+            {t("each", { quantity })} <Price usdMinor={item.unitUsdMinor} />
           </span>
         ) : (
           <Badge variant="outline">{t(`status.${status}`)}</Badge>

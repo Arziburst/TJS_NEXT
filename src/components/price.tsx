@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 type PriceProps = {
   // the price as the admin entered it, in USD cents (D4)
   usdMinor: number;
+  // the lowest of several prices (a product whose sizes differ in price, #66): "from …"
+  from?: boolean;
   className?: string;
 };
 
@@ -14,10 +16,10 @@ type PriceProps = {
  * A USD price in the visitor's currency (cookie, geo or locale default — D5), charm-rounded (D4).
  * Streams in its own Suspense boundary, since the currency is request-time data.
  */
-export function Price({ usdMinor, className }: PriceProps) {
+export function Price({ usdMinor, from = false, className }: PriceProps) {
   return (
     <Suspense fallback={<span aria-hidden className={cn("inline-block h-[1em] w-16 animate-pulse bg-hairline", className)} />}>
-      <PriceText price={formatPrice(usdMinor)} className={className} />
+      <PriceText price={formatPrice(usdMinor)} from={from} className={className} />
     </Suspense>
   );
 }
@@ -40,7 +42,15 @@ export function PriceTotal({ lines, className }: PriceTotalProps) {
   );
 }
 
-async function PriceText({ price: pending, className }: { price: Promise<FormattedPrice | null>; className?: string }) {
+async function PriceText({
+  price: pending,
+  from = false,
+  className,
+}: {
+  price: Promise<FormattedPrice | null>;
+  from?: boolean;
+  className?: string;
+}) {
   const [price, t] = await Promise.all([pending, getTranslations("common.price")]);
 
   if (!price) {
@@ -53,8 +63,14 @@ async function PriceText({ price: pending, className }: { price: Promise<Formatt
   }
 
   return (
-    <data value={decimalString(price)} data-currency={price.currency} data-slot="price" className={cn("tabular-nums", className)}>
-      {price.text}
+    <data
+      value={decimalString(price)}
+      data-currency={price.currency}
+      data-slot="price"
+      data-from={from || undefined}
+      className={cn("tabular-nums", className)}
+    >
+      {from ? t("from", { price: price.text }) : price.text}
     </data>
   );
 }

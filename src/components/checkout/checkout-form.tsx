@@ -36,7 +36,7 @@ type CheckoutFormProps = {
   goods: OrderGoods | null;
   novaPostLive: boolean;
   // the lines shown in the summary: the server checks that the cart still holds exactly these
-  expected: { productId: string; quantity: number }[];
+  expected: { productId: string; variantId: string | null; quantity: number }[];
   // the server-rendered total next to the button
   total: ReactNode;
 };
@@ -155,6 +155,11 @@ export function CheckoutForm({ countries, defaultCountry, prefill, parcel, goods
         // form (and this message) with the empty state, so the message naming them stays instead
         return {
           text: tr("errors.unavailable", { titles: result.titles.join(", ") }),
+          refresh: result.titles.length < expected.length,
+        };
+      case "sizeUnavailable":
+        return {
+          text: tr("errors.sizeUnavailable", { titles: result.titles.join(", ") }),
           refresh: result.titles.length < expected.length,
         };
       case "cartChanged":

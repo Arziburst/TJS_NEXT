@@ -12,15 +12,37 @@ export const MAX_CART_LINES = 50;
 
 export type CartLine = {
   productId: string;
-  /** Reserved for product variants (#66); always null until variants exist. */
+  /** The chosen size of a product with variants (#66); null for a product without variants. */
   variantId: string | null;
   quantity: number;
 };
 
+/** A line is keyed by product and variant: two sizes of one product are two lines, each with its own limit. */
 export type LineRef = Pick<CartLine, "productId" | "variantId">;
 
 export function sameLine(a: LineRef, b: LineRef): boolean {
   return a.productId === b.productId && a.variantId === b.variantId;
+}
+
+/** How a line is named in a message or an accessible name: its title, and its size in brackets (#66). */
+export function lineTitle(title: string, variantLabel: string | null | undefined): string {
+  return variantLabel ? `${title} (${variantLabel})` : title;
+}
+
+export type LineVariantCheck<V> = { ok: true; variant: V | null } | { ok: false; reason: "variantRequired" | "unavailable" };
+
+/**
+ * Whether a line names the right variant of its product: a product with variants is ordered only as one of its live
+ * variants that can be ordered now; a product without variants never with one (a variant deleted meanwhile).
+ */
+export function checkLineVariant<V extends { id: string; available: boolean }>(
+  variants: readonly V[],
+  variantId: string | null,
+): LineVariantCheck<V> {
+  if (variants.length === 0) return variantId === null ? { ok: true, variant: null } : { ok: false, reason: "unavailable" };
+  if (variantId === null) return { ok: false, reason: "variantRequired" };
+  const variant = variants.find((v) => v.id === variantId);
+  return variant?.available ? { ok: true, variant } : { ok: false, reason: "unavailable" };
 }
 
 export function maxQuantity(fulfillment: ProductFulfillment): number {

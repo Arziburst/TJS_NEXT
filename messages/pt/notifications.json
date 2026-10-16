@@ -1,0 +1,79 @@
+{
+  "telegram": {
+    "newOrder": "Novo pedido de encomenda n.º {number}",
+    "statusChange": "Encomenda n.º {number}: {from} → {to}",
+    "placed": "Recebido: {date}",
+    "customer": "Cliente",
+    "phone": "Telefone",
+    "email": "E-mail",
+    "language": "Idioma",
+    "lines": "Peças",
+    "line": "{title} × {quantity} — {total}",
+    "moreLines": "…e mais {count, plural, one {# linha} other {# linhas}}",
+    "goodsTotal": "Total das peças",
+    "delivery": "Envio",
+    "estimate": "Estimativa",
+    "comment": "Comentário",
+    "openAdmin": "Abrir a encomenda na administração"
+  },
+  "delivery": {
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "numa agência",
+      "postomat": "num cacifo automático",
+      "doors": "por estafeta na morada",
+      "division": "numa agência, cacifo automático ou ponto de recolha",
+      "address": "por estafeta na morada"
+    },
+    "flat": "andar {flat}",
+    "estimateAmount": "≈ {amount}",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calculado pela transportadora"
+  },
+  "status": {
+    "new": "Nova",
+    "pending_payment": "A aguardar pagamento",
+    "paid": "Paga",
+    "in_processing": "Em processamento",
+    "accepted": "Aceite",
+    "closed": "Concluída",
+    "canceled": "Cancelada",
+    "refunded": "Reembolsada"
+  },
+  "email": {
+    "confirmation": {
+      "subject": "Recebemos o seu pedido de encomenda n.º {number}",
+      "title": "Pedido de encomenda recebido",
+      "thanks": "Obrigado, {name}! Recebemos o seu pedido de encomenda.",
+      "next": "A loja vai contactá-lo em breve para confirmar a encomenda e o envio."
+    },
+    "statusChange": {
+      "subject": "Encomenda n.º {number}: {status}",
+      "title": "A sua encomenda tem um novo estado",
+      "greeting": "Olá, {name}!",
+      "text": "O estado da sua encomenda n.º {number} é agora: {status}."
+    },
+    "number": "Número da encomenda",
+    "lines": "Peças encomendadas",
+    "quantity": "Quantidade: {quantity}",
+    "goodsTotal": "Total das peças",
+    "delivery": "Envio",
+    "deliveryEstimate": "Envio (estimativa)",
+    "deliveryNote": "O envio não está incluído no total: o preço real do envio é pago à transportadora na receção.",
+    "customsNotice": "O destinatário poderá ter de pagar o IVA de importação e os direitos aduaneiros na entrega.",
+    "contactTitle": "Contactar a loja",
+    "contactTbd": "Canais de contacto: TBD",
+    "channel": {
+      "phone": "Telefone",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "whatsapp": "WhatsApp",
+      "email": "E-mail"
+    },
+    "footer": "Recebe este e-mail porque foi enviado em {site} um pedido de encomenda com este endereço."
+  }
+}

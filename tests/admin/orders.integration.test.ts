@@ -101,6 +101,8 @@ describe.skipIf(!stack)("admin order status changes on the local stack", async (
         {
           product_id: productId,
           variant_id: null,
+          variant_label: null,
+          variant_label_locale: null,
           position: 0,
           title: "Piece",
           title_locale: "uk",

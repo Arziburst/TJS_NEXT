@@ -1,0 +1,79 @@
+{
+  "telegram": {
+    "newOrder": "Nová žádost o objednávku č. {number}",
+    "statusChange": "Objednávka č. {number}: {from} → {to}",
+    "placed": "Přijato: {date}",
+    "customer": "Zákazník",
+    "phone": "Telefon",
+    "email": "E-mail",
+    "language": "Jazyk",
+    "lines": "Kusy",
+    "line": "{title} × {quantity} — {total}",
+    "moreLines": "…a {count, plural, one {# další řádek} few {# další řádky} many {# dalšího řádku} other {# dalších řádků}}",
+    "goodsTotal": "Celkem za kusy",
+    "delivery": "Doprava",
+    "estimate": "Odhad",
+    "comment": "Komentář",
+    "openAdmin": "Otevřít objednávku v administraci"
+  },
+  "delivery": {
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "na pobočku",
+      "postomat": "do výdejního boxu",
+      "doors": "kurýrem na adresu",
+      "division": "na pobočku, do výdejního boxu nebo na výdejní místo",
+      "address": "kurýrem na adresu"
+    },
+    "flat": "byt {flat}",
+    "estimateAmount": "≈ {amount}",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "spočítá dopravce"
+  },
+  "status": {
+    "new": "Nová",
+    "pending_payment": "Čeká na platbu",
+    "paid": "Zaplaceno",
+    "in_processing": "Zpracovává se",
+    "accepted": "Přijato",
+    "closed": "Uzavřeno",
+    "canceled": "Zrušeno",
+    "refunded": "Vráceno"
+  },
+  "email": {
+    "confirmation": {
+      "subject": "Vaši žádost o objednávku č. {number} jsme přijali",
+      "title": "Žádost o objednávku přijata",
+      "thanks": "Děkujeme, {name}! Vaši žádost o objednávku jsme přijali.",
+      "next": "Obchod vás brzy kontaktuje, aby potvrdil objednávku a dopravu."
+    },
+    "statusChange": {
+      "subject": "Objednávka č. {number}: {status}",
+      "title": "Vaše objednávka má nový stav",
+      "greeting": "Dobrý den, {name}!",
+      "text": "Stav vaší objednávky č. {number} je nyní: {status}."
+    },
+    "number": "Číslo objednávky",
+    "lines": "Objednané kusy",
+    "quantity": "Množství: {quantity}",
+    "goodsTotal": "Celkem za kusy",
+    "delivery": "Doprava",
+    "deliveryEstimate": "Doprava (odhad)",
+    "deliveryNote": "Doprava není v součtu zahrnuta: skutečnou cenu dopravy platíte dopravci při převzetí.",
+    "customsNotice": "Při doručení může příjemce platit dovozní DPH a clo.",
+    "contactTitle": "Kontaktovat obchod",
+    "contactTbd": "Kontaktní kanály: TBD",
+    "channel": {
+      "phone": "Telefon",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "whatsapp": "WhatsApp",
+      "email": "E-mail"
+    },
+    "footer": "Tento e-mail dostáváte, protože na {site} byla odeslána žádost o objednávku s touto adresou."
+  }
+}

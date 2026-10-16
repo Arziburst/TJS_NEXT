@@ -393,6 +393,73 @@ checks that no key, prompt or glossary reaches the client bundle.
   product pages' cache life) or at once after the next admin save of that product. Running it on production is
   the coordinator's, after the owner's go.
 
+## Notifications (Telegram and email)
+
+Every order request writes an `order_created` row to `public.outbox_events` in its own transaction (#24). The
+processor (`src/lib/notifications/`, #26) sends it to two channels and keeps each one's outcome in the row:
+
+- **Telegram** to the owner's group, in Ukrainian, `parse_mode` HTML with every order value escaped, with a link
+  to the admin's order page (`/uk/admin/orders/<number>`, reserved for #27).
+- **Email** to the customer through Resend, in the order's locale: the number, the lines and total, the delivery
+  estimate with the on-receipt note (D37, D38) and the shop's contact channels (the TBD line until the admin
+  settings of #21 provide them). Templates: `src/emails/` (confirmation, and the status change for #27);
+  rendered examples: `tests/notifications/__snapshots__/`.
+
+**When it runs.** Right after a placed order (`after()` in the checkout action) and every six hours from
+`GET /api/cron/notifications` (`CRON_SECRET`): four `vercel.json` entries of that path at `0 0`, `0 6`, `0 12` and
+`0 18` UTC, because Hobby runs each entry once a day (somewhere within its hour). A run claims up to 5 × 10 due
+events (`claim_outbox_events`: `FOR UPDATE SKIP LOCKED`, a 5-minute lease, a claim token), so two runs never send
+one message twice; a run that dies leaves its events due again when the lease ends. A failed send is retried after
+1, 2, 4 … minutes (at most 6 hours) by the next run (the next order's or the next cron's), and marked `failed` at
+the 8th attempt. The order itself is never changed by a send. Delivery is at least once: if writing the outcome
+fails after a send, the event is claimed again after its lease and the Telegram message may go out twice (the
+email is deduplicated by its `Idempotency-Key`).
+
+**Telegram's flood control** (about 20 messages a minute in one group). A run sends at most 15 Telegram messages
+(`SENDS_PER_RUN`) and defers the rest by a minute; on a 429 it waits Telegram's `parameters.retry_after` and sends
+no more Telegram messages in that run. Neither spends an attempt (`complete_outbox_event(…, p_refund_attempt)`), so
+a backlog goes out over the next runs and is never marked `failed` for being throttled; the emails of the same
+events go out meanwhile.
+
+**Late confirmations.** The customer's email goes out only for an order placed at most 24 hours ago
+(`CONFIRMATION_EMAIL_MAX_AGE_MS`); an older one, e.g. the requests stored before this sender was configured, is
+marked `skipped_expired`. The owner's Telegram message has no limit: every order request reaches the owner.
+
+**Outcomes** (`telegram_status`, `email_status`, `last_error` on the outbox row; the admin's view comes with #27):
+`pending` → `sent`, or `skipped_unconfigured` (sending is off or the channel's settings are missing; not retried,
+the reason in `last_error`), or `skipped_expired` (the confirmation would be over 24 hours late), or `failed` (the
+last attempt failed too). To see them locally:
+
+```sql
+select o.number, e.telegram_status, e.email_status, e.attempts, e.next_attempt_at, e.last_error
+from public.outbox_events e join public.orders o on o.id = e.order_id order by e.created_at desc;
+```
+
+**Settings** (server only; `.env.example`). Nothing is sent unless `NOTIFICATIONS_SEND` is exactly `true`: tests,
+local runs and CI without it mark every event `skipped_unconfigured`, even with keys in `.env.local`.
+
+| Name | |
+|---|---|
+| `NOTIFICATIONS_SEND` | `true` only where messages may go out (the production deployment) |
+| `TELEGRAM_BOT_TOKEN` | the bot's token (SECRET); the bot is a member of the owner's group — **TBD, the owner provides it** |
+| `TELEGRAM_CHAT_ID` | the group's chat id (negative for groups) — **TBD**; moves to the admin settings with #21 |
+| `RESEND_API_KEY` | the Resend API key (SECRET) — **TBD** |
+| `EMAIL_FROM` | the sender, e.g. `Shop <orders@<domain>>`, on a domain verified in Resend — **TBD, the owner decides** |
+| `EMAIL_REPLY_TO` | optional: where the customer's replies go |
+| `TELEGRAM_API_BASE_URL`, `RESEND_API_URL` | local and e2e only: the stand-in below; unset in production |
+
+**Stand-in.** `e2e/notifications-mock.ts` answers `POST /bot<token>/sendMessage` and `POST /emails` and lists what
+it got at `GET /sent?number=<order number>`. Playwright starts it on `E2E_PORT + 2000` (CI: 5000) and points the
+app at it with `NOTIFICATIONS_SEND=true` and test keys (`playwright.config.ts`). For a dev walk, from Git Bash:
+
+```sh
+NOTIFICATIONS_MOCK_PORT=5026 node e2e/notifications-mock.ts &
+NOTIFICATIONS_SEND=true TELEGRAM_BOT_TOKEN=e2e-bot-token TELEGRAM_CHAT_ID=-100123 \
+  TELEGRAM_API_BASE_URL=http://127.0.0.1:5026 RESEND_API_KEY=e2e-resend-key RESEND_API_URL=http://127.0.0.1:5026 \
+  EMAIL_FROM="TJS dev <orders@example.test>" npx next dev -p 3026
+curl "http://127.0.0.1:5026/sent?number=10001"
+```
+
 ## Vercel
 
 The shop runs on the Vercel project `tjs-next` in the team `arzibursts-projects`, production
@@ -419,6 +486,7 @@ production deployment in the dashboard; the database is not rolled back with it.
 | `NOVA_POSHTA_API_KEY` | server only: the Nova Poshta client (optional, see Nova Poshta above) |
 | `NOVA_POST_API_KEY` | server only: Nova Post international delivery (#23); unset → zone flat rates only. `NOVA_POST_API_URL` stays unset in production |
 | `AI_GATEWAY_OIDC` | server only: `true` turns on the admin's machine translation through the AI Gateway with the deployment's OIDC token (#19); unset → "not configured". Not set yet: the owner decides on the gateway billing. `AI_GATEWAY_API_KEY` / `AI_GATEWAY_BASE_URL` stay unset in production |
+| `NOTIFICATIONS_SEND`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO` | server only: the order notifications (#26, see Notifications above); the values are TBD from the owner, and until they are set every message is `skipped_unconfigured` |
 
 Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
 `VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`
@@ -429,9 +497,11 @@ production deployment only, with `CRON_SECRET`; without the secret the route ans
 fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv.
 `GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), with the same
 secret. `GET /api/cron/staged-uploads` (#92) removes photo uploads older than a day that never left the private
-`product-image-uploads` staging bucket, daily at `45 3 * * *` (UTC), with the same secret (Hobby allows up to
-100 crons a project, each at most once a day). Runs and their logs: the project's *Cron Jobs* settings and the
-function logs.
+`product-image-uploads` staging bucket, daily at `45 3 * * *` (UTC), and `GET /api/cron/notifications` (#26) sends
+the due retries of the notifications outbox at `0 0`, `0 6`, `0 12` and `0 18` UTC (four entries of the same path),
+all with the same secret (Hobby allows up to 100 crons a project, each at most once a day; the same path may have
+several entries; `tests/money/vercel-cron.test.ts` checks every schedule). Runs and
+their logs: the project's *Cron Jobs* settings and the function logs.
 
 **Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`
 renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the document of every page only when

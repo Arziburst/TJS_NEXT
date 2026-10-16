@@ -10,8 +10,11 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import enCheckout from "../messages/en/checkout.json" with { type: "json" };
 import ukAdmin from "../messages/uk/admin.json" with { type: "json" };
+import enNotifications from "../messages/en/notifications.json" with { type: "json" };
 import ukErrors from "../messages/uk/errors.json" with { type: "json" };
+import ukNotifications from "../messages/uk/notifications.json" with { type: "json" };
 import type { Database } from "../src/lib/supabase/database.types";
+import { sentFor } from "./notifications";
 
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 
@@ -259,6 +262,28 @@ test.describe("the admin's orders on the local stack", () => {
         { number, from: "accepted", to: "canceled" },
       ]),
     );
+
+    // the notifications (#26) tell the customer, in their language, and the owner of every change
+    const enStatus = enNotifications.status;
+    const ukStatus = ukNotifications.status;
+    const subject = (status: string) =>
+      enNotifications.email.statusChange.subject.replace("{number}", String(number)).replace("{status}", status);
+    const telegramLine = (from: string, to: string) =>
+      ukNotifications.telegram.statusChange.replace("{number}", String(number)).replace("{from}", from).replace("{to}", to);
+    await expect
+      .poll(async () => (await sentFor(number)).email.map((message) => message.subject), { timeout: 15_000 })
+      .toEqual(expect.arrayContaining([subject(enStatus.in_processing), subject(enStatus.accepted), subject(enStatus.canceled)]));
+    const sent = await sentFor(number);
+    expect(sent.email.every((message) => message.to.includes(email))).toBe(true);
+    await expect
+      .poll(async () => (await sentFor(number)).telegram.map((message) => message.text), { timeout: 15_000 })
+      .toEqual(
+        expect.arrayContaining([
+          expect.stringContaining(telegramLine(ukStatus.new, ukStatus.in_processing)),
+          expect.stringContaining(telegramLine(ukStatus.in_processing, ukStatus.accepted)),
+          expect.stringContaining(telegramLine(ukStatus.accepted, ukStatus.canceled)),
+        ]),
+      );
 
     // the list filtered by status finds it canceled
     await page.goto(`/uk/admin/orders?status=canceled&q=${number}`);

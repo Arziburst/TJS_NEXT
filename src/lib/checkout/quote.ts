@@ -15,7 +15,10 @@ export type QuoteItem = {
   fulfillment: ProductFulfillment;
   title: string;
   titleLocale: Locale;
+  /** The size as the customer saw it (#66), with the locale of its label; null without a variant. */
+  variantLabel: { text: string; locale: Locale } | null;
   sku: string | null;
+  /** The unit price: the variant's price for a line of a variant, else the product's. */
   priceUsdMinor: number;
   weightGrams: number;
   quantity: number;

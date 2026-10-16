@@ -52,14 +52,31 @@ export type ProductSummary = {
   availability: ProductAvailability;
   /** Made-to-order work only: how many days making it takes (a fixed time has minDays = maxDays). */
   leadTime: LeadTime | null;
-  /** USD in cents (minor units); the database keeps numeric(10,2). */
+  /** USD in cents (minor units); the database keeps numeric(10,2). A variant adds its difference to it. */
   priceUsdMinor: number;
+  /** The price a listing shows: the lowest variant price ("from …" when the variants differ), else `priceUsdMinor`. */
+  listPrice: ListPrice;
   weightG: number;
   createdAt: string;
   publishedAt: string | null;
   translation: ProductTranslation;
   images: ProductImage[];
 };
+
+/** A size or length of a made-to-order product (#66, D29); `label` is in `labelLocale`. */
+export type ProductVariant = {
+  id: string;
+  label: string;
+  /** The requested locale, or the fallback the variant has a label in. */
+  labelLocale: Locale;
+  skuSuffix: string | null;
+  /** The product's price plus the variant's difference, in USD cents (always above zero). */
+  priceUsdMinor: number;
+  /** False: a size the owner cannot make for now; shown, not orderable. */
+  available: boolean;
+};
+
+export type ListPrice = { usdMinor: number; from: boolean };
 
 /** A product page's data; its texts (`materials`, `care`, `clasp`, `leadTimeNote`) are in `translation.locale`. */
 export type Product = ProductSummary & {
@@ -68,6 +85,8 @@ export type Product = ProductSummary & {
   clasp: string | null;
   leadTimeNote: string | null;
   dimensions: ProductDimensions;
+  /** In the owner's order; empty for a product without variants (and always for a one-of-a-kind piece). */
+  variants: ProductVariant[];
 };
 
 export type ProductFilters = {

@@ -1,0 +1,79 @@
+{
+  "telegram": {
+    "newOrder": "New order request No. {number}",
+    "statusChange": "Order No. {number}: {from} → {to}",
+    "placed": "Placed: {date}",
+    "customer": "Customer",
+    "phone": "Phone",
+    "email": "Email",
+    "language": "Language",
+    "lines": "Pieces",
+    "line": "{title} × {quantity} — {total}",
+    "moreLines": "…and {count, plural, one {# more line} other {# more lines}}",
+    "goodsTotal": "Total for the pieces",
+    "delivery": "Delivery",
+    "estimate": "Estimate",
+    "comment": "Comment",
+    "openAdmin": "Open the order in the admin"
+  },
+  "delivery": {
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "to a branch",
+      "postomat": "to a parcel locker",
+      "doors": "by courier to the address",
+      "division": "to a branch, parcel locker or pick-up point",
+      "address": "by courier to the address"
+    },
+    "flat": "flat {flat}",
+    "estimateAmount": "≈ {amount}",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calculated by the carrier"
+  },
+  "status": {
+    "new": "New",
+    "pending_payment": "Pending payment",
+    "paid": "Paid",
+    "in_processing": "In processing",
+    "accepted": "Accepted",
+    "closed": "Closed",
+    "canceled": "Canceled",
+    "refunded": "Refunded"
+  },
+  "email": {
+    "confirmation": {
+      "subject": "Your order request No. {number} has been received",
+      "title": "Order request received",
+      "thanks": "Thank you, {name}! Your order request has been received.",
+      "next": "The shop will contact you soon to confirm the order and the delivery."
+    },
+    "statusChange": {
+      "subject": "Order No. {number}: {status}",
+      "title": "Your order has a new status",
+      "greeting": "Hello, {name}!",
+      "text": "The status of your order No. {number} is now: {status}."
+    },
+    "number": "Order number",
+    "lines": "Ordered pieces",
+    "quantity": "Quantity: {quantity}",
+    "goodsTotal": "Total for the pieces",
+    "delivery": "Delivery",
+    "deliveryEstimate": "Delivery (estimate)",
+    "deliveryNote": "Delivery is not included in the total: you pay the actual delivery price to the carrier on receipt.",
+    "customsNotice": "Import VAT and customs duty may be payable by the recipient on delivery.",
+    "contactTitle": "Contact the shop",
+    "contactTbd": "Contact channels: TBD",
+    "channel": {
+      "phone": "Phone",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "whatsapp": "WhatsApp",
+      "email": "Email"
+    },
+    "footer": "You get this email because an order request with this address was sent on {site}."
+  }
+}

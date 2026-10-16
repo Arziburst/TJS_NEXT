@@ -82,7 +82,8 @@
       "next": "Next page",
       "page": "Page {page} of {count}"
     },
-    "unreviewed": "{count, plural, one {# machine translation not reviewed} other {# machine translations not reviewed}}: {locales}"
+    "unreviewed": "{count, plural, one {# machine translation not reviewed} other {# machine translations not reviewed}}: {locales}",
+    "variants": "{count, plural, one {# size} other {# sizes}}"
   },
   "actionErrors": {
     "notAuthorized": "Only the admin can do this. Please sign in again.",
@@ -111,7 +112,8 @@
       "translations": "Texts in every language",
       "taxonomy": "Materials and colours",
       "photos": "Photos",
-      "publication": "Publication"
+      "publication": "Publication",
+      "variants": "Sizes"
     },
     "chooseCategory": "Choose a category",
     "sku": "SKU (article number)",
@@ -186,7 +188,9 @@
       "skuTaken": "Another product already uses this SKU",
       "leadTimeOrder": "Must not be less than “From”",
       "titleRequired": "Enter a title for this language, or clear its other texts",
-      "requiredToPublish": "A Ukrainian title is required to publish"
+      "requiredToPublish": "A Ukrainian title is required to publish",
+      "hasVariants": "A piece with sizes stays made to order; delete its sizes first",
+      "variantPriceNotPositive": "A size of this product would cost zero or less; change its price difference first"
     },
     "translateAfterSave": "Save the product first; then it can be translated into the other languages by machine."
   },
@@ -325,6 +329,55 @@
       "notFound": "This product or photo no longer exists.",
       "conflict": "The photos were changed in another window; the current ones are shown now.",
       "unexpectedError": "That did not work. Try again."
+    }
+  },
+  "variants": {
+    "hint": "Each size the customer chooses from, with its own price difference to the product’s price. A product with sizes is ordered only in one of them.",
+    "saveFirst": "Save the product first, then add its sizes.",
+    "oneOfAKind": "A one-of-a-kind piece has no sizes.",
+    "empty": "No sizes: the piece is ordered as it is.",
+    "add": "Add a size",
+    "newTitle": "New size",
+    "editTitle": "Edit size {label}",
+    "labels": "Name in every language",
+    "labelsHint": "Ukrainian is required. A language left empty shows the English name, else the Ukrainian one.",
+    "priceDelta": "Price difference, USD",
+    "priceDeltaHint": "Added to the product’s price: 0 for the same price, e.g. 5 for a dearer size or -2.50 for a cheaper one.",
+    "skuSuffix": "SKU suffix",
+    "skuSuffixHint": "Optional; added to the product’s SKU on orders, e.g. 17 → TJS-001-17.",
+    "price": "Price: {price}",
+    "available": "Can be ordered",
+    "availableOf": "{label} can be ordered",
+    "off": "Not available now",
+    "edit": "Edit {label}",
+    "moveEarlier": "Move {label} up",
+    "moveLater": "Move {label} down",
+    "delete": "Delete {label}",
+    "deleteTitle": "Delete this size?",
+    "deleteDescription": "{label} disappears from the shop; carts that hold it show it as no longer available.",
+    "deleteConfirm": "Delete",
+    "ordered": "Ordered already: it cannot be deleted, switch it off instead.",
+    "save": "Save the size",
+    "saved": "Size saved",
+    "deleted": "Size deleted",
+    "moved": "Moved to place {position} of {count}",
+    "switchedOn": "{label} can be ordered again",
+    "switchedOff": "{label} is switched off",
+    "errors": {
+      "notAuthorized": "Only the admin can do this. Please sign in again.",
+      "notFound": "This product or size no longer exists. Please reload the page.",
+      "conflict": "The sizes were changed in another tab: the current list is shown.",
+      "ordered": "This size has been ordered: switch it off instead of deleting it.",
+      "tooMany": "A product can have at most 50 sizes.",
+      "oneOfAKind": "A one-of-a-kind piece has no sizes.",
+      "invalid": "Please check the fields.",
+      "unexpectedError": "The sizes could not be changed. Please try again.",
+      "labelRequired": "Enter the Ukrainian name",
+      "tooLong": "At most {max} characters",
+      "invalidDelta": "Enter an amount, e.g. 5 or -2.50",
+      "priceNotPositive": "The size’s price must stay above zero",
+      "invalidSuffix": "Latin letters and digits, with dots or hyphens between them",
+      "suffixTaken": "Another size of this product has this suffix"
     }
   },
   "orderStatus": {

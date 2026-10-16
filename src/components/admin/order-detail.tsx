@@ -2,6 +2,7 @@ import { AtSignIcon, InfoIcon, MailIcon, MessageCircleIcon, PhoneIcon, SendIcon 
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { addOrderNote, changeOrderStatus } from "@/app/[locale]/admin/orders/actions";
+import { VariantLabel } from "@/components/cart/variant-label";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
@@ -208,6 +209,7 @@ export async function OrderDetail({ order, locale }: { order: AdminOrder; locale
                       line.title
                     )}
                   </p>
+                  {line.variantLabel && <VariantLabel label={line.variantLabel} className="font-input" />}
                   <p className="flex flex-wrap items-center gap-2 font-input text-sm">
                     {line.sku && <span>{t("detail.sku", { sku: line.sku })}</span>}
                     <Badge variant="outline" className="rounded-none">

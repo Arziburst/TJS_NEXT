@@ -1,5 +1,6 @@
 import { InfoIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
+import { VariantLabel } from "@/components/cart/variant-label";
 import { SHOP_HREF } from "@/components/catalog/links";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
@@ -80,6 +81,7 @@ async function ConfirmedOrder({ order, locale }: { order: OrderView; locale: str
                   <span lang={line.titleLocale !== locale ? line.titleLocale : undefined} className="font-sans font-semibold break-words">
                     {line.title}
                   </span>
+                  {line.variantLabel && <VariantLabel label={line.variantLabel.text} />}
                   <span className="text-sm">{t("done.quantity", { quantity: line.quantity })}</span>
                 </span>
                 <Amount money={money(line.lineMinor)} locale={locale} className="shrink-0 font-sans text-accent-text" />

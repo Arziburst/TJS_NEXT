@@ -1,12 +1,14 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 import { allowAdminAction } from "@/lib/admin/rate-limit";
 import { ADMIN_ORDER_STATUSES, ORDER_NOTE_MAX_LENGTH, ORDER_STATUSES } from "@/lib/admin/order-status";
 import { addOrderNote as insertOrderNote, setOrderStatus } from "@/lib/admin/orders";
 import { revalidatePieces } from "@/lib/admin/revalidate";
 import { getAdmin } from "@/lib/auth/session";
+import { runNotificationsQuietly } from "@/lib/notifications/run";
 import { createSessionClient } from "@/lib/supabase/server";
 
 /*
@@ -51,6 +53,9 @@ export async function changeOrderStatus(input: unknown): Promise<OrderStatusActi
     if (result.reason === "stale") refresh();
     return { ok: false, reason: result.reason };
   }
+  // the customer's email and the owner's Telegram line go out after the answer (the outbox row was written with
+  // the change; the cron retries what fails)
+  after(runNotificationsQuietly);
   // a one-of-a-kind piece sold or back on sale changes the shop's listings and its page (D24)
   revalidatePieces(result.productIds);
   refresh();

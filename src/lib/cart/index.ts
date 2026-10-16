@@ -6,7 +6,8 @@ import { cache } from "react";
 import { routing, type Locale } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth/session";
 import { createSessionClient } from "@/lib/supabase/server";
-import { clampQuantity, countPieces, mergeLines, type CartLine } from "./lines";
+import type { ProductVariant } from "@/lib/catalog/types";
+import { checkLineVariant, clampQuantity, countPieces, mergeLines, type CartLine } from "./lines";
 import { getCartProducts, type CartProduct } from "./products";
 import { readAccountLines, readGuestLines } from "./store";
 
@@ -46,6 +47,10 @@ export type CartItem = {
   line: CartLine;
   /** null when the product is no longer published (or was deleted): only its removal is offered. */
   product: CartProduct | null;
+  /** The line's size (#66), also when it cannot be ordered now; null without one or when it was deleted. */
+  variant: ProductVariant | null;
+  /** The line's unit price in USD cents: the variant's price, else the product's. */
+  unitUsdMinor: number;
   status: CartItemStatus;
   /** The line's quantity within the product's limits (a one-of-a-kind piece is always 1). */
   quantity: number;
@@ -61,9 +66,11 @@ export type CartView =
     }
   | { ok: false };
 
-function statusOf(product: CartProduct | null): CartItemStatus {
+/** A line of a sold or reserved piece says so; a missing product, or a size that is gone or off, is unavailable. */
+function statusOf(product: CartProduct | null, line: CartLine): CartItemStatus {
   if (!product) return "unavailable";
-  return product.availability;
+  if (product.availability !== "available") return product.availability;
+  return checkLineVariant(product.variants, line.variantId).ok ? "available" : "unavailable";
 }
 
 /**
@@ -89,7 +96,15 @@ export async function readCartView(locale: Locale): Promise<CartView> {
   if (!read.ok) return { ok: false };
   const items = cart.lines.map((line): CartItem => {
     const product = read.products.get(line.productId) ?? null;
-    return { line, product, status: statusOf(product), quantity: clampQuantity(line.quantity, product?.fulfillment ?? null) };
+    const variant = product?.variants.find((v) => v.id === line.variantId) ?? null;
+    return {
+      line,
+      product,
+      variant,
+      unitUsdMinor: variant?.priceUsdMinor ?? product?.priceUsdMinor ?? 0,
+      status: statusOf(product, line),
+      quantity: clampQuantity(line.quantity, product?.fulfillment ?? null),
+    };
   });
   return {
     ok: true,
@@ -99,9 +114,14 @@ export async function readCartView(locale: Locale): Promise<CartView> {
   };
 }
 
-/** The lines that count towards the subtotal: orderable products only, at their current database price. */
+/** The lines that count towards the subtotal: orderable lines only, at their current database price. */
 export function orderableLines(items: readonly CartItem[]): { usdMinor: number; quantity: number }[] {
   return items
     .filter((item): item is CartItem & { product: CartProduct } => item.status === "available" && item.product !== null)
-    .map((item) => ({ usdMinor: item.product.priceUsdMinor, quantity: item.quantity }));
+    .map((item) => ({ usdMinor: item.unitUsdMinor, quantity: item.quantity }));
+}
+
+/** The key of a cart line in a list (two sizes of one product are two lines). */
+export function lineKey(line: CartLine): string {
+  return `${line.productId}:${line.variantId ?? ""}`;
 }
