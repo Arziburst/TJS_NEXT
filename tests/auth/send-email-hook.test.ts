@@ -5,9 +5,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { EmailMessage } from "@/lib/notifications/resend";
 import type { SendResult } from "@/lib/notifications/telegram";
+import type { ShopContacts } from "@/lib/notifications/contacts";
 import { signWebhook, webhookKeys } from "@/lib/auth/webhook-signature";
 
 vi.mock("server-only", () => ({}));
+// the shop's settings (#21) without a database: none by default, set per test
+const settings = vi.hoisted(() => ({ contacts: null as ShopContacts | null }));
+vi.mock("@/lib/notifications/contacts", () => ({ readShopContacts: async () => settings.contacts }));
 
 const { AUTH_HOOK_SEND_TIMEOUT_MS, handleSendEmailHook, hookTransport, renderPlannedEmail } = await import(
   "@/lib/auth/send-email-hook"
@@ -72,6 +76,7 @@ function deps(overrides: Partial<Deps> = {}): Deps {
 
 beforeEach(() => {
   vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://shop.example.test");
+  settings.contacts = null;
   sent = [];
   logs = [];
   for (const method of ["log", "info", "warn", "error", "debug"] as const) {
@@ -205,6 +210,22 @@ describe("the emails", () => {
     expect((await handleSendEmailHook(request("not json"), deps())).status).toBe(400);
     expect((await handleSendEmailHook(request(JSON.stringify({ user: {} })), deps())).status).toBe(400);
     expect(sent).toEqual([]);
+  });
+
+  it("names the shop and shows its channels from the settings when there are some, nothing otherwise", async () => {
+    await handleSendEmailHook(request(payload("signup", { locale: "en" })), deps());
+    expect(sent[0].text).toContain("finish signing up at TJS.");
+    expect(sent[0].text).not.toContain("Contact the shop");
+
+    settings.contacts = {
+      shopName: "Trend Jewelry Store",
+      channels: [{ kind: "instagram", href: "https://www.instagram.com/tjs_shop/", text: "@tjs_shop" }],
+    };
+    await handleSendEmailHook(request(payload("signup", { locale: "en" })), deps());
+    expect(sent[1].text).toContain("finish signing up at Trend Jewelry Store.");
+    expect(sent[1].text).toContain("Contact the shop");
+    expect(sent[1].text).toContain("Instagram: @tjs_shop");
+    expect(sent[1].html).toContain('href="https://www.instagram.com/tjs_shop/"');
   });
 
   it("escapes the addresses in the HTML part", async () => {
