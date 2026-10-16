@@ -74,6 +74,45 @@
       "whatsapp": "WhatsApp",
       "email": "E-mail"
     },
-    "footer": "Tento e-mail dostáváte, protože na {site} byla odeslána žádost o objednávku s touto adresou."
+    "footer": "Tento e-mail dostáváte, protože na {site} byla odeslána žádost o objednávku s touto adresou.",
+    "auth": {
+      "signup": {
+        "subject": "Potvrďte svůj e-mail",
+        "title": "Potvrďte svůj e-mail",
+        "text": "Klikněte na odkaz, abyste potvrdili svou e-mailovou adresu a dokončili registraci v {shop}.",
+        "action": "Potvrdit e-mail",
+        "ignore": "Pokud jste se neregistrovali, tento e-mail ignorujte."
+      },
+      "recovery": {
+        "subject": "Obnovení hesla",
+        "title": "Obnovení hesla",
+        "text": "Klikněte na odkaz a zvolte nové heslo ke svému účtu {shop}.",
+        "action": "Zvolit nové heslo",
+        "ignore": "Pokud jste o nové heslo nežádali, tento e-mail ignorujte: vaše heslo zůstává beze změny."
+      },
+      "emailChangeCurrent": {
+        "subject": "Potvrďte změnu svého e-mailu",
+        "title": "Potvrďte změnu svého e-mailu",
+        "text": "Klikněte na odkaz a potvrďte, že se e-mail vašeho účtu {shop} mění z {email} na {newEmail}. Změna začne platit, jakmile bude potvrzena z obou adres.",
+        "action": "Potvrdit změnu",
+        "ignore": "Pokud jste o tuto změnu nežádali, tento e-mail ignorujte: vaše adresa zůstává beze změny."
+      },
+      "emailChangeNew": {
+        "subject": "Potvrďte svůj nový e-mail",
+        "title": "Potvrďte svůj nový e-mail",
+        "text": "Klikněte na odkaz a potvrďte {newEmail} jako nový e-mail svého účtu {shop}.",
+        "action": "Potvrdit nový e-mail",
+        "ignore": "Pokud jste o tuto změnu nežádali, tento e-mail ignorujte: vaše adresa zůstává beze změny."
+      },
+      "magicLink": {
+        "subject": "Váš odkaz pro přihlášení do {shop}",
+        "title": "Přihlášení do {shop}",
+        "text": "Klikněte na odkaz a přihlaste se ke svému účtu {shop}.",
+        "action": "Přihlásit se",
+        "ignore": "Pokud jste se nechtěli přihlásit, tento e-mail ignorujte."
+      },
+      "linkHint": "Pokud tlačítko nefunguje, otevřete tento odkaz:",
+      "footer": "Tento e-mail dostáváte, protože tato adresa byla použita na {site}."
+    }
   }
 }

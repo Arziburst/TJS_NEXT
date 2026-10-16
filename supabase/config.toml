@@ -307,6 +307,17 @@ max_frequency = "5s"
 # enabled = true
 # uri = "pg-functions://<database>/<schema>/<hook_name>"
 
+# The Send Email Hook (#99): Auth hands every email to the app's /api/auth/send-email, which renders it in the
+# user's locale and sends it through the shop's email transport. Off here by default: Auth then sends the English
+# templates above to the mail catcher, and local development needs no hook, secret or email keys. To try the hook
+# locally, start the stack with it switched on (docs/dev-environment.md "Auth emails in the user's language"):
+# SUPABASE_AUTH_HOOK_SEND_EMAIL_ENABLED=true and SUPABASE_AUTH_HOOK_SEND_EMAIL_URI pointing at the dev server
+# through host.docker.internal; the secret is the same SEND_EMAIL_HOOK_SECRET the app reads.
+[auth.hook.send_email]
+enabled = false
+uri = "http://host.docker.internal:3000/api/auth/send-email"
+secrets = "env(SEND_EMAIL_HOOK_SECRET)"
+
 # Configure one of the supported SMS providers: `twilio`, `twilio_verify`, `messagebird`, `textlocal`, `vonage`.
 [auth.sms.twilio]
 enabled = false

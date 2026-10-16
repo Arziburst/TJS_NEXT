@@ -27,6 +27,14 @@ export function paragraph(text: string, { muted = false, small = false } = {}): 
   return `<p style="margin:0 0 12px;font-size:${small ? 14 : 16}px;color:${muted ? MUTED : INK};">${e(text)}</p>`;
 }
 
+/** A link drawn as a button (a table cell, which mail clients keep), then the bare URL for clients that hide it. */
+export function buttonLink(href: string, label: string, hint: string): string {
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:8px 0 20px;">
+<tr><td style="background:${INK};"><a href="${e(href)}" style="display:inline-block;padding:14px 28px;font-family:${FONT};font-size:15px;font-weight:bold;letter-spacing:1px;color:#ffffff;text-decoration:none;">${e(label)}</a></td></tr>
+</table>
+<p style="margin:0 0 12px;font-size:13px;color:${MUTED};">${e(hint)}<br><a href="${e(href)}" style="color:${MUTED};word-break:break-all;">${e(href)}</a></p>`;
+}
+
 /** A two-column row: a label (with an optional note under it) and an amount on the right. */
 export function amountRow(label: string, amount: string, { note, strong = false }: { note?: string; strong?: boolean } = {}): string {
   const weight = strong ? "bold" : "normal";
