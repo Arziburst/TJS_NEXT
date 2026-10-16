@@ -44,9 +44,12 @@ type ProductCardProps = {
   highlight?: readonly string[];
 };
 
-/** A catalog tile: the first photo cross-fades to the second on hover, the "new" badge for 7 days (D9). */
+/**
+ * A catalog tile: the first photo cross-fades to the second on hover, the "new" badge for 7 days (D9), and
+ * made-to-order work marked like its product page (legacy "Only order", #72).
+ */
 export async function ProductCard({ product, eager = false, highlight }: ProductCardProps) {
-  const t = await getTranslations("catalog");
+  const [t, tProduct] = await Promise.all([getTranslations("catalog"), getTranslations("product")]);
   const [first, second] = product.images;
 
   return (
@@ -78,6 +81,16 @@ export async function ProductCard({ product, eager = false, highlight }: Product
           {product.isNew && (
             <Badge variant="accent" className="absolute top-2 left-2" data-testid="new-badge">
               {t("newBadge")}
+            </Badge>
+          )}
+          {/* over the photo's fixed box, so it never moves the card; a long label wraps inside the photo */}
+          {product.fulfillment === "made_to_order" && (
+            <Badge
+              variant="warning"
+              className="absolute bottom-2 left-2 h-auto max-w-[calc(100%-1rem)] whitespace-normal"
+              data-testid="made-to-order-badge"
+            >
+              {tProduct("card.onlyOrder")}
             </Badge>
           )}
         </span>
