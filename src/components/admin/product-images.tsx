@@ -63,7 +63,7 @@ type ProductImagesProps = {
 };
 
 type MoveControl = "earlier" | "later";
-type UploadStatus ={ key: string; name: string; state: "uploading" | "done" | "error"; message?: string };
+type UploadStatus = { key: string; name: string; state: "uploading" | "done" | "error"; message?: string };
 type UploadFailure = "tooLarge" | "unsupportedType" | "invalidImage" | "failed";
 
 function move<T>(list: readonly T[], from: number, to: number): T[] {
@@ -101,7 +101,8 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
   const [deleting, setDeleting] = useState<{ id: string; index: number } | null>(null);
   const [editingAlts, setEditingAlts] = useState<{ image: AdminProductImage; index: number } | null>(null);
   const focusTarget = useRef<{ id: string; control: MoveControl; index: number } | null>(null);
-  const [announcement, setAnnouncement] = useState("");
+  // numbered: the same text twice in a row (two moves to the same position) is a new node, announced again
+  const [announcement, setAnnouncement] = useState<{ id: number; text: string } | null>(null);
   const listRef = useRef<HTMLOListElement>(null);
   const busy = pending || uploading;
   const maxMb = Math.floor(maxBytes / (1024 * 1024));
@@ -195,7 +196,8 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
       }
       if (moved) {
         const position = next.findIndex((image) => image.id === moved.id) + 1;
-        setAnnouncement(t("moved", { position, count: next.length }));
+        const text = t("moved", { position, count: next.length });
+        setAnnouncement((previous) => ({ id: (previous?.id ?? 0) + 1, text }));
       }
     });
   }
@@ -419,7 +421,7 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
             })}
           </ol>
           <p aria-live="polite" className="sr-only">
-            {announcement}
+            {announcement && <span key={announcement.id}>{announcement.text}</span>}
           </p>
         </>
       )}
