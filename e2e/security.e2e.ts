@@ -173,6 +173,20 @@ test.describe("the main flows under the enforced policy", () => {
     expectNoEnforcedViolation(watched, "sign in");
   });
 
+  test("the error pages (#112): the storefront's and the global one", async ({ page, baseURL }) => {
+    const watched = await watch(page);
+    // the test-only failures of src/lib/test-error.ts (the e2e web server runs with TJS_TEST_ERROR_TRIGGER=true)
+    for (const [scope, path] of [["session", "/uk/cart"], ["shell", "/uk/shop"]] as const) {
+      await page.context().addCookies([{ name: "tjs-test-error", value: scope, url: baseURL! }]);
+      await open(page, path, watched);
+      await expect(page.locator("[data-error-boundary]")).toBeVisible();
+      await watched.collect();
+      await page.context().clearCookies({ name: "tjs-test-error" });
+    }
+    // a failing render logs its error to the console by design: only the policy is checked here
+    expect(watched.violations.filter((v) => v.disposition === "enforce")).toEqual([]);
+  });
+
   test("an admin edit and a photo upload (signed PUT to Storage)", async ({ page }, testInfo) => {
     test.skip(!db, "needs the local Supabase stack (npm run supabase:start:worktree)");
     const email = `e2e-31-admin-${randomUUID()}@example.test`;

@@ -1,7 +1,7 @@
 # The production smoke suite (e2e/smoke-prod/, #31) against a deployment the person running it names: the
-# home, the shop, a product, search, a guest cart (a cookie only), the sign-in page, robots and the sitemap,
-# the share image and the security headers. Read-only: it orders nothing and signs nobody in, so it is safe on
-# production. Started by hand (Actions → Production smoke → Run workflow); no secret is used.
+# home, the shop, a product, search, a guest cart, the sign-in page, robots and the sitemap, the share image
+# and the security headers. It orders nothing and signs nobody in, so it is safe on production; the only writes
+# are the guest cart's cookie and the cart's rate-limit counter rows (consume_rate_limit). Started by hand (Actions → Production smoke → Run workflow); no secret is used.
 
 name: Production smoke
 

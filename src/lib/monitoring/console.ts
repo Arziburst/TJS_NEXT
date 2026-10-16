@@ -49,6 +49,17 @@ const MASKED = Symbol.for("tjs.console.masked");
 type Logger = (...args: unknown[]) => void;
 type MaskableConsole = { error: Logger; warn: Logger };
 
+// console.error as it was before maskConsole wrapped it
+let unmaskedError: Logger | null = null;
+
+/**
+ * Writes a line that is masked already (the structured error event of report.ts) past the wrapper: masking it
+ * again would turn its request and event ids into "<token>".
+ */
+export function writeMaskedLine(line: string): void {
+  (unmaskedError ?? console.error)(line);
+}
+
 /** Makes console.error and console.warn mask their arguments. Once per console; later calls do nothing. */
 export function maskConsole(target: MaskableConsole = console): void {
   const marked = target as MaskableConsole & { [MASKED]?: true };
@@ -56,6 +67,7 @@ export function maskConsole(target: MaskableConsole = console): void {
   marked[MASKED] = true;
   for (const level of ["error", "warn"] as const) {
     const original = target[level].bind(target);
+    if (level === "error" && target === console) unmaskedError = original;
     target[level] = (...args: unknown[]) => {
       let masked: unknown[];
       try {

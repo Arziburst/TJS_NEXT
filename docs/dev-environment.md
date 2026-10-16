@@ -588,9 +588,11 @@ shop sends no custom events, so no personal data leaves through them. Visits and
 
 The manual steps to go live, in order: `docs/launch.md` (#31).
 
-**Production smoke** (`e2e/smoke-prod/`): read-only checks of any running deployment — the home, the shop, a
-product, search, a guest cart (a cookie only), the sign-in page, robots and the sitemap, the share image and the
-security headers. It starts no server and needs no stack:
+**Production smoke** (`e2e/smoke-prod/`): checks of any running deployment that order nothing and sign nobody in
+— the home, the shop, a product, search, a guest cart, the sign-in page, robots and the sitemap, the share image
+and the security headers. The only writes: the guest cart's cookie in the test's browser and the cart's
+rate-limit counter rows (`consume_rate_limit`, per visitor, expiring on their own). It starts no server and needs
+no stack:
 
 ```sh
 E2E_BASE_URL=https://tjs-next.vercel.app npm run test:smoke-prod
@@ -600,9 +602,11 @@ E2E_BASE_URL=http://localhost:<3000+n> npm run test:smoke-prod   # against your 
 On GitHub: Actions → **Production smoke** → Run workflow with the URL (`.github/workflows/smoke-prod.yml`).
 
 **Server errors** (`src/instrumentation.ts`, `src/lib/monitoring/`): every error Next captures on the server is
-logged once as a JSON line, `{"level":"error","event":"server_error","requestId":…,"path":…,"errorType":…,
-"message":…}`, without the query string and with e-mails, phones and tokens masked; Next prints its own line for
-the same error too. A page response carries its `x-request-id`, so a reported problem can be found in the logs.
+logged once as a structured JSON event, `{"level":"error","event":"server_error","requestId":…,"path":…,
+"errorType":…,"message":…}`, without the query string and with e-mails, phones and tokens masked. Next prints its
+own line for the same error too; `console.error` and `console.warn` are wrapped with the same masks (also for an
+unhandled rejection), so that line is masked as well. A page response carries its `x-request-id`, so a reported
+problem can be found in the logs.
 With `SENTRY_DSN` set the event is also sent to that endpoint (a Sentry envelope, 2 s timeout, never retried).
 
 **Legacy shop links** (`src/lib/redirects/`): the old react-router paths (`/shop/see-all`, `/shop/<type>`,

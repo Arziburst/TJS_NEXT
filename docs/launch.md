@@ -59,7 +59,12 @@ Never set on production: `TJS_UI_KIT`, `NOVA_POSHTA_FIXTURES`, `NOVA_POST_API_UR
 2. **[owner]** Email templates and subjects: confirmation, recovery and **email change**, from
    `supabase/templates/` (token-hash links to `/<locale>/auth/confirm`). They stay set even with the hook on:
    Auth uses them again if the hook is disabled.
-3. **[owner]** Providers → Google: the client id and secret of §1.3; enable.
+3. **[owner]** Providers → Google: the client id and secret of §1.3; enable. Trade-off of the CSP's
+   `form-action 'self'`: the Google button is a Server Action form; once the page has hydrated it runs through
+   `fetch` and the browser then navigates to Google (not a form target, allowed), but a click before hydration
+   submits the form natively and its redirect to Supabase/Google is refused by the browser. The visitor clicks
+   again a moment later; listing the Supabase and Google origins in `form-action` would remove that, at the cost
+   of a wider policy (owner, with 0.7).
 4. **[owner + coordinator]** Rate limits: every sign-in and sign-up reaches Supabase from the app's server, so
    Auth's per-IP limit is a **shop-wide** limit. Raise it to a shop-wide budget (the app's own limiter counts
    per visitor and per email: 15 per 5 minutes, `src/lib/auth/rate-limit-keys.ts`). The numbers: **TBD**,
@@ -109,8 +114,9 @@ Never set on production: `TJS_UI_KIT`, `NOVA_POSHTA_FIXTURES`, `NOVA_POST_API_UR
    production URL (`e2e/smoke-prod/`, read-only). All green, including the security headers.
 2. **[coordinator]** Legacy links: `/shop/see-all`, `/shop/necklace`, `/about-us` and one `/product/<legacy id>`
    (an id from §4.1) answer 308 to the localized pages.
-3. **[coordinator]** Errors: the host's function logs show server errors as one JSON line each
-   (`"event":"server_error"`, with `requestId`); with `SENTRY_DSN` set, the same event reaches the provider.
+3. **[coordinator]** Errors: the host's function logs show each server error as one structured JSON event
+   (`"event":"server_error"`, with `requestId`) plus Next's own line for it, both with e-mails, phones and tokens
+   masked; with `SENTRY_DSN` set, the same event reaches the provider.
 4. **[owner + coordinator]** Cache race check (#93): on Vercel the route-cache race is not covered by
    Vercel's docs. Upload two photos one after another to a product in the admin, then open the product page in a
    fresh browser context and reload after a few seconds: both photos must show. If not, file a bug (the fix:

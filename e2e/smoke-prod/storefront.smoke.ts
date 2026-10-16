@@ -1,5 +1,5 @@
-// Read-only checks of a deployment (e2e/smoke-prod/playwright.config.ts): the storefront renders and works
-// with whatever catalogue it has. Nothing is written but the guest cart cookie of the test's own browser.
+// Checks of a deployment (e2e/smoke-prod/playwright.config.ts): the storefront renders and works with whatever
+// catalogue it has. Written: the guest cart cookie of the test's own browser and the cart's rate-limit counter.
 import { expect, test, type Page } from "@playwright/test";
 import enCart from "../../messages/en/cart.json" with { type: "json" };
 import enProduct from "../../messages/en/product.json" with { type: "json" };
@@ -65,7 +65,7 @@ test("search finds a listed product by a word of its title", async ({ page }) =>
   expect(errors).toEqual([]);
 });
 
-test("the guest cart: add a product and remove it (a cookie only)", async ({ page }) => {
+test("the guest cart: add a product and remove it (a cookie)", async ({ page }) => {
   const errors = collectErrors(page);
   // the first product that can be added as it is (one without sizes or variants to pick, in stock)
   let added: string | null = null;

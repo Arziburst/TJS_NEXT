@@ -193,11 +193,14 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   `Content-Security-Policy-Report-Only`: its console violations on the shells are expected. The way to enforce it
   is to render every page per request (no static shell) — an owner decision, `docs/launch.md` 0.7. Client code
   never needs eval: zod parses jitless in the browser (`src/instrumentation-client.ts`).
-- **Server errors** reach `onRequestError` (`src/instrumentation.ts` → `src/lib/monitoring/report.ts`): one JSON
-  log line per error with the request id (`x-request-id` from the proxy, else the host's), the path without its
-  query and a message with e-mails, phones and tokens masked; never headers, cookies or bodies. With
-  `SENTRY_DSN` set the event also goes to that endpoint. Code that catches an error itself logs what it needs and
-  must not put personal data into the message either.
+- **Server errors** reach `onRequestError` (`src/instrumentation.ts` → `src/lib/monitoring/report.ts`): one
+  structured JSON event per error with the request id (`x-request-id` from the proxy, else the host's), the path
+  without its query and a message with e-mails, phones and tokens masked; never headers, cookies or bodies. With
+  `SENTRY_DSN` set the event also goes to that endpoint. Next prints its own line for the same error, and Node or
+  a library may print an unhandled rejection: `register()` wraps `console.error` and `console.warn` in the
+  Node.js runtime with the same masks (`src/lib/monitoring/mask.ts`, `console.ts`), so every log line is masked —
+  the structured event is the record, Next's line the readable copy. Code that catches an error itself logs what
+  it needs and must not put personal data into the message either.
 
 ## 5. UI, layout and text
 

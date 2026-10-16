@@ -1,5 +1,6 @@
 // Server code (src/instrumentation.ts); no "server-only": instrumentation is not built with the react-server
 // condition. SENTRY_DSN is read at run time and never sent to a client.
+import { writeMaskedLine } from "./console";
 import { scrub } from "./mask";
 
 /*
@@ -88,7 +89,8 @@ export async function reportServerError(error: unknown, context: ErrorContext): 
   try {
     if (alreadyReported(error)) return;
     const event = errorEvent(error, context);
-    console.error(JSON.stringify({ level: "error", event: "server_error", ...event }));
+    // every field is masked or an id of ours: past the console wrapper, which would mask the ids
+    writeMaskedLine(JSON.stringify({ level: "error", event: "server_error", ...event }));
     await sendToSentry(event);
   } catch {
     // monitoring must never turn one failure into two

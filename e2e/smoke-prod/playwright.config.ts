@@ -1,9 +1,10 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /*
- * The production smoke suite (#31): proves a deployment works, against any running app, without writing data —
- * the guest cart lives in a cookie, nothing is ordered, nobody signs in or up. It needs no local stack and
- * starts no server: E2E_BASE_URL names the deployment.
+ * The production smoke suite (#31): proves a deployment works, against any running app, without changing shop
+ * data — nothing is ordered, nobody signs in or up; the only writes are the guest cart's cookie and the cart's
+ * rate-limit counter rows (consume_rate_limit, expiring on their own). It needs no local stack and starts no
+ * server: E2E_BASE_URL names the deployment.
  *
  *   E2E_BASE_URL=https://tjs-next.vercel.app npx playwright test -c e2e/smoke-prod/playwright.config.ts
  *

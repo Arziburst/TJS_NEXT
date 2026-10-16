@@ -16,8 +16,9 @@ const MASKS: [RegExp, string][] = [
   [/\b(bearer|basic)\s+[\w.~+/=-]+/gi, "$1 <token>"],
   // an international number: +38 (066) 830 10 29, +380668301029
   [/\+\d[\d\s().-]{7,}\d/g, "<phone>"],
-  // a Ukrainian national number with or without spaces, dashes or brackets: 066 830 10 29, (066) 830-10-29
-  [/(?<![\w.])\(?0\d{2}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}(?!\w)/g, "<phone>"],
+  // a Ukrainian national number with or without spaces, dashes or brackets — 066 830 10 29, (066) 830-10-29 —
+  // also one cut short by V8's message truncation after its first six digits ("(066) 830-")
+  [/(?<![\w.:])\(?0\d{2}\)?[\s-]?\d{3}(?:[\s-]?\d{1,2}){0,2}(?!\w)/g, "<phone>"],
   [/\b\d{10,}\b/g, "<number>"],
   [/\b[A-Za-z0-9_-]{32,}\b/g, "<token>"],
 ];

@@ -1,6 +1,6 @@
 import { inspect } from "node:util";
 import { describe, expect, it, vi } from "vitest";
-import { maskConsole, maskConsoleArgs } from "./console";
+import { maskConsole, maskConsoleArgs, writeMaskedLine } from "./console";
 import { scrub } from "./mask";
 
 describe("scrub", () => {
@@ -16,6 +16,9 @@ describe("scrub", () => {
     for (const phone of ["066 830 10 29", "(066) 830-10-29", "066-830-10-29", "(066)8301029", "0668301029"]) {
       expect(scrub(`call ${phone} now`), phone).not.toMatch(/\d{2}/);
     }
+    // cut short by V8's truncation of a JSON error message
+    expect(scrub(`Unexpected token '(', "(066) 830-"... is not valid JSON`)).toBe(`Unexpected token '(', "<phone>-"... is not valid JSON`);
+    expect(scrub(`"066 830 1"`)).toBe(`"<phone>"`);
     expect(scrub("+38 066 830 10 29")).toBe("<phone>");
     expect(scrub("+380668301029")).toBe("<phone>");
     // dates, times, ports and stack positions stay readable
@@ -71,5 +74,15 @@ describe("maskConsole", () => {
     expect(label).toBe("Unhandled Rejection:");
     expect(logged.message).toBe("lost order of <email>");
     expect(warn).toHaveBeenCalledWith("phone <phone>");
+  });
+
+  it("lets the structured event, masked already, past the wrapper with its ids", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    maskConsole(console);
+    const id = "id 6b1e0c7a5f3d4e2b9a8c7d6e5f4a3b2c";
+    console.error(id);
+    writeMaskedLine(id);
+    expect(spy.mock.calls).toEqual([["id <token>"], [id]]);
+    spy.mockRestore();
   });
 });
