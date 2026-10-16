@@ -49,9 +49,11 @@ export function AccountMenuClient({ displayName, adminLinks, savedLocale, classN
   const [signingOut, startSignOut] = useTransition();
 
   // A signed-in user who reads the shop in another language gets Auth's emails in it from now on. Only a
-  // difference calls the server, which checks the session and the rate limit itself.
+  // difference from a stored locale calls the server, which checks the session and the rate limit itself. An
+  // account without one (signed up before #99, with Google, or made by an admin) is left alone: its emails
+  // follow the page they are asked from.
   useEffect(() => {
-    if (locale === savedLocale || locale === sentLocale) return;
+    if (savedLocale === null || locale === savedLocale || locale === sentLocale) return;
     sentLocale = locale;
     void rememberLocale(locale);
   }, [locale, savedLocale]);

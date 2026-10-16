@@ -306,7 +306,9 @@ Supabase Auth's templates have one language. With the **Send Email Hook** on, Au
 
 Answers: `{}` with 200 on success, `{ "error": { "http_code", "message" } }` otherwise. The token and the link are
 never logged. The locale is stored at sign-up (`options.data.locale`) and, while signed in, when the page's locale
-differs from the stored one (the account menu calls `rememberLocale`, at most 20 changes an hour per account).
+differs from the stored one (the account menu calls `rememberLocale`, at most 20 changes an hour per account). An
+account without a stored locale (signed up before #99, with Google, or made by an admin) keeps none: its emails
+follow the page they are asked from.
 
 **Locally the hook is off** (`[auth.hook.send_email] enabled = false` in `config.toml`): Auth sends the English
 templates of `supabase/templates/` to Mailpit as before, and nothing needs a secret or email keys. To try it, start
