@@ -1,7 +1,7 @@
 import { Suspense, type ReactNode } from "react";
 import { CartHeaderSlot } from "@/components/cart/cart-header-slot";
 import { FavoritesHeaderSlot } from "@/components/favorites/favorites-header-slot";
-import { Toaster } from "@/components/ui/sonner";
+import { LazyToaster } from "./lazy-toaster";
 import { AccountMenu } from "./account-menu";
 import { Footer } from "./footer";
 import { FooterContacts } from "./footer-contacts";
@@ -24,7 +24,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       />
       <div className="flex flex-1 flex-col">{children}</div>
       <Footer contacts={<FooterContacts />} />
-      <Toaster />
+      <LazyToaster />
     </>
   );
 }

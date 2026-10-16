@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { getCurrentUser } from "@/lib/auth/session";
-import { AccountMenuClient } from "./account-menu-client";
+import { AccountMenuClient } from "./account-menu-lazy";
 import { AccountSlot } from "./header-slots";
 
 /**

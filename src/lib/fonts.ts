@@ -7,13 +7,16 @@ import { Cormorant_Garamond, Inter, Playfair_Display, Raleway } from "next/font/
  */
 export const DISPLAY_FONT: "A" | "B" = "A";
 
-// `subsets` picks only what is preloaded: the latin-ext and cyrillic faces stay in the CSS and load on
-// demand (unicode-range), so a page no longer preloads ~380 KB of fonts ahead of its LCP image (#53)
+// The latin-ext and cyrillic faces stay in the CSS and load on demand (unicode-range), so a page no longer
+// preloads ~380 KB of fonts ahead of its LCP image (#53). Not preloaded either (#105): a preload fetches both
+// styles, and the italic (44 KB) is never above the fold; the faces a page shows load when its CSS lays the
+// text out, which swaps from the size-adjusted fallback without a shift.
 export const raleway = Raleway({
   subsets: ["latin"],
   style: ["normal", "italic"],
   variable: "--font-raleway",
   display: "swap",
+  preload: false,
 });
 
 // only inputs and selects use Inter: not preloaded, so pages without a form never fetch it

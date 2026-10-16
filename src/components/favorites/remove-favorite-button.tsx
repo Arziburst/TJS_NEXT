@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import { setFavorite } from "@/app/[locale]/favorites/actions";
 import { Button } from "@/components/ui/button";
 import { settleFavorite, wishFavorite } from "./favorites-store";

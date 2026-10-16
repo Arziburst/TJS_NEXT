@@ -1,15 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState, type ReactNode } from "react";
-import { SearchForm } from "@/components/search/search-form";
-import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { isRouteEnabled } from "@/config/routes";
+import dynamic from "next/dynamic";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { MenuBarsIcon, MenuCloseIcon } from "./icons";
-import { Logo } from "./logo";
-import { NAV_LEFT, NAV_RIGHT } from "./nav-items";
-import { NavLink } from "./nav-link";
+import { MenuBarsIcon } from "./icons";
+import { useLazySheet } from "./lazy-sheet";
 
 type MobileMenuProps = {
   className?: string;
@@ -19,59 +15,35 @@ type MobileMenuProps = {
   footer: ReactNode;
 };
 
-// Full-width sheet from the left; hidden from 1024px up by the caller's CSS, never by window width.
+const loadSheet = () => import("./mobile-menu-sheet");
+const MobileMenuSheet = dynamic(() => loadSheet().then((module) => module.MobileMenuSheet), { ssr: false });
+
+// Full-width sheet from the left; hidden from 1024px up by the caller's CSS, never by window width. The sheet's
+// code loads on first use (lazy-sheet.ts).
 export function MobileMenu({ className, languageSwitcher, currencySwitcher, account, footer }: MobileMenuProps) {
   const t = useTranslations("nav");
-  const [open, setOpen] = useState(false);
-  const close = () => setOpen(false);
+  const { open, setOpen, mounted, triggerProps, finalFocus } = useLazySheet(loadSheet);
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
+    <>
+      <button
+        {...triggerProps}
         aria-label={t("openMenu")}
         className={cn("flex h-11 items-center transition-opacity hover:opacity-70", className)}
       >
         <MenuBarsIcon />
-      </SheetTrigger>
-      <SheetContent side="left" showCloseButton={false} className="gap-0">
-        <div className="page-container flex items-center justify-between py-4">
-          <SheetClose aria-label={t("closeMenu")} className="flex h-11 items-center transition-opacity hover:opacity-70">
-            <MenuCloseIcon />
-          </SheetClose>
-          <SheetTitle render={<div />}>
-            <Logo onNavigate={close} />
-          </SheetTitle>
-          <span className="w-[25px]" aria-hidden />
-        </div>
-        {isRouteEnabled("search") && (
-          <div className="page-container pt-2">
-            <SearchForm id="menu-search" onSubmit={close} />
-          </div>
-        )}
-        <nav aria-label={t("main")} className="page-container flex grow flex-col">
-          <ul className="flex grow flex-col items-center justify-evenly gap-5 py-6">
-            {[...NAV_LEFT, ...NAV_RIGHT].map((item) => (
-              <li key={item.href}>
-                <NavLink {...item} onNavigate={close} />
-              </li>
-            ))}
-            <li className="flex flex-col items-center gap-2" data-slot="mobile-language-switcher">
-              <span className="font-sans text-base font-semibold tracking-[1.6px] italic">{t("language")}</span>
-              {languageSwitcher}
-            </li>
-            <li className="flex flex-col items-center gap-2" data-slot="mobile-currency-switcher">
-              <span className="font-sans text-base font-semibold tracking-[1.6px] italic">{t("currency")}</span>
-              {currencySwitcher}
-            </li>
-            {account && (
-              <li data-slot="mobile-account" onClick={close}>
-                {account}
-              </li>
-            )}
-          </ul>
-        </nav>
-        {footer}
-      </SheetContent>
-    </Sheet>
+      </button>
+      {mounted && (
+        <MobileMenuSheet
+          open={open}
+          onOpenChange={setOpen}
+          finalFocus={finalFocus}
+          languageSwitcher={languageSwitcher}
+          currencySwitcher={currencySwitcher}
+          account={account}
+          footer={footer}
+        />
+      )}
+    </>
   );
 }

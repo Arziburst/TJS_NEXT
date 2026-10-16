@@ -3,7 +3,7 @@ import { CartItemImage } from "@/components/cart/cart-item-image";
 import { productHref, SHOP_HREF } from "@/components/catalog/links";
 import { Price } from "@/components/price";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { Link } from "@/i18n/navigation";
 import { getFavoritesView, type FavoriteItem } from "@/lib/favorites";
 import { cn } from "@/lib/utils";

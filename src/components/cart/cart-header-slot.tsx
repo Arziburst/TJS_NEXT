@@ -4,7 +4,7 @@ import { productHref, SHOP_HREF } from "@/components/catalog/links";
 import { CartSlot } from "@/components/layout/header-slots";
 import { Price, PriceTotal } from "@/components/price";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { routes } from "@/config/routes";
 import { Link } from "@/i18n/navigation";
 import { getCartView, lineKey, orderableLines, regularLines, type CartItem, type CartView } from "@/lib/cart";
