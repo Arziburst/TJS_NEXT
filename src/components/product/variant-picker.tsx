@@ -75,7 +75,7 @@ export function VariantPicker({ options }: { options: VariantOption[] }) {
         <p className="text-sm">{t("noneAvailable")}</p>
       ) : (
         selected === null && (
-          <p className="text-sm" id="variant-hint">
+          <p className="text-sm">
             {t("choose")}
           </p>
         )

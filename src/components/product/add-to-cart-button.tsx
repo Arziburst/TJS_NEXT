@@ -92,7 +92,6 @@ export function AddToCartButton({ productId, fulfillment, inCart, max, addToCart
         onClick={onClick}
         disabled={done || isPending}
         aria-live="polite"
-        aria-describedby={key === null ? "variant-hint" : undefined}
         className="sb:self-start"
       >
         {oneOfAKind && current > 0 ? t("addedToCart") : t("addToCart")}

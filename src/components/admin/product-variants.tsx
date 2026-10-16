@@ -196,7 +196,7 @@ export function ProductVariants({ productId, priceUsdMinor, variants, actions }:
       {ordered.length === 0 ? (
         <p className="font-input text-sm">{t("empty")}</p>
       ) : (
-        <ol ref={listRef} className="grid gap-2 sb:grid-cols-2" aria-busy={pending}>
+        <ol ref={listRef} className="grid gap-2 sb:max-w-xl" aria-busy={pending}>
           {ordered.map((variant, index) => {
             const name = nameOf(variant);
             const first = index === 0;
