@@ -4,7 +4,7 @@ All user-visible text of the app, read through next-intl. One folder per locale 
 namespace:
 
 ```
-messages/<locale>/{common,nav,home,catalog,product,cart,checkout,auth,account,admin,errors}.json
+messages/<locale>/{common,nav,home,catalog,product,cart,checkout,auth,account,admin,errors,notifications}.json
 ```
 
 - `en` is the source: its files define the keys and the TypeScript types (`src/i18n/messages.ts`,
@@ -36,7 +36,9 @@ price; the legacy app had no such texts beyond `errors.form.chooseCity` / `choos
 locales by machine, unreviewed; from #18 the admin's photo editor `admin.images.*` (`admin.form.photosReadOnly`
 removed), written in en, uk and the other 9 locales by machine, unreviewed; from #24 `checkout.request.*` (the
 order request form and its errors) and `checkout.done.*` (its confirmation), written in en, uk and the other 9
-locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
+locales by machine, unreviewed; from #26 the `notifications` namespace (the owner's Telegram message, read in uk,
+and the customer's emails; the legacy app sent no email, its Russian Telegram labels were not kept), written in
+en, uk and the other 9 locales by machine, unreviewed. Legacy `{{ index }}` arguments became named ICU
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the
 admin enters USD).
 

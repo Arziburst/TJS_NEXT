@@ -1,0 +1,78 @@
+{
+  "telegram": {
+    "newOrder": "Cerere nouă de comandă nr. {number}",
+    "placed": "Primită: {date}",
+    "customer": "Client",
+    "phone": "Telefon",
+    "email": "E-mail",
+    "language": "Limbă",
+    "lines": "Piese",
+    "line": "{title} × {quantity} — {total}",
+    "moreLines": "…și încă {count, plural, one {# rând} few {# rânduri} other {# de rânduri}}",
+    "goodsTotal": "Total pentru piese",
+    "delivery": "Livrare",
+    "estimate": "Estimare",
+    "comment": "Comentariu",
+    "openAdmin": "Deschide comanda în administrare"
+  },
+  "delivery": {
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "la o filială",
+      "postomat": "la un locker de colete",
+      "doors": "prin curier la adresă",
+      "division": "la o filială, un locker sau un punct de ridicare",
+      "address": "prin curier la adresă"
+    },
+    "flat": "ap. {flat}",
+    "estimateAmount": "≈ {amount}",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calculată de curier"
+  },
+  "status": {
+    "new": "Nouă",
+    "pending_payment": "În așteptarea plății",
+    "paid": "Plătită",
+    "in_processing": "În curs de procesare",
+    "accepted": "Acceptată",
+    "closed": "Finalizată",
+    "canceled": "Anulată",
+    "refunded": "Rambursată"
+  },
+  "email": {
+    "confirmation": {
+      "subject": "Cererea dvs. de comandă nr. {number} a fost primită",
+      "title": "Cerere de comandă primită",
+      "thanks": "Vă mulțumim, {name}! Cererea dvs. de comandă a fost primită.",
+      "next": "Magazinul vă va contacta în curând pentru a confirma comanda și livrarea."
+    },
+    "statusChange": {
+      "subject": "Comanda nr. {number}: {status}",
+      "title": "Comanda dvs. are un nou status",
+      "greeting": "Bună ziua, {name}!",
+      "text": "Statusul comenzii dvs. nr. {number} este acum: {status}."
+    },
+    "number": "Numărul comenzii",
+    "lines": "Piese comandate",
+    "quantity": "Cantitate: {quantity}",
+    "goodsTotal": "Total pentru piese",
+    "delivery": "Livrare",
+    "deliveryEstimate": "Livrare (estimare)",
+    "deliveryNote": "Livrarea nu este inclusă în total: prețul real al livrării îl plătiți curierului la primire.",
+    "customsNotice": "La livrare, destinatarul poate avea de plătit TVA la import și taxe vamale.",
+    "contactTitle": "Contactați magazinul",
+    "contactTbd": "Canale de contact: TBD",
+    "channel": {
+      "phone": "Telefon",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "whatsapp": "WhatsApp",
+      "email": "E-mail"
+    },
+    "footer": "Primiți acest e-mail deoarece pe {site} a fost trimisă o cerere de comandă cu această adresă."
+  }
+}

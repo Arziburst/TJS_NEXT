@@ -1,0 +1,15 @@
+Order No. 10042: In processing
+
+Your order has a new status
+
+Hello, Олена <b>!
+The status of your order No. 10042 is now: In processing.
+
+Contact the shop
+Phone: +38 (066) 123-45-67
+Instagram: @tjs_shop
+Telegram: https://t.me/tjs_shop
+Email: hello@example.test
+
+--
+You get this email because an order request with this address was sent on shop.example.test.

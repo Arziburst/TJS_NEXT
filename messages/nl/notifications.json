@@ -1,0 +1,78 @@
+{
+  "telegram": {
+    "newOrder": "Nieuwe bestelaanvraag nr. {number}",
+    "placed": "Ontvangen: {date}",
+    "customer": "Klant",
+    "phone": "Telefoon",
+    "email": "E-mail",
+    "language": "Taal",
+    "lines": "Stuks",
+    "line": "{title} × {quantity} — {total}",
+    "moreLines": "…en {count, plural, one {# regel meer} other {# regels meer}}",
+    "goodsTotal": "Totaal voor de stuks",
+    "delivery": "Verzending",
+    "estimate": "Schatting",
+    "comment": "Opmerking",
+    "openAdmin": "Bestelling openen in het beheer"
+  },
+  "delivery": {
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "naar een filiaal",
+      "postomat": "naar een pakketautomaat",
+      "doors": "per koerier naar het adres",
+      "division": "naar een filiaal, pakketautomaat of afhaalpunt",
+      "address": "per koerier naar het adres"
+    },
+    "flat": "appartement {flat}",
+    "estimateAmount": "≈ {amount}",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "berekend door de vervoerder"
+  },
+  "status": {
+    "new": "Nieuw",
+    "pending_payment": "Wacht op betaling",
+    "paid": "Betaald",
+    "in_processing": "In behandeling",
+    "accepted": "Geaccepteerd",
+    "closed": "Afgesloten",
+    "canceled": "Geannuleerd",
+    "refunded": "Terugbetaald"
+  },
+  "email": {
+    "confirmation": {
+      "subject": "Je bestelaanvraag nr. {number} is ontvangen",
+      "title": "Bestelaanvraag ontvangen",
+      "thanks": "Bedankt, {name}! Je bestelaanvraag is ontvangen.",
+      "next": "De winkel neemt binnenkort contact met je op om de bestelling en de verzending te bevestigen."
+    },
+    "statusChange": {
+      "subject": "Bestelling nr. {number}: {status}",
+      "title": "Je bestelling heeft een nieuwe status",
+      "greeting": "Hallo {name}!",
+      "text": "De status van je bestelling nr. {number} is nu: {status}."
+    },
+    "number": "Bestelnummer",
+    "lines": "Bestelde stuks",
+    "quantity": "Aantal: {quantity}",
+    "goodsTotal": "Totaal voor de stuks",
+    "delivery": "Verzending",
+    "deliveryEstimate": "Verzending (schatting)",
+    "deliveryNote": "De verzending zit niet in het totaal: de werkelijke verzendprijs betaal je bij ontvangst aan de vervoerder.",
+    "customsNotice": "Bij bezorging moet de ontvanger mogelijk invoer-btw en douanerechten betalen.",
+    "contactTitle": "Contact met de winkel",
+    "contactTbd": "Contactkanalen: TBD",
+    "channel": {
+      "phone": "Telefoon",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "whatsapp": "WhatsApp",
+      "email": "E-mail"
+    },
+    "footer": "Je ontvangt deze e-mail omdat er op {site} een bestelaanvraag met dit adres is verstuurd."
+  }
+}
