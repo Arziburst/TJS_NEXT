@@ -9,6 +9,7 @@ import { hasLocale } from "next-intl";
 import { routing, type Locale } from "@/i18n/routing";
 import type { Database } from "@/lib/supabase/database.types";
 import { createSessionClient, type ServerSupabaseClient } from "@/lib/supabase/server";
+import { testErrorRequested } from "@/lib/test-error";
 
 export type UserRole = Database["public"]["Enums"]["user_role"];
 
@@ -68,6 +69,7 @@ export async function resolveUser(client: ServerSupabaseClient): Promise<Current
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   // request time only: the Auth client reads the clock (token expiry), which a prerender must not do
   await connection();
+  if (await testErrorRequested("session")) throw new SessionUnavailableError();
   return resolveUser(await createSessionClient());
 });
 

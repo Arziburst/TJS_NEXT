@@ -34,3 +34,21 @@ export function AccountSlot({ className }: { className?: string }) {
     </Link>
   );
 }
+
+// The account slot while the session cannot be read (#112): the sign-in link, a dot and a hint to try again.
+export function AccountUnavailableSlot() {
+  const t = useTranslations("nav");
+  const tError = useTranslations("errors.boundary");
+  return (
+    <Link
+      href={routes.signIn.path}
+      aria-label={`${t("account")}. ${tError("accountUnavailable")}`}
+      title={tError("accountUnavailable")}
+      data-account-unavailable=""
+      className={cn(iconLink, "relative")}
+    >
+      <UserIcon aria-hidden />
+      <span aria-hidden className="absolute top-2.5 right-2.5 size-2 rounded-full bg-accent ring-2 ring-background" />
+    </Link>
+  );
+}

@@ -2,7 +2,7 @@
 
 import { ChevronDownIcon, CircleAlertIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { startTransition, useActionState, useEffect, useRef, useState, useTransition, type FormEvent } from "react";
+import { startTransition, useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { toast } from "sonner";
 import type { DeleteTermResult, SaveTermState } from "@/app/[locale]/admin/attributes/actions";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import type { AdminTerm } from "@/lib/admin/taxonomy";
 import { TERM_NAME_MAX_LENGTH, termNameField } from "@/lib/admin/taxonomy-form";
 import type { TaxonomyKind } from "@/lib/catalog/types";
 import { cn } from "@/lib/utils";
+import { useFormActionState } from "./form-action";
 import { fieldId } from "./form-fields";
 import { inputClass, labelClass } from "./styles";
 
@@ -31,6 +32,7 @@ type Actions = {
 };
 
 const idle: SaveTermState = { status: "idle" };
+const unexpected: SaveTermState = { status: "error", error: "unexpectedError" };
 // the first two locales are always open; the rest behind "Other languages"
 const MAIN_LOCALES = EDITOR_LOCALES.slice(0, 2);
 const OTHER_LOCALES = EDITOR_LOCALES.slice(2);
@@ -41,7 +43,7 @@ type TermFormProps = Pick<Actions, "saveTerm"> & { kind: TaxonomyKind; term: Adm
 function TermForm({ kind, term, saveTerm, idPrefix }: TermFormProps) {
   const t = useTranslations("admin.taxonomy");
   const tLocales = useTranslations("nav.localeNames");
-  const [state, dispatch, pending] = useActionState(saveTerm, idle);
+  const [state, dispatch, pending] = useFormActionState(saveTerm, idle, unexpected);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
