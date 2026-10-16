@@ -96,10 +96,11 @@ export const BASE_SECURITY_HEADERS: readonly HeaderEntry[] = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   // the shop uses none of these; the admin photo upload is a file input (the camera app opens through the OS
-  // file picker, which no permission governs)
+  // file picker, which no permission governs). Only features every Chromium build recognises: Linux Chromium
+  // does not know bluetooth and logs it as an error on every page (#134).
   {
     key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()",
+    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), browsing-topics=()",
   },
   // the same as frame-ancestors 'none', for browsers without CSP level 2
   { key: "X-Frame-Options", value: "DENY" },

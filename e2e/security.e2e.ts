@@ -101,7 +101,10 @@ test.describe("security headers", () => {
       expect(headers["content-security-policy"]).not.toMatch(/nova|resend|telegram/i);
       expect(headers["x-content-type-options"]).toBe("nosniff");
       expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
-      expect(headers["permissions-policy"]).toContain("camera=()");
+      // every feature the shop does not use stays denied (bluetooth dropped, unknown to Linux Chromium: #134)
+      expect(headers["permissions-policy"]).toBe(
+        "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), browsing-topics=()",
+      );
       expect(headers["x-frame-options"]).toBe("DENY");
       // plain http here: no HSTS
       expect(headers["strict-transport-security"]).toBeUndefined();
@@ -111,6 +114,29 @@ test.describe("security headers", () => {
       expect(https.headers()["strict-transport-security"]).toBe("max-age=63072000");
     });
   }
+
+  test("Chromium recognises every feature of the Permissions-Policy and denies it (#134)", async ({ page }) => {
+    // an unknown feature is logged on every page ("Error with Permissions-Policy header: Unrecognized feature")
+    // and denies nothing
+    const logged: string[] = [];
+    page.on("console", (message) => {
+      if (message.text().includes("Permissions-Policy")) logged.push(`${message.type()}: ${message.text()}`);
+    });
+    // the admin answers a guest with its sign-in page: the same headers, a page of the admin's route
+    for (const path of [paths.home, "/uk/shop", paths.product, paths.admin]) {
+      const response = await page.goto(path);
+      await page.waitForLoadState("networkidle");
+      const features = [...(response?.headers()["permissions-policy"] ?? "").matchAll(/([a-z-]+)=\(\)/g)].map((m) => m[1]);
+      expect(features, path).toContain("camera");
+      const unknownOrAllowed = await page.evaluate((names) => {
+        const policy = (document as unknown as { featurePolicy: { features(): string[]; allowsFeature(f: string): boolean } })
+          .featurePolicy;
+        return names.filter((name) => !policy.features().includes(name) || policy.allowsFeature(name));
+      }, features);
+      expect(unknownOrAllowed, path).toEqual([]);
+    }
+    expect(logged).toEqual([]);
+  });
 
   test("pages carry the strict policy report-only, with a fresh nonce on the scripts rendered per request", async ({ request }) => {
     const first = await request.get("/uk/shop");
