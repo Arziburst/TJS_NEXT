@@ -58,6 +58,11 @@ table has its own names; keep the two in step (D31: uk necklaces is «Намис
 Unreviewed machine translations must be checked by a native speaker before the locale is promoted
 (D3); business texts keep the legacy meaning and are not reworded here.
 
+From #67 the collections and sales (the legacy app had neither): `catalog.collections.*`, `catalog.sort.featured`,
+`home.collections`, `common.price.regular` / `sale` (the screen-reader labels of a struck-through price),
+`checkout.request.errors.pricesChanged`, the admin's `admin.collections.*`, `admin.sale.*` and
+`admin.shell.collections`, written in en, uk and the other 9 locales by machine, unreviewed.
+
 ## Reworded legacy texts — for the owner
 
 While porting (#10) some legacy en/uk texts were reworded with the meaning kept. The owner decides per
