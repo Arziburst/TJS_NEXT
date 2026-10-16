@@ -20,9 +20,11 @@ export type VariantFieldError = "labelRequired" | "tooLong" | "invalidDelta" | "
 /** Field name → error: `label.<locale>`, `priceDelta`, `skuSuffix`. */
 export type VariantFieldErrors = Partial<Record<string, VariantFieldError>>;
 
-/** What admin_save_product_variant takes. */
+export type VariantLabelSource = "human" | "machine";
+
+/** What admin_save_product_variant takes (a label without a source is the admin's own: human). */
 export type VariantInput = {
-  labels: { locale: Locale; label: string }[];
+  labels: { locale: Locale; label: string; source?: VariantLabelSource }[];
   sku_suffix: string | null;
   price_delta_usd_minor: number;
 };
@@ -79,6 +81,20 @@ export function parseVariantForm(values: VariantFormInput, productPriceUsdMinor:
 
   if (Object.keys(fields).length > 0 || delta === null) return { ok: false, fields };
   return { ok: true, input: { labels, sku_suffix: suffix === "" ? null : suffix, price_delta_usd_minor: delta } };
+}
+
+/**
+ * The source of each label of a re-saved size, like a product's translations (sourceAfterSave): a label the
+ * admin left as it was keeps its own (a machine name stays machine), an edited or new one is the admin's (human).
+ */
+export function labelSources(
+  labels: VariantInput["labels"],
+  stored: readonly { locale: string; label: string; source: VariantLabelSource }[],
+): VariantInput["labels"] {
+  return labels.map(({ locale, label }) => {
+    const before = stored.find((s) => s.locale === locale);
+    return { locale, label, source: before && before.label === label ? before.source : "human" };
+  });
 }
 
 /** "−2.50" style text of a stored difference, for the editor's field (cents → a plain signed decimal). */

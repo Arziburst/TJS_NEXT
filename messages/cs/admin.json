@@ -205,6 +205,7 @@
     "noSourceOption": "Zatím bez textu",
     "targets": "Do",
     "existing": "má text",
+    "incomplete": "neúplný",
     "overwrite": "Nahradit i existující texty",
     "submit": "{count, plural, =0 {Přeložit} one {Přeložit do # jazyka} few {Přeložit do # jazyků} many {Přeložit do # jazyka} other {Přeložit do # jazyků}}",
     "running": "Překládáme do {count, plural, one {# jazyka} few {# jazyků} many {# jazyka} other {# jazyků}}… Trvá to minutu až dvě.",
