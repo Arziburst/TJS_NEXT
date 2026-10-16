@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useId, useRef, useState, useTransition, type FormEvent } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import type { OrderNoteActionResult } from "@/app/[locale]/admin/orders/actions";
 import { Button } from "@/components/ui/button";
 import { ORDER_NOTE_MAX_LENGTH } from "@/lib/admin/order-status";

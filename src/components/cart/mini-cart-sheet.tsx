@@ -1,9 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useState, type MouseEvent, type ReactNode } from "react";
-import { MenuCloseIcon } from "@/components/layout/icons";
-import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import dynamic from "next/dynamic";
+import type { ReactNode } from "react";
+import { useLazySheet } from "@/components/layout/lazy-sheet";
 import { cn } from "@/lib/utils";
 
 type MiniCartSheetProps = {
@@ -16,34 +15,28 @@ type MiniCartSheetProps = {
   className?: string;
 };
 
-// The header's mini-cart below 1024px: a sheet from the right. Hidden from 1024px up by the caller's CSS.
+const loadPanel = () => import("./mini-cart-panel");
+const MiniCartPanel = dynamic(() => loadPanel().then((module) => module.MiniCartPanel), { ssr: false });
+
+// The header's mini-cart below 1024px: a sheet from the right, its code loaded on first use
+// (layout/lazy-sheet.ts). Hidden from 1024px up by the caller's CSS.
 export function MiniCartSheet({ label, icon, children, className }: MiniCartSheetProps) {
-  const t = useTranslations("nav");
-  const [open, setOpen] = useState(false);
-  // any link inside (a product, the cart page, the shop) closes the sheet as it navigates
-  const closeOnLink = (event: MouseEvent) => {
-    if ((event.target as HTMLElement).closest("a")) setOpen(false);
-  };
+  const { open, setOpen, mounted, triggerProps, finalFocus } = useLazySheet(loadPanel);
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
+    <>
+      <button
+        {...triggerProps}
         aria-label={label}
         className={cn("relative inline-flex size-11 items-center justify-center transition-opacity hover:opacity-70 [&_svg]:size-5", className)}
       >
         {icon}
-      </SheetTrigger>
-      <SheetContent side="right" showCloseButton={false} className="gap-0">
-        <div className="page-container flex items-center justify-between py-4">
-          <SheetTitle className="font-display text-3xl uppercase">{t("cart")}</SheetTitle>
-          <SheetClose aria-label={t("closeCart")} className="flex h-11 items-center transition-opacity hover:opacity-70">
-            <MenuCloseIcon />
-          </SheetClose>
-        </div>
-        <div className="page-container flex grow flex-col pb-6" onClick={closeOnLink}>
+      </button>
+      {mounted && (
+        <MiniCartPanel open={open} onOpenChange={setOpen} finalFocus={finalFocus}>
           {children}
-        </div>
-      </SheetContent>
-    </Sheet>
+        </MiniCartPanel>
+      )}
+    </>
   );
 }

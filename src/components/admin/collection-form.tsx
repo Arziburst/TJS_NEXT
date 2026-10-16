@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useId, useState, useTransition, type FormEvent } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import type { SaveCollectionResult } from "@/app/[locale]/admin/collections/actions";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

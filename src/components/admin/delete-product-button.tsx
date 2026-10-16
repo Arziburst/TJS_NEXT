@@ -3,7 +3,7 @@
 import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/layout/toast";
 import type { ProductActionResult } from "@/app/[locale]/admin/actions";
 import { Button } from "@/components/ui/button";
 import {

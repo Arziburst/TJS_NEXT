@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { productHref, SHOP_HREF } from "@/components/catalog/links";
 import { Price, PriceTotal } from "@/components/price";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { Link } from "@/i18n/navigation";
 import { getCartView, lineKey, orderableLines, regularLines, type CartItem } from "@/lib/cart";
 import { lineTitle, maxQuantity } from "@/lib/cart/lines";

@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { isRouteEnabled, routes } from "@/config/routes";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
