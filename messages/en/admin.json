@@ -33,7 +33,8 @@
     "attributes": "Materials & colours",
     "viewShop": "Shop",
     "orders": "Orders",
-    "ordersWithNew": "Orders, {count, plural, one {# new request} other {# new requests}}"
+    "ordersWithNew": "Orders, {count, plural, one {# new request} other {# new requests}}",
+    "settings": "Settings"
   },
   "status": {
     "draft": "Draft",
@@ -523,6 +524,108 @@
       "historyPlaced": "Request placed",
       "historyChange": "{from} → {to}",
       "historyBy": "{date}, {name}"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "intro": "How customers reach you, how prices are converted and your story. A saved change shows on the site with the next page load.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved. The site shows it now.",
+    "loadError": "The settings could not be loaded. Please reload the page.",
+    "errorSummary": "{count, plural, one {# field needs your attention} other {# fields need your attention}}",
+    "errors": {
+      "notAuthorized": "Only the admin can do this. Please sign in again.",
+      "unexpectedError": "The settings could not be saved. Please try again."
+    },
+    "contacts": {
+      "title": "Contacts",
+      "hint": "Shown in the footer of every page, on the order confirmation and in emails to customers. Leave a field empty to hide that channel.",
+      "shopName": "Shop name",
+      "shopNameHint": "Used on the order confirmation and in emails.",
+      "instagram": "Instagram",
+      "instagramHint": "Your account name (@name) or the link to your profile.",
+      "email": "Email",
+      "emailHint": "For example shop@example.com.",
+      "phone": "Phone",
+      "phoneHint": "With the country code, for example +38 (066) 123 45 67. Shown as you write it.",
+      "telegram": "Telegram chat",
+      "telegramHint": "Your username (@name) or a t.me link.",
+      "viber": "Viber chat",
+      "viberHint": "Your phone number with the country code, or a Viber invite link.",
+      "whatsapp": "WhatsApp chat",
+      "whatsappHint": "Your phone number with the country code, or a wa.me link.",
+      "notifications": "Notifications",
+      "telegramChatId": "Telegram chat id for new orders",
+      "telegramChatIdHint": "The chat where the shop's bot announces new orders: a number (a group's id starts with -100). Never shown on the site.",
+      "tooLong": "At most {max} characters",
+      "invalid": {
+        "shopName": "Enter a name",
+        "instagram": "Enter an account name like @name or an instagram.com profile link",
+        "email": "Enter an email address like shop@example.com",
+        "phone": "Enter a phone number with the country code: digits, spaces, brackets and dashes",
+        "telegram": "Enter a username like @name (at least 5 characters) or a t.me link",
+        "viber": "Enter a phone number with the country code or a Viber invite link",
+        "whatsapp": "Enter a phone number with the country code or a wa.me link",
+        "telegramChatId": "Enter the chat id as a number, for example -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Prices in other currencies",
+      "hint": "You set every price in USD. Visitors see it converted at the NBU rate plus the markup, rounded up to a neat price.",
+      "markup": "Markup, %",
+      "markupHint": "Added to the NBU rate in every currency, USD included. 3 means 3 %.",
+      "rulesTitle": "Rounding",
+      "rulesHint": "A price is rounded up to the next step plus the ending: step 10 and ending 9 give 1 289, 1 299 and so on. Prices below the optional threshold use the small step instead: step 1 and ending 0.90 give 29.90.",
+      "step": "Step",
+      "ending": "Ending",
+      "smallBelow": "Small prices below",
+      "smallStep": "Small step",
+      "smallEnding": "Small ending",
+      "example": "Example price, USD",
+      "exampleHint": "Each currency below shows how this price looks with the values above.",
+      "shownAs": "Shown as",
+      "noRate": "No rate yet",
+      "errors": {
+        "required": "This field is required",
+        "invalidNumber": "Enter a number, for example 9.90",
+        "outOfRange": "This value is out of range",
+        "endingTooLarge": "Must be less than the step",
+        "smallTierIncomplete": "Fill in all three small-price fields, or none"
+      }
+    },
+    "about": {
+      "cardHint": "Your story, in each language.",
+      "edit": "Edit the About page",
+      "back": "Settings",
+      "title": "About page",
+      "hint": "Write your story in Ukrainian (required to publish) and in any other language. A language without its own text shows the English one, else the Ukrainian one; such a page is hidden from search engines.",
+      "state": "Page",
+      "text": "Text",
+      "editorHint": "Headings, paragraphs, lists and links only; anything else is removed when you save.",
+      "metaDescription": "Description for search engines",
+      "metaDescriptionHint": "Up to 500 characters. Left empty, the start of the text is used.",
+      "filled": "Written",
+      "empty": "Empty",
+      "requiredToPublish": "Required to publish",
+      "hasErrors": "Has errors",
+      "view": "View the page",
+      "toolbar": {
+        "label": "Formatting",
+        "heading": "Heading",
+        "subheading": "Subheading",
+        "paragraph": "Paragraph",
+        "bulletList": "Bulleted list",
+        "numberedList": "Numbered list",
+        "link": "Link",
+        "unlink": "Remove link",
+        "linkPrompt": "Link address: https://…, mailto:… or tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Write the Ukrainian text before publishing",
+        "tooLong": "This text is too long",
+        "textRequired": "Write the text for this language, or clear its description"
+      }
     }
   }
 }

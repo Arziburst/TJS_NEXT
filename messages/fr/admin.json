@@ -33,7 +33,8 @@
     "attributes": "Matières et couleurs",
     "viewShop": "Boutique",
     "orders": "Commandes",
-    "ordersWithNew": "Commandes, {count, plural, one {# nouvelle demande} other {# nouvelles demandes}}"
+    "ordersWithNew": "Commandes, {count, plural, one {# nouvelle demande} other {# nouvelles demandes}}",
+    "settings": "Paramètres"
   },
   "status": {
     "draft": "Brouillon",
@@ -523,6 +524,108 @@
       "historyPlaced": "Demande passée",
       "historyChange": "{from} → {to}",
       "historyBy": "{date}, {name}"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "intro": "Comment les clients vous contactent, comment les prix sont convertis et votre histoire. Une modification enregistrée apparaît sur le site au prochain chargement de page.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Enregistré. Le site l’affiche maintenant.",
+    "loadError": "Impossible de charger les paramètres. Veuillez recharger la page.",
+    "errorSummary": "{count, plural, one {# champ demande votre attention} other {# champs demandent votre attention}}",
+    "errors": {
+      "notAuthorized": "Seul l’administrateur peut faire cela. Veuillez vous reconnecter.",
+      "unexpectedError": "Impossible d’enregistrer les paramètres. Veuillez réessayer."
+    },
+    "contacts": {
+      "title": "Contacts",
+      "hint": "Affichés en bas de chaque page, dans la confirmation de commande et dans les e-mails aux clients. Laissez un champ vide pour masquer ce canal.",
+      "shopName": "Nom de la boutique",
+      "shopNameHint": "Utilisé dans la confirmation de commande et les e-mails.",
+      "instagram": "Instagram",
+      "instagramHint": "Le nom de votre compte (@name) ou le lien vers votre profil.",
+      "email": "E-mail",
+      "emailHint": "Par exemple shop@example.com.",
+      "phone": "Téléphone",
+      "phoneHint": "Avec l’indicatif du pays, par exemple +38 (066) 123 45 67. Affiché tel que vous l’écrivez.",
+      "telegram": "Discussion Telegram",
+      "telegramHint": "Votre nom d’utilisateur (@name) ou un lien t.me.",
+      "viber": "Discussion Viber",
+      "viberHint": "Votre numéro de téléphone avec l’indicatif du pays, ou un lien d’invitation Viber.",
+      "whatsapp": "Discussion WhatsApp",
+      "whatsappHint": "Votre numéro de téléphone avec l’indicatif du pays, ou un lien wa.me.",
+      "notifications": "Notifications",
+      "telegramChatId": "Identifiant du chat Telegram pour les nouvelles commandes",
+      "telegramChatIdHint": "Le chat où le bot de la boutique annonce les nouvelles commandes : un nombre (l’identifiant d’un groupe commence par -100). Jamais affiché sur le site.",
+      "tooLong": "{max} caractères au maximum",
+      "invalid": {
+        "shopName": "Saisissez un nom",
+        "instagram": "Saisissez un nom de compte comme @name ou un lien de profil instagram.com",
+        "email": "Saisissez une adresse e-mail comme shop@example.com",
+        "phone": "Saisissez un numéro avec l’indicatif du pays : chiffres, espaces, parenthèses et tirets",
+        "telegram": "Saisissez un nom d’utilisateur comme @name (au moins 5 caractères) ou un lien t.me",
+        "viber": "Saisissez un numéro avec l’indicatif du pays ou un lien d’invitation Viber",
+        "whatsapp": "Saisissez un numéro avec l’indicatif du pays ou un lien wa.me",
+        "telegramChatId": "Saisissez l’identifiant du chat sous forme de nombre, par exemple -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Prix dans les autres devises",
+      "hint": "Vous fixez chaque prix en USD. Les visiteurs le voient converti au taux de la BNU plus la majoration, arrondi au supérieur à un prix rond.",
+      "markup": "Majoration, %",
+      "markupHint": "Ajoutée au taux de la BNU dans chaque devise, USD compris. 3 signifie 3 %.",
+      "rulesTitle": "Arrondi",
+      "rulesHint": "Un prix est arrondi au palier suivant plus la terminaison : palier 10 et terminaison 9 donnent 1 289, 1 299, etc. Les prix sous le seuil facultatif utilisent le petit palier : palier 1 et terminaison 0.90 donnent 29.90.",
+      "step": "Palier",
+      "ending": "Terminaison",
+      "smallBelow": "Petits prix sous",
+      "smallStep": "Petit palier",
+      "smallEnding": "Petite terminaison",
+      "example": "Prix d’exemple, USD",
+      "exampleHint": "Chaque devise ci-dessous montre ce prix avec les valeurs ci-dessus.",
+      "shownAs": "Affiché",
+      "noRate": "Pas encore de taux",
+      "errors": {
+        "required": "Ce champ est obligatoire",
+        "invalidNumber": "Saisissez un nombre, par exemple 9.90",
+        "outOfRange": "Cette valeur est hors limites",
+        "endingTooLarge": "Doit être inférieure au palier",
+        "smallTierIncomplete": "Remplissez les trois champs des petits prix, ou aucun"
+      }
+    },
+    "about": {
+      "cardHint": "Votre histoire, dans chaque langue.",
+      "edit": "Modifier la page « À propos »",
+      "back": "Paramètres",
+      "title": "Page « À propos »",
+      "hint": "Écrivez votre histoire en ukrainien (obligatoire pour publier) et dans toute autre langue. Une langue sans texte propre affiche le texte anglais, sinon l’ukrainien ; une telle page est masquée aux moteurs de recherche.",
+      "state": "Page",
+      "text": "Texte",
+      "editorHint": "Titres, paragraphes, listes et liens uniquement ; tout le reste est supprimé à l’enregistrement.",
+      "metaDescription": "Description pour les moteurs de recherche",
+      "metaDescriptionHint": "Jusqu’à 500 caractères. Laissée vide, le début du texte est utilisé.",
+      "filled": "Rédigé",
+      "empty": "Vide",
+      "requiredToPublish": "Obligatoire pour publier",
+      "hasErrors": "Contient des erreurs",
+      "view": "Voir la page",
+      "toolbar": {
+        "label": "Mise en forme",
+        "heading": "Titre",
+        "subheading": "Sous-titre",
+        "paragraph": "Paragraphe",
+        "bulletList": "Liste à puces",
+        "numberedList": "Liste numérotée",
+        "link": "Lien",
+        "unlink": "Supprimer le lien",
+        "linkPrompt": "Adresse du lien : https://…, mailto:… ou tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Rédigez le texte ukrainien avant de publier",
+        "tooLong": "Ce texte est trop long",
+        "textRequired": "Rédigez le texte dans cette langue, ou effacez sa description"
+      }
     }
   }
 }

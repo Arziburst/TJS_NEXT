@@ -31,7 +31,11 @@
   },
   "contact": {
     "phone": "Teléfono",
-    "email": "Correo electrónico"
+    "email": "Correo electrónico",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp"
   },
   "cookieConsent": {
     "text": "Usamos cookies para ofrecerte la mejor experiencia en nuestro sitio web. Si continúas navegando, entenderemos que estás de acuerdo.",
@@ -43,7 +47,9 @@
     "imageAlt": "Imagen principal de la página “Sobre nosotros”",
     "missionStart": "amo mi trabajo y quiero aportar alegría y belleza a nuestro mundo.",
     "motto": "¡El lujo asequible es mi lema!",
-    "customOrders": "También creo joyas personalizadas y siempre tengo en cuenta los deseos de mis clientes."
+    "customOrders": "También creo joyas personalizadas y siempre tengo en cuenta los deseos de mis clientes.",
+    "tbd": "Sobre nosotros: TBD",
+    "fallbackNote": "Esta página aún no está disponible en tu idioma."
   },
   "footer": {
     "contactsTbd": "Contactos: TBD",

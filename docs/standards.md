@@ -84,6 +84,17 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   - Check: `e2e/prefetch.e2e.ts` reloads the shop ten times and fails on any response of the page that
     carries `stale-while-revalidate`; or `curl -sD - -o /dev/null -H "rsc: 1" -H
     "next-router-prefetch: 1" -H "next-router-segment-prefetch: /_tree" <url>` on `next start`.
+- **No build-time shell after an admin save (Next 16.4.1, found in #21).** With `partialPrefetching: true`,
+  a page under a second dynamic segment (`/shop/[category]`, `/product/[slug]`) whose entry an `updateTag`
+  just expired is answered once from the build's generic fallback shell while it regenerates in the
+  background: the first request after a save showed the build's footer and prices (and JSON-LD price), a
+  deleted product's page answered 200 from that shell; the second request was right. Pages under `[locale]`
+  only render anew at once (a root param is blocking). Such a route therefore exports
+  `unstable_paramMatching = { <param>: "blocking" }`, which makes Next render it anew instead of serving the
+  fallback shell (turning `partialPrefetching` off fixes it too, but changes prefetching for the whole app).
+  Check: `e2e/settings.e2e.ts` asserts the footer on a category page and a product page, and the
+  product page's price and JSON-LD price, on the first request after each save; `e2e/admin.e2e.ts` the 404
+  of a just-deleted product.
 - **A render that started before a write is never stored (Next 16.4.1, found in #18/#92, fixed in #93).**
   Next dates a `"use cache"` entry from the START of its computation, so a tag expired while it computed
   expires it too. But the route cache (the rendered page, its RSC payload and prefetch segments, kept by
@@ -96,10 +107,9 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   `searchParams`) only reads `"use cache"` entries and is not affected.
   - Fix: `next.config.ts` `cacheHandler` = `src/lib/catalog/route-cache-handler.ts`, Next's own file system
     cache that refuses to store a page if one of its tags was expired (or marked stale) between the read that
-    made the render due and the store; the expired page stays, and the next request renders it again. On
+    made the render due and the store; the expired page stays, and the next request renders it again. It is on
     everywhere but Vercel, where Next's own handler must keep talking to the platform's cache (see Hosting).
-    Admin writes need
-    nothing else: they keep calling `revalidateProduct` / `revalidatePieces` (`src/lib/admin/revalidate.ts`),
+    Admin writes need nothing else: they keep calling `revalidateProduct` / `revalidatePieces` (`src/lib/admin/revalidate.ts`),
     and a new tag for the storefront goes through there too.
   - Hosting. `next start` on one server (one Node process): the handler is on and is the whole fix. Several
     processes or servers behind a load balancer: Next keeps the tag expiries (`tagsManifest`) and the

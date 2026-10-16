@@ -18,3 +18,6 @@ export const ADMIN_ORDERS_HREF = `${routes.admin.path}/orders`;
 export function adminOrderHref(number: number): string {
   return `${ADMIN_ORDERS_HREF}/${number}`;
 }
+
+export const ADMIN_SETTINGS_HREF = `${routes.admin.path}/settings`;
+export const ADMIN_ABOUT_HREF = `${routes.admin.path}/settings/about`;
