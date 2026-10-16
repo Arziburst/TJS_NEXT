@@ -11,6 +11,7 @@ const SORT_LABELS = {
   newest: "newest",
   price_asc: "priceAsc",
   price_desc: "priceDesc",
+  position: "featured",
 } as const satisfies Record<ListingSort, string>;
 
 /** The orders of a listing with their message keys (catalog.sort.*): relevance first for search results. */

@@ -54,7 +54,8 @@
       "emptyCart": "Er staat niets in de winkelwagen dat besteld kan worden.",
       "pricesUnavailable": "De prijzen kunnen nu niet worden berekend. Probeer het later opnieuw.",
       "unexpected": "De aanvraag kon niet worden verstuurd. Probeer het opnieuw.",
-      "sizeUnavailable": "Sorry, deze maten zijn nu niet te bestellen: {titles}. Er is niets verzonden. Kies een andere maat of verwijder ze uit de winkelwagen en verstuur de aanvraag opnieuw."
+      "sizeUnavailable": "Sorry, deze maten zijn nu niet te bestellen: {titles}. Er is niets verzonden. Kies een andere maat of verwijder ze uit de winkelwagen en verstuur de aanvraag opnieuw.",
+      "pricesChanged": "Intussen zijn sommige prijzen veranderd (een uitverkoop is begonnen of afgelopen). Er is niets verzonden. Controleer de nieuwe prijzen en verstuur de aanvraag opnieuw."
     }
   },
   "done": {

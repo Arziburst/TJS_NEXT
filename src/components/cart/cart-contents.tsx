@@ -4,7 +4,7 @@ import { Price, PriceTotal } from "@/components/price";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { getCartView, lineKey, orderableLines, type CartItem } from "@/lib/cart";
+import { getCartView, lineKey, orderableLines, regularLines, type CartItem } from "@/lib/cart";
 import { lineTitle, maxQuantity } from "@/lib/cart/lines";
 import { cn } from "@/lib/utils";
 import { CartItemImage } from "./cart-item-image";
@@ -54,7 +54,7 @@ export async function CartContents() {
             <span className="block text-sm">{t("pieces", { count: orderablePieces })}</span>
           </dt>
           <dd className="font-sans text-xl text-accent-text">
-            <PriceTotal lines={orderable} />
+            <PriceTotal lines={orderable} regularLines={regularLines(view.items)} />
           </dd>
         </dl>
         {hasUnavailable && (
@@ -73,7 +73,7 @@ export async function CartContents() {
 
 async function CartRow({ item }: { item: CartItem }) {
   const [t, locale] = await Promise.all([getTranslations("cart"), getLocale()]);
-  const { product, variant, status, quantity, unitUsdMinor } = item;
+  const { product, variant, status, quantity, unitUsdMinor, regularUnitUsdMinor } = item;
 
   if (!product) {
     return (
@@ -124,10 +124,14 @@ async function CartRow({ item }: { item: CartItem }) {
           </div>
           {available ? (
             <span className="flex flex-col items-end font-sans">
-              <PriceTotal lines={[{ usdMinor: unitUsdMinor, quantity }]} className="text-lg text-accent-text" />
+              <PriceTotal
+                lines={[{ usdMinor: unitUsdMinor, quantity }]}
+                regularLines={[{ usdMinor: regularUnitUsdMinor, quantity }]}
+                className="text-lg text-accent-text"
+              />
               {quantity > 1 && (
                 <span className="text-sm">
-                  {t("each", { quantity })} <Price usdMinor={unitUsdMinor} />
+                  {t("each", { quantity })} <Price usdMinor={unitUsdMinor} regularUsdMinor={regularUnitUsdMinor} />
                 </span>
               )}
             </span>

@@ -54,7 +54,8 @@
       "emptyCart": "Nel carrello non c’è nulla che si possa ordinare.",
       "pricesUnavailable": "Al momento non è possibile calcolare i prezzi. Riprova più tardi.",
       "unexpected": "Impossibile inviare la richiesta. Riprova.",
-      "sizeUnavailable": "Spiacenti, queste misure al momento non sono ordinabili: {titles}. Non è stato inviato nulla. Scegli un’altra misura o rimuovile dal carrello, poi invia di nuovo la richiesta."
+      "sizeUnavailable": "Spiacenti, queste misure al momento non sono ordinabili: {titles}. Non è stato inviato nulla. Scegli un’altra misura o rimuovile dal carrello, poi invia di nuovo la richiesta.",
+      "pricesChanged": "Nel frattempo alcuni prezzi sono cambiati (una promozione è iniziata o finita). Non è stato inviato nulla. Controlla i nuovi prezzi e invia di nuovo la richiesta."
     }
   },
   "done": {

@@ -54,7 +54,8 @@
       "emptyCart": "W koszyku nie ma niczego, co można zamówić.",
       "pricesUnavailable": "Nie można teraz obliczyć cen. Spróbuj ponownie później.",
       "unexpected": "Nie udało się wysłać zapytania. Spróbuj ponownie.",
-      "sizeUnavailable": "Niestety tych rozmiarów nie można teraz zamówić: {titles}. Nic nie zostało wysłane. Wybierz inny rozmiar lub usuń je z koszyka i wyślij prośbę ponownie."
+      "sizeUnavailable": "Niestety tych rozmiarów nie można teraz zamówić: {titles}. Nic nie zostało wysłane. Wybierz inny rozmiar lub usuń je z koszyka i wyślij prośbę ponownie.",
+      "pricesChanged": "W międzyczasie zmieniły się niektóre ceny (promocja się zaczęła lub skończyła). Nic nie zostało wysłane. Sprawdź nowe ceny i wyślij zapytanie ponownie."
     }
   },
   "done": {

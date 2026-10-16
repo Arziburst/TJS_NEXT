@@ -23,7 +23,8 @@ import type {
  * through the anonymous client under RLS.
  */
 
-const SORTS: readonly ListingSort[] = ["newest", "price_asc", "price_desc", "relevance"];
+const SORTS: readonly ListingSort[] = ["newest", "price_asc", "price_desc", "relevance", "position"];
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const AVAILABILITY: readonly AvailabilityFilter[] = ["in_stock", "made_to_order"];
 const KINDS: readonly TaxonomyKind[] = ["material", "colour"];
 // the database's limits (private.shop_candidates)
@@ -39,6 +40,7 @@ function validFilters(f: ListingFilters): boolean {
   return (
     isLocale(f.locale) &&
     (f.categorySlug === null || SLUG_PATTERN.test(f.categorySlug)) &&
+    (f.collectionId === null || UUID.test(f.collectionId)) &&
     f.terms.length <= MAX_TERMS &&
     f.terms.every((t) => t.length > 0 && t.length <= MAX_TERM_LENGTH) &&
     f.materials.length <= MAX_VALUES &&
@@ -61,6 +63,7 @@ function filterArgs(f: ListingFilters) {
   return {
     p_locale: f.locale,
     ...(f.categorySlug !== null && { p_category: f.categorySlug }),
+    ...(f.collectionId !== null && { p_collection: f.collectionId }),
     ...(f.terms.length > 0 && { p_terms: f.terms }),
     ...(f.materials.length > 0 && { p_materials: f.materials }),
     ...(f.colours.length > 0 && { p_colours: f.colours }),
@@ -86,7 +89,10 @@ export async function searchProducts(
     const { data, error } = await client
       .rpc("shop_search", {
         ...filterArgs(filters),
-        p_sort: sort === "relevance" && filters.terms.length === 0 ? "newest" : sort,
+        p_sort:
+          (sort === "relevance" && filters.terms.length === 0) || (sort === "position" && filters.collectionId === null)
+            ? "newest"
+            : sort,
         p_limit: page.pageSize,
         p_offset: (page.page - 1) * page.pageSize,
       })

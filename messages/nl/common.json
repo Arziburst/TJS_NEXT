@@ -5,7 +5,9 @@
   "price": {
     "unavailable": "Prijs niet beschikbaar",
     "none": "—",
-    "from": "vanaf {price}"
+    "from": "vanaf {price}",
+    "regular": "Normale prijs:",
+    "sale": "Actieprijs:"
   },
   "pagination": {
     "of": "van"

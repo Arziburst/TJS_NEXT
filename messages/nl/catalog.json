@@ -18,7 +18,8 @@
     "relevance": "Relevantie",
     "placeholder": "Kies een filter",
     "priceAsc": "Prijs (laag naar hoog)",
-    "priceDesc": "Prijs (hoog naar laag)"
+    "priceDesc": "Prijs (hoog naar laag)",
+    "featured": "Uitgelicht"
   },
   "filters": {
     "title": "Filters",

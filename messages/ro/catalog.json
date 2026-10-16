@@ -18,7 +18,8 @@
     "relevance": "Relevanță",
     "placeholder": "Selectează filtrul",
     "priceAsc": "Preț (crescător)",
-    "priceDesc": "Preț (descrescător)"
+    "priceDesc": "Preț (descrescător)",
+    "featured": "Recomandate"
   },
   "filters": {
     "title": "Filtre",

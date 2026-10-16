@@ -18,7 +18,8 @@
     "relevance": "Relevância",
     "placeholder": "Selecione o filtro",
     "priceAsc": "Preço (do mais baixo ao mais alto)",
-    "priceDesc": "Preço (do mais alto ao mais baixo)"
+    "priceDesc": "Preço (do mais alto ao mais baixo)",
+    "featured": "Destaques"
   },
   "filters": {
     "title": "Filtros",

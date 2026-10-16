@@ -29,6 +29,7 @@ function item(overrides: Partial<QuoteItem> = {}): QuoteItem {
     variantLabel: null,
     sku: "TEST-001",
     priceUsdMinor: 2490,
+    regularPriceUsdMinor: overrides.priceUsdMinor ?? 2490,
     weightGrams: 6,
     quantity: 1,
     ...overrides,
@@ -47,7 +48,7 @@ describe("buildQuote", () => {
         fxRate: "0.86",
         fxRateDate: "2026-10-15",
         markupBps: 300,
-        lines: [{ ...item({ quantity: 3 }), position: 0, unitMinor: 2290, lineMinor: 6870, lineUsdMinor: 7470 }],
+        lines: [{ ...item({ quantity: 3 }), position: 0, unitMinor: 2290, regularUnitMinor: 2290, lineMinor: 6870, lineUsdMinor: 7470 }],
         totalUsdMinor: 7470,
         totalMinor: 6870,
       },
@@ -103,5 +104,14 @@ describe("buildQuote", () => {
     expect(buildQuote([item({ quantity: 0 })], "EUR", tables)).toEqual({ ok: false, reason: "invalid" });
     expect(buildQuote([item({ quantity: 1.5 })], "EUR", tables)).toEqual({ ok: false, reason: "invalid" });
     expect(buildQuote([item({ priceUsdMinor: -1 })], "EUR", tables)).toEqual({ ok: false, reason: "invalid" });
+    // a regular price below the price charged is no sale
+    expect(buildQuote([item({ priceUsdMinor: 2490, regularPriceUsdMinor: 1990 })], "EUR", tables)).toEqual({ ok: false, reason: "invalid" });
+  });
+
+  it("charges the sale price and keeps the regular one, both converted as displayed (#67)", () => {
+    // sale 19.92 × 0.86 × 1.03 = 17.65 → €17.90; regular 24.90 → €22.90
+    const result = buildQuote([item({ priceUsdMinor: 1992, regularPriceUsdMinor: 2490, quantity: 2 })], "EUR", tables);
+    expect(result.ok && result.quote.lines[0]).toMatchObject({ unitMinor: 1790, regularUnitMinor: 2290, lineMinor: 3580, lineUsdMinor: 3984 });
+    expect(result.ok && [result.quote.totalUsdMinor, result.quote.totalMinor]).toEqual([3984, 3580]);
   });
 });

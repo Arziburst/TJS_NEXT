@@ -54,7 +54,8 @@
       "emptyCart": "Im Warenkorb ist nichts, was bestellt werden kann.",
       "pricesUnavailable": "Die Preise können gerade nicht berechnet werden. Bitte versuchen Sie es später erneut.",
       "unexpected": "Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
-      "sizeUnavailable": "Leider sind diese Größen gerade nicht bestellbar: {titles}. Es wurde nichts gesendet. Wählen Sie eine andere Größe oder entfernen Sie sie aus dem Warenkorb und senden Sie die Anfrage erneut."
+      "sizeUnavailable": "Leider sind diese Größen gerade nicht bestellbar: {titles}. Es wurde nichts gesendet. Wählen Sie eine andere Größe oder entfernen Sie sie aus dem Warenkorb und senden Sie die Anfrage erneut.",
+      "pricesChanged": "Inzwischen haben sich einige Preise geändert (ein Sale hat begonnen oder ist zu Ende). Es wurde nichts gesendet. Bitte prüfen Sie die neuen Preise und senden Sie die Anfrage erneut."
     }
   },
   "done": {

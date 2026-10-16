@@ -5,7 +5,9 @@
   "price": {
     "unavailable": "Prix indisponible",
     "none": "—",
-    "from": "à partir de {price}"
+    "from": "à partir de {price}",
+    "regular": "Prix habituel :",
+    "sale": "Prix soldé :"
   },
   "pagination": {
     "of": "sur"

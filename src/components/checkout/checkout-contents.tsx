@@ -11,7 +11,7 @@ import { Link } from "@/i18n/navigation";
 import { hasLocale } from "next-intl";
 import { routing, type Locale } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth/session";
-import { getCartView, lineKey, orderableLines, type CartItem, type CartProduct } from "@/lib/cart";
+import { getCartView, lineKey, orderableLines, regularLines, type CartItem, type CartProduct } from "@/lib/cart";
 import { parcelFromCart } from "@/lib/delivery/nova-poshta/parcel";
 import { isDeliveryCountry } from "@/lib/delivery/nova-post/countries";
 import { getNovaPostClient } from "@/lib/delivery/nova-post/config";
@@ -114,7 +114,7 @@ export async function CheckoutContents() {
         <span className="block text-sm">{t("summary.pieces", { count: pieces })}</span>
       </dt>
       <dd className="font-sans text-xl text-accent-text">
-        <PriceTotal lines={orderableLines(orderable)} />
+        <PriceTotal lines={orderableLines(orderable)} regularLines={regularLines(orderable)} />
       </dd>
     </dl>
   );
@@ -126,7 +126,7 @@ export async function CheckoutContents() {
           {t("summary.lines")}
         </h2>
         <ul className="flex flex-col divide-y divide-hairline border-y border-hairline">
-          {orderable.map(({ line, product, variant, unitUsdMinor, quantity }) => (
+          {orderable.map(({ line, product, variant, unitUsdMinor, regularUnitUsdMinor, quantity }) => (
             <li key={lineKey(line)} className="flex gap-3 py-3" data-testid="checkout-line">
               <CartItemImage image={product.image} alt="" sizes={IMAGE_SIZES} className="size-16 shrink-0" />
               <div className="flex min-w-0 grow flex-col gap-1">
@@ -136,7 +136,11 @@ export async function CheckoutContents() {
                 {variant && <VariantLabel label={variant.label} />}
                 <span className="text-sm">{t("summary.quantity", { quantity })}</span>
               </div>
-              <PriceTotal lines={[{ usdMinor: unitUsdMinor, quantity }]} className="shrink-0 font-sans text-accent-text" />
+              <PriceTotal
+                lines={[{ usdMinor: unitUsdMinor, quantity }]}
+                regularLines={[{ usdMinor: regularUnitUsdMinor, quantity }]}
+                className="shrink-0 font-sans text-accent-text"
+              />
             </li>
           ))}
         </ul>
@@ -173,7 +177,12 @@ export async function CheckoutContents() {
             parcel={parcel}
             goods={goods}
             novaPostLive={getNovaPostClient() !== null}
-            expected={orderable.map(({ line, quantity }) => ({ productId: line.productId, variantId: line.variantId, quantity }))}
+            expected={orderable.map(({ line, quantity, unitUsdMinor }) => ({
+              productId: line.productId,
+              variantId: line.variantId,
+              quantity,
+              unitUsdMinor,
+            }))}
             // on a phone the summary is far above the button: the total is repeated next to it
             total={<div className="sb:hidden">{total()}</div>}
           />

@@ -13,7 +13,12 @@ import {
   type SlugMatch,
 } from "./product-path";
 import type { AlternateTranslation } from "@/lib/seo/product";
+import { lifeUntilSaleChange } from "./sale";
+import { readNextSaleChange } from "./sale-life";
 import type { CatalogResult, Product } from "./types";
+
+// daysNoSwr's revalidate (next.config.ts)
+const DAYS_REVALIDATE_SECONDS = 86_400;
 
 /** The cache tag of everything rendered from one product; the admin revalidates it on every change. */
 export function productCacheTag(productId: string): string {
@@ -126,7 +131,11 @@ export async function getProductPage(locale: Locale, slug: string): Promise<Prod
     return { kind: "redirect", slug: resolution.slug };
   }
 
-  const [product, categories] = await Promise.all([getProductBySlug(locale, slug), getCategories(locale)]);
+  const [product, categories, nextSaleChange] = await Promise.all([
+    getProductBySlug(locale, slug),
+    getCategories(locale),
+    readNextSaleChange(),
+  ]);
   if (!product.ok) {
     if (product.reason !== "notFound") return failed();
     cacheLife("minutes");
@@ -134,10 +143,14 @@ export async function getProductPage(locale: Locale, slug: string): Promise<Prod
   }
   const translations = matches.data.find((m) => m.productId === resolution.productId)?.productSlugs ?? [];
   const category = categories.ok ? categories.data.find((c) => c.id === product.data.category.id) : undefined;
-  // a page without its category name (no breadcrumb) is an incomplete read: never kept, never prerendered
-  // the product route's shell: no stale window, see daysNoSwr in next.config.ts
-  if (categories.ok) cacheLife("daysNoSwr");
-  else cacheLife(FAILED_READ_LIFE);
+  // a page without its category name (no breadcrumb) is an incomplete read: never kept, never prerendered; so is
+  // one that cannot tell when its sale prices change (#67)
+  // the product route's shell: no stale window, see daysNoSwr in next.config.ts; its prices live no longer than
+  // until the next sale starts or ends
+  const bounded = nextSaleChange === undefined ? null : lifeUntilSaleChange(DAYS_REVALIDATE_SECONDS, nextSaleChange, Date.now());
+  if (!categories.ok || nextSaleChange === undefined) cacheLife(FAILED_READ_LIFE);
+  else if (bounded) cacheLife(bounded);
+  else cacheLife("daysNoSwr");
 
   return { kind: "ok", product: product.data, categoryName: category?.name ?? null, translations };
 }

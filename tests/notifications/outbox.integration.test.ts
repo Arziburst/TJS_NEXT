@@ -106,7 +106,7 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
         items_total_usd_minor: 1000,
         items_total_minor: 990,
       },
-      [{ product_id: productId, variant_id: null, position: 0, title: "Outbox ring", title_locale: "de", variant_label: null, variant_label_locale: null, quantity: 1, unit_price_usd_minor: 1000, unit_price_minor: 990 }],
+      [{ product_id: productId, variant_id: null, position: 0, title: "Outbox ring", title_locale: "de", variant_label: null, variant_label_locale: null, quantity: 1, unit_price_usd_minor: 1000, unit_price_minor: 990, regular_unit_price_usd_minor: 1000, regular_unit_price_minor: 990 }],
     );
     if (!created.ok) throw new Error(`the test order was not stored: ${JSON.stringify(created)}`);
     return { orderId: created.orderId, number: created.number };
@@ -198,7 +198,9 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
           variant_label_locale: "uk",
           quantity: 1,
           unit_price_usd_minor: 1000,
+          regular_unit_price_usd_minor: 1000,
           unit_price_minor: 1000,
+          regular_unit_price_minor: 1000,
         },
       ],
     );

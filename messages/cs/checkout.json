@@ -54,7 +54,8 @@
       "emptyCart": "V košíku není nic, co by šlo objednat.",
       "pricesUnavailable": "Ceny teď nelze spočítat. Zkuste to prosím později.",
       "unexpected": "Žádost se nepodařilo odeslat. Zkuste to znovu.",
-      "sizeUnavailable": "Bohužel tyto velikosti teď nelze objednat: {titles}. Nic nebylo odesláno. Vyberte jinou velikost nebo je odeberte z košíku a odešlete žádost znovu."
+      "sizeUnavailable": "Bohužel tyto velikosti teď nelze objednat: {titles}. Nic nebylo odesláno. Vyberte jinou velikost nebo je odeberte z košíku a odešlete žádost znovu.",
+      "pricesChanged": "Mezitím se některé ceny změnily (výprodej začal nebo skončil). Nic nebylo odesláno. Zkontrolujte nové ceny a odešlete žádost znovu."
     }
   },
   "done": {

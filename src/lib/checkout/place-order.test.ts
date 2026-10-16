@@ -23,6 +23,9 @@ const EARRINGS = "a0000000-0000-4000-8000-000000000001";
 const CORAL = "a0000000-0000-4000-8000-000000000009";
 const ATTEMPT = "7d1f3c2e-8a4b-4c6d-9e0f-1a2b3c4d5e6f";
 
+// a price without a sale
+const own = (usdMinor: number) => ({ usdMinor, regularUsdMinor: usdMinor, saleEndsAt: null });
+
 function product(id: string, overrides: Partial<CartProduct> = {}): CartProduct {
   return {
     id,
@@ -37,7 +40,8 @@ function product(id: string, overrides: Partial<CartProduct> = {}): CartProduct 
     locale: "en",
     image: null,
     variants: [],
-    listPrice: { usdMinor: overrides.priceUsdMinor ?? 2490, from: false },
+    offer: own(overrides.priceUsdMinor ?? 2490),
+    listPrice: { ...own(overrides.priceUsdMinor ?? 2490), from: false },
     ...overrides,
   };
 }
@@ -48,7 +52,8 @@ function item(p: CartProduct, quantity = 1, status: CartItem["status"] = "availa
     line: { productId: p.id, variantId, quantity },
     product: p,
     variant,
-    unitUsdMinor: variant?.priceUsdMinor ?? p.priceUsdMinor,
+    unitUsdMinor: variant?.priceUsdMinor ?? p.offer.usdMinor,
+    regularUnitUsdMinor: variant?.regularPriceUsdMinor ?? p.offer.regularUsdMinor,
     status,
     quantity,
   };
@@ -80,8 +85,8 @@ function input(overrides: Record<string, unknown> = {}) {
     delivery: kyivBranch,
     comment: "",
     expected: [
-      { productId: EARRINGS, quantity: 2 },
-      { productId: CORAL, quantity: 1 },
+      { productId: EARRINGS, quantity: 2, unitUsdMinor: 2490 },
+      { productId: CORAL, quantity: 1, unitUsdMinor: 2990 },
     ],
     ...overrides,
   };
@@ -150,8 +155,8 @@ describe("placeOrder", () => {
       delivery_estimate_decimals: 2,
     });
     expect(created.items).toEqual([
-      { product_id: EARRINGS, variant_id: null, position: 0, title: "Earrings", title_locale: "en", variant_label: null, variant_label_locale: null, quantity: 2, unit_price_usd_minor: 2490, unit_price_minor: 2290 },
-      { product_id: CORAL, variant_id: null, position: 1, title: "Coral", title_locale: "en", variant_label: null, variant_label_locale: null, quantity: 1, unit_price_usd_minor: 2990, unit_price_minor: 2690 },
+      { product_id: EARRINGS, variant_id: null, position: 0, title: "Earrings", title_locale: "en", variant_label: null, variant_label_locale: null, quantity: 2, unit_price_usd_minor: 2490, unit_price_minor: 2290, regular_unit_price_usd_minor: 2490, regular_unit_price_minor: 2290 },
+      { product_id: CORAL, variant_id: null, position: 1, title: "Coral", title_locale: "en", variant_label: null, variant_label_locale: null, quantity: 1, unit_price_usd_minor: 2990, unit_price_minor: 2690, regular_unit_price_usd_minor: 2990, regular_unit_price_minor: 2690 },
     ]);
   });
 
@@ -161,22 +166,22 @@ describe("placeOrder", () => {
     const ring = product(EARRINGS, {
       title: "Ring",
       variants: [
-        { id: SIZE_16, label: "16", labelLocale: "uk", skuSuffix: "16", priceUsdMinor: 2490, available: true },
-        { id: SIZE_18, label: "18", labelLocale: "uk", skuSuffix: "18", priceUsdMinor: 2990, available: true },
+        { id: SIZE_16, label: "16", labelLocale: "uk", skuSuffix: "16", priceUsdMinor: 2490, regularPriceUsdMinor: 2490, saleEndsAt: null, available: true },
+        { id: SIZE_18, label: "18", labelLocale: "uk", skuSuffix: "18", priceUsdMinor: 2990, regularPriceUsdMinor: 2990, saleEndsAt: null, available: true },
       ],
     });
     const twoSizes = () => ({ ok: true as const, items: [item(ring, 2, "available", SIZE_16), item(ring, 1, "available", SIZE_18)], pieces: 3, pendingMerge: false });
     const expected = [
-      { productId: EARRINGS, variantId: SIZE_16, quantity: 2 },
-      { productId: EARRINGS, variantId: SIZE_18, quantity: 1 },
+      { productId: EARRINGS, variantId: SIZE_16, quantity: 2, unitUsdMinor: 2490 },
+      { productId: EARRINGS, variantId: SIZE_18, quantity: 1, unitUsdMinor: 2990 },
     ];
 
     it("orders two sizes of one product as two lines, each at its size's price with its label", async () => {
       const { deps: d, created } = deps({ readCart: vi.fn(async () => twoSizes()) });
       expect(await placeOrder(input({ expected }), d)).toEqual({ ok: true, number: 10001 });
       expect(created.items).toEqual([
-        { product_id: EARRINGS, variant_id: SIZE_16, position: 0, title: "Ring", title_locale: "en", variant_label: "16", variant_label_locale: "uk", quantity: 2, unit_price_usd_minor: 2490, unit_price_minor: 2290 },
-        { product_id: EARRINGS, variant_id: SIZE_18, position: 1, title: "Ring", title_locale: "en", variant_label: "18", variant_label_locale: "uk", quantity: 1, unit_price_usd_minor: 2990, unit_price_minor: 2690 },
+        { product_id: EARRINGS, variant_id: SIZE_16, position: 0, title: "Ring", title_locale: "en", variant_label: "16", variant_label_locale: "uk", quantity: 2, unit_price_usd_minor: 2490, unit_price_minor: 2290, regular_unit_price_usd_minor: 2490, regular_unit_price_minor: 2290 },
+        { product_id: EARRINGS, variant_id: SIZE_18, position: 1, title: "Ring", title_locale: "en", variant_label: "18", variant_label_locale: "uk", quantity: 1, unit_price_usd_minor: 2990, unit_price_minor: 2690, regular_unit_price_usd_minor: 2990, regular_unit_price_minor: 2690 },
       ]);
       expect(created.order).toMatchObject({ items_total_usd_minor: 2490 * 2 + 2990, items_total_minor: 2290 * 2 + 2690 });
       expect(d.removeFromCart).toHaveBeenCalledWith([
@@ -188,8 +193,8 @@ describe("placeOrder", () => {
     it("compares the lines by size: another size seen on the page is a changed cart", async () => {
       const { deps: d } = deps({ readCart: vi.fn(async () => twoSizes()) });
       const swapped = [
-        { productId: EARRINGS, variantId: SIZE_16, quantity: 1 },
-        { productId: EARRINGS, variantId: SIZE_18, quantity: 2 },
+        { productId: EARRINGS, variantId: SIZE_16, quantity: 1, unitUsdMinor: 2490 },
+        { productId: EARRINGS, variantId: SIZE_18, quantity: 2, unitUsdMinor: 2990 },
       ];
       expect(await placeOrder(input({ expected: swapped }), d)).toEqual({ ok: false, reason: "cartChanged" });
       expect(await placeOrder(input({ expected: expected.slice(0, 1) }), d)).toEqual({ ok: false, reason: "cartChanged" });
@@ -226,8 +231,8 @@ describe("placeOrder", () => {
     const tampered = {
       ...input({
         expected: [
-          { productId: EARRINGS, quantity: 2, priceUsdMinor: 1 },
-          { productId: CORAL, quantity: 1, unitMinor: 1 },
+          { productId: EARRINGS, quantity: 2, unitUsdMinor: 2490, priceUsdMinor: 1 },
+          { productId: CORAL, quantity: 1, unitUsdMinor: 2990, unitMinor: 1 },
         ],
       }),
       total: 1,
@@ -303,8 +308,32 @@ describe("placeOrder", () => {
     });
     expect(await placeOrder(input(), d)).toEqual({ ok: false, reason: "cartChanged" });
     const { deps: added } = deps();
-    expect(await placeOrder(input({ expected: [{ productId: EARRINGS, quantity: 2 }] }), added)).toEqual({ ok: false, reason: "cartChanged" });
+    expect(await placeOrder(input({ expected: [{ productId: EARRINGS, quantity: 2, unitUsdMinor: 2490 }] }), added)).toEqual({ ok: false, reason: "cartChanged" });
     expect(d.createOrder).not.toHaveBeenCalled();
+  });
+
+  it("re-prices a request whose sale ended (or started) since the page was shown: nothing is stored (#67)", async () => {
+    // the page showed the earrings on sale at $19.92; the sale has ended, the cart now reads $24.90
+    const { deps: d } = deps();
+    const seen = input({ expected: [{ productId: EARRINGS, quantity: 2, unitUsdMinor: 1992 }, { productId: CORAL, quantity: 1, unitUsdMinor: 2990 }] });
+    expect(await placeOrder(seen, d)).toEqual({ ok: false, reason: "pricesChanged" });
+    expect(d.createOrder).not.toHaveBeenCalled();
+  });
+
+  it("charges the sale price running at the request and stores the regular price next to it (#67)", async () => {
+    const onSale = { ...earrings, offer: { usdMinor: 1992, regularUsdMinor: 2490, saleEndsAt: null } };
+    const { deps: d, created } = deps({
+      readCart: vi.fn(async () => ({ ok: true as const, items: [item(onSale, 2), item(coral)], pieces: 3, pendingMerge: false })),
+    });
+    const seen = input({ expected: [{ productId: EARRINGS, quantity: 2, unitUsdMinor: 1992 }, { productId: CORAL, quantity: 1, unitUsdMinor: 2990 }] });
+    expect(await placeOrder(seen, d)).toEqual({ ok: true, number: 10001 });
+    expect(created.items?.[0]).toMatchObject({
+      unit_price_usd_minor: 1992,
+      unit_price_minor: 1790,
+      regular_unit_price_usd_minor: 2490,
+      regular_unit_price_minor: 2290,
+    });
+    expect(created.order).toMatchObject({ items_total_usd_minor: 1992 * 2 + 2990, items_total_minor: 1790 * 2 + 2690 });
   });
 
   it("does not price an order without a rate", async () => {

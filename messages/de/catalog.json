@@ -18,7 +18,8 @@
     "relevance": "Relevanz",
     "placeholder": "Sortierung wählen",
     "priceAsc": "Preis (aufsteigend)",
-    "priceDesc": "Preis (absteigend)"
+    "priceDesc": "Preis (absteigend)",
+    "featured": "Empfohlen"
   },
   "filters": {
     "title": "Filter",

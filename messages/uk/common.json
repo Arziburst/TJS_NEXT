@@ -5,7 +5,9 @@
   "price": {
     "unavailable": "Ціна недоступна",
     "none": "—",
-    "from": "від {price}"
+    "from": "від {price}",
+    "regular": "Звичайна ціна:",
+    "sale": "Ціна зі знижкою:"
   },
   "pagination": {
     "of": "із"

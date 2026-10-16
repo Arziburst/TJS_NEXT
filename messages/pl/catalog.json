@@ -18,7 +18,8 @@
     "relevance": "Trafność",
     "placeholder": "Wybierz filtr",
     "priceAsc": "Cena (od najniższej)",
-    "priceDesc": "Cena (od najwyższej)"
+    "priceDesc": "Cena (od najwyższej)",
+    "featured": "Polecane"
   },
   "filters": {
     "title": "Filtry",

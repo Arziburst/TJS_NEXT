@@ -51,6 +51,7 @@
       "rateLimited": "Too many requests. Please wait a few minutes and try again.",
       "unavailable": "Sorry, these pieces have just been ordered by someone else: {titles}. Nothing was sent. Remove them from the cart and send the request again.",
       "cartChanged": "Your cart has changed in the meantime. Please check the order and send it again.",
+      "pricesChanged": "Some prices have changed in the meantime (a sale has started or ended). Nothing was sent. Please check the new prices and send the request again.",
       "emptyCart": "There is nothing in the cart that can be ordered.",
       "pricesUnavailable": "The prices cannot be calculated right now. Please try again later.",
       "unexpected": "The request could not be sent. Please try again.",

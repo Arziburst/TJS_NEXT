@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  priceValidUntil,
   productAlternates,
   productOpenGraphLocales,
   productJsonLd,
@@ -170,6 +171,30 @@ describe("productJsonLd", () => {
       "@graph"
     ] as Record<string, unknown>[];
     expect(product).not.toHaveProperty("offers");
+  });
+});
+
+describe("sale prices in the Offer (#67)", () => {
+  it("states priceValidUntil when the sale ends, for the product and for each size", () => {
+    const [product] = productJsonLd({
+      ...input,
+      price: { price: "19.90", priceCurrency: "EUR" },
+      priceValidUntil: "2026-10-19",
+    })["@graph"] as Record<string, unknown>[];
+    expect(product?.offers).toMatchObject({ price: "19.90", priceValidUntil: "2026-10-19" });
+
+    const [sized] = productJsonLd({
+      ...input,
+      variants: [{ name: "16", sku: null, price: { price: "19.90", priceCurrency: "EUR" }, priceValidUntil: "2026-10-19", available: true }],
+    })["@graph"] as Record<string, unknown>[];
+    expect(sized?.offers).toEqual([expect.objectContaining({ price: "19.90", priceValidUntil: "2026-10-19" })]);
+  });
+
+  it("is the last Kyiv day the sale runs", () => {
+    // ends at Kyiv midnight (21:00 UTC in summer time): valid through the day before
+    expect(priceValidUntil("2026-10-19T21:00:00Z")).toBe("2026-10-19");
+    expect(priceValidUntil("2026-10-20T10:00:00Z")).toBe("2026-10-20");
+    expect(priceValidUntil(null)).toBeNull();
   });
 });
 

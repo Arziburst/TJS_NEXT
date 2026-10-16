@@ -18,8 +18,14 @@ const variant = (id: string, priceUsdMinor: number, available = true): ProductVa
   labelLocale: "en",
   skuSuffix: null,
   priceUsdMinor,
+  regularPriceUsdMinor: priceUsdMinor,
+  saleEndsAt: null,
   available,
 });
+
+// a price without a sale, and the list price it gives
+const own = (usdMinor: number) => ({ usdMinor, regularUsdMinor: usdMinor, saleEndsAt: null });
+const list = (usdMinor: number, from: boolean) => ({ ...own(usdMinor), from });
 
 describe("pickVariantLabel", () => {
   const labels = [
@@ -49,8 +55,8 @@ describe("mapVariants", () => {
       "en",
     );
     expect(variants).toEqual([
-      { id: "a", label: "a", labelLocale: "uk", skuSuffix: "16", priceUsdMinor: 2000, available: true },
-      { id: "b", label: "b", labelLocale: "uk", skuSuffix: null, priceUsdMinor: 2250, available: true },
+      { id: "a", label: "a", labelLocale: "uk", skuSuffix: "16", priceUsdMinor: 2000, regularPriceUsdMinor: 2000, saleEndsAt: null, available: true },
+      { id: "b", label: "b", labelLocale: "uk", skuSuffix: null, priceUsdMinor: 2250, regularPriceUsdMinor: 2250, saleEndsAt: null, available: true },
     ]);
   });
 
@@ -63,17 +69,38 @@ describe("mapVariants", () => {
 
 describe("listPriceOf", () => {
   it("is the product's own price without variants", () => {
-    expect(listPriceOf(2000, [])).toEqual({ usdMinor: 2000, from: false });
+    expect(listPriceOf(own(2000), [])).toEqual(list(2000, false));
   });
 
   it("is the lowest variant price, from when the prices differ", () => {
-    expect(listPriceOf(2000, [variant("a", 2250), variant("b", 1900)])).toEqual({ usdMinor: 1900, from: true });
-    expect(listPriceOf(2000, [variant("a", 2500), variant("b", 2500)])).toEqual({ usdMinor: 2500, from: false });
+    expect(listPriceOf(own(2000), [variant("a", 2250), variant("b", 1900)])).toEqual(list(1900, true));
+    expect(listPriceOf(own(2000), [variant("a", 2500), variant("b", 2500)])).toEqual(list(2500, false));
   });
 
   it("counts only the variants that can be ordered while there are any", () => {
-    expect(listPriceOf(2000, [variant("a", 1500, false), variant("b", 2200)])).toEqual({ usdMinor: 2200, from: false });
-    expect(listPriceOf(2000, [variant("a", 1500, false), variant("b", 2200, false)])).toEqual({ usdMinor: 1500, from: true });
+    expect(listPriceOf(own(2000), [variant("a", 1500, false), variant("b", 2200)])).toEqual(list(2200, false));
+    expect(listPriceOf(own(2000), [variant("a", 1500, false), variant("b", 2200, false)])).toEqual(list(1500, true));
+  });
+
+  it("keeps the product's own sale without variants, and the lowest size's sale with them (#67)", () => {
+    const sale = { usdMinor: 1600, regularUsdMinor: 2000, saleEndsAt: "2026-10-20T00:00:00Z" };
+    expect(listPriceOf(sale, [])).toEqual({ ...sale, from: false });
+    const sized = [
+      { ...variant("a", 1800), regularPriceUsdMinor: 2250, saleEndsAt: sale.saleEndsAt },
+      { ...variant("b", 1600), regularPriceUsdMinor: 2000, saleEndsAt: sale.saleEndsAt },
+    ];
+    expect(listPriceOf(sale, sized)).toEqual({ ...sale, from: true });
+  });
+});
+
+describe("mapVariants on sale (#67)", () => {
+  it("prices every size under the running sale, its difference kept", () => {
+    const sales = [{ percentOff: null, priceUsdMinor: 1500, startsAt: null, endsAt: null }];
+    const variants = mapVariants([row("a"), row("b", { position: 1, price_delta_usd_minor: 250 })], 2000, "en", sales);
+    expect(variants.map((v) => [v.id, v.priceUsdMinor, v.regularPriceUsdMinor])).toEqual([
+      ["a", 1500, 2000],
+      ["b", 1750, 2250],
+    ]);
   });
 });
 
