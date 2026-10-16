@@ -84,6 +84,8 @@
     "back": "Toutes les commandes",
     "placed": "Envoyée le {date}",
     "status": "Statut",
+    "history": "Historique des statuts",
+    "historyError": "Impossible de charger l’historique des statuts. Veuillez réessayer plus tard.",
     "lines": "Pièces commandées",
     "quantity": "Quantité : {quantity}",
     "goodsTotal": "Total des pièces",

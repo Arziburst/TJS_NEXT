@@ -4,7 +4,7 @@ import { BUSINESS_TIME_ZONE } from "@/lib/money/business-date";
 import { cn } from "@/lib/utils";
 
 // D17: the order statuses, as `account.orderStatus.<key>` names them
-const STATUS_KEYS = {
+export const STATUS_KEYS = {
   new: "new",
   pending_payment: "pendingPayment",
   paid: "paid",

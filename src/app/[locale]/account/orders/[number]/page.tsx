@@ -5,10 +5,11 @@ import { Suspense } from "react";
 import { AccountFrame, AccountSkeleton, SectionTitle } from "@/components/account/account-frame";
 import { DeliverySummary } from "@/components/account/delivery-summary";
 import { OrderStatusBadge, orderDate } from "@/components/account/order-status";
+import { OrderSteps } from "@/components/account/order-steps";
 import { ACCOUNT_ORDERS_HREF, accountOrderHref } from "@/components/account/paths";
 import { VariantLabel } from "@/components/cart/variant-label";
 import { Link } from "@/i18n/navigation";
-import { readOwnOrderDetail } from "@/lib/account/orders";
+import { readOwnOrderDetail, readOwnOrderSteps, type OrderDetailResult, type OrderStepsResult } from "@/lib/account/orders";
 import { requireUser } from "@/lib/auth/session";
 import { parseOrderNumber } from "@/lib/checkout/confirmation";
 import { decimalString, formatMoney, type Money } from "@/lib/money/format";
@@ -39,7 +40,7 @@ function Amount({ money, locale, className }: { money: Money; locale: string; cl
 }
 
 /*
- * One order of the customer: its status, the lines and totals as they were stored when it was sent (never
+ * One order of the customer: its status and how it moved (#108), the lines and totals as they were stored when it was sent (never
  * priced again), the delivery and the contacts. The read goes through the customer's session (RLS): another
  * customer's number, or an unknown one, shows "not found" in the account.
  */
@@ -56,7 +57,13 @@ async function OrderContents({ params }: Pick<PageProps<"/[locale]/account/order
   const number = parseOrderNumber(param);
   const user = await requireUser(locale, `/${locale}${number === null ? ACCOUNT_ORDERS_HREF : accountOrderHref(number)}`);
   const t = await getTranslations("account");
-  const read = number === null ? { ok: true as const, order: null } : await readOwnOrderDetail(await createSessionClient(), user.id, number);
+  // the order and its steps side by side; both answer only the customer's own order
+  let read: OrderDetailResult = { ok: true, order: null };
+  let steps: OrderStepsResult = { ok: true, steps: [] };
+  if (number !== null) {
+    const client = await createSessionClient();
+    [read, steps] = await Promise.all([readOwnOrderDetail(client, user.id, number), readOwnOrderSteps(client, number)]);
+  }
 
   const back = (
     <Link href={ACCOUNT_ORDERS_HREF} className="inline-flex min-h-11 w-fit items-center gap-2 text-sm underline underline-offset-4 hover:text-accent-text">
@@ -103,6 +110,8 @@ async function OrderContents({ params }: Pick<PageProps<"/[locale]/account/order
           </span>
         </div>
       </div>
+
+      <OrderSteps read={steps} locale={locale} />
 
       <section aria-labelledby="order-lines-title" className="grid gap-4">
         <h3 id="order-lines-title" className="font-sans text-sm font-semibold tracking-[0.2em] uppercase">

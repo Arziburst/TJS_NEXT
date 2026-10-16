@@ -104,6 +104,25 @@ export type OrderDetail = {
 
 export type OrderDetailResult = { ok: true; order: OrderDetail | null } | { ok: false };
 
+// One step of an order's status history as the customer sees it: the status and when it was reached
+export type OrderStep = { status: OrderStatus; at: string };
+
+export type OrderStepsResult = { ok: true; steps: OrderStep[] } | { ok: false };
+
+/**
+ * How the user's own order `number` moved, oldest first: its placement, then every status change. The history
+ * table is the shop's (admins only); own_order_status_history answers the caller's own orders only, with the
+ * status and its time and nothing else (supabase/migrations/…_own_order_status_history.sql).
+ */
+export async function readOwnOrderSteps(client: ServerSupabaseClient, number: number): Promise<OrderStepsResult> {
+  const { data, error } = await client.rpc("own_order_status_history", { p_number: number });
+  if (error) {
+    console.error("account: order status history read failed", error);
+    return { ok: false };
+  }
+  return { ok: true, steps: data.map((row) => ({ status: row.status, at: row.changed_at })) };
+}
+
 /** The user's own order `number` with its lines (the snapshot taken when it was placed), or null. */
 export async function readOwnOrderDetail(client: ServerSupabaseClient, userId: string, number: number): Promise<OrderDetailResult> {
   const { data: row, error } = await client

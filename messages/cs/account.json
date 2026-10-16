@@ -84,6 +84,8 @@
     "back": "Všechny objednávky",
     "placed": "Odesláno {date}",
     "status": "Stav",
+    "history": "Historie stavů",
+    "historyError": "Historii stavů se nepodařilo načíst. Zkuste to prosím později.",
     "lines": "Objednané kusy",
     "quantity": "Množství: {quantity}",
     "goodsTotal": "Celkem za kusy",

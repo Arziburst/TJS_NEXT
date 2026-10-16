@@ -740,6 +740,11 @@ isOneToOne: false
               "settlements": number,"warehouses": number
             }[]
                            },
+"own_order_status_history":
+{ Args: { "p_number": number }; Returns: {
+              "changed_at": string,"status": Database["public"]['Enums']["order_status"]
+            }[]
+                           },
 "shop_facets":
 { Args: { "p_availability"?: (string)[],"p_category"?: string,"p_collection"?: string,"p_colours"?: (string)[],"p_locale": unknown,"p_materials"?: (string)[],"p_price_max_minor"?: number,"p_price_min_minor"?: number,"p_terms"?: (string)[] }; Returns: {
               "count": number,"facet": string,"value": string
