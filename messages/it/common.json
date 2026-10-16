@@ -31,7 +31,11 @@
   },
   "contact": {
     "phone": "Telefono",
-    "email": "Email"
+    "email": "Email",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp"
   },
   "cookieConsent": {
     "text": "Utilizziamo i cookie per offrirti la migliore esperienza sul nostro sito. Continuando a usare il sito, presumiamo che tu ne sia soddisfatto.",
@@ -43,7 +47,9 @@
     "imageAlt": "Immagine principale della pagina \"Chi siamo\"",
     "missionStart": "amo il mio lavoro e voglio portare gioia e bellezza nel nostro mondo.",
     "motto": "Il lusso accessibile è il mio motto!",
-    "customOrders": "Creo anche gioielli su misura, tenendo sempre conto dei desideri dei clienti."
+    "customOrders": "Creo anche gioielli su misura, tenendo sempre conto dei desideri dei clienti.",
+    "tbd": "Chi siamo: TBD",
+    "fallbackNote": "Questa pagina non è ancora disponibile nella tua lingua."
   },
   "footer": {
     "contactsTbd": "Contatti: TBD",

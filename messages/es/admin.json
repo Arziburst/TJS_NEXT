@@ -33,7 +33,8 @@
     "attributes": "Materiales y colores",
     "viewShop": "Tienda",
     "orders": "Pedidos",
-    "ordersWithNew": "Pedidos, {count, plural, one {# solicitud nueva} other {# solicitudes nuevas}}"
+    "ordersWithNew": "Pedidos, {count, plural, one {# solicitud nueva} other {# solicitudes nuevas}}",
+    "settings": "Ajustes"
   },
   "status": {
     "draft": "Borrador",
@@ -523,6 +524,108 @@
       "historyPlaced": "Solicitud realizada",
       "historyChange": "{from} → {to}",
       "historyBy": "{date}, {name}"
+    }
+  },
+  "settings": {
+    "title": "Ajustes",
+    "intro": "Cómo te contactan los clientes, cómo se convierten los precios y tu historia. Un cambio guardado aparece en el sitio con la siguiente carga de página.",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saved": "Guardado. El sitio ya lo muestra.",
+    "loadError": "No se pudieron cargar los ajustes. Vuelve a cargar la página.",
+    "errorSummary": "{count, plural, one {# campo necesita tu atención} other {# campos necesitan tu atención}}",
+    "errors": {
+      "notAuthorized": "Solo el administrador puede hacer esto. Vuelve a iniciar sesión.",
+      "unexpectedError": "No se pudieron guardar los ajustes. Inténtalo de nuevo."
+    },
+    "contacts": {
+      "title": "Contactos",
+      "hint": "Se muestran al pie de cada página, en la confirmación del pedido y en los correos a los clientes. Deja un campo vacío para ocultar ese canal.",
+      "shopName": "Nombre de la tienda",
+      "shopNameHint": "Se usa en la confirmación del pedido y en los correos.",
+      "instagram": "Instagram",
+      "instagramHint": "El nombre de tu cuenta (@name) o el enlace a tu perfil.",
+      "email": "Correo electrónico",
+      "emailHint": "Por ejemplo shop@example.com.",
+      "phone": "Teléfono",
+      "phoneHint": "Con el prefijo del país, por ejemplo +38 (066) 123 45 67. Se muestra tal como lo escribes.",
+      "telegram": "Chat de Telegram",
+      "telegramHint": "Tu nombre de usuario (@name) o un enlace t.me.",
+      "viber": "Chat de Viber",
+      "viberHint": "Tu número de teléfono con el prefijo del país, o un enlace de invitación de Viber.",
+      "whatsapp": "Chat de WhatsApp",
+      "whatsappHint": "Tu número de teléfono con el prefijo del país, o un enlace wa.me.",
+      "notifications": "Notificaciones",
+      "telegramChatId": "ID del chat de Telegram para pedidos nuevos",
+      "telegramChatIdHint": "El chat donde el bot de la tienda anuncia los pedidos nuevos: un número (el ID de un grupo empieza por -100). Nunca se muestra en el sitio.",
+      "tooLong": "Como máximo {max} caracteres",
+      "invalid": {
+        "shopName": "Escribe un nombre",
+        "instagram": "Escribe un nombre de cuenta como @name o un enlace de perfil de instagram.com",
+        "email": "Escribe un correo como shop@example.com",
+        "phone": "Escribe un teléfono con el prefijo del país: dígitos, espacios, paréntesis y guiones",
+        "telegram": "Escribe un nombre de usuario como @name (al menos 5 caracteres) o un enlace t.me",
+        "viber": "Escribe un teléfono con el prefijo del país o un enlace de invitación de Viber",
+        "whatsapp": "Escribe un teléfono con el prefijo del país o un enlace wa.me",
+        "telegramChatId": "Escribe el ID del chat como número, por ejemplo -1001234567890"
+      }
+    },
+    "prices": {
+      "title": "Precios en otras monedas",
+      "hint": "Fijas cada precio en USD. Los visitantes lo ven convertido al tipo del BNU más el recargo, redondeado hacia arriba a un precio redondo.",
+      "markup": "Recargo, %",
+      "markupHint": "Se suma al tipo del BNU en cada moneda, USD incluido. 3 significa 3 %.",
+      "rulesTitle": "Redondeo",
+      "rulesHint": "Un precio se redondea hacia arriba al siguiente escalón más la terminación: escalón 10 y terminación 9 dan 1 289, 1 299, etc. Los precios por debajo del umbral opcional usan el escalón pequeño: escalón 1 y terminación 0.90 dan 29.90.",
+      "step": "Escalón",
+      "ending": "Terminación",
+      "smallBelow": "Precios pequeños por debajo de",
+      "smallStep": "Escalón pequeño",
+      "smallEnding": "Terminación pequeña",
+      "example": "Precio de ejemplo, USD",
+      "exampleHint": "Cada moneda de abajo muestra cómo queda este precio con los valores de arriba.",
+      "shownAs": "Se muestra como",
+      "noRate": "Aún no hay tipo",
+      "errors": {
+        "required": "Este campo es obligatorio",
+        "invalidNumber": "Escribe un número, por ejemplo 9.90",
+        "outOfRange": "Este valor está fuera de rango",
+        "endingTooLarge": "Debe ser menor que el escalón",
+        "smallTierIncomplete": "Rellena los tres campos de precios pequeños, o ninguno"
+      }
+    },
+    "about": {
+      "cardHint": "Tu historia, en cada idioma.",
+      "edit": "Editar la página «Sobre nosotros»",
+      "back": "Ajustes",
+      "title": "Página «Sobre nosotros»",
+      "hint": "Escribe tu historia en ucraniano (obligatorio para publicar) y en cualquier otro idioma. Un idioma sin texto propio muestra el inglés y, si no lo hay, el ucraniano; esa página se oculta a los buscadores.",
+      "state": "Página",
+      "text": "Texto",
+      "editorHint": "Solo títulos, párrafos, listas y enlaces; todo lo demás se elimina al guardar.",
+      "metaDescription": "Descripción para buscadores",
+      "metaDescriptionHint": "Hasta 500 caracteres. Si se deja vacía, se usa el comienzo del texto.",
+      "filled": "Escrito",
+      "empty": "Vacío",
+      "requiredToPublish": "Obligatorio para publicar",
+      "hasErrors": "Tiene errores",
+      "view": "Ver la página",
+      "toolbar": {
+        "label": "Formato",
+        "heading": "Título",
+        "subheading": "Subtítulo",
+        "paragraph": "Párrafo",
+        "bulletList": "Lista con viñetas",
+        "numberedList": "Lista numerada",
+        "link": "Enlace",
+        "unlink": "Quitar enlace",
+        "linkPrompt": "Dirección del enlace: https://…, mailto:… o tel:…"
+      },
+      "errors": {
+        "requiredToPublish": "Escribe el texto en ucraniano antes de publicar",
+        "tooLong": "Este texto es demasiado largo",
+        "textRequired": "Escribe el texto en este idioma o borra su descripción"
+      }
     }
   }
 }

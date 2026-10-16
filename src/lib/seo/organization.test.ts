@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { siteJsonLd } from "./organization";
+import { organizationContacts, siteJsonLd } from "./organization";
 
 const base = new URL("https://tjs.example");
 
@@ -63,5 +63,31 @@ describe("siteJsonLd", () => {
     for (const field of ["hasMerchantReturnPolicy", "shippingDetails", "MerchantReturnPolicy", "OfferShippingDetails"]) {
       expect(json).not.toContain(field);
     }
+  });
+});
+
+describe("organizationContacts", () => {
+  it("takes the email, the phone and the public profiles from the shop's settings", () => {
+    expect(
+      organizationContacts({
+        shopName: null,
+        channels: [
+          { kind: "phone", href: "tel:+380668301029", text: "+38 (066) 830 10 29" },
+          { kind: "instagram", href: "https://www.instagram.com/tjs/", text: "@tjs" },
+          { kind: "telegram", href: "https://t.me/tjs_shop" },
+          { kind: "whatsapp", href: "https://wa.me/380668301029" },
+          { kind: "email", href: "mailto:shop@example.com", text: "shop@example.com" },
+        ],
+      }),
+    ).toEqual({
+      email: "shop@example.com",
+      telephone: "+38 (066) 830 10 29",
+      sameAs: ["https://www.instagram.com/tjs/", "https://t.me/tjs_shop"],
+    });
+  });
+
+  it("states nothing without settings", () => {
+    expect(organizationContacts(null)).toBeUndefined();
+    expect(organizationContacts({ shopName: null, channels: [] })).toEqual({ sameAs: [] });
   });
 });

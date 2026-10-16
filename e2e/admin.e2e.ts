@@ -401,9 +401,13 @@ test.describe("admin on the local stack", () => {
       await expect(page.getByRole("link", { name: title })).toHaveCount(0);
       const { data: deleted } = await db!.from("products").select("deleted_at").eq("id", productId).single();
       expect(deleted?.deleted_at).not.toBeNull();
-      await page.goto(productPath);
-      await expect(page.getByRole("heading", { name: ukErrors.notFound.title })).toBeVisible();
       expect(errors).toEqual([]);
+      // the deleted product's page answers 404 at once (rendered anew, not the build's shell): the browser logs
+      // that status of the document itself, and nothing else
+      const response = await page.goto(productPath);
+      expect(response?.status()).toBe(404);
+      await expect(page.getByRole("heading", { name: ukErrors.notFound.title })).toBeVisible();
+      expect(errors).toEqual(["console: Failed to load resource: the server responded with a status of 404 (Not Found)"]);
     });
   });
 

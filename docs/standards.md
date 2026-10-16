@@ -85,6 +85,17 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   - Check: `e2e/prefetch.e2e.ts` reloads the shop ten times and fails on any response of the page that
     carries `stale-while-revalidate`; or `curl -sD - -o /dev/null -H "rsc: 1" -H
     "next-router-prefetch: 1" -H "next-router-segment-prefetch: /_tree" <url>` on `next start`.
+- **No build-time shell after an admin save (Next 16.4.1, found in #21).** With `partialPrefetching: true`,
+  a page under a second dynamic segment (`/shop/[category]`, `/product/[slug]`) whose entry an `updateTag`
+  just expired is answered once from the build's generic fallback shell while it regenerates in the
+  background: the first request after a save showed the build's footer and prices (and JSON-LD price), a
+  deleted product's page answered 200 from that shell; the second request was right. Pages under `[locale]`
+  only render anew at once (a root param is blocking). Such a route therefore exports
+  `unstable_paramMatching = { <param>: "blocking" }`, which makes Next render it anew instead of serving the
+  fallback shell (turning `partialPrefetching` off fixes it too, but changes prefetching for the whole app).
+  Check: `e2e/settings.e2e.ts` asserts the footer on a category page and a product page, and the
+  product page's price and JSON-LD price, on the first request after each save; `e2e/admin.e2e.ts` the 404
+  of a just-deleted product.
 - **A failed read is never cached as data (Next 16.4.1, found in #59).** A `"use cache"` data function
   either throws on a failed read or gives its entry `cacheLife(FAILED_READ_LIFE)`
   (`src/lib/failed-read.ts`: zero stale, revalidate and expire). That covers an *incomplete* read

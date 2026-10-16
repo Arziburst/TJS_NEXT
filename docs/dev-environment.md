@@ -448,7 +448,7 @@ local runs and CI without it mark every event `skipped_unconfigured`, even with 
 |---|---|
 | `NOTIFICATIONS_SEND` | `true` only where messages may go out (the production deployment) |
 | `TELEGRAM_BOT_TOKEN` | the bot's token (SECRET); the bot is a member of the owner's group — **TBD, the owner provides it** |
-| `TELEGRAM_CHAT_ID` | the group's chat id (negative for groups) — **TBD**; moves to the admin settings with #21 |
+| `TELEGRAM_CHAT_ID` | the group's chat id (negative for groups) — **TBD**; a fallback only: the chat id in the admin settings (`/admin/settings`, #21) wins |
 | `RESEND_API_KEY` | the Resend API key (SECRET) — **TBD** |
 | `EMAIL_FROM` | the sender, e.g. `Shop <orders@<domain>>`, on a domain verified in Resend — **TBD, the owner decides** |
 | `EMAIL_REPLY_TO` | optional: where the customer's replies go |
