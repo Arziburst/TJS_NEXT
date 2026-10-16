@@ -467,6 +467,31 @@ test.describe("order request on the local stack", () => {
     expect(errors).toEqual([]);
   });
 
+  // #66: a size the owner switches off while the form is open is named as a size, not as a piece someone else took
+  test("a size switched off meanwhile refuses the request with a size message; nothing is stored", async ({ page, baseURL }) => {
+    const errors = collectErrors(page);
+    await useOwnClientIp(page);
+    const ring = await createProduct({ fulfillment: "made_to_order", priceUsd: 20 });
+    const size = await admin!.from("product_variants").insert({ product_id: ring.id, sku_suffix: "17" }).select("id").single();
+    if (size.error) throw size.error;
+    const label = await admin!.from("product_variant_translations").insert({ variant_id: size.data.id, locale: "en", label: "17" });
+    if (label.error) throw label.error;
+    await page.context().addCookies([
+      { name: "TJS_CART", value: encodeURIComponent(JSON.stringify([{ p: ring.id, v: size.data.id, q: 1 }])), url: baseURL! },
+    ]);
+    await open(page, "/en/checkout");
+    const email = uniqueEmail();
+    await fillContact(page, email);
+    await chooseKyivBranch(page);
+
+    expect((await admin!.from("product_variants").update({ is_available: false }).eq("id", size.data.id)).error).toBeNull();
+    await page.getByRole("button", { name: t.submit }).click();
+    await expect(page.getByTestId("checkout-error")).toHaveText(t.errors.sizeUnavailable.replace("{titles}", `${ring.title} (17)`));
+    await expect(page.getByTestId("checkout-error")).not.toContainText("someone else");
+    expect(await ordersOf(email)).toEqual([]);
+    expect(errors).toEqual([]);
+  });
+
   // #66: one ring in two sizes is two lines, each at its own size's price, from the cart to the stored order
   test("two sizes of one product: two lines in the cart, two order lines with their sizes and prices", async ({ page, baseURL }) => {
     const errors = collectErrors(page);
