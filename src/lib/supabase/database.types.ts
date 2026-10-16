@@ -196,6 +196,56 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"order_notes": {
+                  Row: {
+                    "author_id": string | null,"body": string,"created_at": string,"id": string,"order_id": string
+                  }
+                  Insert: {
+                    "author_id"?: string | null,"body": string,"created_at"?: string,"id"?: string,"order_id": string
+                  }
+                  Update: {
+                    "author_id"?: string | null,"body"?: string,"created_at"?: string,"id"?: string,"order_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "order_notes_author_id_fkey"
+      columns: ["author_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "order_notes_order_id_fkey"
+      columns: ["order_id"]
+isOneToOne: false
+      referencedRelation: "orders"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"order_status_history": {
+                  Row: {
+                    "changed_by": string | null,"created_at": string,"from_status": Database["public"]['Enums']["order_status"],"id": string,"order_id": string,"to_status": Database["public"]['Enums']["order_status"]
+                  }
+                  Insert: {
+                    "changed_by"?: string | null,"created_at"?: string,"from_status": Database["public"]['Enums']["order_status"],"id"?: string,"order_id": string,"to_status": Database["public"]['Enums']["order_status"]
+                  }
+                  Update: {
+                    "changed_by"?: string | null,"created_at"?: string,"from_status"?: Database["public"]['Enums']["order_status"],"id"?: string,"order_id"?: string,"to_status"?: Database["public"]['Enums']["order_status"]
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "order_status_history_changed_by_fkey"
+      columns: ["changed_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "order_status_history_order_id_fkey"
+      columns: ["order_id"]
+isOneToOne: false
+      referencedRelation: "orders"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"orders": {
                   Row: {
                     "comment": string | null,"country": string,"created_at": string,"currency": string,"currency_decimals": number,"delivery_carrier": string,"delivery_destination": NonNullable<Json>,"delivery_estimate_currency": string | null,"delivery_estimate_decimals": number | null,"delivery_estimate_minor": number | null,"delivery_estimate_source": string | null,"delivery_estimate_state": string,"delivery_method": string,"email": string,"first_name": string,"fx_rate": number,"fx_rate_date": string | null,"id": string,"idempotency_key": string,"items_total_minor": number,"items_total_usd_minor": number,"last_name": string | null,"locale": string,"markup_bps": number,"number": number,"phone": string,"status": Database["public"]['Enums']["order_status"],"updated_at": string,"user_id": string | null
@@ -455,6 +505,9 @@ isOneToOne: false
 "admin_delete_taxonomy_term":
 { Args: { "p_id": string }; Returns: string
                            },
+"admin_list_orders":
+{ Args: { "p_country"?: string,"p_date_from"?: string,"p_date_to"?: string,"p_limit"?: number,"p_offset"?: number,"p_query"?: string,"p_status"?: Database["public"]['Enums']["order_status"] }; Returns: Json
+                           },
 "admin_reorder_product_images":
 { Args: { "p_image_ids": (string)[],"p_product_id": string }; Returns: undefined
                            },
@@ -478,6 +531,9 @@ isOneToOne: false
                            },
 "admin_save_variant_labels":
 { Args: { "p_labels": Json,"p_overwrite": boolean,"p_product_id": string }; Returns: number
+                           },
+"admin_set_order_status":
+{ Args: { "p_from": Database["public"]['Enums']["order_status"],"p_number": number,"p_to": Database["public"]['Enums']["order_status"] }; Returns: Json
                            },
 "admin_set_product_status":
 { Args: { "p_id": string,"p_status": Database["public"]['Enums']["product_status"] }; Returns: boolean

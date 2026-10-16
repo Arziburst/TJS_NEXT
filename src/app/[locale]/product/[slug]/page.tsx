@@ -64,12 +64,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/product/
       description,
       url: productPath(translation.locale, translation.slug),
       ...productOpenGraphLocales(page.translations, translation.locale),
-      images: product.images.slice(0, 1).map((image) => ({
-        url: image.url,
-        width: image.width,
-        height: image.height,
-        alt: image.alt,
-      })),
+      // og:image: ./opengraph-image.tsx (the main photo with the title and the price)
     },
   };
 }

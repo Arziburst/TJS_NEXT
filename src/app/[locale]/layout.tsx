@@ -17,6 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: getMetadataBase(),
     title: { default: t("brand"), template: `%s | ${t("brand")}` },
+    // X shows the og:image of the page (the opengraph-image files) as a large card
+    twitter: { card: "summary_large_image" },
   };
 }
 

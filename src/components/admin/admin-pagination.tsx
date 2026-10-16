@@ -8,22 +8,22 @@ import { ADMIN_PRODUCTS_HREF } from "./paths";
 type AdminPaginationProps = {
   page: number;
   pageCount: number;
-  /** The list's search and filters, kept on every page link. */
-  filters: { query?: string; categoryId?: string; status?: string };
+  /** The list's search and filters as URL params, kept on every page link. */
+  search: Record<string, string | undefined>;
+  /** The list's page (default: the product list). */
+  path?: string;
 };
 
-/** Previous / next page of the admin list, with the filters kept; nothing for a single page. */
-export async function AdminPagination({ page, pageCount, filters }: AdminPaginationProps) {
+/** Previous / next page of an admin list, with the filters kept; nothing for a single page. */
+export async function AdminPagination({ page, pageCount, search, path = ADMIN_PRODUCTS_HREF }: AdminPaginationProps) {
   if (pageCount <= 1) return null;
   const t = await getTranslations("admin.list.pagination");
   const href = (target: number) => {
     const params = new URLSearchParams();
-    if (filters.query) params.set("q", filters.query);
-    if (filters.categoryId) params.set("category", filters.categoryId);
-    if (filters.status) params.set("status", filters.status);
+    for (const [key, value] of Object.entries(search)) if (value && key !== "page") params.set(key, value);
     if (target > 1) params.set("page", String(target));
-    const search = params.toString();
-    return search ? `${ADMIN_PRODUCTS_HREF}?${search}` : ADMIN_PRODUCTS_HREF;
+    const query = params.toString();
+    return query ? `${path}?${query}` : path;
   };
   const link = cn(buttonVariants({ variant: "outline" }), "min-w-12 px-3");
 

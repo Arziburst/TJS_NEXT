@@ -1,6 +1,7 @@
 {
   "telegram": {
     "newOrder": "Nová žádost o objednávku č. {number}",
+    "statusChange": "Objednávka č. {number}: {from} → {to}",
     "placed": "Přijato: {date}",
     "customer": "Zákazník",
     "phone": "Telefon",

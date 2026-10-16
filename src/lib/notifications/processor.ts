@@ -1,5 +1,6 @@
 import "server-only";
 
+import { isOrderEvent } from "./events";
 import type { NotificationOrder } from "./order";
 
 // The outbox processor (D11: sending never blocks or loses an order). It runs after an order is placed (after())
@@ -43,8 +44,11 @@ export type ClaimedEvent = {
   claimToken: string;
   event: string;
   orderId: string;
-  // when the event was written, i.e. when the order was placed
+  // when the event was written: when the order was placed, or when its status changed
   createdAt: string;
+  // what the event says beyond the order ({ number } or, for a status change, { number, from, to }); absent in
+  // tests that do not need it
+  payload?: unknown;
   // counts this claim
   attempts: number;
   telegram: Delivery;
@@ -110,7 +114,7 @@ type Attempt = SendOutcome | { status: "held"; retryAfterSeconds: number; error:
 
 async function attempt(channel: Channel, event: ClaimedEvent, order: NotificationOrder | null, deps: ProcessorDeps, run: RunState): Promise<Attempt> {
   if (!order) return { status: "error", error: "the order could not be read" };
-  if (event.event !== "order_created") return { status: "error", error: `unknown event ${event.event}` };
+  if (!isOrderEvent(event.event)) return { status: "error", error: `unknown event ${event.event}` };
   const paused = run.pausedFor[channel];
   if (paused !== undefined) return { status: "held", retryAfterSeconds: paused, error: "paused after a 429 in this run" };
   const cap = SENDS_PER_RUN[channel];

@@ -117,6 +117,16 @@ describe("message catalogs", () => {
       // Auth's emails (#99): the shop's name and the new address of an email change
       shop: "TJS",
       newEmail: "olena.new@example.com",
+      // the admin's orders (#27)
+      from: "New",
+      to: "In processing",
+      author: "Olena",
+      rate: "41.5",
+      markup: "3%",
+      city: "Berlin",
+      postCode: "10115",
+      street: "Invalidenstr.",
+      house: "1",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };
