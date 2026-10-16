@@ -9,6 +9,7 @@ import { existsSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../src/lib/supabase/database.types";
+import { firstLoadScripts } from "./client-js";
 import enErrors from "../messages/en/errors.json" with { type: "json" };
 import ukAdmin from "../messages/uk/admin.json" with { type: "json" };
 import ukCart from "../messages/uk/cart.json" with { type: "json" };
@@ -96,6 +97,40 @@ test.describe("error pages (#112)", () => {
 
     await recover(page);
     await boundary.getByRole("button", { name: ukErrors.boundary.retry }).click();
+    await expect(page.locator("[data-error-boundary]")).toHaveCount(0);
+    await expect(page.locator("header").first()).toBeVisible();
+  });
+
+  test("a failing root layout whose lazy code cannot load: a plain page with a reload, never a blank one (#105)", async ({ page }) => {
+    await failWith(page, "shell");
+    // the scripts each document names load; every chunk loaded later (the error view, the locale's texts) fails
+    let firstLoad = new Set<string>();
+    await page.route("**/*", async (route) => {
+      const request = route.request();
+      if (request.resourceType() === "document") {
+        const response = await route.fetch();
+        const html = await response.text();
+        firstLoad = new Set(firstLoadScripts(html));
+        return route.fulfill({ response, body: html });
+      }
+      const { pathname } = new URL(request.url());
+      if (pathname.startsWith("/_next/static/chunks/") && pathname.endsWith(".js") && !firstLoad.has(pathname)) {
+        return route.abort();
+      }
+      return route.continue();
+    });
+
+    await page.goto("/uk");
+    const boundary = page.locator("[data-error-boundary]");
+    // English stands in for the locale's texts that could not load
+    await expect(boundary.getByRole("heading", { level: 1, name: enErrors.boundary.title })).toBeVisible();
+    await expect(boundary.getByText(enErrors.boundary.description)).toBeVisible();
+    await expect(boundary.getByRole("link", { name: enErrors.boundary.home })).toHaveAttribute("href", "/uk");
+    const reload = boundary.getByRole("link", { name: enErrors.boundary.retry });
+    await expect(reload).toHaveAttribute("href", "/uk");
+
+    await recover(page);
+    await reload.click();
     await expect(page.locator("[data-error-boundary]")).toHaveCount(0);
     await expect(page.locator("header").first()).toBeVisible();
   });

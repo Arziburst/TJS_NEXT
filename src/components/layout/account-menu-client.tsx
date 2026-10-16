@@ -36,8 +36,15 @@ export function AccountMenuClient({ displayName, adminLinks, savedLocale, classN
   const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // opened from the keyboard, the menu focuses its first item, as Base UI's own trigger does
+  const [focusFirstItem, setFocusFirstItem] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const preload = () => void loadPopup();
+  const openMenu = (fromKeyboard: boolean) => {
+    setFocusFirstItem(fromKeyboard);
+    setMounted(true);
+    setOpen(true);
+  };
 
   // A signed-in user who reads the shop in another language gets Auth's emails in it from now on. Only a
   // difference from a stored locale calls the server, which checks the session and the rate limit itself. An
@@ -62,12 +69,17 @@ export function AccountMenuClient({ displayName, adminLinks, savedLocale, classN
         onPointerEnter={preload}
         onTouchStart={preload}
         onFocus={preload}
+        onKeyDown={(event) => {
+          if (event.key !== "ArrowDown") return;
+          event.preventDefault();
+          openMenu(true);
+        }}
         onClick={(event) => {
           // the mobile menu sheet closes on clicks in its account slot (meant for links); this one only opens
           // the account menu, so the sheet stays
           event.stopPropagation();
-          setMounted(true);
-          setOpen(true);
+          // Enter and Space click with no pointer (detail 0)
+          openMenu(event.detail === 0);
         }}
         className={cn(
           "inline-flex size-11 items-center justify-center transition-opacity outline-none hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring data-popup-open:opacity-70",
@@ -86,6 +98,7 @@ export function AccountMenuClient({ displayName, adminLinks, savedLocale, classN
           open={open}
           onOpenChange={setOpen}
           trigger={triggerRef}
+          focusFirstItem={focusFirstItem}
           displayName={displayName}
           adminLinks={adminLinks}
         />

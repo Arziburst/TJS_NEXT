@@ -19,6 +19,7 @@ export function onToasterRequest(listener: () => void): () => void {
 
 function show(kind: Kind, message: string) {
   toasterRequests.forEach((listener) => listener());
+  // eslint-disable-next-line no-restricted-syntax -- the one module that loads sonner (eslint.config.mjs, #105)
   void import("sonner").then(({ toast }) => (kind === "message" ? toast(message) : toast[kind](message)));
 }
 

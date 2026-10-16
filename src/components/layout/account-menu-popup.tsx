@@ -3,7 +3,7 @@
 import { Menu } from "@base-ui/react/menu";
 import { HeartIcon, LayoutDashboardIcon, LogOutIcon, MapPinIcon, PackageIcon, PlusIcon, UserIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useTransition, type RefObject } from "react";
+import { useEffect, useRef, useTransition, type RefObject } from "react";
 import { ACCOUNT_ADDRESSES_HREF, ACCOUNT_HREF, ACCOUNT_ORDERS_HREF } from "@/components/account/paths";
 import { ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "@/components/admin/paths";
 import { routes } from "@/config/routes";
@@ -16,6 +16,8 @@ export type AccountMenuPopupProps = {
   onOpenChange: (open: boolean) => void;
   /** The trigger: the popup is placed against it and gives the focus back to it. */
   trigger: RefObject<HTMLButtonElement | null>;
+  /** Opened from the keyboard: the first item takes the focus (and the highlight), as with Base UI's trigger. */
+  focusFirstItem: boolean;
   displayName: string;
   adminLinks?: { admin: string; addProduct: string };
 };
@@ -32,10 +34,23 @@ const itemClass =
   "flex cursor-pointer items-center gap-2 px-3 py-2.5 outline-none select-none data-highlighted:bg-primary data-highlighted:text-primary-foreground";
 
 /** The account menu's popup: who is signed in, their account pages, sign-out. Loaded by AccountMenuClient on first use. */
-export function AccountMenuPopup({ open, onOpenChange, trigger, displayName, adminLinks }: AccountMenuPopupProps) {
+export function AccountMenuPopup({ open, onOpenChange, trigger, focusFirstItem, displayName, adminLinks }: AccountMenuPopupProps) {
   const t = useTranslations("nav");
   const locale = useLocale();
   const [signingOut, startSignOut] = useTransition();
+  const shown = useOpenAfterMount(open);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  // after the popup took the focus on opening, hand it to the first item
+  useEffect(() => {
+    if (!shown || !focusFirstItem) return;
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => {
+        popupRef.current?.querySelector<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])')?.focus();
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [shown, focusFirstItem]);
 
   // Called as an action, not through a <form> in the menu: the mobile menu sheet closes (and unmounts this
   // component) on any click in its account slot, which must not cancel the sign-out.
@@ -46,10 +61,11 @@ export function AccountMenuPopup({ open, onOpenChange, trigger, displayName, adm
   }
 
   return (
-    <Menu.Root modal open={useOpenAfterMount(open)} onOpenChange={onOpenChange}>
+    <Menu.Root modal open={shown} onOpenChange={onOpenChange}>
       <Menu.Portal>
         <Menu.Positioner anchor={trigger} side="bottom" align="end" sideOffset={6} className="z-50">
           <Menu.Popup
+            ref={popupRef}
             finalFocus={trigger}
             className="min-w-56 border-2 border-primary bg-background p-1 font-sans text-sm text-foreground outline-none data-ending-style:opacity-0 data-starting-style:opacity-0 transition-opacity"
           >

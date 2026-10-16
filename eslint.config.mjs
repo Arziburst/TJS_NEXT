@@ -46,6 +46,12 @@ const eslintConfig = defineConfig([
         ...literalText(`Property[key.value=${textKey}]`, textInModule),
         ...literalText("CallExpression[callee.name='toast']", textInModule),
         ...literalText("CallExpression[callee.object.name='toast']", textInModule),
+        // #105: sonner loads on first use, only through src/components/layout/toast.ts (no-restricted-imports
+        // below covers the static imports)
+        {
+          selector: "ImportExpression[source.value='sonner']",
+          message: 'import { toast } from "@/components/layout/toast" (sonner loads on first use, #105)',
+        },
       ],
     },
   },
@@ -62,6 +68,7 @@ const eslintConfig = defineConfig([
             { name: "sonner", message: "import { toast } from \"@/components/layout/toast\" (sonner loads on first use, #105)" },
             { name: "@/components/ui/sonner", message: "the toaster is LazyToaster in the site shell (#105)" },
           ],
+          patterns: [{ group: ["**/ui/sonner"], message: "the toaster is LazyToaster in the site shell (#105)" }],
         },
       ],
     },

@@ -246,7 +246,8 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   (`npx next analyze --output`, then `next analyze export`).
   - A sheet, dialog or menu that is closed on load is code loaded on first use: a plain trigger button with
     the same look and ARIA, and the Base UI part behind `next/dynamic` (`src/components/layout/lazy-sheet.ts`;
-    the mobile menu, the mini-cart and the filter sheet; the account menu the same way with Base UI's menu).
+    the mobile menu, the mini-cart and the filter sheet; the account menu the same way with Base UI's menu,
+    which Enter and ArrowDown open with the focus on its first item, as Base UI's own trigger does).
     No `next/dynamic` with server rendering in the header: a lazy component still loading when a render
     switches to the not-found page fails its boundary (React #419).
   - Every toast goes through `src/components/layout/toast.ts`: sonner loads with the first toast and the
