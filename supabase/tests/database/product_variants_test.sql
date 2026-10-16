@@ -3,7 +3,7 @@
 -- and the listing price of a product with variants.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(63);
+select plan(66);
 
 insert into auth.users (id, email) values
   ('61111111-1111-4111-8111-111111111111', 'variants-customer-' || gen_random_uuid() || '@example.test'),
@@ -384,6 +384,32 @@ select ok(
 select is(
   (select count(*)::int from public.cart_items where variant_id = 'c6000000-0000-4000-8000-000000000001'),
   1, 'a cart line of a deleted variant stays (the cart shows it as no longer available)'
+);
+
+-- Machine-translated size names (the translation run, #19) ----------------------------------------------------------
+select set_config('request.jwt.claims', '{"sub":"61111111-1111-4111-8111-111111111111","role":"authenticated"}', true);
+set local role authenticated;
+select throws_ok(
+  $$select public.admin_save_variant_labels('b6000000-0000-4000-8000-000000000001',
+      '[{"variant_id":"c6000000-0000-4000-8000-000000000002","locale":"de","label":"x"}]', false)$$,
+  '42501', null, 'a customer cannot save translated size names'
+);
+reset role;
+select set_config('request.jwt.claims', '{"sub":"62222222-2222-4222-8222-222222222222","role":"authenticated"}', true);
+set local role authenticated;
+select is(
+  public.admin_save_variant_labels('b6000000-0000-4000-8000-000000000001',
+    '[{"variant_id":"c6000000-0000-4000-8000-000000000002","locale":"de","label":"18"},
+      {"variant_id":"c6000000-0000-4000-8000-000000000002","locale":"uk","label":"вісімнадцять"},
+      {"variant_id":"c6000000-0000-4000-8000-000000000005","locale":"de","label":"M"}]', false),
+  1, 'an admin saves machine size names of the product''s live sizes only, keeping existing ones'
+);
+reset role;
+select results_eq(
+  $$select locale::text, label, source::text from public.product_variant_translations
+    where variant_id = 'c6000000-0000-4000-8000-000000000002' order by locale$$,
+  $$values ('de', '18', 'machine'), ('uk', '18', 'human')$$,
+  'the new label is a machine one, the human label is kept without overwrite'
 );
 
 -- The listing filters by the listing price ----------------------------------------------------------------------------

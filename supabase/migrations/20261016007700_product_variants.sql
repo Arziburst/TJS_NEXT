@@ -323,6 +323,36 @@ begin
 end;
 $$;
 
+-- Machine translations of the size names (the product's translation run, #19): [{ variant_id, locale, label }] of
+-- the product's live sizes, saved as source = machine; a label already there is kept unless p_overwrite.
+create function public.admin_save_variant_labels(p_product_id uuid, p_labels jsonb, p_overwrite boolean)
+returns integer
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_count integer;
+begin
+  perform private.assert_admin_writes_variants();
+  if jsonb_typeof(p_labels) is distinct from 'array' then
+    raise exception 'labels must be an array' using errcode = '22023';
+  end if;
+  perform private.lock_live_product(p_product_id);
+  insert into public.product_variant_translations (variant_id, locale, label, source)
+  select l.variant_id, l.locale, btrim(l.label), 'machine'
+  from jsonb_to_recordset(p_labels) as l (variant_id uuid, locale public.locale, label text)
+  join public.product_variants v on v.id = l.variant_id and v.product_id = p_product_id and v.deleted_at is null
+  on conflict (variant_id, locale) do update set label = excluded.label, source = excluded.source
+  where p_overwrite;
+  get diagnostics v_count = row_count;
+  return v_count;
+end;
+$$;
+
+revoke all on function public.admin_save_variant_labels(uuid, jsonb, boolean) from public, anon;
+grant execute on function public.admin_save_variant_labels(uuid, jsonb, boolean) to authenticated, service_role;
+
 revoke all on function public.admin_save_product_variant(uuid, uuid, jsonb, jsonb) from public, anon;
 revoke all on function public.admin_set_product_variant_available(uuid, uuid, boolean) from public, anon;
 revoke all on function public.admin_reorder_product_variants(uuid, uuid[]) from public, anon;

@@ -7,12 +7,16 @@ import { Link } from "@/i18n/navigation";
 import { PUBLISH_LOCALE } from "@/lib/admin/product-form";
 import type { AdminProductListItem } from "@/lib/admin/products";
 import type { Category } from "@/lib/catalog/types";
+import { SelectProductCheckbox } from "./bulk-translation";
 import { editProductHref } from "./paths";
 import { StatusToggle } from "./status-toggle";
 
 const STATUS_VARIANT = { published: "default", draft: "secondary", archived: "outline" } as const;
 
-/** The admin's product list: one card per product, the title links to its form, one tap (un)publishes it. */
+/**
+ * The admin's product list: one card per product, the title links to its form, one tap (un)publishes it, a
+ * checkbox selects it for the bulk translation actions (BulkTranslation around the list).
+ */
 export async function ProductList({ items, categories }: { items: AdminProductListItem[]; categories: Category[] }) {
   const [t, tAdmin, tLocales, format] = await Promise.all([
     getTranslations("admin.list"),
@@ -30,8 +34,9 @@ export async function ProductList({ items, categories }: { items: AdminProductLi
         return (
           <li
             key={item.id}
-            className="grid grid-cols-[4rem_minmax(0,1fr)] gap-x-3 gap-y-3 border-2 border-hairline p-3 sb:grid-cols-[4rem_minmax(0,1fr)_auto] sb:items-center"
+            className="grid grid-cols-[auto_4rem_minmax(0,1fr)] gap-x-3 gap-y-3 border-2 border-hairline p-3 sb:grid-cols-[auto_4rem_minmax(0,1fr)_auto] sb:items-center"
           >
+            <SelectProductCheckbox id={item.id} title={title} />
             <div className="relative size-16 overflow-hidden bg-muted">
               {item.image ? (
                 <Image src={item.image.url} alt="" fill sizes="64px" quality={75} className="object-cover" />
@@ -78,6 +83,14 @@ export async function ProductList({ items, categories }: { items: AdminProductLi
                   })}
                 </p>
               )}
+              {item.unreviewedLocales.length > 0 && (
+                <p className="font-input text-xs">
+                  {t("unreviewed", {
+                    count: item.unreviewedLocales.length,
+                    locales: format.list(item.unreviewedLocales.map((l) => tLocales(l))),
+                  })}
+                </p>
+              )}
             </div>
             <StatusToggle
               productId={item.id}
@@ -85,7 +98,7 @@ export async function ProductList({ items, categories }: { items: AdminProductLi
               canPublish={!missingUk}
               title={title}
               setProductStatus={setProductStatus}
-              className="col-span-2 sb:col-span-1"
+              className="col-span-3 sb:col-span-1"
             />
           </li>
         );

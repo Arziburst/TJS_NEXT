@@ -20,6 +20,7 @@ import type { AdminProduct } from "@/lib/admin/products";
 import { ChoiceField, FieldShell, TextField, fieldId, useFieldErrorText } from "./form-fields";
 import { editProductHref } from "./paths";
 import { selectClass } from "./styles";
+import { TranslatePanel, type TranslatePanelProps } from "./translate-panel";
 import { TranslationFields } from "./translation-fields";
 
 type ProductFormProps = {
@@ -34,6 +35,8 @@ type ProductFormProps = {
   deleteButton?: ReactNode;
   /** The materials and colours to choose from, and the product's (#25), rendered by the page. */
   taxonomy?: ReactNode;
+  /** Machine translation of an existing (saved) product. */
+  translation?: Pick<TranslatePanelProps, "configured" | "translateProduct" | "setTranslationReviewed">;
 };
 
 const idle: SaveProductState = { status: "idle" };
@@ -48,7 +51,16 @@ function localesWithErrors(fields: FieldErrors | undefined): Locale[] {
  * tiles, the texts of every locale in disclosures, and a save bar that stays at the bottom of the screen.
  * The server action validates everything again; its field errors are listed on top and shown at each field.
  */
-export function ProductForm({ product, categories, saveProduct, photos, variants, deleteButton, taxonomy }: ProductFormProps) {
+export function ProductForm({
+  product,
+  categories,
+  saveProduct,
+  photos,
+  variants,
+  deleteButton,
+  taxonomy,
+  translation,
+}: ProductFormProps) {
   const t = useTranslations("admin.form");
   const tAdmin = useTranslations("admin");
   const errorText = useFieldErrorText();
@@ -57,6 +69,8 @@ export function ProductForm({ product, categories, saveProduct, photos, variants
   const [fulfillment, setFulfillment] = useState<string>(product?.fulfillment ?? "made_to_order");
   const [status, setStatus] = useState<string>(product?.status ?? "draft");
   const [openLocales, setOpenLocales] = useState<ReadonlySet<Locale>>(() => new Set([PUBLISH_LOCALE]));
+  // unsaved changes: the translation panel waits for a save (it writes from the saved texts)
+  const [dirty, setDirty] = useState(false);
   const summaryRef = useRef<HTMLDivElement>(null);
 
   const fields: FieldErrors = state.status === "error" ? (state.fields ?? {}) : {};
@@ -71,6 +85,7 @@ export function ProductForm({ product, categories, saveProduct, photos, variants
       summaryRef.current?.focus();
     }
     if (state.status === "saved") {
+      setDirty(false);
       toast.success(t(state.created ? "created" : "saved"));
       if (state.created) router.replace(editProductHref(state.id));
     }
@@ -86,7 +101,24 @@ export function ProductForm({ product, categories, saveProduct, photos, variants
   const errorEntries = Object.entries(fields).filter((entry): entry is [string, NonNullable<FieldErrors[string]>] => !!entry[1]);
 
   return (
-    <form onSubmit={onSubmit} noValidate className="grid gap-6" aria-busy={pending}>
+    <form
+      onSubmit={onSubmit}
+      // only the product's own fields count: named and submitted with this form (the translation panel's controls
+      // have no name; the photo alt texts belong to their own form and save on their own)
+      onInput={(event) => {
+        const field = event.target;
+        if (
+          (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement) &&
+          field.name &&
+          field.form === event.currentTarget
+        ) {
+          setDirty(true);
+        }
+      }}
+      noValidate
+      className="grid gap-6"
+      aria-busy={pending}
+    >
       <input type="hidden" name="id" value={product?.id ?? ""} />
       <p className="font-input text-sm">{tAdmin("product.title")}</p>
 
@@ -228,9 +260,15 @@ export function ProductForm({ product, categories, saveProduct, photos, variants
           {t("sections.translations")}
         </h2>
         <p className="font-input text-xs">{t("translationsHint")}</p>
+        {product && translation ? (
+          <TranslatePanel productId={product.id} translations={product.translations} dirty={dirty} {...translation} />
+        ) : (
+          <p className="font-input text-xs">{t("translateAfterSave")}</p>
+        )}
         {EDITOR_LOCALES.map((locale) => (
           <TranslationFields
-            key={locale}
+            // a translation run or a review rewrites the row: its fields are read again from the saved text
+            key={`${locale}:${translations.get(locale)?.updatedAt ?? "new"}`}
             locale={locale}
             initial={translations.get(locale)}
             errors={fields}

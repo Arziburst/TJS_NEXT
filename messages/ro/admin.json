@@ -80,6 +80,7 @@
       "next": "Pagina următoare",
       "page": "Pagina {page} din {count}"
     },
+    "unreviewed": "{count, plural, one {# traducere automată neverificată} few {# traduceri automate neverificate} other {# de traduceri automate neverificate}}: {locales}",
     "variants": "{count, plural, one {# mărime} few {# mărimi} other {# de mărimi}}"
   },
   "actionErrors": {
@@ -188,6 +189,64 @@
       "requiredToPublish": "Pentru publicare este necesar un titlu în ucraineană",
       "hasVariants": "O piesă cu mărimi rămâne la comandă; ștergeți mai întâi mărimile ei",
       "variantPriceNotPositive": "O mărime a acestui produs ar costa zero sau mai puțin; schimbați mai întâi diferența ei de preț"
+    },
+    "translateAfterSave": "Salvați mai întâi produsul; apoi poate fi tradus automat în celelalte limbi."
+  },
+  "translate": {
+    "title": "Traducere automată",
+    "hint": "Completează celelalte limbi dintr-un singur text, dintr-o dată. Textele automate apar în magazin, dar motoarele de căutare nu le indexează până nu le marcați ca verificate.",
+    "notConfigured": "Traducerea automată nu este configurată pe acest server. Completați limbile manual sau rugați dezvoltatorul să conecteze AI Gateway.",
+    "saveFirst": "Salvați mai întâi modificările: traducerea pornește de la textul salvat.",
+    "source": "Tradu din",
+    "noSourceOption": "Încă fără text",
+    "targets": "În",
+    "existing": "are text",
+    "overwrite": "Înlocuiește și textele existente",
+    "submit": "{count, plural, =0 {Tradu} one {Tradu în # limbă} few {Tradu în # limbi} other {Tradu în # de limbi}}",
+    "running": "Se traduce în {count, plural, one {# limbă} few {# limbi} other {# de limbi}}… Durează un minut sau două.",
+    "done": "Tradus în: {locales}.",
+    "doneToast": "{count, plural, one {Tradus în # limbă} few {Tradus în # limbi} other {Tradus în # de limbi}}",
+    "partial": "Netradus: {locales}. Încercați din nou.",
+    "review": {
+      "title": "Verificare",
+      "hint": "Citiți fiecare text automat și marcați-l ca verificat: abia atunci motoarele de căutare indexează pagina în acea limbă.",
+      "none": "Nicio traducere automată de verificat.",
+      "reviewed": "Verificat",
+      "notReviewed": "Neverificat",
+      "label": "{language}: verificat",
+      "markedToast": "{language}: marcat ca verificat",
+      "unmarkedToast": "{language}: din nou neverificat"
+    },
+    "errors": {
+      "notAuthorized": "Doar administratorul poate face asta. Autentificați-vă din nou.",
+      "invalid": "Această cerere nu este validă.",
+      "notConfigured": "Traducerea automată nu este configurată pe acest server.",
+      "tooManyRequests": "Prea multe traduceri într-un timp scurt. Așteptați puțin și încercați din nou.",
+      "notFound": "Acest produs nu mai există.",
+      "noSource": "Limba aleasă nu are text din care să se traducă.",
+      "nothingToTranslate": "Nimic de tradus: fiecare limbă aleasă are deja text.",
+      "conflict": "Între timp, alt produs a ocupat una dintre noile adrese de pagină. Încercați din nou.",
+      "authFailed": "Serviciul de traducere a refuzat cheia de acces. Rugați dezvoltatorul să o verifice.",
+      "rateLimited": "Serviciul de traducere este supraîncărcat. Încercați din nou peste câteva minute.",
+      "timeout": "Traducerea a durat prea mult. Încercați din nou sau alegeți mai puține limbi.",
+      "unavailable": "Serviciul de traducere nu este disponibil acum. Încercați mai târziu.",
+      "rejected": "Serviciul de traducere a refuzat cererea. Rugați dezvoltatorul să verifice jurnalele.",
+      "invalidOutput": "Traducerea a venit inutilizabilă. Încercați din nou.",
+      "unexpectedError": "Ceva nu a mers. Încercați din nou."
+    },
+    "bulk": {
+      "label": "Traducerea produselor selectate",
+      "selectAll": "Selectează tot de pe această pagină",
+      "select": "Selectează {title}",
+      "selected": "{count, plural, =0 {Nimic selectat} one {# selectat} few {# selectate} other {# selectate}}",
+      "translate": "{count, plural, =0 {Tradu limbile lipsă} other {Tradu limbile lipsă (#)}}",
+      "markReviewed": "{count, plural, =0 {Marchează traducerile ca verificate} other {Marchează traducerile ca verificate (#)}}",
+      "stop": "Oprește după acest produs",
+      "progress": "Se traduce {current} din {total}: {title}",
+      "report": "Rezultatele traducerii",
+      "translatedLine": "{count, plural, one {# limbă tradusă} few {# limbi traduse} other {# de limbi traduse}}, {failed} netraduse",
+      "summary": "{done, plural, one {# produs tradus} few {# produse traduse} other {# de produse traduse}}, {failed, plural, =0 {fără erori} one {# eroare} few {# erori} other {# de erori}}",
+      "reviewedToast": "{count, plural, =0 {Nicio traducere nu aștepta verificarea} one {# traducere marcată ca verificată} few {# traduceri marcate ca verificate} other {# de traduceri marcate ca verificate}}"
     }
   },
   "taxonomy": {

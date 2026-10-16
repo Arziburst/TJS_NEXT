@@ -80,6 +80,7 @@
       "next": "Página siguiente",
       "page": "Página {page} de {count}"
     },
+    "unreviewed": "{count, plural, one {# traducción automática sin revisar} other {# traducciones automáticas sin revisar}}: {locales}",
     "variants": "{count, plural, one {# talla} other {# tallas}}"
   },
   "actionErrors": {
@@ -188,6 +189,64 @@
       "requiredToPublish": "Para publicar hace falta un título en ucraniano",
       "hasVariants": "Una pieza con tallas sigue siendo por encargo; elimina primero sus tallas",
       "variantPriceNotPositive": "Una talla de este producto costaría cero o menos; cambia primero su diferencia de precio"
+    },
+    "translateAfterSave": "Guarde primero el producto; después podrá traducirse automáticamente a los demás idiomas."
+  },
+  "translate": {
+    "title": "Traducción automática",
+    "hint": "Rellena los demás idiomas a partir de un solo texto, de una vez. Los textos automáticos se muestran en la tienda, pero los buscadores no los indexan hasta que los marque como revisados.",
+    "notConfigured": "La traducción automática no está configurada en este servidor. Rellene los idiomas a mano o pida al desarrollador que conecte el AI Gateway.",
+    "saveFirst": "Guarde primero sus cambios: la traducción parte del texto guardado.",
+    "source": "Traducir desde",
+    "noSourceOption": "Aún sin texto",
+    "targets": "A",
+    "existing": "tiene texto",
+    "overwrite": "Sustituir también los textos existentes",
+    "submit": "{count, plural, =0 {Traducir} one {Traducir a # idioma} other {Traducir a # idiomas}}",
+    "running": "Traduciendo a {count, plural, one {# idioma} other {# idiomas}}… Tarda uno o dos minutos.",
+    "done": "Traducido a: {locales}.",
+    "doneToast": "{count, plural, one {Traducido a # idioma} other {Traducido a # idiomas}}",
+    "partial": "Sin traducir: {locales}. Inténtelo de nuevo.",
+    "review": {
+      "title": "Revisión",
+      "hint": "Lea cada texto automático y márquelo como revisado: solo entonces los buscadores indexan la página en ese idioma.",
+      "none": "No hay traducciones automáticas por revisar.",
+      "reviewed": "Revisado",
+      "notReviewed": "Sin revisar",
+      "label": "{language}: revisado",
+      "markedToast": "{language}: marcado como revisado",
+      "unmarkedToast": "{language}: de nuevo sin revisar"
+    },
+    "errors": {
+      "notAuthorized": "Solo el administrador puede hacer esto. Vuelva a iniciar sesión.",
+      "invalid": "Esta solicitud no es válida.",
+      "notConfigured": "La traducción automática no está configurada en este servidor.",
+      "tooManyRequests": "Demasiadas traducciones en poco tiempo. Espere un poco e inténtelo de nuevo.",
+      "notFound": "Este producto ya no existe.",
+      "noSource": "El idioma elegido no tiene texto desde el que traducir.",
+      "nothingToTranslate": "Nada que traducir: todos los idiomas elegidos ya tienen texto.",
+      "conflict": "Otro producto ha ocupado mientras tanto una de las nuevas direcciones de página. Inténtelo de nuevo.",
+      "authFailed": "El servicio de traducción ha rechazado la clave de acceso. Pida al desarrollador que la revise.",
+      "rateLimited": "El servicio de traducción está saturado. Inténtelo de nuevo en unos minutos.",
+      "timeout": "La traducción ha tardado demasiado. Inténtelo de nuevo o elija menos idiomas.",
+      "unavailable": "El servicio de traducción no está disponible ahora. Inténtelo más tarde.",
+      "rejected": "El servicio de traducción ha rechazado la solicitud. Pida al desarrollador que revise los registros.",
+      "invalidOutput": "La traducción ha vuelto inservible. Inténtelo de nuevo.",
+      "unexpectedError": "Algo ha fallado. Inténtelo de nuevo."
+    },
+    "bulk": {
+      "label": "Traducción de los productos seleccionados",
+      "selectAll": "Seleccionar todos en esta página",
+      "select": "Seleccionar {title}",
+      "selected": "{count, plural, =0 {Nada seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "translate": "{count, plural, =0 {Traducir los idiomas que faltan} other {Traducir los idiomas que faltan (#)}}",
+      "markReviewed": "{count, plural, =0 {Marcar traducciones como revisadas} other {Marcar traducciones como revisadas (#)}}",
+      "stop": "Parar tras este producto",
+      "progress": "Traduciendo {current} de {total}: {title}",
+      "report": "Resultados de la traducción",
+      "translatedLine": "{count, plural, one {# idioma traducido} other {# idiomas traducidos}}, {failed} sin traducir",
+      "summary": "{done, plural, one {# producto traducido} other {# productos traducidos}}, {failed, plural, =0 {sin errores} one {# error} other {# errores}}",
+      "reviewedToast": "{count, plural, =0 {Ninguna traducción esperaba revisión} one {# traducción marcada como revisada} other {# traducciones marcadas como revisadas}}"
     }
   },
   "taxonomy": {

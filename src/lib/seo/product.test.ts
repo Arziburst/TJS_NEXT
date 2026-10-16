@@ -8,11 +8,14 @@ import {
   type ProductJsonLdInput,
 } from "./product";
 
+const human = { source: "human", reviewedAt: null } as const;
 const translations = [
-  { locale: "en", slug: "coral-drop-earrings" },
-  { locale: "uk", slug: "serezhky-krapli-z-koralom" },
-  { locale: "de", slug: "korallen-tropfenohrringe" },
-];
+  { locale: "en", slug: "coral-drop-earrings", ...human },
+  { locale: "uk", slug: "serezhky-krapli-z-koralom", ...human },
+  // a machine translation the admin has reviewed is indexable like a human one
+  { locale: "de", slug: "korallen-tropfenohrringe", source: "machine", reviewedAt: "2026-10-16T10:00:00Z" },
+] as const;
+const unreviewedPl = { locale: "pl", slug: "kolczyki-z-koralem", source: "machine", reviewedAt: null } as const;
 
 describe("productAlternates", () => {
   it("lists hreflang only for translated locales, x-default on en, canonical on itself", () => {
@@ -33,7 +36,28 @@ describe("productAlternates", () => {
   });
 
   it("has no x-default without an en translation", () => {
-    const alternates = productAlternates([{ locale: "uk", slug: "lyshe" }], { locale: "uk", slug: "lyshe" });
+    const alternates = productAlternates([{ locale: "uk", slug: "lyshe", ...human }], { locale: "uk", slug: "lyshe" });
+    expect(alternates.languages).toEqual({ uk: "/uk/product/lyshe" });
+  });
+
+  it("leaves an unreviewed machine translation out of hreflang, on its own page as on the others", () => {
+    const all = [...translations, unreviewedPl];
+    for (const shown of [translations[2], unreviewedPl]) {
+      const alternates = productAlternates(all, shown);
+      expect(Object.keys(alternates.languages ?? {}).sort()).toEqual(["de", "en", "uk", "x-default"]);
+    }
+    // its page keeps its own canonical: it is noindex, not a duplicate of another page
+    expect(productAlternates(all, unreviewedPl).canonical).toBe("/pl/product/kolczyki-z-koralem");
+  });
+
+  it("has no x-default when the en translation is an unreviewed machine one", () => {
+    const alternates = productAlternates(
+      [
+        { locale: "uk", slug: "lyshe", ...human },
+        { locale: "en", slug: "fox", source: "machine", reviewedAt: null },
+      ],
+      { locale: "uk", slug: "lyshe" },
+    );
     expect(alternates.languages).toEqual({ uk: "/uk/product/lyshe" });
   });
 });

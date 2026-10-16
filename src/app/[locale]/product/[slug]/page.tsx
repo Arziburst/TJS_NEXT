@@ -21,6 +21,7 @@ import {
   productPath,
   serializeJsonLd,
 } from "@/lib/seo/product";
+import { translationRobots } from "@/lib/seo/indexing";
 
 /*
  * Unknown and unpublished slugs answer 404 in the proxy (src/proxy/product-not-found.ts) before this page
@@ -56,6 +57,8 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/product/
     title: translation.metaTitle ?? translation.title,
     description,
     alternates: productAlternates(page.translations, translation),
+    // an unreviewed machine translation is shown, but not indexed (src/lib/seo/indexing.ts)
+    robots: translationRobots(translation),
     openGraph: {
       title: translation.metaTitle ?? translation.title,
       description,

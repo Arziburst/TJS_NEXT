@@ -463,6 +463,9 @@ isOneToOne: false
 "admin_save_taxonomy_term":
 { Args: { "p_id": string,"p_kind": Database["public"]['Enums']["taxonomy_kind"],"p_names": Json,"p_slug": string }; Returns: string
                            },
+"admin_save_variant_labels":
+{ Args: { "p_labels": Json,"p_overwrite": boolean,"p_product_id": string }; Returns: number
+                           },
 "admin_set_product_status":
 { Args: { "p_id": string,"p_status": Database["public"]['Enums']["product_status"] }; Returns: boolean
                            },

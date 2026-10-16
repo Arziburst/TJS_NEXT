@@ -102,6 +102,8 @@ describe("message catalogs", () => {
       name: "IMG_0042.jpg",
       done: 3,
       position: 2,
+      current: 3,
+      failed: 1,
       // a size's name (#66)
       label: "17",
       link: (chunks: string) => `<a>${chunks}</a>`,
