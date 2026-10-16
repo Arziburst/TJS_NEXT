@@ -166,6 +166,8 @@ jobs:
         env:
           SUPABASE_AUTH_HOOK_SEND_EMAIL_ENABLED: "true"
           SUPABASE_AUTH_HOOK_SEND_EMAIL_URI: http://host.docker.internal:3000/api/auth/send-email
+          # SCRATCH (#119): a wrong secret, to show the job fails; reverted in the next commit
+          SEND_EMAIL_HOOK_SECRET: v1,whsec_d3Jvbmctc2VjcmV0LWZvci10aGUtc2NyYXRjaC1ydW4=
         run: npx supabase start -x studio,postgres-meta,imgproxy,edge-runtime,logflare,vector,realtime,supavisor
 
       - name: Reset the database (every migration, then the seed)
