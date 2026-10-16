@@ -217,6 +217,21 @@ Business values (prices, markets, locales, statuses …) are not here — they l
     The levers are the ones above: two qualities, two formats, `sizes` that pick small widths, the long
     TTL, and no transformation of decorative or already-small images. Check the usage in the Vercel
     dashboard after launch before adding a quality, a format or a width.
+- **Client JavaScript budget (#105).** Lighthouse mobile (simulated 4G) counts every request that ends
+  before the largest paint, so first-load JS and fonts decide the score. `e2e/client-js-budget.e2e.ts`
+  fails CI when the gzip first-load JS of the home, the shop or a product page grows past its budget
+  (180 / 190 / 190 KB, of which ~137 KB is React and Next). Raise a budget only with a bundle audit in the PR
+  (`npx next analyze --output`, then `next analyze export`).
+  - A sheet, dialog or menu that is closed on load is code loaded on first use: a plain trigger button with
+    the same look and ARIA, and the Base UI part behind `next/dynamic` (`src/components/layout/lazy-sheet.ts`;
+    the mobile menu, the mini-cart and the filter sheet). A client island only some visitors see is a chunk
+    of its own (the account menu).
+  - Storefront toasts go through `src/components/layout/toast.ts` (sonner loads with the first toast);
+    the toaster mounts on that toast or once the page is idle.
+  - A Server Component that styles a link as a button imports `buttonVariants` from
+    `@/components/ui/button-variants`, never from `button.tsx` (its Base UI primitive would join the
+    route's client JS).
+  - Fonts: no preload for a face that is not above the fold (a preload fetches every style of the call).
 
 ## 6. Testing
 
