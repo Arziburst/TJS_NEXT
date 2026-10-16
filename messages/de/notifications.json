@@ -74,6 +74,45 @@
       "whatsapp": "WhatsApp",
       "email": "E-Mail"
     },
-    "footer": "Sie erhalten diese E-Mail, weil auf {site} eine Bestellanfrage mit dieser Adresse gesendet wurde."
+    "footer": "Sie erhalten diese E-Mail, weil auf {site} eine Bestellanfrage mit dieser Adresse gesendet wurde.",
+    "auth": {
+      "signup": {
+        "subject": "Bestätigen Sie Ihre E-Mail-Adresse",
+        "title": "Bestätigen Sie Ihre E-Mail-Adresse",
+        "text": "Folgen Sie dem Link, um Ihre E-Mail-Adresse zu bestätigen und Ihre Registrierung bei {shop} abzuschließen.",
+        "action": "E-Mail-Adresse bestätigen",
+        "ignore": "Wenn Sie sich nicht registriert haben, ignorieren Sie diese E-Mail."
+      },
+      "recovery": {
+        "subject": "Passwort zurücksetzen",
+        "title": "Passwort zurücksetzen",
+        "text": "Folgen Sie dem Link, um ein neues Passwort für Ihr {shop}-Konto festzulegen.",
+        "action": "Neues Passwort festlegen",
+        "ignore": "Wenn Sie kein neues Passwort angefordert haben, ignorieren Sie diese E-Mail: Ihr Passwort bleibt unverändert."
+      },
+      "emailChangeCurrent": {
+        "subject": "Bestätigen Sie die Änderung Ihrer E-Mail-Adresse",
+        "title": "Bestätigen Sie die Änderung Ihrer E-Mail-Adresse",
+        "text": "Folgen Sie dem Link, um zu bestätigen, dass sich die E-Mail-Adresse Ihres {shop}-Kontos von {email} zu {newEmail} ändert. Die Änderung wird wirksam, sobald sie von beiden Adressen aus bestätigt wurde.",
+        "action": "Änderung bestätigen",
+        "ignore": "Wenn Sie diese Änderung nicht angefordert haben, ignorieren Sie diese E-Mail: Ihre Adresse bleibt unverändert."
+      },
+      "emailChangeNew": {
+        "subject": "Bestätigen Sie Ihre neue E-Mail-Adresse",
+        "title": "Bestätigen Sie Ihre neue E-Mail-Adresse",
+        "text": "Folgen Sie dem Link, um {newEmail} als neue E-Mail-Adresse Ihres {shop}-Kontos zu bestätigen.",
+        "action": "Neue E-Mail-Adresse bestätigen",
+        "ignore": "Wenn Sie diese Änderung nicht angefordert haben, ignorieren Sie diese E-Mail: Ihre Adresse bleibt unverändert."
+      },
+      "magicLink": {
+        "subject": "Ihr Anmeldelink für {shop}",
+        "title": "Bei {shop} anmelden",
+        "text": "Folgen Sie dem Link, um sich bei Ihrem {shop}-Konto anzumelden.",
+        "action": "Anmelden",
+        "ignore": "Wenn Sie sich nicht anmelden wollten, ignorieren Sie diese E-Mail."
+      },
+      "linkHint": "Falls die Schaltfläche nicht funktioniert, öffnen Sie diesen Link:",
+      "footer": "Sie erhalten diese E-Mail, weil diese Adresse auf {site} verwendet wurde."
+    }
   }
 }

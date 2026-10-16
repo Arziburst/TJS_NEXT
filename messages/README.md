@@ -49,7 +49,9 @@ sizes), written in en, uk and the other 9 locales by machine, unreviewed; from #
 `notifications.telegram.statusChange`, written in en, uk and the other 9 locales by machine, unreviewed; from #21 the
 settings pages (`admin.shell.settings`, `admin.settings.*`), the footer's channel names (`common.contact.instagram`,
 `telegram`, `viber`, `whatsapp`: brand names, the same in every locale) and the About page's `common.about.tbd` and
-`fallbackNote` — written in en, uk and the other 9 locales by machine, unreviewed. Legacy
+`fallbackNote` — written in en, uk and the other 9 locales by machine, unreviewed; from #99 Auth's emails
+`notifications.email.auth.*` (sign-up confirmation, password reset, email change, sign-in link; the Supabase
+templates they replace were English only), written in en, uk and the other 9 locales by machine, unreviewed. Legacy
 `{{ index }}` arguments became named ICU
 arguments; the legacy admin price texts named UAH, now the currency is an argument (`{currency}`, D4: the
 admin enters USD).

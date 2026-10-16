@@ -74,6 +74,45 @@
       "whatsapp": "WhatsApp",
       "email": "Correo electrónico"
     },
-    "footer": "Recibes este correo porque se envió una solicitud de pedido con esta dirección en {site}."
+    "footer": "Recibes este correo porque se envió una solicitud de pedido con esta dirección en {site}.",
+    "auth": {
+      "signup": {
+        "subject": "Confirma tu correo electrónico",
+        "title": "Confirma tu correo electrónico",
+        "text": "Sigue el enlace para confirmar tu dirección de correo electrónico y terminar tu registro en {shop}.",
+        "action": "Confirmar mi correo",
+        "ignore": "Si no te has registrado, ignora este correo."
+      },
+      "recovery": {
+        "subject": "Restablece tu contraseña",
+        "title": "Restablece tu contraseña",
+        "text": "Sigue el enlace para elegir una nueva contraseña para tu cuenta de {shop}.",
+        "action": "Elegir una nueva contraseña",
+        "ignore": "Si no has pedido una nueva contraseña, ignora este correo: tu contraseña no cambia."
+      },
+      "emailChangeCurrent": {
+        "subject": "Confirma el cambio de tu correo electrónico",
+        "title": "Confirma el cambio de tu correo electrónico",
+        "text": "Sigue el enlace para confirmar que el correo electrónico de tu cuenta de {shop} cambia de {email} a {newEmail}. El cambio se aplica cuando se confirma desde ambas direcciones.",
+        "action": "Confirmar el cambio",
+        "ignore": "Si no has pedido este cambio, ignora este correo: tu dirección no cambia."
+      },
+      "emailChangeNew": {
+        "subject": "Confirma tu nuevo correo electrónico",
+        "title": "Confirma tu nuevo correo electrónico",
+        "text": "Sigue el enlace para confirmar {newEmail} como el nuevo correo electrónico de tu cuenta de {shop}.",
+        "action": "Confirmar el nuevo correo",
+        "ignore": "Si no has pedido este cambio, ignora este correo: tu dirección no cambia."
+      },
+      "magicLink": {
+        "subject": "Tu enlace para entrar en {shop}",
+        "title": "Entrar en {shop}",
+        "text": "Sigue el enlace para entrar en tu cuenta de {shop}.",
+        "action": "Entrar",
+        "ignore": "Si no has pedido entrar, ignora este correo."
+      },
+      "linkHint": "Si el botón no funciona, abre este enlace:",
+      "footer": "Recibes este correo porque esta dirección se usó en {site}."
+    }
   }
 }

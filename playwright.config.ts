@@ -18,6 +18,9 @@ const aiGatewayMockKey = "e2e-gateway-key";
 const notificationsMockPort = Number(process.env.NOTIFICATIONS_MOCK_PORT || port + 2000);
 const notificationsMockToken = "e2e-bot-token";
 const notificationsMockKey = "e2e-resend-key";
+// The secret of Supabase Auth's Send Email Hook (#99): the app checks the hook's calls with it. A stack started
+// with the hook on (docs/dev-environment.md) signs with the same value; without the hook it is never used.
+const sendEmailHookSecret = process.env.SEND_EMAIL_HOOK_SECRET || "v1,whsec_dGpzLWUyZS1zZW5kLWVtYWlsLWhvb2stc2VjcmV0";
 // e2e files that write products of their own to the catalog (see the projects below)
 const CATALOG_WRITERS = [
   "**/cart.e2e.ts",
@@ -136,6 +139,8 @@ export default defineConfig({
             RESEND_API_KEY: notificationsMockKey,
             RESEND_API_URL: `http://127.0.0.1:${notificationsMockPort}`,
             EMAIL_FROM: "TJS e2e <orders@example.test>",
+            // Auth's emails come through the hook only when the stack runs with it (e2e/auth-emails.e2e.ts)
+            SEND_EMAIL_HOOK_SECRET: sendEmailHookSecret,
             // the test-only hold of a storefront render (src/lib/catalog/render-hold.ts, e2e/cache-race.e2e.ts)
             TJS_TEST_RENDER_HOLD_DIR: RENDER_HOLD_DIR,
           },

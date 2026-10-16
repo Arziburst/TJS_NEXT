@@ -85,7 +85,8 @@ export async function signUp(_previous: FormState<SignUpField>, formData: FormDa
   const { error } = await supabase.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: authUrl(locale, "confirm"), data: { name, phone } },
+    // the locale goes with the account: Auth's emails (the Send Email Hook, #99) are written in it
+    options: { emailRedirectTo: authUrl(locale, "confirm"), data: { name, phone, locale } },
   });
   // An address that is already registered gets the same answer (no account enumeration).
   if (error && error.code !== "user_already_exists") return failed<SignUpField>(authErrorCode(error), kept);

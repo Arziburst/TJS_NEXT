@@ -3,12 +3,13 @@
 import { Menu } from "@base-ui/react/menu";
 import { HeartIcon, LayoutDashboardIcon, LogOutIcon, MapPinIcon, PackageIcon, PlusIcon, UserIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { ACCOUNT_ADDRESSES_HREF, ACCOUNT_HREF, ACCOUNT_ORDERS_HREF } from "@/components/account/paths";
 import { ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "@/components/admin/paths";
 import { routes } from "@/config/routes";
 import { Link } from "@/i18n/navigation";
-import { signOut } from "@/lib/auth/actions";
+import type { Locale } from "@/i18n/routing";
+import { rememberLocale, signOut } from "@/lib/auth/actions";
 import { cn } from "@/lib/utils";
 
 type AccountMenuClientProps = {
@@ -17,6 +18,8 @@ type AccountMenuClientProps = {
   // an admin's entries with their labels, given by the server only for an admin (the role comes from the
   // database; the admin pages check it again), so no other visitor receives them
   adminLinks?: { admin: string; addProduct: string };
+  // the language stored for Auth's emails (#99); the menu stores the page's locale when it differs
+  savedLocale: Locale | null;
   className?: string;
 };
 
@@ -28,6 +31,9 @@ const ACCOUNT_LINKS = [
   { key: "favorites", href: routes.favorites.path, icon: HeartIcon },
 ] as const;
 
+// the locale last sent from this tab: the header renders the menu twice (desktop, mobile sheet), it goes once
+let sentLocale: string | null = null;
+
 const itemClass =
   "flex cursor-pointer items-center gap-2 px-3 py-2.5 outline-none select-none data-highlighted:bg-primary data-highlighted:text-primary-foreground";
 
@@ -37,10 +43,20 @@ function initials(displayName: string): string {
 }
 
 /** The signed-in user's menu in the header's account slot: who is signed in, their account pages, sign-out. */
-export function AccountMenuClient({ displayName, adminLinks, className }: AccountMenuClientProps) {
+export function AccountMenuClient({ displayName, adminLinks, savedLocale, className }: AccountMenuClientProps) {
   const t = useTranslations("nav");
   const locale = useLocale();
   const [signingOut, startSignOut] = useTransition();
+
+  // A signed-in user who reads the shop in another language gets Auth's emails in it from now on. Only a
+  // difference from a stored locale calls the server, which checks the session and the rate limit itself. An
+  // account without one (signed up before #99, with Google, or made by an admin) is left alone: its emails
+  // follow the page they are asked from.
+  useEffect(() => {
+    if (savedLocale === null || locale === savedLocale || locale === sentLocale) return;
+    sentLocale = locale;
+    void rememberLocale(locale);
+  }, [locale, savedLocale]);
 
   // Called as an action, not through a <form> in the menu: the mobile menu sheet closes (and unmounts this
   // component) on any click in its account slot, which must not cancel the sign-out.
