@@ -250,6 +250,9 @@ Business values (prices, markets, locales, statuses …) are not here — they l
     which Enter and ArrowDown open with the focus on its first item, as Base UI's own trigger does).
     No `next/dynamic` with server rendering in the header: a lazy component still loading when a render
     switches to the not-found page fails its boundary (React #419).
+  - Dev-only (#113): a sheet opened in `next dev` before a streamed boundary hydrates logs an `aria-hidden`
+    mismatch (Base UI's markOthers hides the siblings of `[aria-live]` nodes inside it); production hydrates first
+    (`e2e/sheet-hydration.e2e.ts`), and deferring the modal to `load` would lose focus trap and scroll lock meanwhile.
   - Every toast goes through `src/components/layout/toast.ts`: sonner loads with the first toast and the
     toaster mounts for it, never on its own (a state update while a page still hydrates fails a bailed-out
     boundary, React #419). ESLint refuses a direct `sonner` or `@/components/ui/sonner` import.
