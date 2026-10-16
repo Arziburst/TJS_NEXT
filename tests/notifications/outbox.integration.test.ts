@@ -155,7 +155,9 @@ describe.skipIf(!stack)("the notifications outbox on the local stack", async () 
 
   it("two processors running at the same time never send a message twice", async () => {
     const productId = await madeToOrderProduct();
-    const orders = await Promise.all(Array.from({ length: 14 }, () => placeOrder(productId)));
+    // placed one by one: the race under test is the two processors, not the orders
+    const orders: { orderId: string; number: number }[] = [];
+    for (let index = 0; index < 14; index += 1) orders.push(await placeOrder(productId));
     const apis = fakeApis({ delayMs: 20 });
 
     await Promise.all([processor(configured, apis.fetchImpl), processor(configured, apis.fetchImpl)]);

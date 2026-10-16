@@ -17,7 +17,8 @@ const TITLE_MAX = 100;
 
 export type TelegramConfig = { token: string; chatId: string; apiBaseUrl: string };
 
-export type SendResult = { ok: true } | { ok: false; error: string };
+// retryAfterSeconds: the provider throttled the request and asks to wait that long (Telegram's 429)
+export type SendResult = { ok: true } | { ok: false; error: string; retryAfterSeconds?: number };
 
 /** The text of the owner's message about order `order`; `adminUrl` opens it in the admin (#27). */
 export function renderTelegramOrder(
@@ -67,6 +68,9 @@ export function renderTelegramOrder(
 }
 
 const TIMEOUT_MS = 10_000;
+// a 429 without retry_after waits a minute; a retry_after beyond an hour is not trusted further than that
+const TOO_MANY_REQUESTS_WAIT = 60;
+const MAX_RETRY_AFTER = 3600;
 
 /**
  * Sends `text` to the configured chat. The bot token is part of the API URL: no error, log line or result
@@ -92,8 +96,15 @@ export async function sendTelegram(config: TelegramConfig, text: string, fetchIm
     const code = (error as { cause?: { code?: unknown } })?.cause?.code;
     return { ok: false, error: scrub(`telegram: ${(error as Error)?.name ?? "Error"}${typeof code === "string" ? ` ${code}` : ""}`) };
   }
-  const body = (await response.json().catch(() => null)) as { ok?: boolean; description?: unknown } | null;
+  const body = (await response.json().catch(() => null)) as { ok?: boolean; description?: unknown; parameters?: { retry_after?: unknown } } | null;
   if (response.ok && body?.ok === true) return { ok: true };
   const description = typeof body?.description === "string" ? `: ${body.description}` : "";
-  return { ok: false, error: scrub(`telegram: HTTP ${response.status}${description}`) };
+  const error = scrub(`telegram: HTTP ${response.status}${description}`);
+  // flood control (about 20 messages a minute in a group): Telegram names how long to wait
+  const retryAfter = body?.parameters?.retry_after;
+  if (response.status === 429) {
+    const seconds = typeof retryAfter === "number" && Number.isFinite(retryAfter) && retryAfter > 0 ? Math.ceil(retryAfter) : TOO_MANY_REQUESTS_WAIT;
+    return { ok: false, error, retryAfterSeconds: Math.min(seconds, MAX_RETRY_AFTER) };
+  }
+  return { ok: false, error };
 }

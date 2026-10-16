@@ -34,7 +34,10 @@ export function channelSenders(
       const t = await notificationsTranslator(TELEGRAM_LOCALE);
       const text = renderTelegramOrder(order, { t, locale: TELEGRAM_LOCALE, adminUrl: adminOrderUrl(order.number) });
       const sent = await sendTelegram(config.telegram.config, text, fetchImpl);
-      return sent.ok ? { status: "sent" } : { status: "error", error: sent.error };
+      if (sent.ok) return { status: "sent" };
+      return sent.retryAfterSeconds === undefined
+        ? { status: "error", error: sent.error }
+        : { status: "throttled", retryAfterSeconds: sent.retryAfterSeconds, error: sent.error };
     },
     email: async (event, order) => {
       if (!config.email.ok) return { status: "skipped_unconfigured", reason: config.email.reason };

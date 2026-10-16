@@ -7,7 +7,9 @@ import { kyivBranchOrder } from "./fixtures";
 
 vi.mock("server-only", () => ({}));
 
-const { BATCH_SIZE, MAX_ATTEMPTS, MAX_BATCHES, processOutbox, retryDelaySeconds } = await import("@/lib/notifications/processor");
+const { BATCH_SIZE, DEFERRED_SECONDS, MAX_ATTEMPTS, MAX_BATCHES, SENDS_PER_RUN, processOutbox, retryDelaySeconds } = await import(
+  "@/lib/notifications/processor"
+);
 
 type Row = {
   id: string;
@@ -67,6 +69,7 @@ function outbox(count: number, event = "order_created") {
         claimToken: null,
         processed: completion.retryInSeconds === null,
         dueIn: completion.retryInSeconds ?? 0,
+        attempts: completion.refundAttempt ? Math.max(row.attempts - 1, 0) : row.attempts,
       });
       return true;
     },
@@ -105,7 +108,7 @@ describe("processOutbox", () => {
   it("sends both channels of every due event once and marks it processed", async () => {
     const store = outbox(3);
     const run = deps(store);
-    expect(await processOutbox(run)).toEqual({ claimed: 3, processed: 3, retried: 0, lostClaims: 0, sent: 6, skipped: 0, failed: 0 });
+    expect(await processOutbox(run)).toEqual({ claimed: 3, processed: 3, retried: 0, lostClaims: 0, sent: 6, skipped: 0, throttled: 0, failed: 0 });
     expect(run.calls.telegram).toEqual(["event-0:10000", "event-1:10001", "event-2:10002"]);
     expect(run.calls.email).toHaveLength(3);
     expect(store.rows.every((row) => row.processed && row.telegram === "sent" && row.email === "sent" && row.lastError === null)).toBe(true);
@@ -204,6 +207,83 @@ describe("processOutbox", () => {
       return complete(completion);
     };
     expect(await processOutbox(run)).toMatchObject({ lostClaims: 1, processed: 0 });
+  });
+
+  it("waits as long as Telegram asks after a 429, without spending an attempt", async () => {
+    const store = outbox(1);
+    let throttled = true;
+    const run = deps(store, {
+      telegram: async () => (throttled ? { status: "throttled", retryAfterSeconds: 35, error: "telegram: HTTP 429: Too Many Requests" } : { status: "sent" }),
+    });
+
+    expect(await processOutbox(run)).toMatchObject({ retried: 1, throttled: 1, failed: 0, sent: 1 });
+    expect(store.rows[0]).toMatchObject({ processed: false, telegram: "pending", email: "sent", dueIn: 35, attempts: 0 });
+    expect(store.rows[0].lastError).toBe("telegram: telegram: HTTP 429: Too Many Requests");
+    expect(store.completions[0].refundAttempt).toBe(true);
+
+    throttled = false;
+    store.elapse();
+    expect(await processOutbox(run)).toMatchObject({ processed: 1, sent: 1 });
+    expect(store.rows[0]).toMatchObject({ processed: true, telegram: "sent", email: "sent", attempts: 1 });
+  });
+
+  it("never runs out of attempts while only throttled", async () => {
+    const store = outbox(1);
+    const run = deps(store, { telegram: async () => ({ status: "throttled", retryAfterSeconds: 5, error: "429" }) });
+    for (let round = 0; round < MAX_ATTEMPTS * 2; round += 1) {
+      await processOutbox(run);
+      store.elapse();
+    }
+    expect(store.rows[0]).toMatchObject({ processed: false, telegram: "pending", attempts: 0 });
+  });
+
+  it("stops the run's Telegram sends after the first 429; the emails still go out", async () => {
+    const store = outbox(4);
+    let calls = 0;
+    const run = deps(store, {
+      telegram: async () => {
+        calls += 1;
+        return calls === 2 ? { status: "throttled", retryAfterSeconds: 40, error: "429" } : { status: "sent" };
+      },
+    });
+    expect(await processOutbox(run)).toMatchObject({ claimed: 4, processed: 1, retried: 3, throttled: 3, sent: 5 });
+    expect(run.calls.telegram).toEqual(["event-0:10000", "event-1:10001"]);
+    expect(run.calls.email).toHaveLength(4);
+    expect(store.rows.map((row) => [row.telegram, row.dueIn, row.attempts])).toEqual([
+      ["sent", 0, 1],
+      ["pending", 40, 0],
+      ["pending", 40, 0],
+      ["pending", 40, 0],
+    ]);
+    expect(store.rows[2].lastError).toBe("telegram: paused after a 429 in this run");
+  });
+
+  it("sends at most SENDS_PER_RUN Telegram messages in one run and defers the rest without an attempt", async () => {
+    const cap = SENDS_PER_RUN.telegram!;
+    expect(cap).toBeLessThan(20);
+    const store = outbox(cap + 5);
+    const run = deps(store);
+    expect(await processOutbox(run)).toMatchObject({ claimed: cap + 5, processed: cap, retried: 5, throttled: 5, sent: cap * 2 + 5 });
+    expect(run.calls.telegram).toHaveLength(cap);
+    expect(run.calls.email).toHaveLength(cap + 5);
+    const deferred = store.rows.slice(cap);
+    expect(deferred.every((row) => row.telegram === "pending" && row.dueIn === DEFERRED_SECONDS && row.attempts === 0)).toBe(true);
+
+    // the next run sends them
+    store.elapse();
+    expect(await processOutbox(run)).toMatchObject({ claimed: 5, processed: 5 });
+    expect(run.calls.telegram).toHaveLength(cap + 5);
+  });
+
+  it("spends the attempt and takes the longer wait when a send failed besides the throttle", async () => {
+    const store = outbox(1);
+    const run = deps(store, {
+      telegram: async () => ({ status: "throttled", retryAfterSeconds: 5, error: "429" }),
+      email: async () => ({ status: "error", error: "email: HTTP 500" }),
+    });
+    expect(await processOutbox(run)).toMatchObject({ retried: 1, throttled: 1 });
+    expect(store.rows[0]).toMatchObject({ telegram: "pending", email: "pending", dueIn: 60, attempts: 1 });
+    expect(store.completions[0].refundAttempt).toBe(false);
   });
 
   it("takes at most MAX_BATCHES batches per run", async () => {

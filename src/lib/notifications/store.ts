@@ -49,6 +49,7 @@ export async function completeOutboxEvent(service: ServerSupabaseClient, complet
     p_email_status: completion.email,
     ...(completion.lastError === null ? {} : { p_last_error: completion.lastError }),
     ...(completion.retryInSeconds === null ? {} : { p_retry_in_seconds: completion.retryInSeconds }),
+    ...(completion.refundAttempt ? { p_refund_attempt: true } : {}),
   });
   if (error) throw new Error(`notifications: completing event ${completion.id} failed: ${error.message}`);
   return data === true;

@@ -112,6 +112,27 @@ describe("sendTelegram", () => {
     expect(result).toEqual({ ok: false, error: "telegram: HTTP 400: Bad Request: can't parse entities (bot<token>)" });
   });
 
+  it("hands on Telegram's retry_after of a 429", async () => {
+    const fetchImpl = vi.fn<typeof fetch>(async () =>
+      Response.json(
+        { ok: false, error_code: 429, description: "Too Many Requests: retry after 35", parameters: { retry_after: 35 } },
+        { status: 429 },
+      ),
+    );
+    expect(await sendTelegram(config, "x", fetchImpl)).toEqual({
+      ok: false,
+      error: "telegram: HTTP 429: Too Many Requests: retry after 35",
+      retryAfterSeconds: 35,
+    });
+  });
+
+  it("waits a minute after a 429 without retry_after, and at most an hour", async () => {
+    const answer = (body: object) => vi.fn<typeof fetch>(async () => Response.json(body, { status: 429 }));
+    expect(await sendTelegram(config, "x", answer({ ok: false }))).toMatchObject({ retryAfterSeconds: 60 });
+    expect(await sendTelegram(config, "x", answer({ ok: false, parameters: { retry_after: 86_400 } }))).toMatchObject({ retryAfterSeconds: 3600 });
+    expect(await sendTelegram(config, "x", answer({ ok: false, parameters: { retry_after: 2.5 } }))).toMatchObject({ retryAfterSeconds: 3 });
+  });
+
   it("reports a network failure by its name only: the error's message may quote the URL with the token", async () => {
     const fetchImpl = vi.fn<typeof fetch>(async () => {
       throw Object.assign(new TypeError(`fetch failed: ${config.apiBaseUrl}/bot${config.token}/sendMessage`), { cause: { code: "ECONNRESET" } });

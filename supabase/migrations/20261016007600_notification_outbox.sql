@@ -62,14 +62,17 @@ end;
 $$;
 
 -- Writes the outcome of a claimed event. p_retry_in_seconds null (or left out): the event is processed (no channel may still
--- be pending); otherwise it is due again after that many seconds. False when the claim is no longer held.
+-- be pending); otherwise it is due again after that many seconds. p_refund_attempt gives the claim's attempt back
+-- (a channel only waited for the provider, e.g. Telegram's 429, and nothing failed). False when the claim is no
+-- longer held.
 create function public.complete_outbox_event(
   p_id uuid,
   p_claim_token uuid,
   p_telegram_status public.notification_delivery,
   p_email_status public.notification_delivery,
   p_last_error text default null,
-  p_retry_in_seconds integer default null
+  p_retry_in_seconds integer default null,
+  p_refund_attempt boolean default false
 )
 returns boolean
 language plpgsql
@@ -88,6 +91,7 @@ begin
       processed_at = case when p_retry_in_seconds is null then now() end,
       next_attempt_at = case when p_retry_in_seconds is null then next_attempt_at
                              else now() + make_interval(secs => p_retry_in_seconds) end,
+      attempts = case when p_refund_attempt then greatest(attempts - 1, 0) else attempts end,
       claim_token = null
   where id = p_id and claim_token = p_claim_token and processed_at is null;
   return found;
@@ -95,8 +99,8 @@ end;
 $$;
 
 revoke all on function public.claim_outbox_events(integer, integer) from public, anon, authenticated;
-revoke all on function public.complete_outbox_event(uuid, uuid, public.notification_delivery, public.notification_delivery, text, integer)
+revoke all on function public.complete_outbox_event(uuid, uuid, public.notification_delivery, public.notification_delivery, text, integer, boolean)
   from public, anon, authenticated;
 grant execute on function public.claim_outbox_events(integer, integer) to service_role;
-grant execute on function public.complete_outbox_event(uuid, uuid, public.notification_delivery, public.notification_delivery, text, integer)
+grant execute on function public.complete_outbox_event(uuid, uuid, public.notification_delivery, public.notification_delivery, text, integer, boolean)
   to service_role;

@@ -429,7 +429,7 @@ isOneToOne: false
         isSetofReturn: true
       } },
 "complete_outbox_event":
-{ Args: { "p_claim_token": string,"p_email_status": Database["public"]['Enums']["notification_delivery"],"p_id": string,"p_last_error"?: string,"p_retry_in_seconds"?: number,"p_telegram_status": Database["public"]['Enums']["notification_delivery"] }; Returns: boolean
+{ Args: { "p_claim_token": string,"p_email_status": Database["public"]['Enums']["notification_delivery"],"p_id": string,"p_last_error"?: string,"p_refund_attempt"?: boolean,"p_retry_in_seconds"?: number,"p_telegram_status": Database["public"]['Enums']["notification_delivery"] }; Returns: boolean
                            },
 "consume_rate_limit":
 { Args: { "p_key": string,"p_max": number,"p_window_seconds": number }; Returns: boolean

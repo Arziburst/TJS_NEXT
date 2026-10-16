@@ -411,7 +411,15 @@ processor (`src/lib/notifications/`, #26) sends it to two channels and keeps eac
 events (`claim_outbox_events`: `FOR UPDATE SKIP LOCKED`, a 5-minute lease, a claim token), so two runs never send
 one message twice; a run that dies leaves its events due again when the lease ends. A failed send is retried after
 1, 2, 4 … minutes (at most 6 hours) by the next run (the next order's or the next cron's), and marked `failed` at
-the 8th attempt. The order itself is never changed by a send.
+the 8th attempt. The order itself is never changed by a send. Delivery is at least once: if writing the outcome
+fails after a send, the event is claimed again after its lease and the Telegram message may go out twice (the
+email is deduplicated by its `Idempotency-Key`).
+
+**Telegram's flood control** (about 20 messages a minute in one group). A run sends at most 15 Telegram messages
+(`SENDS_PER_RUN`) and defers the rest by a minute; on a 429 it waits Telegram's `parameters.retry_after` and sends
+no more Telegram messages in that run. Neither spends an attempt (`complete_outbox_event(…, p_refund_attempt)`), so
+a backlog goes out over the next runs and is never marked `failed` for being throttled; the emails of the same
+events go out meanwhile.
 
 **Late confirmations.** The customer's email goes out only for an order placed at most 24 hours ago
 (`CONFIRMATION_EMAIL_MAX_AGE_MS`); an older one, e.g. the requests stored before this sender was configured, is

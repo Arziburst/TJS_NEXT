@@ -4,7 +4,7 @@
 -- tests/notifications/outbox.integration.test.ts (one pgTAP transaction cannot hold two sessions).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(28);
+select plan(31);
 
 -- Fixture: one guest order request for the seed's made-to-order TEST-001 ($24.90; test values below).
 select is(
@@ -50,13 +50,13 @@ select enum_has_labels(
 -- Access -----------------------------------------------------------------------------------------------------
 select ok(has_function_privilege('service_role', 'public.claim_outbox_events(integer, integer)', 'execute'), 'the server may claim');
 select ok(
-  has_function_privilege('service_role', 'public.complete_outbox_event(uuid, uuid, public.notification_delivery, public.notification_delivery, text, integer)', 'execute'),
+  has_function_privilege('service_role', 'public.complete_outbox_event(uuid, uuid, public.notification_delivery, public.notification_delivery, text, integer, boolean)', 'execute'),
   'the server may complete'
 );
 select ok(not has_function_privilege('anon', 'public.claim_outbox_events(integer, integer)', 'execute'), 'a guest may not claim');
 select ok(not has_function_privilege('authenticated', 'public.claim_outbox_events(integer, integer)', 'execute'), 'a signed-in user may not claim');
 select ok(
-  not has_function_privilege('authenticated', 'public.complete_outbox_event(uuid, uuid, public.notification_delivery, public.notification_delivery, text, integer)', 'execute'),
+  not has_function_privilege('authenticated', 'public.complete_outbox_event(uuid, uuid, public.notification_delivery, public.notification_delivery, text, integer, boolean)', 'execute'),
   'a signed-in user may not complete'
 );
 
@@ -136,10 +136,33 @@ select is(
   2,
   'a due retry is claimed again and counts its attempt'
 );
+
+-- Telegram throttled the send (429, retry_after 30) and nothing failed: the attempt is given back
+select is(
+  public.complete_outbox_event(
+    (select event_id from fixture), (select claim_token from second_claim where id = (select event_id from fixture)),
+    'pending', 'sent', 'telegram: HTTP 429: Too Many Requests', 30, true
+  ),
+  true,
+  'the claim writes a throttled retry'
+);
+select results_eq(
+  $$select attempts, next_attempt_at = now() + interval '30 seconds', processed_at is null
+    from public.outbox_events where id = (select event_id from fixture)$$,
+  $$values (1, true, true)$$,
+  'a throttled retry spends no attempt and waits as long as asked'
+);
+update public.outbox_events set next_attempt_at = now() - interval '1 second' where id = (select event_id from fixture);
+create temp table third_claim as select * from public.claim_outbox_events(100, 300);
+select is(
+  (select attempts from third_claim where id = (select event_id from fixture)),
+  2,
+  'the next claim counts from the refunded attempts'
+);
 select throws_ok(
   format(
     $$select public.complete_outbox_event(%L, %L, 'pending', 'sent')$$,
-    (select event_id from fixture), (select claim_token from second_claim where id = (select event_id from fixture))
+    (select event_id from fixture), (select claim_token from third_claim where id = (select event_id from fixture))
   ),
   '23514',
   null,
@@ -147,7 +170,7 @@ select throws_ok(
 );
 select is(
   public.complete_outbox_event(
-    (select event_id from fixture), (select claim_token from second_claim where id = (select event_id from fixture)),
+    (select event_id from fixture), (select claim_token from third_claim where id = (select event_id from fixture)),
     'sent', 'skipped_unconfigured', 'email: not configured (RESEND_API_KEY unset)'
   ),
   true,
