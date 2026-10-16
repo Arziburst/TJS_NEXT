@@ -167,6 +167,28 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   (`src/lib/supabase/server.ts`) therefore fetches with `cache: "no-store"`; inside `"use cache"` that does
   not make the scope dynamic, so the entry's `cacheLife`/`cacheTag` alone decide freshness. A new
   server-side Supabase client used for cached reads does the same.
+- **The LCP element is inline in the shell (React 19.2 / Next 16.4.1, found in #105, fixed for the product
+  page in #127).** React reveals a Suspense boundary that is not inline in the HTML shell with `$RC`, and
+  `$RC` waits until at least 300 ms after the first paint (`$RT`, the first animation frame after the
+  shell). A boundary is not inline when it streams (it waits on request-time data: `searchParams`, cookies,
+  the session) **or** when it is finished but large: React moves a finished boundary of more than 500 bytes
+  out of the shell when the shell's own bytes plus the boundary's own bytes pass 12 800
+  (`progressiveChunkSize`, which Next does not set; a nested boundary's bytes count for itself, not for its
+  parent). The shell's own bytes (header, footer, fallbacks) are ~6.5 KB, a product photo with its `srcSet`
+  and blur placeholder ~3.7 KB. Rules:
+  - The page's largest photo sits outside every boundary, or in a boundary that waits on nothing
+    request-time and whose own markup stays small: everything else in it goes into nested `<Suspense>`
+    boundaries, whose fallbacks keep the layout (no shift, the footer below the fold). The product page:
+    the main photo alone in the boundary that reads the params; the other photos, the slider controls, the
+    info column and the JSON-LD in nested boundaries (`ProductGallery`, `ProductDetails`, the page).
+  - Keep `params` inside the page's `<Suspense>` (the client-navigation skeleton, the fallback shell of an
+    unlisted slug); never remove a boundary to get under the limit.
+  - Open: the shop and category grids. Their photos are in the results boundary, which waits on
+    `searchParams` and the currency cookie; a static shell (one per path) could only hold the default
+    listing's first row, which every sorted or filtered URL would then flash. Follow-up issue of #127.
+  - Check: "keeps the main photo in the static shell" in `e2e/product.e2e.ts` (the raw HTML: the main photo
+    inside `<main>`, ahead of every hidden `S:` segment); Lighthouse's LCP breakdown ("element render
+    delay") shows the reveal wait.
 - **Route registry (`src/config/routes.ts`).** Every shop route is listed once with its locale-less
   `path` and an `enabled` flag; the shell (header nav, mobile menu, cart and account slots) links only to
   enabled routes, because the client router prefetches every link and a link to a page that does not

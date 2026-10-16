@@ -94,8 +94,13 @@ async function ProductContent({ params }: { params: PageProps<"/[locale]/product
   return (
     <>
       {/* only the canonical page states the product: a fallback page (canonical = the en page) would give
-          the same URL a second Offer in another currency */}
-      {!page.product.translation.isFallback && <ProductJsonLd locale={locale} page={page} />}
+          the same URL a second Offer in another currency; its own boundary keeps this boundary small enough for
+          React to leave the main photo in the shell (#127, docs/standards.md §3) */}
+      {!page.product.translation.isFallback && (
+        <Suspense>
+          <ProductJsonLd locale={locale} page={page} />
+        </Suspense>
+      )}
       <ProductDetails
         product={page.product}
         categoryName={page.categoryName}
