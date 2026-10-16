@@ -5,6 +5,7 @@ import type { Locale } from "@/i18n/routing";
 import { isNewProduct } from "./categories";
 import { FAILED_READ_LIFE } from "@/lib/failed-read";
 import { getCategories } from "./index";
+import { holdRenderForTest } from "./render-hold";
 import { getFacets, getTaxonomyTerms, searchProducts } from "./search";
 import type { CatalogResult, Category, Facets, ListingFilters, ListingSort, ProductSummary, TaxonomyTerm } from "./types";
 
@@ -62,6 +63,7 @@ export async function getCachedListingPage(
   // without the category's id the entry would miss its tag: an incomplete read, kept no longer than a failure
   lifeFor(categorySlug && !category ? { ok: false, reason: "unexpectedError" } : result);
   if (!result.ok) return result;
+  await holdRenderForTest(result.data.items.map((item) => item.id));
   // the badge is as fresh as the entry (at most hours late), never per request
   const now = Date.now();
   return {

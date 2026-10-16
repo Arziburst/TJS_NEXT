@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { RENDER_HOLD_DIR } from "./e2e/render-hold";
 
 const isCI = !!process.env.CI;
 const port = Number(process.env.E2E_PORT || 3000);
@@ -27,6 +28,8 @@ const CATALOG_WRITERS = [
   // a ring with a size of its own, ordered with a saved address (#28)
   "**/account.e2e.ts",
   "**/admin-orders.e2e.ts",
+  // a product of its own, renamed while a storefront render of it is held (#93)
+  "**/cache-race.e2e.ts",
 ];
 
 export default defineConfig({
@@ -124,6 +127,8 @@ export default defineConfig({
             RESEND_API_KEY: notificationsMockKey,
             RESEND_API_URL: `http://127.0.0.1:${notificationsMockPort}`,
             EMAIL_FROM: "TJS e2e <orders@example.test>",
+            // the test-only hold of a storefront render (src/lib/catalog/render-hold.ts, e2e/cache-race.e2e.ts)
+            TJS_TEST_RENDER_HOLD_DIR: RENDER_HOLD_DIR,
           },
         },
       ],
