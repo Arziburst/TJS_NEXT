@@ -148,7 +148,9 @@ without `gh` that step is a warning locally and an error in CI. The branch's own
 named by `--pr <n>`, else the PR whose head ref is the current branch or whose head commit HEAD is or contains
 (a verifier's worktree, an integration branch). Base: `--base <ref>`, else
 `$MIGRATIONS_BASE_REF`, else `origin/$GITHUB_BASE_REF`, else `origin/main` (run `git fetch origin main`
-first). The remote migration history stays a manual check.
+first). The remote migration history stays a manual check. Production gets the migrations through
+`production-migrations.yml` with `supabase db push --include-all`: a slot claimed early may merge after a newer
+one is applied (why and the runbook: `docs/ci.md`).
 
 ## Legacy catalogue import
 
@@ -172,9 +174,14 @@ uk and en texts (`source = machine`, `reviewed_at` null, so the review flow appl
 `translations.json` gets `source = human` and `reviewed_at` = the import time; slugs transliterated / from the English title, numbered
 `-2`, `-3` … for repeated titles, oldest first, existing slugs never changed), and every photo in its order to
 `product-images/legacy/<product id>/<n>-<file>` with width, height, an 8 px blur placeholder and the title as
-alt text per locale. Customers, orders, views and unused media stay in the archive.
+alt text per locale. A photo is stored as the admin upload stores it (`src/lib/images/encode.ts`: turned
+upright, re-encoded without EXIF/XMP/IPTC, so without a GPS position), with the extension of its encoded format.
+Customers, orders, views and unused media stay in the archive.
 
-It is idempotent: a second run changes nothing (`plan: products created 0, …`). A row that differs from the
+It is idempotent: a second run changes nothing (`plan: products created 0, …`). A photo row counts as done at its
+legacy path, or at the new file `scripts/images/strip-metadata.mjs` moved it to (same folder and position), so a
+re-run neither uploads it again nor adds a second row; its blur placeholder is not compared (it follows the
+encoder). A real re-run is only needed for a fresh database: production is already imported. A row that differs from the
 export (edited in the admin since) is kept and listed; `--overwrite` resets it to the export. An interrupted run
 is finished by running it again.
 
@@ -209,8 +216,8 @@ texts, 441 photos on an empty catalogue) before the real run. The shop's catalog
 (`cacheLife("hours")`, `src/lib/catalog/cache.ts`): the products appear within the hour, or at once after a
 redeploy. Locally, restart `next dev` (or rebuild) after an import.
 
-The importer stores the archived originals as they are, EXIF included (one legacy photo carries a GPS
-position); `scripts/images/strip-metadata.mjs` below cleans them after an import.
+Imports before #90 stored the archived originals as they were, EXIF included (one legacy photo carries a GPS
+position); `scripts/images/strip-metadata.mjs` below cleans such files.
 
 ## Photo metadata cleanup
 
@@ -230,8 +237,7 @@ node scripts/images/strip-metadata.mjs --apply    # clean the local stack
 On production (the coordinator only), with the variables set as for the import: `--production` for the dry
 run, then `--production --apply`. Storefront pages cached before the run still name the old URLs; the image
 optimizer may keep serving its cached, metadata-free copies of them (not verified on Vercel) until the pages' cache entries expire or the
-next deployment. A later re-run of the legacy importer would upload the original under its legacy path again;
-run this script after it.
+next deployment. A later re-run of the legacy importer keeps the cleaned rows as they are.
 
 ## Auth
 
