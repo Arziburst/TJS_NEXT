@@ -331,13 +331,26 @@ isOneToOne: false
                   ]
                 },"profiles": {
                   Row: {
-                    "created_at": string,"id": string,"name": string | null,"phone": string | null,"role": Database["public"]['Enums']["user_role"],"updated_at": string
+                    "created_at": string,"first_name": string | null,"id": string,"last_name": string | null,"name": string | null,"phone": string | null,"role": Database["public"]['Enums']["user_role"],"updated_at": string
                   }
                   Insert: {
-                    "created_at"?: string,"id": string,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
+                    "created_at"?: string,"first_name"?: string | null,"id": string,"last_name"?: string | null,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
+                    "created_at"?: string,"first_name"?: string | null,"id"?: string,"last_name"?: string | null,"name"?: string | null,"phone"?: string | null,"role"?: Database["public"]['Enums']["user_role"],"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"saved_addresses": {
+                  Row: {
+                    "country": string,"created_at": string,"delivery": NonNullable<Json>,"id": string,"is_default": boolean,"label": string | null,"updated_at": string,"user_id": string
+                  }
+                  Insert: {
+                    "country": string,"created_at"?: string,"delivery": NonNullable<Json>,"id"?: string,"is_default"?: boolean,"label"?: string | null,"updated_at"?: string,"user_id"?: string
+                  }
+                  Update: {
+                    "country"?: string,"created_at"?: string,"delivery"?: NonNullable<Json>,"id"?: string,"is_default"?: boolean,"label"?: string | null,"updated_at"?: string,"user_id"?: string
                   }
                   Relationships: [
                     
