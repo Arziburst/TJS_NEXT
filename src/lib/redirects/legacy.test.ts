@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { legacyTarget, visitorLocale } from "./legacy";
-import { clearLegacyProductLookups } from "./legacy-product";
 import { legacyRedirect } from "./proxy";
 
 const ID = "64f1a2b3c4d5e6f708192a3b";
@@ -60,7 +59,6 @@ describe("legacyRedirect", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
-    clearLegacyProductLookups();
   });
 
   function request(path: string, headers: Record<string, string> = {}) {
@@ -92,8 +90,8 @@ describe("legacyRedirect", () => {
     expect(pl?.headers.get("location")).toBe("http://localhost/pl/product/coral-ring");
     const admin = await legacyRedirect(request(`/product/${ID}/management`));
     expect(admin?.headers.get("location")).toBe("http://localhost/en/admin/products/6a1f0c1e-0000-4000-8000-000000000001");
-    // cached: one query for the three requests
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    // not cached (#74): one query per request, so an admin change shows at once
+    expect(fetchMock).toHaveBeenCalledTimes(3);
     const query = new URL(fetchMock.mock.calls[0][0]).searchParams;
     expect(query.get("status")).toBe("eq.published");
     expect(query.get("deleted_at")).toBe("is.null");
@@ -102,7 +100,6 @@ describe("legacyRedirect", () => {
     expect(unknown?.status).toBe(308);
     expect(unknown?.headers.get("location")).toBe("http://localhost/en/shop");
 
-    clearLegacyProductLookups();
     vi.stubGlobal("fetch", vi.fn(async () => { throw new Error("network down"); }));
     const failed = await legacyRedirect(request(`/product/${ID}`));
     expect(failed?.headers.get("location")).toBe("http://localhost/en/shop");

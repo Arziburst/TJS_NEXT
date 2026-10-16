@@ -34,6 +34,8 @@ const CATALOG_WRITERS = [
   "**/admin-orders.e2e.ts",
   // a product of its own, renamed while a storefront render of it is held (#93)
   "**/cache-race.e2e.ts",
+  // a product and a collection of its own, published and unpublished in the admin (#74)
+  "**/proxy-slug-lookup.e2e.ts",
 ];
 // e2e files that change the shop-wide settings (every footer, every price): alone, after everything else
 const SETTINGS_WRITERS = ["**/settings.e2e.ts"];

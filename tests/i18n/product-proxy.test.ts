@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { locales } from "@/i18n/routing";
 import proxy from "@/proxy";
-import { clearProductLookups } from "@/proxy/product-not-found";
 
 const earrings = [
   { locale: "en", slug: "coral-drop-earrings" },
@@ -25,7 +25,6 @@ function request(path: string, headers: Record<string, string> = {}) {
 }
 
 beforeEach(() => {
-  clearProductLookups();
   fetchMock.mockClear();
   vi.stubGlobal("fetch", fetchMock);
   vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
@@ -71,10 +70,21 @@ describe("proxy for product pages", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("asks the database once per slug within the cache time", async () => {
+  it("asks the database on every document request, so an admin change shows at once (#74)", async () => {
     await proxy(request("/de/product/korallen-tropfenohrringe"));
+    // unpublished in the admin meanwhile: the Data API no longer returns it
+    fetchMock.mockResolvedValueOnce(new Response("[]", { status: 200 }));
+    const response = await proxy(request("/de/product/korallen-tropfenohrringe"));
+    expect(new URL(response.headers.get("x-middleware-rewrite")!).pathname).toBe("/de/_not-found-product");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("looks the slug up through the unique (locale, slug) index: every locale named", async () => {
     await proxy(request("/de/product/korallen-tropfenohrringe"));
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const query = new URL(String(fetchMock.mock.calls[0][0])).searchParams;
+    expect(query.get("locale")).toBe(`in.(${locales.join(",")})`);
+    expect(query.get("slug")).toBe("eq.korallen-tropfenohrringe");
+    expect(query.get("product.status")).toBe("eq.published");
   });
 
   it("fails open when the lookup fails", async () => {

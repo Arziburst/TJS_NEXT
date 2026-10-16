@@ -1,6 +1,6 @@
 import { hasLocale } from "next-intl";
 import { NextResponse, type NextRequest } from "next/server";
-import { routing, type Locale } from "@/i18n/routing";
+import { locales, routing, type Locale } from "@/i18n/routing";
 import { PRODUCT_SLUG_PATTERN, resolveProductPath, type SlugMatch } from "@/lib/catalog/product-path";
 
 /*
@@ -17,12 +17,7 @@ const NOT_FOUND_PATH = "/_not-found-product";
 // next-intl's request header for the locale, read by src/i18n/request.ts on the global 404
 const LOCALE_HEADER = "X-NEXT-INTL-LOCALE";
 
-const CACHE_TTL_MS = 60_000;
-const CACHE_MAX_ENTRIES = 500;
 const LOOKUP_TIMEOUT_MS = 2_000;
-
-// per server instance; a published or unpublished product shows up here within CACHE_TTL_MS
-const lookups = new Map<string, { expires: number; matches: SlugMatch[] }>();
 
 /** A browser or crawler loading the page itself, not an RSC fetch, a prefetch or an asset. */
 export function isDocumentRequest(request: NextRequest): boolean {
@@ -41,17 +36,16 @@ type RestRow = {
 };
 
 // Anonymous read through the Data API: RLS hides drafts, archived and deleted products (anon may not even name
-// deleted_at: column grants). Null on any failure.
+// deleted_at: column grants). Null on any failure. Not cached (#74): an admin change shows on the very next request,
+// on every server instance. One query per product document request: the locale list lets the unique (locale, slug)
+// index find the slug, and the product and its translations come by their primary keys.
 async function lookUp(slug: string): Promise<SlugMatch[] | null> {
-  const now = Date.now();
-  const cached = lookups.get(slug);
-  if (cached && cached.expires > now) return cached.matches;
-
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !anonKey) return null;
   const query = new URLSearchParams({
     select: "product_id,locale,slug,product:products!inner(product_translations(locale,slug))",
+    locale: `in.(${locales.join(",")})`,
     slug: `eq.${slug}`,
     "product.status": "eq.published",
   });
@@ -63,15 +57,12 @@ async function lookUp(slug: string): Promise<SlugMatch[] | null> {
     });
     if (!response.ok) return null;
     const rows = (await response.json()) as RestRow[];
-    const matches = rows.map((row) => ({
+    return rows.map((row) => ({
       productId: row.product_id,
       locale: row.locale,
       slug: row.slug,
       productSlugs: row.product.product_translations,
     }));
-    if (lookups.size >= CACHE_MAX_ENTRIES) lookups.clear();
-    lookups.set(slug, { expires: now + CACHE_TTL_MS, matches });
-    return matches;
   } catch {
     return null;
   }
@@ -114,9 +105,4 @@ function safeDecode(value: string): string | null {
   } catch {
     return null;
   }
-}
-
-/** Empties the lookup cache (tests). */
-export function clearProductLookups(): void {
-  lookups.clear();
 }
