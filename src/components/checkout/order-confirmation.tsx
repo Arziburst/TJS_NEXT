@@ -2,6 +2,7 @@ import { InfoIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { VariantLabel } from "@/components/cart/variant-label";
 import { SHOP_HREF } from "@/components/catalog/links";
+import { ShopContactLinks } from "@/components/layout/footer-contacts";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { parseOrderNumber, readOrderForVisitor } from "@/lib/checkout/confirmation";
@@ -128,8 +129,10 @@ async function ConfirmedOrder({ order, locale }: { order: OrderView; locale: str
             {t("done.contactTitle")}
           </h2>
           <p>{t("done.next")}</p>
-          {/* the shop's channels come from the admin settings (#21); until then a visible TBD */}
-          <p data-testid="contact-channels">{t("done.contactTbd")}</p>
+          {/* the shop's channels from the admin settings (#21); a visible TBD while none is set */}
+          <div data-testid="contact-channels" className="flex flex-wrap items-center gap-x-4 gap-y-1 text-accent-text">
+            <ShopContactLinks fallback={t("done.contactTbd")} />
+          </div>
           <Link href={SHOP_HREF} className={cn(buttonVariants(), "self-start")}>
             {t("payment.continueShopping")}
           </Link>

@@ -1,6 +1,7 @@
 import { routes } from "@/config/routes";
 import { getPathname } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import type { ShopContacts } from "@/lib/settings/contacts";
 
 const SCHEMA = "https://schema.org";
 
@@ -11,6 +12,21 @@ export type OrganizationContacts = {
   /** Profile URLs (Instagram …). */
   sameAs?: readonly string[];
 };
+
+/**
+ * The Organization's contacts from the shop's settings (#21): the email, the phone as written, and the public
+ * profiles (Instagram, a Telegram channel or user) as sameAs; chat links of Viber and WhatsApp are not profiles.
+ */
+export function organizationContacts(shop: ShopContacts | null): OrganizationContacts | undefined {
+  if (!shop) return undefined;
+  const contacts: OrganizationContacts = { sameAs: [] };
+  for (const channel of shop.channels) {
+    if (channel.kind === "email") contacts.email = channel.text;
+    else if (channel.kind === "phone") contacts.telephone = channel.text;
+    else if (channel.kind === "instagram" || channel.kind === "telegram") contacts.sameAs = [...(contacts.sameAs ?? []), channel.href];
+  }
+  return contacts;
+}
 
 export type SiteJsonLdInput = {
   /** The origin every URL is absolute on (getMetadataBase()). */
