@@ -65,6 +65,26 @@ Business values (prices, markets, locales, statuses …) are not here — they l
     (no JavaScript) and asserts the status 404, `<html lang="<locale>"`, the localized `<title>` and the
     message text in the raw HTML (see "the 404 under a locale is server-rendered …" in
     `e2e/i18n.e2e.ts`).
+- **The proxy's lookups are never cached (found in #17, fixed in #74).** The proxy answers a document request
+  for a product, a collection or a legacy product URL from the database (`src/proxy/product-not-found.ts`,
+  `src/proxy/collection-not-found.ts`, `src/lib/redirects/legacy-product.ts`). An admin write expires the data
+  caches by tag (`src/lib/admin/revalidate.ts`), but it cannot reach the proxy: a separate bundle and, on Vercel,
+  a separate instance per region and scale-out. A per-instance cache of these lookups (it was 60 s, 10 min for
+  legacy ids) therefore answered the old status after a save: a just-unpublished or deleted piece's page 200
+  instead of 404, a just-published or renamed one 404. Rules:
+  - A proxy lookup reads the database on every request it handles, without an in-process cache, a TTL or a
+    version key; it fails open (a failed lookup lets the page answer). A catalog version the admin bumps would
+    cost a read per request too and add a write to every admin action, for no saving.
+  - Cost: one Data API query per handled document request (product or collection page, legacy product URL),
+    none for client navigations, prefetches, RSC requests or a malformed slug. Each query uses an index: the
+    slug through `unique (locale, slug)` (the filter names every locale, `locale=in.(…)`, so the index's leading
+    column is bound), the product or collection and its translations by their primary keys, a legacy id
+    through its unique index.
+  - A legacy id never changes, but its answer carries the product's status and slugs, which do: it is not
+    cached either.
+  - Check: `e2e/proxy-slug-lookup.e2e.ts` requests each URL as a document before and right after each admin
+    save (publish, rename, archive, delete; a collection's publish and unpublish); unit tests:
+    `tests/i18n/product-proxy.test.ts`, `src/lib/redirects/legacy.test.ts`.
 - **No stale window in a prerendered route shell (Next 16.4.1, found in #15, cause found in #79).** A
   `"use cache"` entry in a route's shell whose `cacheLife` has `expire` longer than `revalidate` (every
   preset: `days`, `hours`, `max` …) makes `next start` send the route, its `/_tree` prefetch included,
