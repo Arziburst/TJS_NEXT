@@ -96,11 +96,20 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   `searchParams`) only reads `"use cache"` entries and is not affected.
   - Fix: `next.config.ts` `cacheHandler` = `src/lib/catalog/route-cache-handler.ts`, Next's own file system
     cache that refuses to store a page if one of its tags was expired (or marked stale) between the read that
-    made the render due and the store; the expired page stays, and the next request renders it again. Not on
-    Vercel (`VERCEL` set at build): the platform's cache serves pages there and Next's handler must keep
-    talking to it; whether that cache has the same race is not known (no test can reach it). Admin writes need
+    made the render due and the store; the expired page stays, and the next request renders it again. On
+    everywhere but Vercel, where Next's own handler must keep talking to the platform's cache (see Hosting).
+    Admin writes need
     nothing else: they keep calling `revalidateProduct` / `revalidatePieces` (`src/lib/admin/revalidate.ts`),
     and a new tag for the storefront goes through there too.
+  - Hosting. `next start` on one server (one Node process): the handler is on and is the whole fix. Several
+    processes or servers behind a load balancer: Next keeps the tag expiries (`tagsManifest`) and the
+    stored pages per process, so an admin write expires them in its own process only; such a setup needs a
+    shared `cacheHandler` and `cacheHandlers` (e.g. Redis) first, and this rule (refuse a store whose tags
+    expired since the render was due) carried over into it. Vercel: off (`VERCEL` set at build); Vercel's
+    ISR marks a revalidated tag stale in every region and regenerates in the background, but its docs say
+    nothing of a regeneration that started before the revalidation, so the race there is open. Check after
+    a deploy: add two photos to a published product one after the other in the admin, then open its page in
+    a fresh browser context (no cookies) and reload once after a few seconds — both photos must show.
   - Left as is: a request that arrives while such a render is still running shares its result (Next batches
     the renders of one route); the render is not stored, so the request after it is fresh. A page first
     served from its fallback shell is rendered in the background after the response, so a request right
