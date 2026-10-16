@@ -68,6 +68,10 @@ From #67 the collections and sales (the legacy app had neither): `catalog.collec
 `checkout.request.errors.pricesChanged`, the admin's `admin.collections.*`, `admin.sale.*` and
 `admin.shell.collections`, written in en, uk and the other 9 locales by machine, unreviewed.
 
+From #112 the error pages `errors.boundary.*` (the legacy app showed no page of its own; `accountUnavailable` is
+the header's hint while the session cannot be read), written in en, uk and the other 9 locales by machine,
+unreviewed.
+
 ## Reworded legacy texts — for the owner
 
 While porting (#10) some legacy en/uk texts were reworded with the meaning kept. The owner decides per
