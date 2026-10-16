@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 import { supportedAcceptLanguage } from "./i18n/accept-language";
 import { routing } from "./i18n/routing";
 import { rewriteUnknownCategory } from "./lib/catalog/unknown-category";
+import { legacyRedirect } from "./lib/redirects/proxy";
+import { securePageRequest } from "./lib/security/proxy";
 import { refreshSession } from "./lib/supabase/proxy";
 import { productNotFoundOrRedirect } from "./proxy/product-not-found";
 
@@ -16,14 +18,20 @@ function withSupportedLanguages(request: NextRequest): NextRequest {
   return request;
 }
 
-// Session refresh first (it updates the request cookies the next steps forward), then the catalog rewrites
-// and redirects or locale routing; the refreshed cookies are set on whichever response that returns.
+// The request id and the report-only policy's nonce first (the next steps forward the request headers), then
+// the session refresh (it updates the request cookies), then the legacy shop's URLs, the catalog rewrites and
+// redirects or locale routing; the refreshed cookies and the security headers are set on whichever response
+// that returns.
 export default async function proxy(request: NextRequest) {
+  const applySecurity = securePageRequest(request);
   const applySession = await refreshSession(request);
-  return applySession(
-    rewriteUnknownCategory(request) ??
-      (await productNotFoundOrRedirect(request)) ??
-      intl(withSupportedLanguages(request)),
+  return applySecurity(
+    applySession(
+      (await legacyRedirect(request)) ??
+        rewriteUnknownCategory(request) ??
+        (await productNotFoundOrRedirect(request)) ??
+        intl(withSupportedLanguages(request)),
+    ),
   );
 }
 
