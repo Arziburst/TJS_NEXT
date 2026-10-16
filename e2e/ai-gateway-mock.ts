@@ -4,7 +4,8 @@
 // starts it for the e2e run; in local dev run `node e2e/ai-gateway-mock.ts` and point AI_GATEWAY_BASE_URL at
 // it (docs/dev-environment.md). No real model is called, nothing is billed.
 //
-// A source title containing "[omit:<locale>]" leaves that locale out of the answer (a partial failure).
+// A source title containing "[omit:<locale>]" leaves that locale out of the answer (a partial failure). When the
+// prompt lists the keys per locale (a locale that has some texts already, #102), each locale gets only its keys.
 import { createServer } from "node:http";
 
 const port = Number(process.env.AI_GATEWAY_MOCK_PORT || 4500);
@@ -29,14 +30,31 @@ function translate(value: unknown, locale: string): unknown {
   return value;
 }
 
+/** Only the keys a locale is asked for ("de: title, sizes.size2"), when the prompt lists them per locale (#102). */
+function pick(translated: Record<string, unknown>, keys: string[] | undefined): unknown {
+  if (!keys) return translated;
+  const picked: Record<string, Record<string, unknown> | unknown> = {};
+  for (const key of keys) {
+    const [group, ref] = key.split(".");
+    if (ref === undefined) picked[group] = translated[group];
+    else picked[group] = { ...(picked[group] as object), [ref]: (translated[group] as Record<string, unknown>)[ref] };
+  }
+  return picked;
+}
+
 function answer(prompt: string): string {
   const targets = [...(/^Target locales: (.*)$/m.exec(prompt)?.[1] ?? "").matchAll(/\b([a-z]{2}) \(/g)].map((m) => m[1]);
+  const keysByLocale = new Map(
+    [...prompt.matchAll(/^([a-z]{2}): ([\w., ]+)$/gm)].map((m) => [m[1], m[2].split(", ")] as const),
+  );
   const source = JSON.parse(prompt.slice(prompt.indexOf("{", prompt.indexOf("Source texts (JSON):")))) as {
     title?: string;
   };
   const omitted = [...(source.title ?? "").matchAll(/\[omit:([a-z]{2})\]/g)].map((m) => m[1]);
   const translations = Object.fromEntries(
-    targets.filter((locale) => !omitted.includes(locale)).map((locale) => [locale, translate(source, locale)]),
+    targets
+      .filter((locale) => !omitted.includes(locale))
+      .map((locale) => [locale, pick(translate(source, locale) as Record<string, unknown>, keysByLocale.get(locale))]),
   );
   return JSON.stringify({ translations });
 }

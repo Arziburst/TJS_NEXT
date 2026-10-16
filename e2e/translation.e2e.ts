@@ -214,6 +214,119 @@ test.describe("machine translation on the local stack", () => {
     expect(errors).toEqual([]);
   });
 
+  // #102: a size added after the product was translated gets its name in every language, and nothing else changes
+  test("a new size of a translated product: Translate fills only its name; a re-save keeps the untouched sources", async ({
+    page,
+  }) => {
+    test.setTimeout(120_000);
+    const errors = collectErrors(page);
+    const title = `Каблучка розміри ${randomUUID().slice(0, 8)}`;
+    const product = await insertProduct(title, "draft");
+    const fulfillment = await db!.from("products").update({ fulfillment: "made_to_order" }).eq("id", product.id);
+    if (fulfillment.error) throw fulfillment.error;
+    // translated before: de by hand, the others by machine; size 16 named in every locale (de by hand)
+    const rows = await db!.from("product_translations").insert(
+      OTHER_LOCALES.map((locale) => ({
+        product_id: product.id,
+        locale,
+        slug: `${product.slug}-${locale}`,
+        title: `${locale} title`,
+        description: `${locale} description`,
+        source: locale === "de" ? ("human" as const) : ("machine" as const),
+      })),
+    );
+    if (rows.error) throw rows.error;
+    const size16 = await db!.from("product_variants").insert({ product_id: product.id }).select("id").single();
+    if (size16.error) throw size16.error;
+    const labels16 = await db!.from("product_variant_translations").insert(
+      ["uk", ...OTHER_LOCALES].map((locale) => ({
+        variant_id: size16.data.id,
+        locale,
+        label: `16 ${locale}`,
+        source: locale === "uk" || locale === "de" ? ("human" as const) : ("machine" as const),
+      })),
+    );
+    if (labels16.error) throw labels16.error;
+    const textsBefore = await db!.from("product_translations").select("*").eq("product_id", product.id).order("locale");
+    const admin = await createAdmin();
+
+    await signIn(page, admin, `/uk/admin/products/${product.id}`);
+    await page.waitForLoadState("networkidle");
+    const panel = page.locator('[data-slot="translate-panel"]');
+    // complete: nothing to translate without "replace"
+    await expect(panel.getByRole("button", { name: "Перекласти", exact: true })).toBeDisabled();
+
+    // the owner adds size 18 in Ukrainian only
+    const sizes = page.getByRole("region", { name: ukAdmin.form.sections.variants, exact: true });
+    await sizes.getByRole("button", { name: ukAdmin.variants.add }).click();
+    const dialog = page.getByRole("dialog");
+    await dialog.getByRole("textbox", { name: "Українська" }).fill("18 мм");
+    await dialog.getByRole("button", { name: ukAdmin.variants.save }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(sizes.getByTestId("admin-variant")).toHaveCount(2);
+
+    // every other language lacks its name: chosen, marked incomplete, one click translates it
+    const targets = panel.getByRole("group", { name: tr.targets });
+    for (const locale of OTHER_LOCALES) {
+      await expect(targets.getByRole("checkbox", { name: `${localeName[locale]} ${tr.incomplete}`, exact: true })).toBeChecked();
+    }
+    await panel.getByRole("button", { name: "Перекласти 10 мовами" }).click();
+    await expect(panel.getByText(/^Перекладено: /)).toBeVisible({ timeout: 60_000 });
+
+    const { data: size18 } = await db!
+      .from("product_variants")
+      .select("id, product_variant_translations(locale, label, source)")
+      .eq("product_id", product.id)
+      .neq("id", size16.data.id)
+      .single();
+    const labels18 = new Map(size18!.product_variant_translations.map((l) => [l.locale, l]));
+    expect(labels18.get("uk")).toMatchObject({ label: "18 мм", source: "human" });
+    for (const locale of OTHER_LOCALES) {
+      expect(labels18.get(locale), locale).toMatchObject({ label: `[${locale}] 18 мм`, source: "machine" });
+    }
+    // the product's texts and the other size's names are untouched, their sources too
+    const textsAfter = await db!.from("product_translations").select("*").eq("product_id", product.id).order("locale");
+    expect(textsAfter.data).toEqual(textsBefore.data);
+    const { data: after16 } = await db!
+      .from("product_variant_translations")
+      .select("locale, label, source")
+      .eq("variant_id", size16.data.id);
+    expect(after16!.toSorted((a, b) => a.locale.localeCompare(b.locale))).toEqual(
+      ["uk", ...OTHER_LOCALES]
+        .map((locale) => ({
+          locale,
+          label: `16 ${locale}`,
+          source: locale === "uk" || locale === "de" ? "human" : "machine",
+        }))
+        .toSorted((a, b) => a.locale.localeCompare(b.locale)),
+    );
+    // complete again
+    await expect(panel.getByRole("button", { name: "Перекласти", exact: true })).toBeDisabled();
+    await expect(targets.getByText(tr.existing, { exact: true })).toHaveCount(10);
+
+    // re-saving size 18 with only its English name edited: that one becomes human, the others stay machine
+    await sizes.getByRole("button", { name: ukAdmin.variants.edit.replace("{label}", "18 мм") }).click();
+    await dialog.getByRole("textbox", { name: localeName.en }).fill("18 mm");
+    await dialog.getByRole("button", { name: ukAdmin.variants.save }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect
+      .poll(async () => {
+        const { data } = await db!
+          .from("product_variant_translations")
+          .select("locale, label, source")
+          .eq("variant_id", size18!.id);
+        return new Map(data!.map((l) => [l.locale, `${l.label}|${l.source}`]));
+      })
+      .toEqual(
+        new Map([
+          ["uk", "18 мм|human"],
+          ["en", "18 mm|human"],
+          ...OTHER_LOCALES.filter((l) => l !== "en").map((l) => [l, `[${l}] 18 мм|machine`] as [string, string]),
+        ]),
+      );
+    expect(errors).toEqual([]);
+  });
+
   test("the list translates the missing locales of the selected products and marks them reviewed", async ({ page }) => {
     test.setTimeout(120_000);
     const errors = collectErrors(page);
