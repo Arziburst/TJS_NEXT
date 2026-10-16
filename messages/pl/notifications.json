@@ -1,0 +1,78 @@
+{
+  "telegram": {
+    "newOrder": "Nowe zapytanie o zamówienie nr {number}",
+    "placed": "Złożone: {date}",
+    "customer": "Klient",
+    "phone": "Telefon",
+    "email": "E-mail",
+    "language": "Język",
+    "lines": "Produkty",
+    "line": "{title} × {quantity} — {total}",
+    "moreLines": "…i {count, plural, one {# kolejna pozycja} few {# kolejne pozycje} many {# kolejnych pozycji} other {# kolejnej pozycji}}",
+    "goodsTotal": "Razem za produkty",
+    "delivery": "Dostawa",
+    "estimate": "Szacunek",
+    "comment": "Komentarz",
+    "openAdmin": "Otwórz zamówienie w panelu administracyjnym"
+  },
+  "delivery": {
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "do oddziału",
+      "postomat": "do paczkomatu",
+      "doors": "kurierem pod adres",
+      "division": "do oddziału, paczkomatu lub punktu odbioru",
+      "address": "kurierem pod adres"
+    },
+    "flat": "lokal {flat}",
+    "estimateAmount": "≈ {amount}",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "oblicza przewoźnik"
+  },
+  "status": {
+    "new": "Nowe",
+    "pending_payment": "Oczekuje na płatność",
+    "paid": "Opłacone",
+    "in_processing": "W realizacji",
+    "accepted": "Przyjęte",
+    "closed": "Zamknięte",
+    "canceled": "Anulowane",
+    "refunded": "Zwrócone środki"
+  },
+  "email": {
+    "confirmation": {
+      "subject": "Twoje zapytanie o zamówienie nr {number} zostało przyjęte",
+      "title": "Zapytanie o zamówienie przyjęte",
+      "thanks": "Dziękujemy, {name}! Twoje zapytanie o zamówienie zostało przyjęte.",
+      "next": "Sklep wkrótce skontaktuje się z Tobą, aby potwierdzić zamówienie i dostawę."
+    },
+    "statusChange": {
+      "subject": "Zamówienie nr {number}: {status}",
+      "title": "Twoje zamówienie ma nowy status",
+      "greeting": "Dzień dobry, {name}!",
+      "text": "Status Twojego zamówienia nr {number} to teraz: {status}."
+    },
+    "number": "Numer zamówienia",
+    "lines": "Zamówione produkty",
+    "quantity": "Ilość: {quantity}",
+    "goodsTotal": "Razem za produkty",
+    "delivery": "Dostawa",
+    "deliveryEstimate": "Dostawa (szacunkowo)",
+    "deliveryNote": "Dostawa nie jest wliczona w sumę: rzeczywisty koszt dostawy płacisz przewoźnikowi przy odbiorze.",
+    "customsNotice": "Przy odbiorze odbiorca może być zobowiązany do zapłaty importowego VAT i cła.",
+    "contactTitle": "Kontakt ze sklepem",
+    "contactTbd": "Kanały kontaktu: TBD",
+    "channel": {
+      "phone": "Telefon",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "whatsapp": "WhatsApp",
+      "email": "E-mail"
+    },
+    "footer": "Otrzymujesz tę wiadomość, ponieważ w serwisie {site} wysłano zapytanie o zamówienie z tym adresem."
+  }
+}

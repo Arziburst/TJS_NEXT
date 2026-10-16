@@ -1,5 +1,8 @@
 {
   "shop": "Obchod",
+  "search": "Hledat",
+  "searchLabel": "Hledat v obchodě",
+  "searchPlaceholder": "Hledat…",
   "aboutUs": "O nás",
   "contacts": "Kontakty",
   "favorites": "Oblíbené",

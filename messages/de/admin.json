@@ -30,6 +30,7 @@
     "nav": "Verwaltung",
     "products": "Produkte",
     "newProduct": "Neu",
+    "attributes": "Materialien & Farben",
     "viewShop": "Shop",
     "settings": "Einstellungen"
   },
@@ -79,7 +80,8 @@
       "previous": "Vorherige Seite",
       "next": "Nächste Seite",
       "page": "Seite {page} von {count}"
-    }
+    },
+    "unreviewed": "{count, plural, one {# maschinelle Übersetzung nicht geprüft} other {# maschinelle Übersetzungen nicht geprüft}}: {locales}"
   },
   "actionErrors": {
     "notAuthorized": "Nur die Verwaltung darf das. Bitte melden Sie sich erneut an.",
@@ -106,6 +108,7 @@
       "making": "Fertigung und Verfügbarkeit",
       "dimensions": "Maße",
       "translations": "Texte in allen Sprachen",
+      "taxonomy": "Materialien und Farben",
       "photos": "Fotos",
       "publication": "Veröffentlichung"
     },
@@ -123,6 +126,7 @@
     "heightMm": "Höhe, mm",
     "dimensionsHint": "Optional; in Millimetern, bis zu einer Nachkommastelle.",
     "translationsHint": "Ukrainisch ist zum Veröffentlichen nötig; eine Sprache ohne Titel wird nicht gezeigt, der Shop zeigt dann den englischen Text.",
+    "manageTerms": "Listen der Materialien und Farben bearbeiten",
     "status": "Status",
     "position": "Position",
     "positionHint": "Eine Zahl für die manuelle Reihenfolge; standardmäßig 0.",
@@ -170,6 +174,7 @@
       "notAuthorized": "Nur die Verwaltung darf das. Bitte melden Sie sich erneut an.",
       "notFound": "Dieses Produkt existiert nicht mehr.",
       "conflict": "Ein anderes Produkt hat diese Adresse oder Artikelnummer gerade übernommen. Bitte prüfen und erneut speichern.",
+      "termsChanged": "Ein gewähltes Material oder eine gewählte Farbe wurde gerade gelöscht. Bitte prüfen Sie die Liste und speichern Sie erneut.",
       "unexpectedError": "Das Produkt konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
       "required": "Dieses Feld ist erforderlich",
       "tooLong": "Höchstens {max} Zeichen",
@@ -181,6 +186,108 @@
       "leadTimeOrder": "Darf nicht kleiner als „Von“ sein",
       "titleRequired": "Geben Sie einen Titel in dieser Sprache ein oder leeren Sie ihre anderen Texte",
       "requiredToPublish": "Zum Veröffentlichen ist ein ukrainischer Titel nötig"
+    },
+    "translateAfterSave": "Speichern Sie das Produkt zuerst; danach kann es maschinell in die anderen Sprachen übersetzt werden."
+  },
+  "translate": {
+    "title": "Maschinelle Übersetzung",
+    "hint": "Füllt die anderen Sprachen in einem Durchgang aus einem Text. Maschinentexte erscheinen im Shop, Suchmaschinen indexieren sie aber erst, wenn Sie sie als geprüft markieren.",
+    "notConfigured": "Die maschinelle Übersetzung ist auf diesem Server nicht eingerichtet. Füllen Sie die Sprachen von Hand aus oder bitten Sie den Entwickler, das AI Gateway anzubinden.",
+    "saveFirst": "Speichern Sie zuerst Ihre Änderungen: Die Übersetzung geht vom gespeicherten Text aus.",
+    "source": "Übersetzen aus",
+    "noSourceOption": "Noch kein Text",
+    "targets": "In",
+    "existing": "hat Text",
+    "overwrite": "Vorhandene Texte ebenfalls ersetzen",
+    "submit": "{count, plural, =0 {Übersetzen} one {In # Sprache übersetzen} other {In # Sprachen übersetzen}}",
+    "running": "Übersetzung in {count, plural, one {# Sprache} other {# Sprachen}} läuft… Das dauert ein bis zwei Minuten.",
+    "done": "Übersetzt in: {locales}.",
+    "doneToast": "{count, plural, one {In # Sprache übersetzt} other {In # Sprachen übersetzt}}",
+    "partial": "Nicht übersetzt: {locales}. Versuchen Sie es erneut.",
+    "review": {
+      "title": "Prüfung",
+      "hint": "Lesen Sie jeden Maschinentext und markieren Sie ihn als geprüft: Erst dann indexieren Suchmaschinen die Seite in dieser Sprache.",
+      "none": "Keine maschinelle Übersetzung zu prüfen.",
+      "reviewed": "Geprüft",
+      "notReviewed": "Nicht geprüft",
+      "label": "{language}: geprüft",
+      "markedToast": "{language}: als geprüft markiert",
+      "unmarkedToast": "{language}: wieder nicht geprüft"
+    },
+    "errors": {
+      "notAuthorized": "Das darf nur der Admin. Bitte melden Sie sich erneut an.",
+      "invalid": "Diese Anfrage ist ungültig.",
+      "notConfigured": "Die maschinelle Übersetzung ist auf diesem Server nicht eingerichtet.",
+      "tooManyRequests": "Zu viele Übersetzungen in kurzer Zeit. Bitte warten Sie etwas und versuchen Sie es erneut.",
+      "notFound": "Dieses Produkt gibt es nicht mehr.",
+      "noSource": "Die gewählte Sprache hat keinen Text, aus dem übersetzt werden kann.",
+      "nothingToTranslate": "Nichts zu übersetzen: Jede gewählte Sprache hat bereits einen Text.",
+      "conflict": "Ein anderes Produkt hat inzwischen eine der neuen Seitenadressen belegt. Bitte versuchen Sie es erneut.",
+      "authFailed": "Der Übersetzungsdienst hat den Zugangsschlüssel abgelehnt. Bitten Sie den Entwickler, ihn zu prüfen.",
+      "rateLimited": "Der Übersetzungsdienst ist ausgelastet. Bitte versuchen Sie es in einigen Minuten erneut.",
+      "timeout": "Die Übersetzung hat zu lange gedauert. Versuchen Sie es erneut oder wählen Sie weniger Sprachen.",
+      "unavailable": "Der Übersetzungsdienst ist gerade nicht erreichbar. Bitte versuchen Sie es später erneut.",
+      "rejected": "Der Übersetzungsdienst hat die Anfrage abgelehnt. Bitten Sie den Entwickler, die Logs zu prüfen.",
+      "invalidOutput": "Die Übersetzung kam unbrauchbar zurück. Bitte versuchen Sie es erneut.",
+      "unexpectedError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "bulk": {
+      "label": "Übersetzung der ausgewählten Produkte",
+      "selectAll": "Alle auf dieser Seite auswählen",
+      "select": "{title} auswählen",
+      "selected": "{count, plural, =0 {Nichts ausgewählt} one {# ausgewählt} other {# ausgewählt}}",
+      "translate": "{count, plural, =0 {Fehlende Sprachen übersetzen} other {Fehlende Sprachen übersetzen (#)}}",
+      "markReviewed": "{count, plural, =0 {Übersetzungen als geprüft markieren} other {Übersetzungen als geprüft markieren (#)}}",
+      "stop": "Nach diesem Produkt anhalten",
+      "progress": "Übersetze {current} von {total}: {title}",
+      "report": "Ergebnisse der Übersetzung",
+      "translatedLine": "{count, plural, one {# Sprache übersetzt} other {# Sprachen übersetzt}}, {failed} nicht übersetzt",
+      "summary": "{done, plural, one {# Produkt übersetzt} other {# Produkte übersetzt}}, {failed, plural, =0 {keine Fehler} one {# Fehler} other {# Fehler}}",
+      "reviewedToast": "{count, plural, =0 {Keine Übersetzung wartete auf Prüfung} one {# Übersetzung als geprüft markiert} other {# Übersetzungen als geprüft markiert}}"
+    }
+  },
+  "taxonomy": {
+    "title": "Materialien und Farben",
+    "intro": "Die Filter des Shops listen sie auf. Jeder Eintrag braucht seinen ukrainischen Namen; eine Sprache ohne eigenen Namen zeigt den englischen, sonst den ukrainischen.",
+    "kinds": {
+      "material": "Materialien",
+      "colour": "Farben"
+    },
+    "add": {
+      "material": "Material hinzufügen",
+      "colour": "Farbe hinzufügen"
+    },
+    "empty": {
+      "material": "Noch keine Materialien.",
+      "colour": "Noch keine Farben."
+    },
+    "nameIn": "Name ({language})",
+    "required": "(erforderlich)",
+    "otherLocales": "Weitere Sprachen",
+    "slug": "In Shop-Links: {slug}",
+    "usedBy": "{count, plural, =0 {Nicht verwendet} one {Bei # Produkt verwendet} other {Bei # Produkten verwendet}}",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "create": "Hinzufügen",
+    "saved": "Gespeichert",
+    "created": "Hinzugefügt",
+    "delete": "Löschen",
+    "deleteTitle": "„{name}“ löschen?",
+    "deleteDescription": "Der Eintrag verschwindet aus den Filtern des Shops. Das kann nicht rückgängig gemacht werden.",
+    "deleteConfirm": "Löschen",
+    "cancel": "Abbrechen",
+    "deleted": "„{name}“ gelöscht",
+    "inUseHint": "Produkte verwenden ihn: Entfernen Sie das Häkchen in deren Formularen, um ihn zu löschen.",
+    "loadError": "Die Listen konnten nicht geladen werden. Bitte versuchen Sie es erneut.",
+    "errors": {
+      "required": "Geben Sie den ukrainischen Namen ein",
+      "tooLong": "Höchstens {max} Zeichen",
+      "notAuthorized": "Nur der Admin kann das tun. Bitte melden Sie sich erneut an.",
+      "notFound": "Dieser Eintrag existiert nicht mehr.",
+      "nameTaken": "Ein anderer Eintrag dieser Liste hat bereits diesen Namen.",
+      "invalid": "Diese Anfrage ist ungültig.",
+      "unexpectedError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "inUse": "Produkte verwenden ihn: Entfernen Sie zuerst das Häkchen in deren Formularen."
     }
   },
   "images": {
@@ -193,6 +300,7 @@
     "makeMain": "Zum Hauptfoto machen",
     "moveEarlier": "Foto {index} nach vorne verschieben",
     "moveLater": "Foto {index} nach hinten verschieben",
+    "moved": "Foto an Position {position} von {count} verschoben.",
     "altTextsOf": "Alternativtexte von Foto {index}",
     "altHint": "Eine kurze Beschreibung des Fotos für Screenreader und Suchmaschinen. Ein leeres Feld verwendet den darin angezeigten Text.",
     "altSave": "Alternativtexte speichern",

@@ -30,6 +30,7 @@
     "nav": "Správa",
     "products": "Produkty",
     "newProduct": "Přidat",
+    "attributes": "Materiály a barvy",
     "viewShop": "Obchod",
     "settings": "Nastavení"
   },
@@ -79,7 +80,8 @@
       "previous": "Předchozí stránka",
       "next": "Další stránka",
       "page": "Stránka {page} z {count}"
-    }
+    },
+    "unreviewed": "{count, plural, one {# strojový překlad nezkontrolován} few {# strojové překlady nezkontrolovány} many {# strojového překladu nezkontrolováno} other {# strojových překladů nezkontrolováno}}: {locales}"
   },
   "actionErrors": {
     "notAuthorized": "To může udělat jen správce. Přihlaste se znovu.",
@@ -106,6 +108,7 @@
       "making": "Výroba a dostupnost",
       "dimensions": "Rozměry",
       "translations": "Texty ve všech jazycích",
+      "taxonomy": "Materiály a barvy",
       "photos": "Fotky",
       "publication": "Zveřejnění"
     },
@@ -123,6 +126,7 @@
     "heightMm": "Výška, mm",
     "dimensionsHint": "Nepovinné; v milimetrech, nejvýše jedno desetinné místo.",
     "translationsHint": "Ukrajinština je ke zveřejnění nutná; jazyk bez názvu se nezobrazuje, obchod pak ukáže anglický text.",
+    "manageTerms": "Upravit seznamy materiálů a barev",
     "status": "Stav",
     "position": "Pořadí",
     "positionHint": "Číslo pro ruční řazení; výchozí 0.",
@@ -170,6 +174,7 @@
       "notAuthorized": "To může udělat jen správce. Přihlaste se znovu.",
       "notFound": "Tento produkt už neexistuje.",
       "conflict": "Jiný produkt právě získal tuto adresu nebo kód. Zkontrolujte a uložte znovu.",
+      "termsChanged": "Zvolený materiál nebo barva byly právě smazány. Zkontrolujte seznam a uložte znovu.",
       "unexpectedError": "Produkt se nepodařilo uložit. Zkuste to znovu.",
       "required": "Toto pole je povinné",
       "tooLong": "Nejvýše {max} znaků",
@@ -181,6 +186,108 @@
       "leadTimeOrder": "Nesmí být menší než „Od“",
       "titleRequired": "Zadejte název v tomto jazyce, nebo vymažte jeho ostatní texty",
       "requiredToPublish": "Ke zveřejnění je nutný ukrajinský název"
+    },
+    "translateAfterSave": "Nejprve produkt uložte; potom jej lze strojově přeložit do ostatních jazyků."
+  },
+  "translate": {
+    "title": "Strojový překlad",
+    "hint": "Vyplní ostatní jazyky z jednoho textu najednou. Strojové texty se v obchodě zobrazují, ale vyhledávače je neindexují, dokud je neoznačíte jako zkontrolované.",
+    "notConfigured": "Strojový překlad není na tomto serveru nastaven. Vyplňte jazyky ručně nebo požádejte vývojáře o připojení AI Gateway.",
+    "saveFirst": "Nejprve uložte změny: překlad vychází z uloženého textu.",
+    "source": "Přeložit z",
+    "noSourceOption": "Zatím bez textu",
+    "targets": "Do",
+    "existing": "má text",
+    "overwrite": "Nahradit i existující texty",
+    "submit": "{count, plural, =0 {Přeložit} one {Přeložit do # jazyka} few {Přeložit do # jazyků} many {Přeložit do # jazyka} other {Přeložit do # jazyků}}",
+    "running": "Překládáme do {count, plural, one {# jazyka} few {# jazyků} many {# jazyka} other {# jazyků}}… Trvá to minutu až dvě.",
+    "done": "Přeloženo do: {locales}.",
+    "doneToast": "{count, plural, one {Přeloženo do # jazyka} few {Přeloženo do # jazyků} many {Přeloženo do # jazyka} other {Přeloženo do # jazyků}}",
+    "partial": "Nepřeloženo: {locales}. Zkuste to znovu.",
+    "review": {
+      "title": "Kontrola",
+      "hint": "Přečtěte každý strojový text a označte jej jako zkontrolovaný: teprve pak vyhledávače indexují stránku v tomto jazyce.",
+      "none": "Žádný strojový překlad ke kontrole.",
+      "reviewed": "Zkontrolováno",
+      "notReviewed": "Nezkontrolováno",
+      "label": "{language}: zkontrolováno",
+      "markedToast": "{language}: označeno jako zkontrolované",
+      "unmarkedToast": "{language}: opět nezkontrolováno"
+    },
+    "errors": {
+      "notAuthorized": "To může udělat jen administrátor. Přihlaste se prosím znovu.",
+      "invalid": "Tento požadavek není platný.",
+      "notConfigured": "Strojový překlad není na tomto serveru nastaven.",
+      "tooManyRequests": "Příliš mnoho překladů za krátkou dobu. Chvíli počkejte a zkuste to znovu.",
+      "notFound": "Tento produkt již neexistuje.",
+      "noSource": "Zvolený jazyk nemá text, ze kterého by se dalo překládat.",
+      "nothingToTranslate": "Není co překládat: každý zvolený jazyk už text má.",
+      "conflict": "Jiný produkt mezitím obsadil jednu z nových adres stránky. Zkuste to znovu.",
+      "authFailed": "Překladová služba odmítla přístupový klíč. Požádejte vývojáře, ať jej zkontroluje.",
+      "rateLimited": "Překladová služba je přetížená. Zkuste to znovu za pár minut.",
+      "timeout": "Překlad trval příliš dlouho. Zkuste to znovu nebo zvolte méně jazyků.",
+      "unavailable": "Překladová služba teď není dostupná. Zkuste to později.",
+      "rejected": "Překladová služba požadavek odmítla. Požádejte vývojáře o kontrolu logů.",
+      "invalidOutput": "Překlad se vrátil nepoužitelný. Zkuste to znovu.",
+      "unexpectedError": "Něco se pokazilo. Zkuste to znovu."
+    },
+    "bulk": {
+      "label": "Překlad vybraných produktů",
+      "selectAll": "Vybrat vše na této stránce",
+      "select": "Vybrat {title}",
+      "selected": "{count, plural, =0 {Nic nevybráno} one {Vybrán #} few {Vybrány #} many {Vybráno #} other {Vybráno #}}",
+      "translate": "{count, plural, =0 {Přeložit chybějící jazyky} other {Přeložit chybějící jazyky (#)}}",
+      "markReviewed": "{count, plural, =0 {Označit překlady jako zkontrolované} other {Označit překlady jako zkontrolované (#)}}",
+      "stop": "Zastavit po tomto produktu",
+      "progress": "Překládáme {current} z {total}: {title}",
+      "report": "Výsledky překladu",
+      "translatedLine": "{count, plural, one {přeložen # jazyk} few {přeloženy # jazyky} many {přeloženo # jazyka} other {přeloženo # jazyků}}, nepřeloženo: {failed}",
+      "summary": "{done, plural, one {Přeložen # produkt} few {Přeloženy # produkty} many {Přeloženo # produktu} other {Přeloženo # produktů}}, {failed, plural, =0 {bez chyb} one {# chyba} few {# chyby} many {# chyby} other {# chyb}}",
+      "reviewedToast": "{count, plural, =0 {Žádný překlad nečekal na kontrolu} one {# překlad označen jako zkontrolovaný} few {# překlady označeny jako zkontrolované} many {# překladu označeno jako zkontrolované} other {# překladů označeno jako zkontrolované}}"
+    }
+  },
+  "taxonomy": {
+    "title": "Materiály a barvy",
+    "intro": "Zobrazují je filtry obchodu. Každá položka potřebuje ukrajinský název; jazyk bez vlastního názvu ukáže anglický, jinak ukrajinský.",
+    "kinds": {
+      "material": "Materiály",
+      "colour": "Barvy"
+    },
+    "add": {
+      "material": "Přidat materiál",
+      "colour": "Přidat barvu"
+    },
+    "empty": {
+      "material": "Zatím žádné materiály.",
+      "colour": "Zatím žádné barvy."
+    },
+    "nameIn": "Název ({language})",
+    "required": "(povinné)",
+    "otherLocales": "Další jazyky",
+    "slug": "V odkazech obchodu: {slug}",
+    "usedBy": "{count, plural, =0 {Nepoužito} one {Použito u # produktu} few {Použito u # produktů} many {Použito u # produktu} other {Použito u # produktů}}",
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "create": "Přidat",
+    "saved": "Uloženo",
+    "created": "Přidáno",
+    "delete": "Smazat",
+    "deleteTitle": "Smazat „{name}“?",
+    "deleteDescription": "Zmizí z filtrů obchodu. Tuto akci nelze vrátit.",
+    "deleteConfirm": "Smazat",
+    "cancel": "Zrušit",
+    "deleted": "„{name}“ smazáno",
+    "inUseHint": "Používají ho produkty: odškrtněte ho v jejich formulářích, abyste ho mohli smazat.",
+    "loadError": "Seznamy se nepodařilo načíst. Zkuste to znovu.",
+    "errors": {
+      "required": "Zadejte ukrajinský název",
+      "tooLong": "Nejvýše {max} znaků",
+      "notAuthorized": "To může udělat jen administrátor. Přihlaste se znovu.",
+      "notFound": "Tato položka už neexistuje.",
+      "nameTaken": "Jiná položka tohoto seznamu už má tento název.",
+      "invalid": "Tento požadavek je neplatný.",
+      "unexpectedError": "Něco se pokazilo. Zkuste to znovu.",
+      "inUse": "Používají ho produkty: nejprve ho odškrtněte v jejich formulářích."
     }
   },
   "images": {
@@ -193,6 +300,7 @@
     "makeMain": "Nastavit jako hlavní",
     "moveEarlier": "Posunout fotku {index} dopředu",
     "moveLater": "Posunout fotku {index} dozadu",
+    "moved": "Fotka přesunuta na pozici {position} z {count}.",
     "altTextsOf": "Alternativní texty fotky {index}",
     "altHint": "Krátký popis fotky pro čtečky obrazovky a vyhledávače. Prázdné pole použije text, který je v něm zobrazen.",
     "altSave": "Uložit texty",

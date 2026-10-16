@@ -34,6 +34,8 @@ function builder(table: string) {
 vi.mock("@/lib/supabase/server", () => ({
   createPublicServerClient: () => ({
     from: (table: string) => builder(table),
+    // a database function answers like a table named rpc:<function>
+    rpc: (fn: string) => builder(`rpc:${fn}`),
     storage: {
       from: (bucket: string) => ({
         getPublicUrl: (path: string) => ({ data: { publicUrl: `https://storage.test/${bucket}/${path}` } }),
@@ -43,10 +45,22 @@ vi.mock("@/lib/supabase/server", () => ({
 }));
 
 const { FAILED_READ_LIFE } = await import("@/lib/failed-read");
-const { getCachedCategories, getCachedListingPage } = await import("./cache");
+const { getCachedCategories, getCachedFacets, getCachedListingPage, getCachedTaxonomyTerms } = await import("./cache");
 const { getProductPage } = await import("./product");
 
 const failure: Response = { data: null, error: { message: "boom" } };
+
+const listing = (categorySlug: string | null) => ({
+  locale: "de" as const,
+  categorySlug,
+  terms: [],
+  materials: [],
+  colours: [],
+  priceMinUsdMinor: null,
+  priceMaxUsdMinor: null,
+  availability: [],
+});
+const noIds: Response = { data: { ids: [], total: 0 }, error: null };
 
 const categoryRows: Response = {
   data: [{ id: "c1", slug: "earrings", position: 1, category_translations: [{ locale: "de", name: "Ohrringe", source: "human" }] }],
@@ -154,27 +168,90 @@ describe("getCachedCategories", () => {
 });
 
 describe("getCachedListingPage", () => {
+  it("caches a failed search with zero lifetime", async () => {
+    responses["rpc:shop_search"] = [failure];
+    expect(await getCachedListingPage(listing(null), "newest", 1, 24)).toEqual({ ok: false, reason: "unexpectedError" });
+    expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
+  });
+
   it("caches a failed product read with zero lifetime", async () => {
+    responses["rpc:shop_search"] = [{ data: { ids: ["p1"], total: 1 }, error: null }];
     responses.products = [failure];
-    expect(await getCachedListingPage("de", null, "newest", 1, 24)).toEqual({ ok: false, reason: "unexpectedError" });
+    expect(await getCachedListingPage(listing(null), "newest", 1, 24)).toEqual({ ok: false, reason: "unexpectedError" });
     expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
   });
 
   it("caches a category listing with zero lifetime when the categories cannot be read", async () => {
     // the products are there, but without the category's id the entry would miss its revalidation tag
-    responses.products = [{ data: [], error: null }];
+    responses["rpc:shop_search"] = [noIds];
     responses.categories = [failure];
-    expect(await getCachedListingPage("de", "earrings", "newest", 1, 24)).toMatchObject({ ok: true });
+    expect(await getCachedListingPage(listing("earrings"), "newest", 1, 24)).toMatchObject({ ok: true });
     expect(cacheLife).toHaveBeenLastCalledWith(FAILED_READ_LIFE);
     expect(cacheLife).not.toHaveBeenCalledWith("hours");
   });
 
   it("keeps a complete listing for hours, tagged with its category", async () => {
-    responses.products = [{ data: [], error: null }];
+    responses["rpc:shop_search"] = [noIds];
     responses.categories = [categoryRows];
-    expect(await getCachedListingPage("de", "earrings", "newest", 1, 24)).toMatchObject({ ok: true });
+    expect(await getCachedListingPage(listing("earrings"), "newest", 1, 24)).toMatchObject({ ok: true });
     expect(cacheLife).toHaveBeenLastCalledWith("hours");
     expect(cacheTag).toHaveBeenCalledWith("category:c1");
+  });
+});
+
+describe("getCachedFacets", () => {
+  it.each([
+    ["a database error", failure],
+    ["a network failure", new TypeError("fetch failed")],
+  ])("caches %s with zero lifetime", async (_what, response) => {
+    responses["rpc:shop_facets"] = [response];
+    expect(await getCachedFacets(listing(null))).toEqual({ ok: false, reason: "unexpectedError" });
+    expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
+  });
+
+  it("keeps the counts for hours", async () => {
+    responses["rpc:shop_facets"] = [
+      {
+        data: [
+          { facet: "material", value: "brass", count: 3 },
+          { facet: "availability", value: "in_stock", count: 1 },
+        ],
+        error: null,
+      },
+    ];
+    expect(await getCachedFacets(listing(null))).toEqual({
+      ok: true,
+      data: { material: { brass: 3 }, colour: {}, availability: { in_stock: 1 } },
+    });
+    expect(cacheLife.mock.calls).toEqual([["hours"]]);
+  });
+});
+
+describe("getCachedTaxonomyTerms", () => {
+  it("caches a failed read with zero lifetime", async () => {
+    responses.taxonomy_terms = [failure];
+    expect(await getCachedTaxonomyTerms("de")).toEqual({ ok: false, reason: "unexpectedError" });
+    expect(cacheLife.mock.calls).toEqual([[FAILED_READ_LIFE]]);
+  });
+
+  it("keeps the lists for hours, named in the locale, else en, else uk", async () => {
+    responses.taxonomy_terms = [
+      {
+        data: [
+          { id: "t1", kind: "material", slug: "brass", position: 0, taxonomy_term_translations: [{ locale: "uk", name: "Латунь" }, { locale: "en", name: "Brass" }] },
+          { id: "t2", kind: "colour", slug: "red", position: 0, taxonomy_term_translations: [{ locale: "uk", name: "Червоний" }, { locale: "de", name: "Rot" }] },
+          { id: "t3", kind: "colour", slug: "blue", position: 0, taxonomy_term_translations: [{ locale: "uk", name: "Синій" }] },
+        ],
+        error: null,
+      },
+    ];
+    const result = await getCachedTaxonomyTerms("de");
+    expect(result.ok && result.data.map((t) => [t.slug, t.name, t.nameLocale])).toEqual([
+      ["brass", "Brass", "en"],
+      ["red", "Rot", "de"],
+      ["blue", "Синій", "uk"],
+    ]);
+    expect(cacheLife.mock.calls).toEqual([["hours"]]);
   });
 });
 

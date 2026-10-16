@@ -93,11 +93,23 @@ describe("message catalogs", () => {
       date: "21 October 2026",
       kg: 30,
       price: "96,45 ₴",
+      query: "coral",
+      language: "English",
+      slug: "brass",
       titles: "Coral drop earrings, Pearl ring",
       maxMb: 15,
       // a file name (admin.images) and a person's first name (checkout.done) alike
       name: "IMG_0042.jpg",
       done: 3,
+      position: 2,
+      current: 3,
+      failed: 1,
+      // the notifications (#26): an order number, its status, money and the shop's host
+      number: 10042,
+      status: "Accepted",
+      amount: "80 ₴",
+      flat: "12",
+      site: "shop.example.test",
       link: (chunks: string) => `<a>${chunks}</a>`,
       b: (chunks: string) => `<b>${chunks}</b>`,
     };

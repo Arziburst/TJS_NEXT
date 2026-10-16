@@ -30,6 +30,7 @@
     "nav": "Administrare",
     "products": "Produse",
     "newProduct": "Adaugă",
+    "attributes": "Materiale și culori",
     "viewShop": "Magazin",
     "settings": "Setări"
   },
@@ -79,7 +80,8 @@
       "previous": "Pagina anterioară",
       "next": "Pagina următoare",
       "page": "Pagina {page} din {count}"
-    }
+    },
+    "unreviewed": "{count, plural, one {# traducere automată neverificată} few {# traduceri automate neverificate} other {# de traduceri automate neverificate}}: {locales}"
   },
   "actionErrors": {
     "notAuthorized": "Doar administrarea poate face asta. Conectați-vă din nou.",
@@ -106,6 +108,7 @@
       "making": "Realizare și disponibilitate",
       "dimensions": "Dimensiuni",
       "translations": "Texte în toate limbile",
+      "taxonomy": "Materiale și culori",
       "photos": "Fotografii",
       "publication": "Publicare"
     },
@@ -123,6 +126,7 @@
     "heightMm": "Înălțime, mm",
     "dimensionsHint": "Opțional; în milimetri, cel mult o zecimală.",
     "translationsHint": "Ucraineana este necesară pentru publicare; o limbă fără titlu nu este afișată, magazinul arată atunci textul în engleză.",
+    "manageTerms": "Editează listele de materiale și culori",
     "status": "Stare",
     "position": "Poziție",
     "positionHint": "Un număr pentru ordonarea manuală; implicit 0.",
@@ -170,6 +174,7 @@
       "notAuthorized": "Doar administrarea poate face asta. Conectați-vă din nou.",
       "notFound": "Acest produs nu mai există.",
       "conflict": "Alt produs tocmai a preluat această adresă sau acest cod. Verificați și salvați din nou.",
+      "termsChanged": "Un material sau o culoare aleasă tocmai a fost ștearsă. Verificați lista și salvați din nou.",
       "unexpectedError": "Produsul nu a putut fi salvat. Încercați din nou.",
       "required": "Acest câmp este obligatoriu",
       "tooLong": "Cel mult {max} caractere",
@@ -181,6 +186,108 @@
       "leadTimeOrder": "Nu poate fi mai mic decât „De la”",
       "titleRequired": "Introduceți un titlu în această limbă sau goliți celelalte texte ale ei",
       "requiredToPublish": "Pentru publicare este necesar un titlu în ucraineană"
+    },
+    "translateAfterSave": "Salvați mai întâi produsul; apoi poate fi tradus automat în celelalte limbi."
+  },
+  "translate": {
+    "title": "Traducere automată",
+    "hint": "Completează celelalte limbi dintr-un singur text, dintr-o dată. Textele automate apar în magazin, dar motoarele de căutare nu le indexează până nu le marcați ca verificate.",
+    "notConfigured": "Traducerea automată nu este configurată pe acest server. Completați limbile manual sau rugați dezvoltatorul să conecteze AI Gateway.",
+    "saveFirst": "Salvați mai întâi modificările: traducerea pornește de la textul salvat.",
+    "source": "Tradu din",
+    "noSourceOption": "Încă fără text",
+    "targets": "În",
+    "existing": "are text",
+    "overwrite": "Înlocuiește și textele existente",
+    "submit": "{count, plural, =0 {Tradu} one {Tradu în # limbă} few {Tradu în # limbi} other {Tradu în # de limbi}}",
+    "running": "Se traduce în {count, plural, one {# limbă} few {# limbi} other {# de limbi}}… Durează un minut sau două.",
+    "done": "Tradus în: {locales}.",
+    "doneToast": "{count, plural, one {Tradus în # limbă} few {Tradus în # limbi} other {Tradus în # de limbi}}",
+    "partial": "Netradus: {locales}. Încercați din nou.",
+    "review": {
+      "title": "Verificare",
+      "hint": "Citiți fiecare text automat și marcați-l ca verificat: abia atunci motoarele de căutare indexează pagina în acea limbă.",
+      "none": "Nicio traducere automată de verificat.",
+      "reviewed": "Verificat",
+      "notReviewed": "Neverificat",
+      "label": "{language}: verificat",
+      "markedToast": "{language}: marcat ca verificat",
+      "unmarkedToast": "{language}: din nou neverificat"
+    },
+    "errors": {
+      "notAuthorized": "Doar administratorul poate face asta. Autentificați-vă din nou.",
+      "invalid": "Această cerere nu este validă.",
+      "notConfigured": "Traducerea automată nu este configurată pe acest server.",
+      "tooManyRequests": "Prea multe traduceri într-un timp scurt. Așteptați puțin și încercați din nou.",
+      "notFound": "Acest produs nu mai există.",
+      "noSource": "Limba aleasă nu are text din care să se traducă.",
+      "nothingToTranslate": "Nimic de tradus: fiecare limbă aleasă are deja text.",
+      "conflict": "Între timp, alt produs a ocupat una dintre noile adrese de pagină. Încercați din nou.",
+      "authFailed": "Serviciul de traducere a refuzat cheia de acces. Rugați dezvoltatorul să o verifice.",
+      "rateLimited": "Serviciul de traducere este supraîncărcat. Încercați din nou peste câteva minute.",
+      "timeout": "Traducerea a durat prea mult. Încercați din nou sau alegeți mai puține limbi.",
+      "unavailable": "Serviciul de traducere nu este disponibil acum. Încercați mai târziu.",
+      "rejected": "Serviciul de traducere a refuzat cererea. Rugați dezvoltatorul să verifice jurnalele.",
+      "invalidOutput": "Traducerea a venit inutilizabilă. Încercați din nou.",
+      "unexpectedError": "Ceva nu a mers. Încercați din nou."
+    },
+    "bulk": {
+      "label": "Traducerea produselor selectate",
+      "selectAll": "Selectează tot de pe această pagină",
+      "select": "Selectează {title}",
+      "selected": "{count, plural, =0 {Nimic selectat} one {# selectat} few {# selectate} other {# selectate}}",
+      "translate": "{count, plural, =0 {Tradu limbile lipsă} other {Tradu limbile lipsă (#)}}",
+      "markReviewed": "{count, plural, =0 {Marchează traducerile ca verificate} other {Marchează traducerile ca verificate (#)}}",
+      "stop": "Oprește după acest produs",
+      "progress": "Se traduce {current} din {total}: {title}",
+      "report": "Rezultatele traducerii",
+      "translatedLine": "{count, plural, one {# limbă tradusă} few {# limbi traduse} other {# de limbi traduse}}, {failed} netraduse",
+      "summary": "{done, plural, one {# produs tradus} few {# produse traduse} other {# de produse traduse}}, {failed, plural, =0 {fără erori} one {# eroare} few {# erori} other {# de erori}}",
+      "reviewedToast": "{count, plural, =0 {Nicio traducere nu aștepta verificarea} one {# traducere marcată ca verificată} few {# traduceri marcate ca verificate} other {# de traduceri marcate ca verificate}}"
+    }
+  },
+  "taxonomy": {
+    "title": "Materiale și culori",
+    "intro": "Filtrele magazinului le afișează. Fiecare are nevoie de numele în ucraineană; o limbă fără nume propriu îl arată pe cel englez, altfel pe cel ucrainean.",
+    "kinds": {
+      "material": "Materiale",
+      "colour": "Culori"
+    },
+    "add": {
+      "material": "Adaugă un material",
+      "colour": "Adaugă o culoare"
+    },
+    "empty": {
+      "material": "Încă nu există materiale.",
+      "colour": "Încă nu există culori."
+    },
+    "nameIn": "Nume ({language})",
+    "required": "(obligatoriu)",
+    "otherLocales": "Alte limbi",
+    "slug": "În linkurile magazinului: {slug}",
+    "usedBy": "{count, plural, =0 {Nefolosit} one {Folosit de # produs} few {Folosit de # produse} other {Folosit de # de produse}}",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "create": "Adaugă",
+    "saved": "Salvat",
+    "created": "Adăugat",
+    "delete": "Șterge",
+    "deleteTitle": "Ștergeți „{name}”?",
+    "deleteDescription": "Dispare din filtrele magazinului. Acțiunea nu poate fi anulată.",
+    "deleteConfirm": "Șterge",
+    "cancel": "Anulează",
+    "deleted": "„{name}” a fost șters",
+    "inUseHint": "Unele produse îl folosesc: debifați-l în formularele lor pentru a-l șterge.",
+    "loadError": "Listele nu au putut fi încărcate. Încercați din nou.",
+    "errors": {
+      "required": "Introduceți numele în ucraineană",
+      "tooLong": "Cel mult {max} caractere",
+      "notAuthorized": "Doar administratorul poate face asta. Autentificați-vă din nou.",
+      "notFound": "Această intrare nu mai există.",
+      "nameTaken": "O altă intrare din această listă are deja acest nume.",
+      "invalid": "Această cerere nu este validă.",
+      "unexpectedError": "Ceva nu a mers bine. Încercați din nou.",
+      "inUse": "Unele produse îl folosesc: debifați-l mai întâi în formularele lor."
     }
   },
   "images": {
@@ -193,6 +300,7 @@
     "makeMain": "Setați ca principală",
     "moveEarlier": "Mutați fotografia {index} mai în față",
     "moveLater": "Mutați fotografia {index} mai în spate",
+    "moved": "Fotografia a fost mutată pe poziția {position} din {count}.",
     "altTextsOf": "Textele alternative ale fotografiei {index}",
     "altHint": "O scurtă descriere a fotografiei pentru cititoarele de ecran și motoarele de căutare. Un câmp gol folosește textul afișat în el.",
     "altSave": "Salvați textele",

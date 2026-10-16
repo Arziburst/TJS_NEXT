@@ -6,7 +6,9 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AdminPending, AdminShell } from "@/components/admin/admin-shell";
 import { ADMIN_PRODUCTS_HREF, NEW_PRODUCT_HREF } from "@/components/admin/paths";
+import { setTranslationReviewed, translateProduct } from "@/app/[locale]/admin/actions";
 import { AdminPagination } from "@/components/admin/admin-pagination";
+import { BulkTranslation } from "@/components/admin/bulk-translation";
 import { ProductList } from "@/components/admin/product-list";
 import { inputClass, labelClass, selectClass } from "@/components/admin/styles";
 import { buttonVariants } from "@/components/ui/button";
@@ -17,6 +19,7 @@ import { STATUSES, type ProductStatus } from "@/lib/admin/product-form";
 import { listAdminProducts } from "@/lib/admin/products";
 import { getAdmin, requireAdmin } from "@/lib/auth/session";
 import { getCachedCategories } from "@/lib/catalog/cache";
+import { isTranslationConfigured } from "@/lib/translate/gateway";
 
 export async function generateMetadata(): Promise<Metadata> {
   // nothing about the admin area for anyone else, not even its title
@@ -144,7 +147,14 @@ async function AdminProducts({ params, searchParams }: PageProps<"/[locale]/admi
           <p className="font-input text-sm">{filtered ? t("noMatch") : t("empty")}</p>
         ) : (
           <>
-            <ProductList items={products.data.items} categories={categoryList} />
+            <BulkTranslation
+              items={products.data.items.map((item) => ({ id: item.id, title: item.title?.text ?? t("untitled") }))}
+              configured={isTranslationConfigured()}
+              translateProduct={translateProduct}
+              setTranslationReviewed={setTranslationReviewed}
+            >
+              <ProductList items={products.data.items} categories={categoryList} />
+            </BulkTranslation>
             <AdminPagination page={products.data.page} pageCount={products.data.pageCount} filters={filters} />
           </>
         )}

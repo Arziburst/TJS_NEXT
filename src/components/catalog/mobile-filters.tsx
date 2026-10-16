@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useTransition, type ChangeEvent } from "react";
+import { useId, useTransition, type ChangeEvent, type ReactNode } from "react";
 import { useRouter } from "@/i18n/navigation";
 
 export type FilterOption = { value: string; label: string; href: { pathname: string; query: Record<string, string> } };
@@ -40,20 +40,27 @@ function FilterSelect({ label, value, options }: FilterSelectProps) {
 }
 
 type MobileFiltersProps = {
-  categoryLabel: string;
-  category: string;
-  categories: FilterOption[];
+  /** The shop's category list; the search results have none. */
+  category?: { label: string; value: string; options: FilterOption[] };
   sortLabel: string;
   sort: string;
   sorts: FilterOption[];
+  /** The filter sheet's trigger, a row of its own under the selects. */
+  filters?: ReactNode;
 };
 
-/** Below 1024px the category and sort lists become two selects side by side, stacked under 360px. */
-export function MobileFilters(props: MobileFiltersProps) {
+/**
+ * Below 1024px the category and sort lists become two selects side by side, stacked under 360px, with the
+ * button of the filter sheet below them.
+ */
+export function MobileFilters({ category, sortLabel, sort, sorts, filters }: MobileFiltersProps) {
   return (
-    <div className="flex gap-3 max-[360px]:flex-col sb:hidden" data-testid="mobile-filters">
-      <FilterSelect label={props.categoryLabel} value={props.category} options={props.categories} />
-      <FilterSelect label={props.sortLabel} value={props.sort} options={props.sorts} />
+    <div className="flex flex-col gap-3 sb:hidden" data-testid="mobile-filters">
+      <div className="flex gap-3 max-[360px]:flex-col">
+        {category && <FilterSelect label={category.label} value={category.value} options={category.options} />}
+        <FilterSelect label={sortLabel} value={sort} options={sorts} />
+      </div>
+      {filters}
     </div>
   );
 }

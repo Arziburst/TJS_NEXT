@@ -30,6 +30,7 @@
     "nav": "Gestão",
     "products": "Produtos",
     "newProduct": "Adicionar",
+    "attributes": "Materiais e cores",
     "viewShop": "Loja",
     "settings": "Definições"
   },
@@ -79,7 +80,8 @@
       "previous": "Página anterior",
       "next": "Página seguinte",
       "page": "Página {page} de {count}"
-    }
+    },
+    "unreviewed": "{count, plural, one {# tradução automática por rever} other {# traduções automáticas por rever}}: {locales}"
   },
   "actionErrors": {
     "notAuthorized": "Só a gestão pode fazer isto. Inicie sessão novamente.",
@@ -106,6 +108,7 @@
       "making": "Produção e disponibilidade",
       "dimensions": "Dimensões",
       "translations": "Textos em todos os idiomas",
+      "taxonomy": "Materiais e cores",
       "photos": "Fotos",
       "publication": "Publicação"
     },
@@ -123,6 +126,7 @@
     "heightMm": "Altura, mm",
     "dimensionsHint": "Opcional; em milímetros, no máximo uma casa decimal.",
     "translationsHint": "O ucraniano é necessário para publicar; um idioma sem título não é mostrado e a loja mostra o texto em inglês.",
+    "manageTerms": "Editar as listas de materiais e cores",
     "status": "Estado",
     "position": "Posição",
     "positionHint": "Um número para a ordem manual; 0 por predefinição.",
@@ -170,6 +174,7 @@
       "notAuthorized": "Só a gestão pode fazer isto. Inicie sessão novamente.",
       "notFound": "Este produto já não existe.",
       "conflict": "Outro produto acabou de ficar com este endereço ou referência. Verifique e guarde novamente.",
+      "termsChanged": "Um material ou cor escolhido acabou de ser eliminado. Verifique a lista e guarde novamente.",
       "unexpectedError": "Não foi possível guardar o produto. Tente novamente.",
       "required": "Este campo é obrigatório",
       "tooLong": "No máximo {max} caracteres",
@@ -181,6 +186,108 @@
       "leadTimeOrder": "Não pode ser menor do que «De»",
       "titleRequired": "Introduza um título neste idioma ou limpe os outros textos dele",
       "requiredToPublish": "Para publicar é necessário um título em ucraniano"
+    },
+    "translateAfterSave": "Guarde primeiro o produto; depois poderá ser traduzido automaticamente para as outras línguas."
+  },
+  "translate": {
+    "title": "Tradução automática",
+    "hint": "Preenche as outras línguas a partir de um só texto, de uma vez. Os textos automáticos aparecem na loja, mas os motores de busca só os indexam quando os marcar como revistos.",
+    "notConfigured": "A tradução automática não está configurada neste servidor. Preencha as línguas à mão ou peça ao programador que ligue o AI Gateway.",
+    "saveFirst": "Guarde primeiro as alterações: a tradução parte do texto guardado.",
+    "source": "Traduzir de",
+    "noSourceOption": "Ainda sem texto",
+    "targets": "Para",
+    "existing": "tem texto",
+    "overwrite": "Substituir também os textos existentes",
+    "submit": "{count, plural, =0 {Traduzir} one {Traduzir para # língua} other {Traduzir para # línguas}}",
+    "running": "A traduzir para {count, plural, one {# língua} other {# línguas}}… Demora um ou dois minutos.",
+    "done": "Traduzido para: {locales}.",
+    "doneToast": "{count, plural, one {Traduzido para # língua} other {Traduzido para # línguas}}",
+    "partial": "Não traduzido: {locales}. Tente novamente.",
+    "review": {
+      "title": "Revisão",
+      "hint": "Leia cada texto automático e marque-o como revisto: só então os motores de busca indexam a página nessa língua.",
+      "none": "Nenhuma tradução automática por rever.",
+      "reviewed": "Revisto",
+      "notReviewed": "Por rever",
+      "label": "{language}: revisto",
+      "markedToast": "{language}: marcado como revisto",
+      "unmarkedToast": "{language}: de novo por rever"
+    },
+    "errors": {
+      "notAuthorized": "Só o administrador pode fazer isto. Inicie sessão novamente.",
+      "invalid": "Este pedido não é válido.",
+      "notConfigured": "A tradução automática não está configurada neste servidor.",
+      "tooManyRequests": "Demasiadas traduções em pouco tempo. Aguarde um pouco e tente novamente.",
+      "notFound": "Este produto já não existe.",
+      "noSource": "A língua escolhida não tem texto a partir do qual traduzir.",
+      "nothingToTranslate": "Nada a traduzir: todas as línguas escolhidas já têm texto.",
+      "conflict": "Entretanto, outro produto ocupou um dos novos endereços de página. Tente novamente.",
+      "authFailed": "O serviço de tradução recusou a chave de acesso. Peça ao programador que a verifique.",
+      "rateLimited": "O serviço de tradução está sobrecarregado. Tente novamente dentro de alguns minutos.",
+      "timeout": "A tradução demorou demasiado. Tente novamente ou escolha menos línguas.",
+      "unavailable": "O serviço de tradução não está disponível neste momento. Tente mais tarde.",
+      "rejected": "O serviço de tradução recusou o pedido. Peça ao programador que consulte os registos.",
+      "invalidOutput": "A tradução voltou inutilizável. Tente novamente.",
+      "unexpectedError": "Algo correu mal. Tente novamente."
+    },
+    "bulk": {
+      "label": "Tradução dos produtos selecionados",
+      "selectAll": "Selecionar todos nesta página",
+      "select": "Selecionar {title}",
+      "selected": "{count, plural, =0 {Nada selecionado} one {# selecionado} other {# selecionados}}",
+      "translate": "{count, plural, =0 {Traduzir as línguas em falta} other {Traduzir as línguas em falta (#)}}",
+      "markReviewed": "{count, plural, =0 {Marcar traduções como revistas} other {Marcar traduções como revistas (#)}}",
+      "stop": "Parar depois deste produto",
+      "progress": "A traduzir {current} de {total}: {title}",
+      "report": "Resultados da tradução",
+      "translatedLine": "{count, plural, one {# língua traduzida} other {# línguas traduzidas}}, {failed} por traduzir",
+      "summary": "{done, plural, one {# produto traduzido} other {# produtos traduzidos}}, {failed, plural, =0 {sem erros} one {# erro} other {# erros}}",
+      "reviewedToast": "{count, plural, =0 {Nenhuma tradução aguardava revisão} one {# tradução marcada como revista} other {# traduções marcadas como revistas}}"
+    }
+  },
+  "taxonomy": {
+    "title": "Materiais e cores",
+    "intro": "Os filtros da loja mostram-nos. Cada um precisa do nome em ucraniano; um idioma sem nome próprio mostra o inglês e, se não houver, o ucraniano.",
+    "kinds": {
+      "material": "Materiais",
+      "colour": "Cores"
+    },
+    "add": {
+      "material": "Adicionar um material",
+      "colour": "Adicionar uma cor"
+    },
+    "empty": {
+      "material": "Ainda não há materiais.",
+      "colour": "Ainda não há cores."
+    },
+    "nameIn": "Nome ({language})",
+    "required": "(obrigatório)",
+    "otherLocales": "Outros idiomas",
+    "slug": "Nos links da loja: {slug}",
+    "usedBy": "{count, plural, =0 {Não usado} one {Usado por # produto} other {Usado por # produtos}}",
+    "save": "Guardar",
+    "saving": "A guardar…",
+    "create": "Adicionar",
+    "saved": "Guardado",
+    "created": "Adicionado",
+    "delete": "Eliminar",
+    "deleteTitle": "Eliminar «{name}»?",
+    "deleteDescription": "Desaparece dos filtros da loja. Não é possível anular.",
+    "deleteConfirm": "Eliminar",
+    "cancel": "Cancelar",
+    "deleted": "«{name}» eliminado",
+    "inUseHint": "Há produtos que o usam: desmarque-o nos respetivos formulários para o eliminar.",
+    "loadError": "Não foi possível carregar as listas. Tente novamente.",
+    "errors": {
+      "required": "Introduza o nome em ucraniano",
+      "tooLong": "No máximo {max} caracteres",
+      "notAuthorized": "Só o administrador pode fazer isto. Inicie sessão novamente.",
+      "notFound": "Esta entrada já não existe.",
+      "nameTaken": "Outra entrada desta lista já tem este nome.",
+      "invalid": "Este pedido não é válido.",
+      "unexpectedError": "Algo correu mal. Tente novamente.",
+      "inUse": "Há produtos que o usam: desmarque-o primeiro nos respetivos formulários."
     }
   },
   "images": {
@@ -193,6 +300,7 @@
     "makeMain": "Tornar principal",
     "moveEarlier": "Mover a foto {index} para a frente",
     "moveLater": "Mover a foto {index} para trás",
+    "moved": "Foto movida para a posição {position} de {count}.",
     "altTextsOf": "Textos alternativos da foto {index}",
     "altHint": "Uma breve descrição da foto para leitores de ecrã e motores de busca. Um campo vazio usa o texto nele apresentado.",
     "altSave": "Guardar textos",

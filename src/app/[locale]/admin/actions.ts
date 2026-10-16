@@ -4,9 +4,16 @@ import { refresh } from "next/cache";
 import { z } from "zod";
 import { parseProductForm, STATUSES, type FieldErrors } from "@/lib/admin/product-form";
 import { findSaveConflicts, getStoredProduct, sourceAfterSave } from "@/lib/admin/products";
+import { parseTermIds, PRODUCT_TERMS_FIELD } from "@/lib/admin/taxonomy-form";
 import { revalidateProduct } from "@/lib/admin/revalidate";
 import { getAdmin } from "@/lib/auth/session";
+import { allowAdminAction } from "@/lib/admin/rate-limit";
+import { ADMIN_PAGE_SIZE } from "@/lib/admin/products";
 import { createSessionClient } from "@/lib/supabase/server";
+import { locales, type Locale } from "@/i18n/routing";
+import type { LocaleFailure, TranslateFailure } from "@/lib/translate/core";
+import { translationModel } from "@/lib/translate/gateway";
+import { setTranslationsReviewed, translateProduct as translateProductTexts } from "@/lib/translate/product";
 
 /*
  * The admin's writes. Each action is a public entry point: it checks the admin itself, validates its input
@@ -14,7 +21,7 @@ import { createSessionClient } from "@/lib/supabase/server";
  * the audit trigger apply: created_by / updated_by come from the JWT), then expires the storefront caches.
  */
 
-export type AdminFormError = "notAuthorized" | "notFound" | "conflict" | "unexpectedError";
+export type AdminFormError = "notAuthorized" | "notFound" | "conflict" | "termsChanged" | "unexpectedError";
 
 export type SaveProductState =
   | { status: "idle" }
@@ -38,6 +45,9 @@ export async function saveProduct(_previous: SaveProductState, formData: FormDat
   const parsed = parseProductForm(formValues(formData));
   if (!parsed.ok) return { status: "error", fields: parsed.fields };
   const { id, product, translations } = parsed.input;
+  // the materials and colours (#25), when the form showed their lists; else the product keeps its own
+  const termIds = formData.has(`${PRODUCT_TERMS_FIELD}-shown`) ? parseTermIds(formData.getAll(PRODUCT_TERMS_FIELD)) : undefined;
+  if (termIds === null) return failed("unexpectedError");
 
   const stored = id === null ? null : await getStoredProduct(id);
   if (stored === "notFound") return failed("notFound");
@@ -60,17 +70,23 @@ export async function saveProduct(_previous: SaveProductState, formData: FormDat
   let savedId: string;
   try {
     const supabase = await createSessionClient();
-    const { data, error } = await supabase.rpc("admin_save_product", {
+    const args = {
       // a new product has no id yet; the function inserts it
       p_id: id as string,
       p_product: product,
       p_translations: payload,
-    });
+    };
+    const { data, error } =
+      termIds === undefined
+        ? await supabase.rpc("admin_save_product", args)
+        : await supabase.rpc("admin_save_product_with_terms", { ...args, p_term_ids: termIds });
     if (error) {
       if (error.code === "42501") return failed("notAuthorized");
       if (error.code === "P0002") return failed("notFound");
       // a slug or SKU taken between the check and the save
       if (error.code === "23505") return failed("conflict");
+      // a ticked material or colour deleted meanwhile
+      if (error.code === "23503") return failed("termsChanged");
       return failed("unexpectedError");
     }
     savedId = data;
@@ -119,6 +135,98 @@ export async function setProductStatus(input: unknown): Promise<ProductActionRes
   revalidateProduct({ productId: id, categoryIds: [stored.categoryId], slugs: stored.translations.map((t) => t.slug) });
   refresh();
   return { ok: true };
+}
+
+export type TranslateErrorReason =
+  | "notAuthorized"
+  | "invalid"
+  | "notConfigured"
+  | "tooManyRequests"
+  | "notFound"
+  | "noSource"
+  | "nothingToTranslate"
+  | "conflict"
+  | "unexpectedError"
+  | TranslateFailure;
+
+export type TranslateActionResult =
+  | { ok: true; translated: Locale[]; failed: { locale: Locale; reason: LocaleFailure }[] }
+  | { ok: false; reason: TranslateErrorReason };
+
+const translateInput = z.object({
+  id: z.uuid(),
+  sourceLocale: z.enum(locales).optional(),
+  targets: z.array(z.enum(locales)).min(1).max(locales.length).optional(),
+  overwrite: z.boolean().default(false),
+});
+
+/**
+ * Machine-translates one product from a source locale (default uk, else en) into the chosen locales (default:
+ * every missing one) and saves them as unreviewed machine rows. One product per call: the list's bulk action
+ * calls it product by product, so each call stays well within a function's time and shows its own progress.
+ */
+export async function translateProduct(input: unknown): Promise<TranslateActionResult> {
+  const admin = await getAdmin();
+  if (!admin) return { ok: false, reason: "notAuthorized" };
+  const parsed = translateInput.safeParse(input);
+  if (!parsed.success) return { ok: false, reason: "invalid" };
+  const model = translationModel();
+  if (!model) return { ok: false, reason: "notConfigured" };
+  if (!(await allowAdminAction("translate", admin.id))) return { ok: false, reason: "tooManyRequests" };
+
+  const { id, sourceLocale, targets, overwrite } = parsed.data;
+  let outcome: Awaited<ReturnType<typeof translateProductTexts>>;
+  try {
+    outcome = await translateProductTexts(
+      { productId: id, sourceLocale, targets, overwrite },
+      { model, writer: await createSessionClient() },
+    );
+  } catch {
+    return { ok: false, reason: "unexpectedError" };
+  }
+  if (!outcome.ok) return { ok: false, reason: outcome.reason };
+
+  revalidateProduct({ productId: id, categoryIds: [outcome.categoryId], slugs: outcome.slugs });
+  refresh();
+  return { ok: true, translated: outcome.translated, failed: outcome.failed };
+}
+
+export type ReviewActionResult =
+  | { ok: true; updated: number }
+  | { ok: false; reason: "notAuthorized" | "invalid" | "tooManyRequests" | "unexpectedError" };
+
+const reviewInput = z.union([
+  // one locale of one product: the toggle in the form
+  z.object({ ids: z.tuple([z.uuid()]), locale: z.enum(locales), reviewed: z.boolean() }),
+  // every machine translation of the selected products: the list's bulk action
+  z.object({ ids: z.array(z.uuid()).min(1).max(ADMIN_PAGE_SIZE), reviewed: z.literal(true) }),
+]);
+
+/** Marks machine translations reviewed (indexable) or takes the mark back. */
+export async function setTranslationReviewed(input: unknown): Promise<ReviewActionResult> {
+  const admin = await getAdmin();
+  if (!admin) return { ok: false, reason: "notAuthorized" };
+  const parsed = reviewInput.safeParse(input);
+  if (!parsed.success) return { ok: false, reason: "invalid" };
+  if (!(await allowAdminAction("review", admin.id))) return { ok: false, reason: "tooManyRequests" };
+
+  const { ids, reviewed } = parsed.data;
+  const locale = "locale" in parsed.data ? parsed.data.locale : undefined;
+  const outcome = await setTranslationsReviewed(
+    { productIds: ids, locales: locale ? [locale] : undefined, reviewed },
+    await createSessionClient(),
+  );
+  if (!outcome.ok) return { ok: false, reason: outcome.reason };
+
+  for (const productId of new Set(outcome.updated.map((u) => u.productId))) {
+    revalidateProduct({
+      productId,
+      categoryIds: [],
+      slugs: outcome.updated.filter((u) => u.productId === productId).map((u) => u.slug),
+    });
+  }
+  refresh();
+  return { ok: true, updated: outcome.updated.length };
 }
 
 /** Soft delete (the row stays for order history); the storefront hides it at once. */

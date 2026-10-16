@@ -1,0 +1,78 @@
+{
+  "telegram": {
+    "newOrder": "Nuova richiesta d’ordine n. {number}",
+    "placed": "Ricevuta: {date}",
+    "customer": "Cliente",
+    "phone": "Telefono",
+    "email": "Email",
+    "language": "Lingua",
+    "lines": "Pezzi",
+    "line": "{title} × {quantity} — {total}",
+    "moreLines": "…e {count, plural, one {# altra riga} other {# altre righe}}",
+    "goodsTotal": "Totale dei pezzi",
+    "delivery": "Spedizione",
+    "estimate": "Stima",
+    "comment": "Commento",
+    "openAdmin": "Apri l’ordine nell’amministrazione"
+  },
+  "delivery": {
+    "carrier": {
+      "nova_poshta": "Nova Poshta",
+      "nova_post": "Nova Post"
+    },
+    "method": {
+      "warehouse": "in filiale",
+      "postomat": "in un armadietto automatico",
+      "doors": "con corriere all’indirizzo",
+      "division": "in filiale, armadietto automatico o punto di ritiro",
+      "address": "con corriere all’indirizzo"
+    },
+    "flat": "interno {flat}",
+    "estimateAmount": "≈ {amount}",
+    "estimateTbd": "TBD",
+    "estimateUnavailable": "calcolata dal corriere"
+  },
+  "status": {
+    "new": "Nuovo",
+    "pending_payment": "In attesa di pagamento",
+    "paid": "Pagato",
+    "in_processing": "In elaborazione",
+    "accepted": "Accettato",
+    "closed": "Chiuso",
+    "canceled": "Annullato",
+    "refunded": "Rimborsato"
+  },
+  "email": {
+    "confirmation": {
+      "subject": "Abbiamo ricevuto la tua richiesta d’ordine n. {number}",
+      "title": "Richiesta d’ordine ricevuta",
+      "thanks": "Grazie, {name}! Abbiamo ricevuto la tua richiesta d’ordine.",
+      "next": "Il negozio ti contatterà presto per confermare l’ordine e la spedizione."
+    },
+    "statusChange": {
+      "subject": "Ordine n. {number}: {status}",
+      "title": "Il tuo ordine ha un nuovo stato",
+      "greeting": "Ciao {name}!",
+      "text": "Lo stato del tuo ordine n. {number} ora è: {status}."
+    },
+    "number": "Numero d’ordine",
+    "lines": "Pezzi ordinati",
+    "quantity": "Quantità: {quantity}",
+    "goodsTotal": "Totale dei pezzi",
+    "delivery": "Spedizione",
+    "deliveryEstimate": "Spedizione (stima)",
+    "deliveryNote": "La spedizione non è inclusa nel totale: il prezzo effettivo lo paghi al corriere alla consegna.",
+    "customsNotice": "Alla consegna il destinatario potrebbe dover pagare l’IVA all’importazione e i dazi doganali.",
+    "contactTitle": "Contatta il negozio",
+    "contactTbd": "Canali di contatto: TBD",
+    "channel": {
+      "phone": "Telefono",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "whatsapp": "WhatsApp",
+      "email": "Email"
+    },
+    "footer": "Ricevi questa email perché su {site} è stata inviata una richiesta d’ordine con questo indirizzo."
+  }
+}

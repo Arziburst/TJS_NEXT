@@ -340,6 +340,126 @@ searched and every estimate is the zone flat rate of `nova_post_zone_rates` (TBD
   point searches count as `search`, quotes as `quote`; over the budget the shop's "too many attempts" text
   (`auth.errors.rateLimited`) is shown.
 
+## Machine translation (Vercel AI Gateway)
+
+The admin translates a product's texts (title, description, materials, care, clasp, lead-time note, meta
+title/description, alt texts) from one locale into the others in one structured-output call per product
+(`src/lib/translate/`, #19): AI SDK 7 through the Vercel AI Gateway, model `TRANSLATION_MODEL` in
+`src/lib/translate/core.ts` (`anthropic/claude-sonnet-5.5`: the gateway's "provider/model" id with a dotted version,
+not the Anthropic API's `claude-sonnet-5-5`; typed against the gateway's list, so an unknown id fails the
+typecheck; change it there), the
+jewellery glossary in `src/lib/translate/glossary.ts` (data, corrected by PR; not yet checked by native speakers).
+Machine rows are saved as `source = machine`, `reviewed_at = null`: the shop shows them, but the product page is
+`noindex` and left out of hreflang (and of the sitemap, #30) until the admin marks the locale reviewed
+(`src/lib/seo/indexing.ts`). Everything runs on the server; `tests/translate/client-bundle.integration.test.ts`
+checks that no key, prompt or glossary reaches the client bundle.
+
+- **Credentials.** Translation is on when the server has one: `AI_GATEWAY_API_KEY` (local development; a key from
+  the Vercel dashboard, *AI Gateway → API keys*, in `.env.local`, never committed), or `AI_GATEWAY_OIDC=true` on
+  Vercel, where the gateway authenticates with the deployment's OIDC token (no key stored). Neither set: the
+  admin shows "machine translation is not configured" and calls nothing. Turning it on in production (billing
+  of the AI Gateway) is the owner's and the coordinator's decision.
+- **Stand-in gateway.** `e2e/ai-gateway-mock.ts` answers the gateway's `/language-model` endpoint and
+  "translates" by prefixing `[de] ` etc.; a source title containing `[omit:cs]` leaves cs out (a partial
+  result). Playwright starts it on `E2E_PORT + 1500` (CI: 4500) and gives the app `AI_GATEWAY_API_KEY` and
+  `AI_GATEWAY_BASE_URL`. For a dev walk, from Git Bash:
+
+  ```sh
+  AI_GATEWAY_MOCK_PORT=4519 node e2e/ai-gateway-mock.ts &
+  AI_GATEWAY_API_KEY=e2e-gateway-key AI_GATEWAY_BASE_URL=http://127.0.0.1:4519/v4/ai npx next dev -p 3019
+  ```
+
+  `AI_GATEWAY_BASE_URL` is ignored when `VERCEL_ENV=production`.
+- **Limits.** One attempt times out after 90 s in the app (three attempts with backoff stay under a function's
+  300 s); a gateway 429/5xx or an unusable answer is retried, a refused key is not. A locale that comes back
+  missing or over a column limit fails alone, the others are saved. Per admin: 120 translations an hour and 300
+  review changes per 10 minutes (`src/lib/admin/rate-limit.ts`).
+- **Cost.** About **$0.015 per product** for the 9–10 missing locales of a short legacy text: ~2 400 input tokens
+  (the prompt with the glossary) + ~1 000 output tokens at Sonnet 5.5's list price of $2 / $10 per million tokens
+  (`TRANSLATION_MODEL_PRICE`; the gateway bills the provider's list price). The whole legacy catalogue (167
+  products) is a few dollars; the batch script's dry run prints the estimate for the actual catalogue.
+- **Batch.** `scripts/translate/missing.mjs` fills the missing locales of every product with the same code:
+
+  ```sh
+  node scripts/translate/missing.mjs                       # dry run: what it would translate, token/cost estimate
+  node scripts/translate/missing.mjs --apply --limit 5     # translate five products (needs AI_GATEWAY_API_KEY)
+  node scripts/translate/missing.mjs --production          # dry run against production (a non-loopback URL)
+  ```
+
+  Options: `--product <id>`, `--source <locale>` (default uk, else en), `--limit <n>`. It reads
+  `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` from the environment, else `.env.local`, and refuses a
+  non-loopback URL without `--production`. It only inserts missing locales (an existing text is never replaced)
+  and writes as the service role, so `created_by` stays empty. The shop shows the new texts within a day (the
+  product pages' cache life) or at once after the next admin save of that product. Running it on production is
+  the coordinator's, after the owner's go.
+
+## Notifications (Telegram and email)
+
+Every order request writes an `order_created` row to `public.outbox_events` in its own transaction (#24). The
+processor (`src/lib/notifications/`, #26) sends it to two channels and keeps each one's outcome in the row:
+
+- **Telegram** to the owner's group, in Ukrainian, `parse_mode` HTML with every order value escaped, with a link
+  to the admin's order page (`/uk/admin/orders/<number>`, reserved for #27).
+- **Email** to the customer through Resend, in the order's locale: the number, the lines and total, the delivery
+  estimate with the on-receipt note (D37, D38) and the shop's contact channels (the TBD line until the admin
+  settings of #21 provide them). Templates: `src/emails/` (confirmation, and the status change for #27);
+  rendered examples: `tests/notifications/__snapshots__/`.
+
+**When it runs.** Right after a placed order (`after()` in the checkout action) and every six hours from
+`GET /api/cron/notifications` (`CRON_SECRET`): four `vercel.json` entries of that path at `0 0`, `0 6`, `0 12` and
+`0 18` UTC, because Hobby runs each entry once a day (somewhere within its hour). A run claims up to 5 × 10 due
+events (`claim_outbox_events`: `FOR UPDATE SKIP LOCKED`, a 5-minute lease, a claim token), so two runs never send
+one message twice; a run that dies leaves its events due again when the lease ends. A failed send is retried after
+1, 2, 4 … minutes (at most 6 hours) by the next run (the next order's or the next cron's), and marked `failed` at
+the 8th attempt. The order itself is never changed by a send. Delivery is at least once: if writing the outcome
+fails after a send, the event is claimed again after its lease and the Telegram message may go out twice (the
+email is deduplicated by its `Idempotency-Key`).
+
+**Telegram's flood control** (about 20 messages a minute in one group). A run sends at most 15 Telegram messages
+(`SENDS_PER_RUN`) and defers the rest by a minute; on a 429 it waits Telegram's `parameters.retry_after` and sends
+no more Telegram messages in that run. Neither spends an attempt (`complete_outbox_event(…, p_refund_attempt)`), so
+a backlog goes out over the next runs and is never marked `failed` for being throttled; the emails of the same
+events go out meanwhile.
+
+**Late confirmations.** The customer's email goes out only for an order placed at most 24 hours ago
+(`CONFIRMATION_EMAIL_MAX_AGE_MS`); an older one, e.g. the requests stored before this sender was configured, is
+marked `skipped_expired`. The owner's Telegram message has no limit: every order request reaches the owner.
+
+**Outcomes** (`telegram_status`, `email_status`, `last_error` on the outbox row; the admin's view comes with #27):
+`pending` → `sent`, or `skipped_unconfigured` (sending is off or the channel's settings are missing; not retried,
+the reason in `last_error`), or `skipped_expired` (the confirmation would be over 24 hours late), or `failed` (the
+last attempt failed too). To see them locally:
+
+```sql
+select o.number, e.telegram_status, e.email_status, e.attempts, e.next_attempt_at, e.last_error
+from public.outbox_events e join public.orders o on o.id = e.order_id order by e.created_at desc;
+```
+
+**Settings** (server only; `.env.example`). Nothing is sent unless `NOTIFICATIONS_SEND` is exactly `true`: tests,
+local runs and CI without it mark every event `skipped_unconfigured`, even with keys in `.env.local`.
+
+| Name | |
+|---|---|
+| `NOTIFICATIONS_SEND` | `true` only where messages may go out (the production deployment) |
+| `TELEGRAM_BOT_TOKEN` | the bot's token (SECRET); the bot is a member of the owner's group — **TBD, the owner provides it** |
+| `TELEGRAM_CHAT_ID` | the group's chat id (negative for groups) — **TBD**; moves to the admin settings with #21 |
+| `RESEND_API_KEY` | the Resend API key (SECRET) — **TBD** |
+| `EMAIL_FROM` | the sender, e.g. `Shop <orders@<domain>>`, on a domain verified in Resend — **TBD, the owner decides** |
+| `EMAIL_REPLY_TO` | optional: where the customer's replies go |
+| `TELEGRAM_API_BASE_URL`, `RESEND_API_URL` | local and e2e only: the stand-in below; unset in production |
+
+**Stand-in.** `e2e/notifications-mock.ts` answers `POST /bot<token>/sendMessage` and `POST /emails` and lists what
+it got at `GET /sent?number=<order number>`. Playwright starts it on `E2E_PORT + 2000` (CI: 5000) and points the
+app at it with `NOTIFICATIONS_SEND=true` and test keys (`playwright.config.ts`). For a dev walk, from Git Bash:
+
+```sh
+NOTIFICATIONS_MOCK_PORT=5026 node e2e/notifications-mock.ts &
+NOTIFICATIONS_SEND=true TELEGRAM_BOT_TOKEN=e2e-bot-token TELEGRAM_CHAT_ID=-100123 \
+  TELEGRAM_API_BASE_URL=http://127.0.0.1:5026 RESEND_API_KEY=e2e-resend-key RESEND_API_URL=http://127.0.0.1:5026 \
+  EMAIL_FROM="TJS dev <orders@example.test>" npx next dev -p 3026
+curl "http://127.0.0.1:5026/sent?number=10001"
+```
+
 ## Vercel
 
 The shop runs on the Vercel project `tjs-next` in the team `arzibursts-projects`, production
@@ -365,6 +485,8 @@ production deployment in the dashboard; the database is not rolled back with it.
 | `CRON_SECRET` | the cron routes; Vercel Cron sends it as `Authorization: Bearer …` |
 | `NOVA_POSHTA_API_KEY` | server only: the Nova Poshta client (optional, see Nova Poshta above) |
 | `NOVA_POST_API_KEY` | server only: Nova Post international delivery (#23); unset → zone flat rates only. `NOVA_POST_API_URL` stays unset in production |
+| `AI_GATEWAY_OIDC` | server only: `true` turns on the admin's machine translation through the AI Gateway with the deployment's OIDC token (#19); unset → "not configured". Not set yet: the owner decides on the gateway billing. `AI_GATEWAY_API_KEY` / `AI_GATEWAY_BASE_URL` stay unset in production |
+| `NOTIFICATIONS_SEND`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO` | server only: the order notifications (#26, see Notifications above); the values are TBD from the owner, and until they are set every message is `skipped_unconfigured` |
 
 Set by Vercel itself: `VERCEL_ENV` (`production` turns on Analytics and Speed Insights) and
 `VERCEL_PROJECT_PRODUCTION_URL`. `TJS_UI_KIT` and `NOVA_POSHTA_FIXTURES` are never set on Vercel (the `/ui-kit`
@@ -374,7 +496,12 @@ and `/delivery-demo` showcases stay a 404; the fixture transport refuses under `
 production deployment only, with `CRON_SECRET`; without the secret the route answers 401. On Hobby, Vercel
 fires a daily cron at some minute within that hour, always after NBU publishes at 15:30 Kyiv.
 `GET /api/cron/nova-poshta` refreshes the Nova Poshta dictionary cache daily at `30 2 * * *` (UTC), with the same
-secret. Runs and their logs: the project's *Cron Jobs* settings and the function logs.
+secret. `GET /api/cron/staged-uploads` (#92) removes photo uploads older than a day that never left the private
+`product-image-uploads` staging bucket, daily at `45 3 * * *` (UTC), and `GET /api/cron/notifications` (#26) sends
+the due retries of the notifications outbox at `0 0`, `0 6`, `0 12` and `0 18` UTC (four entries of the same path),
+all with the same secret (Hobby allows up to 100 crons a project, each at most once a day; the same path may have
+several entries; `tests/money/vercel-cron.test.ts` checks every schedule). Runs and
+their logs: the project's *Cron Jobs* settings and the function logs.
 
 **Web Analytics and Speed Insights** (enabled in the project by the owner). `src/components/layout/vercel-insights.tsx`
 renders `@vercel/analytics/next` and `@vercel/speed-insights/next` in the document of every page only when

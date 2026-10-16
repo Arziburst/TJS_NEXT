@@ -1,6 +1,7 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { after } from "next/server";
 import { getCurrentUser } from "@/lib/auth/session";
 import { readCartView } from "@/lib/cart";
 import { removeLine } from "@/lib/cart/lines";
@@ -13,6 +14,7 @@ import { getNovaPostClient } from "@/lib/delivery/nova-post/config";
 import { estimateDelivery } from "@/lib/delivery/nova-post/quote";
 import { readZoneRates } from "@/lib/delivery/nova-post/zone-rates";
 import { getCurrencyChoiceFor } from "@/lib/money/prices";
+import { runNotificationsQuietly } from "@/lib/notifications/run";
 import { createOrderRequest, findOrderByAttempt } from "@/lib/orders/store";
 import { createServiceClient } from "@/lib/supabase/server";
 
@@ -43,6 +45,11 @@ export async function placeOrderAction(input: unknown): Promise<PlaceOrderResult
     },
     rememberOrder: rememberOrderAccess,
   });
-  if (result.ok) refresh();
+  if (result.ok) {
+    refresh();
+    // the owner's Telegram message and the customer's email go out after the answer (the outbox row was
+    // stored with the order): a slow or failing messenger never delays or undoes the request
+    after(runNotificationsQuietly);
+  }
   return result;
 }

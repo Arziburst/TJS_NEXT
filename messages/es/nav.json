@@ -1,5 +1,8 @@
 {
   "shop": "Tienda",
+  "search": "Buscar",
+  "searchLabel": "Buscar en la tienda",
+  "searchPlaceholder": "Buscar…",
   "aboutUs": "Sobre nosotros",
   "contacts": "Contacto",
   "favorites": "Favoritos",

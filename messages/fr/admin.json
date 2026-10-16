@@ -30,6 +30,7 @@
     "nav": "Administration",
     "products": "Produits",
     "newProduct": "Ajouter",
+    "attributes": "Matières et couleurs",
     "viewShop": "Boutique",
     "settings": "Paramètres"
   },
@@ -79,7 +80,8 @@
       "previous": "Page précédente",
       "next": "Page suivante",
       "page": "Page {page} sur {count}"
-    }
+    },
+    "unreviewed": "{count, plural, one {# traduction automatique non relue} other {# traductions automatiques non relues}} : {locales}"
   },
   "actionErrors": {
     "notAuthorized": "Seule l’administration peut faire cela. Veuillez vous reconnecter.",
@@ -106,6 +108,7 @@
       "making": "Fabrication et disponibilité",
       "dimensions": "Dimensions",
       "translations": "Textes dans toutes les langues",
+      "taxonomy": "Matières et couleurs",
       "photos": "Photos",
       "publication": "Publication"
     },
@@ -123,6 +126,7 @@
     "heightMm": "Hauteur, mm",
     "dimensionsHint": "Facultatif ; en millimètres, une décimale au plus.",
     "translationsHint": "L’ukrainien est requis pour publier ; une langue sans titre n’est pas affichée, la boutique montre alors le texte anglais.",
+    "manageTerms": "Modifier les listes de matières et de couleurs",
     "status": "Statut",
     "position": "Position",
     "positionHint": "Un nombre pour l’ordre manuel ; 0 par défaut.",
@@ -170,6 +174,7 @@
       "notAuthorized": "Seule l’administration peut faire cela. Veuillez vous reconnecter.",
       "notFound": "Ce produit n’existe plus.",
       "conflict": "Un autre produit vient de prendre cette adresse ou cette référence. Vérifiez et enregistrez à nouveau.",
+      "termsChanged": "Une matière ou une couleur choisie vient d’être supprimée. Vérifiez la liste et enregistrez à nouveau.",
       "unexpectedError": "Impossible d’enregistrer le produit. Veuillez réessayer.",
       "required": "Ce champ est obligatoire",
       "tooLong": "{max} caractères au maximum",
@@ -181,6 +186,108 @@
       "leadTimeOrder": "Ne doit pas être inférieur à « De »",
       "titleRequired": "Saisissez un titre dans cette langue ou videz ses autres textes",
       "requiredToPublish": "Un titre ukrainien est requis pour publier"
+    },
+    "translateAfterSave": "Enregistrez d’abord le produit ; il pourra ensuite être traduit automatiquement dans les autres langues."
+  },
+  "translate": {
+    "title": "Traduction automatique",
+    "hint": "Remplit les autres langues à partir d’un seul texte, en une fois. Les textes automatiques sont affichés dans la boutique, mais les moteurs de recherche ne les indexent pas tant que vous ne les avez pas marqués comme relus.",
+    "notConfigured": "La traduction automatique n’est pas configurée sur ce serveur. Remplissez les langues à la main ou demandez au développeur de connecter l’AI Gateway.",
+    "saveFirst": "Enregistrez d’abord vos modifications : la traduction part du texte enregistré.",
+    "source": "Traduire depuis",
+    "noSourceOption": "Pas encore de texte",
+    "targets": "Vers",
+    "existing": "a un texte",
+    "overwrite": "Remplacer aussi les textes existants",
+    "submit": "{count, plural, =0 {Traduire} one {Traduire en # langue} other {Traduire en # langues}}",
+    "running": "Traduction en {count, plural, one {# langue} other {# langues}}… Cela prend une à deux minutes.",
+    "done": "Traduit en : {locales}.",
+    "doneToast": "{count, plural, one {Traduit en # langue} other {Traduit en # langues}}",
+    "partial": "Non traduit : {locales}. Réessayez.",
+    "review": {
+      "title": "Relecture",
+      "hint": "Lisez chaque texte automatique et marquez-le comme relu : alors seulement les moteurs de recherche indexent la page dans cette langue.",
+      "none": "Aucune traduction automatique à relire.",
+      "reviewed": "Relu",
+      "notReviewed": "Non relu",
+      "label": "{language} : relu",
+      "markedToast": "{language} : marqué comme relu",
+      "unmarkedToast": "{language} : de nouveau non relu"
+    },
+    "errors": {
+      "notAuthorized": "Seul l’administrateur peut faire cela. Veuillez vous reconnecter.",
+      "invalid": "Cette demande n’est pas valide.",
+      "notConfigured": "La traduction automatique n’est pas configurée sur ce serveur.",
+      "tooManyRequests": "Trop de traductions en peu de temps. Patientez un peu et réessayez.",
+      "notFound": "Ce produit n’existe plus.",
+      "noSource": "La langue choisie n’a pas de texte à traduire.",
+      "nothingToTranslate": "Rien à traduire : chaque langue choisie a déjà un texte.",
+      "conflict": "Un autre produit a pris entre-temps l’une des nouvelles adresses de page. Veuillez réessayer.",
+      "authFailed": "Le service de traduction a refusé la clé d’accès. Demandez au développeur de la vérifier.",
+      "rateLimited": "Le service de traduction est surchargé. Réessayez dans quelques minutes.",
+      "timeout": "La traduction a pris trop de temps. Réessayez ou choisissez moins de langues.",
+      "unavailable": "Le service de traduction n’est pas disponible pour le moment. Réessayez plus tard.",
+      "rejected": "Le service de traduction a refusé la demande. Demandez au développeur de consulter les journaux.",
+      "invalidOutput": "La traduction est revenue inutilisable. Veuillez réessayer.",
+      "unexpectedError": "Une erreur s’est produite. Veuillez réessayer."
+    },
+    "bulk": {
+      "label": "Traduction des produits sélectionnés",
+      "selectAll": "Tout sélectionner sur cette page",
+      "select": "Sélectionner {title}",
+      "selected": "{count, plural, =0 {Aucune sélection} one {# sélectionné} other {# sélectionnés}}",
+      "translate": "{count, plural, =0 {Traduire les langues manquantes} other {Traduire les langues manquantes (#)}}",
+      "markReviewed": "{count, plural, =0 {Marquer les traductions comme relues} other {Marquer les traductions comme relues (#)}}",
+      "stop": "Arrêter après ce produit",
+      "progress": "Traduction {current} sur {total} : {title}",
+      "report": "Résultats de la traduction",
+      "translatedLine": "{count, plural, one {# langue traduite} other {# langues traduites}}, {failed} non traduites",
+      "summary": "{done, plural, one {# produit traduit} other {# produits traduits}}, {failed, plural, =0 {aucune erreur} one {# erreur} other {# erreurs}}",
+      "reviewedToast": "{count, plural, =0 {Aucune traduction n’attendait de relecture} one {# traduction marquée comme relue} other {# traductions marquées comme relues}}"
+    }
+  },
+  "taxonomy": {
+    "title": "Matières et couleurs",
+    "intro": "Les filtres de la boutique les affichent. Chacune a besoin de son nom ukrainien ; une langue sans nom propre affiche le nom anglais, sinon l’ukrainien.",
+    "kinds": {
+      "material": "Matières",
+      "colour": "Couleurs"
+    },
+    "add": {
+      "material": "Ajouter une matière",
+      "colour": "Ajouter une couleur"
+    },
+    "empty": {
+      "material": "Aucune matière pour l’instant.",
+      "colour": "Aucune couleur pour l’instant."
+    },
+    "nameIn": "Nom ({language})",
+    "required": "(obligatoire)",
+    "otherLocales": "Autres langues",
+    "slug": "Dans les liens de la boutique : {slug}",
+    "usedBy": "{count, plural, =0 {Non utilisée} one {Utilisée par # produit} other {Utilisée par # produits}}",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "create": "Ajouter",
+    "saved": "Enregistré",
+    "created": "Ajouté",
+    "delete": "Supprimer",
+    "deleteTitle": "Supprimer « {name} » ?",
+    "deleteDescription": "Elle disparaît des filtres de la boutique. Cette action est irréversible.",
+    "deleteConfirm": "Supprimer",
+    "cancel": "Annuler",
+    "deleted": "« {name} » supprimé",
+    "inUseHint": "Des produits l’utilisent : décochez-la dans leurs formulaires pour la supprimer.",
+    "loadError": "Impossible de charger les listes. Veuillez réessayer.",
+    "errors": {
+      "required": "Saisissez le nom ukrainien",
+      "tooLong": "{max} caractères au maximum",
+      "notAuthorized": "Seul l’administrateur peut faire cela. Veuillez vous reconnecter.",
+      "notFound": "Cette entrée n’existe plus.",
+      "nameTaken": "Une autre entrée de cette liste porte déjà ce nom.",
+      "invalid": "Cette requête n’est pas valide.",
+      "unexpectedError": "Une erreur s’est produite. Veuillez réessayer.",
+      "inUse": "Des produits l’utilisent : décochez-la d’abord dans leurs formulaires."
     }
   },
   "images": {
@@ -193,6 +300,7 @@
     "makeMain": "Définir comme principale",
     "moveEarlier": "Avancer la photo {index}",
     "moveLater": "Reculer la photo {index}",
+    "moved": "Photo déplacée en position {position} sur {count}.",
     "altTextsOf": "Textes alternatifs de la photo {index}",
     "altHint": "Une courte description de la photo pour les lecteurs d’écran et les moteurs de recherche. Un champ vide utilise le texte qui y est affiché.",
     "altSave": "Enregistrer les textes",

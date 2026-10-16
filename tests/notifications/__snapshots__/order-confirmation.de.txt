@@ -1,0 +1,24 @@
+Bestellanfrage eingegangen
+
+Danke, Jürgen! Ihre Bestellanfrage ist eingegangen.
+Bestellnummer: 10043
+
+Bestellte Stücke:
+- Ring Koralle × 1: 29,90 €
+Summe der Stücke: 29,90 €
+
+Versand: Nova Post, per Kurier an die Adresse
+Invalidenstr. 1, Wohnung 3 <a>
+10115 Berlin
+Deutschland
+Versand (Schätzung): TBD
+Der Versand ist in der Summe nicht enthalten: Den tatsächlichen Versandpreis bezahlen Sie beim Empfang an den Zusteller.
+Bei der Zustellung können für den Empfänger Einfuhrumsatzsteuer und Zoll anfallen.
+
+Der Shop meldet sich bald bei Ihnen, um die Bestellung und den Versand zu bestätigen.
+
+Den Shop kontaktieren
+Kontaktkanäle: TBD
+
+--
+Sie erhalten diese E-Mail, weil auf shop.example.test eine Bestellanfrage mit dieser Adresse gesendet wurde.
