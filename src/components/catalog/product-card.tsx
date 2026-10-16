@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 import type { ListedProduct } from "@/lib/catalog/cache";
 import type { ProductImage } from "@/lib/catalog/types";
+import { highlightSegments } from "@/lib/search/query";
 import { cn } from "@/lib/utils";
 import { PRODUCT_PREFETCH, productHref } from "./links";
 
@@ -36,8 +37,15 @@ function CardImage({ image, priority, className }: CardImageProps) {
   );
 }
 
+type ProductCardProps = {
+  product: ListedProduct;
+  eager?: boolean;
+  /** Search results: the words whose matches the title marks. */
+  highlight?: readonly string[];
+};
+
 /** A catalog tile: the first photo cross-fades to the second on hover, the "new" badge for 7 days (D9). */
-export async function ProductCard({ product, eager = false }: { product: ListedProduct; eager?: boolean }) {
+export async function ProductCard({ product, eager = false, highlight }: ProductCardProps) {
   const t = await getTranslations("catalog");
   const [first, second] = product.images;
 
@@ -74,7 +82,17 @@ export async function ProductCard({ product, eager = false }: { product: ListedP
           )}
         </span>
         <span className="font-sans text-[15px] leading-snug transition-colors group-hover:text-accent-text">
-          {product.translation.title}
+          {highlight && highlight.length > 0
+            ? highlightSegments(product.translation.title, highlight).map((segment, index) =>
+                segment.match ? (
+                  <mark key={index} className="bg-transparent font-semibold text-accent-text">
+                    {segment.text}
+                  </mark>
+                ) : (
+                  segment.text
+                ),
+              )
+            : product.translation.title}
         </span>
         {/* a line of its own: the streamed price and its placeholder are then the same height (#57) */}
         <span className="font-sans text-[15px] text-accent-text">

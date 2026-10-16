@@ -266,6 +266,31 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"product_taxonomy_terms": {
+                  Row: {
+                    "created_at": string,"product_id": string,"term_id": string
+                  }
+                  Insert: {
+                    "created_at"?: string,"product_id": string,"term_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"product_id"?: string,"term_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "product_taxonomy_terms_product_id_fkey"
+      columns: ["product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "product_taxonomy_terms_term_id_fkey"
+      columns: ["term_id"]
+isOneToOne: false
+      referencedRelation: "taxonomy_terms"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"product_translations": {
                   Row: {
                     "alt_text": string | null,"care": string | null,"clasp": string | null,"created_at": string,"created_by": string | null,"description": string | null,"lead_time_note": string | null,"locale": string,"materials": string | null,"meta_description": string | null,"meta_title": string | null,"product_id": string,"reviewed_at": string | null,"search_vector": unknown,"slug": string,"source": Database["public"]['Enums']["translation_source"],"title": string,"updated_at": string,"updated_by": string | null
@@ -317,6 +342,38 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"taxonomy_term_translations": {
+                  Row: {
+                    "locale": string,"name": string,"source": Database["public"]['Enums']["translation_source"],"term_id": string
+                  }
+                  Insert: {
+                    "locale": string,"name": string,"source"?: Database["public"]['Enums']["translation_source"],"term_id": string
+                  }
+                  Update: {
+                    "locale"?: string,"name"?: string,"source"?: Database["public"]['Enums']["translation_source"],"term_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "taxonomy_term_translations_term_id_fkey"
+      columns: ["term_id"]
+isOneToOne: false
+      referencedRelation: "taxonomy_terms"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"taxonomy_terms": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"id": string,"kind": Database["public"]['Enums']["taxonomy_kind"],"position": number,"slug": string,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"kind": Database["public"]['Enums']["taxonomy_kind"],"position"?: number,"slug": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"kind"?: Database["public"]['Enums']["taxonomy_kind"],"position"?: number,"slug"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 }
           }
           Views: {
@@ -329,6 +386,9 @@ isOneToOne: false
 "admin_delete_product":
 { Args: { "p_id": string }; Returns: boolean
                            },
+"admin_delete_taxonomy_term":
+{ Args: { "p_id": string }; Returns: string
+                           },
 "admin_reorder_product_images":
 { Args: { "p_image_ids": (string)[],"p_product_id": string }; Returns: undefined
                            },
@@ -337,6 +397,12 @@ isOneToOne: false
                            },
 "admin_save_product":
 { Args: { "p_id": string,"p_product": Json,"p_translations": Json }; Returns: string
+                           },
+"admin_save_product_with_terms":
+{ Args: { "p_id": string,"p_product": Json,"p_term_ids": (string)[],"p_translations": Json }; Returns: string
+                           },
+"admin_save_taxonomy_term":
+{ Args: { "p_id": string,"p_kind": Database["public"]['Enums']["taxonomy_kind"],"p_names": Json,"p_slug": string }; Returns: string
                            },
 "admin_set_product_status":
 { Args: { "p_id": string,"p_status": Database["public"]['Enums']["product_status"] }; Returns: boolean
@@ -354,10 +420,20 @@ isOneToOne: false
 { Args: Record<PropertyKey, never>; Returns: {
               "settlements": number,"warehouses": number
             }[]
+                           },
+"shop_facets":
+{ Args: { "p_availability"?: (string)[],"p_category"?: string,"p_colours"?: (string)[],"p_locale": unknown,"p_materials"?: (string)[],"p_price_max_minor"?: number,"p_price_min_minor"?: number,"p_terms"?: (string)[] }; Returns: {
+              "count": number,"facet": string,"value": string
+            }[]
+                           },
+"shop_search":
+{ Args: { "p_availability"?: (string)[],"p_category"?: string,"p_colours"?: (string)[],"p_limit"?: number,"p_locale": unknown,"p_materials"?: (string)[],"p_offset"?: number,"p_price_max_minor"?: number,"p_price_min_minor"?: number,"p_sort"?: string,"p_terms"?: (string)[] }; Returns: {
+              "ids": (string)[],"total": number
+            }[]
                            }
           }
           Enums: {
-            "order_status": "new"|"pending_payment"|"paid"|"in_processing"|"accepted"|"closed"|"canceled"|"refunded","product_availability": "available"|"reserved"|"sold","product_fulfillment": "made_to_order"|"one_of_a_kind","product_status": "draft"|"published"|"archived","translation_source": "human"|"machine","user_role": "customer"|"admin"
+            "order_status": "new"|"pending_payment"|"paid"|"in_processing"|"accepted"|"closed"|"canceled"|"refunded","product_availability": "available"|"reserved"|"sold","product_fulfillment": "made_to_order"|"one_of_a_kind","product_status": "draft"|"published"|"archived","taxonomy_kind": "material"|"colour","translation_source": "human"|"machine","user_role": "customer"|"admin"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -473,7 +549,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "order_status": ["new", "pending_payment", "paid", "in_processing", "accepted", "closed", "canceled", "refunded"],"product_availability": ["available", "reserved", "sold"],"product_fulfillment": ["made_to_order", "one_of_a_kind"],"product_status": ["draft", "published", "archived"],"translation_source": ["human", "machine"],"user_role": ["customer", "admin"]
+            "order_status": ["new", "pending_payment", "paid", "in_processing", "accepted", "closed", "canceled", "refunded"],"product_availability": ["available", "reserved", "sold"],"product_fulfillment": ["made_to_order", "one_of_a_kind"],"product_status": ["draft", "published", "archived"],"taxonomy_kind": ["material", "colour"],"translation_source": ["human", "machine"],"user_role": ["customer", "admin"]
           }
         }
 } as const

@@ -17,8 +17,17 @@ describe("vercel.json crons", () => {
     expect(config.crons).toContainEqual({ path: "/api/cron/nova-poshta", schedule: "30 2 * * *" });
   });
 
+  it("sweeps abandoned photo uploads daily at 03:45 UTC", () => {
+    // once a day as the Hobby plan allows (up to 100 daily crons per project)
+    expect(config.crons).toContainEqual({ path: "/api/cron/staged-uploads", schedule: "45 3 * * *" });
+  });
+
   it("has no other cron", () => {
-    expect(config.crons.map((cron) => cron.path).sort()).toEqual(["/api/cron/fx-rates", "/api/cron/nova-poshta"]);
+    expect(config.crons.map((cron) => cron.path).sort()).toEqual([
+      "/api/cron/fx-rates",
+      "/api/cron/nova-poshta",
+      "/api/cron/staged-uploads",
+    ]);
   });
 
   it("points at an existing route handler", () => {

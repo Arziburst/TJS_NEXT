@@ -147,14 +147,22 @@ describe.skipIf(!stack)("admin product photos on the local stack", async () => {
     expect(published ?? []).toEqual([]);
   });
 
-  it("refuses a file over 15 MiB, and a type that is not a photo, before it is staged", async () => {
+  it("refuses a file over 15 MiB before it is staged", async () => {
     const over = await stage(new Uint8Array(MAX_IMAGE_BYTES + 1), "image/jpeg");
     expect(over.response.ok).toBe(false);
     expect(await over.response.text()).toMatch(/size|large/i);
-    const svg = await stage(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>'), "image/svg+xml");
-    expect(svg.response.ok).toBe(false);
-    expect(await svg.response.text()).toMatch(/mime/i);
     expect(await stagedFiles(admin.id)).toEqual([]);
+  });
+
+  it("stages whatever type the browser claims, and the server refuses what is not a photo by its bytes", async () => {
+    const svg = await stage(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>'), "image/svg+xml");
+    expect(svg.response.ok).toBe(true);
+    expect(await images.storeStagedUpload(admin.client, { adminId: admin.id, productId, uploadId: svg.uploadId })).toEqual({
+      ok: false,
+      reason: "unsupportedType",
+    });
+    expect(await stagedFiles(admin.id)).toEqual([]);
+    expect(await rows()).toEqual([]);
   });
 
   it("stores a phone photo upright, without metadata, under a new path, with its size and blur", async () => {
@@ -163,7 +171,9 @@ describe.skipIf(!stack)("admin product photos on the local stack", async () => {
     expect(await images.storeStagedUpload(admin.client, { adminId: admin.id, productId, uploadId: first.uploadId })).toMatchObject({
       ok: true,
     });
-    const second = await stage(await phonePhoto(), "image/jpeg");
+    // a photo the browser could not type (no extension): what the client then sends
+    const second = await stage(await phonePhoto(), "application/octet-stream");
+    expect(second.response.ok).toBe(true);
     expect(await images.storeStagedUpload(admin.client, { adminId: admin.id, productId, uploadId: second.uploadId })).toMatchObject({
       ok: true,
     });
@@ -240,11 +250,22 @@ describe.skipIf(!stack)("admin product photos on the local stack", async () => {
     expect(await images.deleteImage(customer.client, { productId, imageId: main!.id })).toEqual({ ok: false, reason: "notFound" });
     expect(await rows()).toHaveLength(2);
 
-    expect(await images.deleteImage(admin.client, { productId, imageId: main!.id })).toEqual({ ok: true });
+    expect(await images.deleteImage(admin.client, { productId, imageId: main!.id })).toEqual({ ok: true, fileRemoved: true });
     expect((await rows()).map((r) => r.id)).toEqual([other!.id]);
     const url = service.storage.from(PUBLIC_BUCKET).getPublicUrl(main!.storage_path).data.publicUrl;
     expect((await fetch(url)).status).toBe(400);
     const { data: alts } = await service.from("product_image_alts").select("image_id").eq("image_id", main!.id);
     expect(alts).toEqual([]);
+  });
+
+  it("reports a file Storage did not remove, and still deletes the row", async () => {
+    const [last] = await rows();
+    // the file is gone already (removed by hand): the row goes, the missing removal is reported
+    await service.storage.from(PUBLIC_BUCKET).remove([last!.storage_path]);
+    const errors = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    expect(await images.deleteImage(admin.client, { productId, imageId: last!.id })).toEqual({ ok: true, fileRemoved: false });
+    expect(errors).toHaveBeenCalledWith("product photo: row deleted, file kept", last!.storage_path, "not found in Storage");
+    errors.mockRestore();
+    expect(await rows()).toEqual([]);
   });
 });

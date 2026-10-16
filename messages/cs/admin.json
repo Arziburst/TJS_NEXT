@@ -30,6 +30,7 @@
     "nav": "Správa",
     "products": "Produkty",
     "newProduct": "Přidat",
+    "attributes": "Materiály a barvy",
     "viewShop": "Obchod"
   },
   "status": {
@@ -106,6 +107,7 @@
       "making": "Výroba a dostupnost",
       "dimensions": "Rozměry",
       "translations": "Texty ve všech jazycích",
+      "taxonomy": "Materiály a barvy",
       "photos": "Fotky",
       "publication": "Zveřejnění"
     },
@@ -123,6 +125,7 @@
     "heightMm": "Výška, mm",
     "dimensionsHint": "Nepovinné; v milimetrech, nejvýše jedno desetinné místo.",
     "translationsHint": "Ukrajinština je ke zveřejnění nutná; jazyk bez názvu se nezobrazuje, obchod pak ukáže anglický text.",
+    "manageTerms": "Upravit seznamy materiálů a barev",
     "status": "Stav",
     "position": "Pořadí",
     "positionHint": "Číslo pro ruční řazení; výchozí 0.",
@@ -170,6 +173,7 @@
       "notAuthorized": "To může udělat jen správce. Přihlaste se znovu.",
       "notFound": "Tento produkt už neexistuje.",
       "conflict": "Jiný produkt právě získal tuto adresu nebo kód. Zkontrolujte a uložte znovu.",
+      "termsChanged": "Zvolený materiál nebo barva byly právě smazány. Zkontrolujte seznam a uložte znovu.",
       "unexpectedError": "Produkt se nepodařilo uložit. Zkuste to znovu.",
       "required": "Toto pole je povinné",
       "tooLong": "Nejvýše {max} znaků",
@@ -241,6 +245,50 @@
       "reviewedToast": "{count, plural, =0 {Žádný překlad nečekal na kontrolu} one {# překlad označen jako zkontrolovaný} few {# překlady označeny jako zkontrolované} many {# překladu označeno jako zkontrolované} other {# překladů označeno jako zkontrolované}}"
     }
   },
+  "taxonomy": {
+    "title": "Materiály a barvy",
+    "intro": "Zobrazují je filtry obchodu. Každá položka potřebuje ukrajinský název; jazyk bez vlastního názvu ukáže anglický, jinak ukrajinský.",
+    "kinds": {
+      "material": "Materiály",
+      "colour": "Barvy"
+    },
+    "add": {
+      "material": "Přidat materiál",
+      "colour": "Přidat barvu"
+    },
+    "empty": {
+      "material": "Zatím žádné materiály.",
+      "colour": "Zatím žádné barvy."
+    },
+    "nameIn": "Název ({language})",
+    "required": "(povinné)",
+    "otherLocales": "Další jazyky",
+    "slug": "V odkazech obchodu: {slug}",
+    "usedBy": "{count, plural, =0 {Nepoužito} one {Použito u # produktu} few {Použito u # produktů} many {Použito u # produktu} other {Použito u # produktů}}",
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "create": "Přidat",
+    "saved": "Uloženo",
+    "created": "Přidáno",
+    "delete": "Smazat",
+    "deleteTitle": "Smazat „{name}“?",
+    "deleteDescription": "Zmizí z filtrů obchodu. Tuto akci nelze vrátit.",
+    "deleteConfirm": "Smazat",
+    "cancel": "Zrušit",
+    "deleted": "„{name}“ smazáno",
+    "inUseHint": "Používají ho produkty: odškrtněte ho v jejich formulářích, abyste ho mohli smazat.",
+    "loadError": "Seznamy se nepodařilo načíst. Zkuste to znovu.",
+    "errors": {
+      "required": "Zadejte ukrajinský název",
+      "tooLong": "Nejvýše {max} znaků",
+      "notAuthorized": "To může udělat jen administrátor. Přihlaste se znovu.",
+      "notFound": "Tato položka už neexistuje.",
+      "nameTaken": "Jiná položka tohoto seznamu už má tento název.",
+      "invalid": "Tento požadavek je neplatný.",
+      "unexpectedError": "Něco se pokazilo. Zkuste to znovu.",
+      "inUse": "Používají ho produkty: nejprve ho odškrtněte v jejich formulářích."
+    }
+  },
   "images": {
     "hint": "JPEG, PNG nebo WebP, každá do {maxMb} MB. První fotka je hlavní fotkou v obchodě. Údaje o místě a fotoaparátu se při nahrání odstraní.",
     "saveFirst": "Nejprve produkt uložte, potom sem přidejte jeho fotky.",
@@ -251,6 +299,7 @@
     "makeMain": "Nastavit jako hlavní",
     "moveEarlier": "Posunout fotku {index} dopředu",
     "moveLater": "Posunout fotku {index} dozadu",
+    "moved": "Fotka přesunuta na pozici {position} z {count}.",
     "altTextsOf": "Alternativní texty fotky {index}",
     "altHint": "Krátký popis fotky pro čtečky obrazovky a vyhledávače. Prázdné pole použije text, který je v něm zobrazen.",
     "altSave": "Uložit texty",

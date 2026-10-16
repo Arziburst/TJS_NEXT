@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { useOptimistic, useRef, useState, useTransition, type DragEvent, type FormEvent } from "react";
+import { useEffect, useOptimistic, useRef, useState, useTransition, type DragEvent, type FormEvent } from "react";
 import { toast } from "sonner";
 import type {
   CreateUploadResult,
@@ -62,7 +62,8 @@ type ProductImagesProps = {
   actions: ProductImageActions;
 };
 
-type UploadStatus = { key: string; name: string; state: "uploading" | "done" | "error"; message?: string };
+type MoveControl = "earlier" | "later";
+type UploadStatus ={ key: string; name: string; state: "uploading" | "done" | "error"; message?: string };
 type UploadFailure = "tooLarge" | "unsupportedType" | "invalidImage" | "failed";
 
 function move<T>(list: readonly T[], from: number, to: number): T[] {
@@ -99,8 +100,24 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
   const [dropTarget, setDropTarget] = useState<number | null>(null);
   const [deleting, setDeleting] = useState<{ id: string; index: number } | null>(null);
   const [editingAlts, setEditingAlts] = useState<{ image: AdminProductImage; index: number } | null>(null);
+  const focusTarget = useRef<{ id: string; control: MoveControl; index: number } | null>(null);
+  const [announcement, setAnnouncement] = useState("");
+  const listRef = useRef<HTMLOListElement>(null);
   const busy = pending || uploading;
   const maxMb = Math.floor(maxBytes / (1024 * 1024));
+
+  // React moves the photo's card in the DOM, which drops the focus to the body: once the card is at its new
+  // place, put the focus back on the moved photo's control (once: later renders of the same order move nothing),
+  // unless the admin has gone on to another control meanwhile
+  useEffect(() => {
+    const target = focusTarget.current;
+    if (!target || ordered[target.index]?.id !== target.id) return;
+    focusTarget.current = null;
+    const card = listRef.current?.querySelector<HTMLElement>(`[data-photo-id="${target.id}"]`);
+    const active = document.activeElement;
+    if (!card || (active && active !== document.body && !card.contains(active))) return;
+    card.querySelector<HTMLElement>(`[data-control="${target.control}"]`)?.focus();
+  }, [ordered]);
 
   function errorMessage(reason: ImageActionError): string {
     return t(`errors.${reason === "invalid" ? "unexpectedError" : reason}`);
@@ -110,38 +127,33 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
     setUploads((current) => current.map((u) => (u.key === key ? { ...u, ...status } : u)));
   }
 
-  async function uploadOne(file: File, key: string): Promise<boolean> {
-    const fail = (failure: UploadFailure) => {
+  async function uploadOne(file: File, key: string): Promise<void> {
+    const fail = (failure: UploadFailure) =>
       setStatus(key, { state: "error", message: t(`uploadErrors.${failure}`, { name: file.name, maxMb }) });
-      return false;
-    };
     if (file.size > maxBytes) return fail("tooLarge");
-    const created = await actions.createImageUpload({ productId });
-    if (!created.ok) {
-      setStatus(key, { state: "error", message: errorMessage(created.reason) });
-      return false;
-    }
     try {
-      // straight to Storage: a photo is larger than a Server Action request may be
+      const created = await actions.createImageUpload({ productId });
+      if (!created.ok) return setStatus(key, { state: "error", message: errorMessage(created.reason) });
+      // straight to Storage: a photo is larger than a Server Action request may be. An empty or unknown type
+      // is fine: the staging bucket takes any, the server decides by the bytes
       const response = await fetch(created.signedUrl, {
         method: "PUT",
         body: file,
         headers: { "content-type": file.type || "application/octet-stream", "x-upsert": "false" },
       });
       if (!response.ok) return fail(await uploadFailure(response));
+      const finished = await actions.finishImageUpload({ productId, uploadId: created.uploadId });
+      if (!finished.ok) {
+        const { reason } = finished;
+        if (reason === "tooLarge" || reason === "unsupportedType" || reason === "invalidImage") return fail(reason);
+        if (reason === "uploadMissing") return fail("failed");
+        return setStatus(key, { state: "error", message: errorMessage(reason) });
+      }
+      setStatus(key, { state: "done", message: t("uploaded", { name: file.name }) });
     } catch {
-      return fail("failed");
+      // the connection dropped, or an action answered with a server error: this file failed, the batch goes on
+      fail("failed");
     }
-    const finished = await actions.finishImageUpload({ productId, uploadId: created.uploadId });
-    if (!finished.ok) {
-      const { reason } = finished;
-      if (reason === "tooLarge" || reason === "unsupportedType" || reason === "invalidImage") return fail(reason);
-      if (reason === "uploadMissing") return fail("failed");
-      setStatus(key, { state: "error", message: errorMessage(reason) });
-      return false;
-    }
-    setStatus(key, { state: "done", message: t("uploaded", { name: file.name }) });
-    return true;
   }
 
   async function upload(files: File[]) {
@@ -152,16 +164,39 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
     }));
     setUploads(batch.map((b) => b.status));
     setUploading(true);
-    // one after the other: a phone's upload bandwidth is the limit anyway, and the order is kept
-    for (const { file, status } of batch) await uploadOne(file, status.key);
-    setUploading(false);
+    try {
+      // one after the other: a phone's upload bandwidth is the limit anyway, and the order is kept
+      for (const { file, status } of batch) await uploadOne(file, status.key);
+    } finally {
+      setUploading(false);
+    }
   }
 
-  function reorder(next: AdminProductImage[]) {
+  /** An action's answer, or the generic failure when the request itself failed (network, server error). */
+  async function settle(call: () => Promise<ImageActionResult>): Promise<ImageActionResult> {
+    try {
+      return await call();
+    } catch {
+      return { ok: false, reason: "unexpectedError" };
+    }
+  }
+
+  /** The new order; a move by button keeps the focus on the moved photo and announces its new position. */
+  function reorder(next: AdminProductImage[], moved?: { id: string; control: MoveControl }) {
+    if (moved) focusTarget.current = { ...moved, index: next.findIndex((image) => image.id === moved.id) };
     startTransition(async () => {
       setOrdered(next);
-      const result = await actions.reorderProductImages({ productId, imageIds: next.map((image) => image.id) });
-      if (!result.ok) toast.error(errorMessage(result.reason));
+      const result = await settle(() =>
+        actions.reorderProductImages({ productId, imageIds: next.map((image) => image.id) }),
+      );
+      if (!result.ok) {
+        toast.error(errorMessage(result.reason));
+        return;
+      }
+      if (moved) {
+        const position = next.findIndex((image) => image.id === moved.id) + 1;
+        setAnnouncement(t("moved", { position, count: next.length }));
+      }
     });
   }
 
@@ -169,7 +204,7 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
     if (!deleting) return;
     const { id } = deleting;
     startTransition(async () => {
-      const result = await actions.deleteProductImage({ productId, imageId: id });
+      const result = await settle(() => actions.deleteProductImage({ productId, imageId: id }));
       if (!result.ok) {
         toast.error(errorMessage(result.reason));
         return;
@@ -188,7 +223,7 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
     const alts = Object.fromEntries(EDITOR_LOCALES.map((locale) => [locale, String(data.get(locale) ?? "")]));
     const imageId = editingAlts.image.id;
     startTransition(async () => {
-      const result = await actions.saveProductImageAlts({ productId, imageId, alts });
+      const result = await settle(() => actions.saveProductImageAlts({ productId, imageId, alts }));
       if (!result.ok) {
         toast.error(errorMessage(result.reason));
         return;
@@ -266,7 +301,7 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
               <p className="hidden font-input text-xs sb:block">{t("orderHint")}</p>
             </>
           )}
-          <ol className="grid gap-3 sb:grid-cols-4" aria-busy={pending}>
+          <ol ref={listRef} className="grid gap-3 sb:grid-cols-4" aria-busy={pending}>
             {ordered.map((image, index) => {
               const number = index + 1;
               const first = index === 0;
@@ -290,6 +325,7 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
                   }}
                   onDrop={(event) => onDrop(event, index)}
                   data-testid="admin-photo"
+                  data-photo-id={image.id}
                   className={cn(
                     "flex gap-3 border-2 border-hairline p-2 sb:flex-col sb:cursor-grab",
                     dragged === index && "opacity-50",
@@ -321,7 +357,8 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
                         size="sm"
                         className="justify-self-start"
                         disabled={busy}
-                        onClick={() => reorder(move(ordered, index, 0))}
+                        focusableWhenDisabled
+                        onClick={() => reorder(move(ordered, index, 0), { id: image.id, control: "later" })}
                       >
                         <StarIcon aria-hidden />
                         {t("makeMain")}
@@ -332,9 +369,12 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
                         type="button"
                         variant="outline"
                         size="icon"
+                        // stays focusable while disabled: a keyboard move must not drop the focus
                         disabled={busy || first}
+                        focusableWhenDisabled
+                        data-control="earlier"
                         aria-label={t("moveEarlier", { index: number })}
-                        onClick={() => reorder(move(ordered, index, index - 1))}
+                        onClick={() => reorder(move(ordered, index, index - 1), { id: image.id, control: "earlier" })}
                       >
                         <ArrowUpIcon aria-hidden className="sb:hidden" />
                         <ArrowLeftIcon aria-hidden className="hidden sb:block" />
@@ -344,8 +384,10 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
                         variant="outline"
                         size="icon"
                         disabled={busy || last}
+                        focusableWhenDisabled
+                        data-control="later"
                         aria-label={t("moveLater", { index: number })}
-                        onClick={() => reorder(move(ordered, index, index + 1))}
+                        onClick={() => reorder(move(ordered, index, index + 1), { id: image.id, control: "later" })}
                       >
                         <ArrowDownIcon aria-hidden className="sb:hidden" />
                         <ArrowRightIcon aria-hidden className="hidden sb:block" />
@@ -376,6 +418,9 @@ export function ProductImages({ productId, images, altDefaults, maxBytes, action
               );
             })}
           </ol>
+          <p aria-live="polite" className="sr-only">
+            {announcement}
+          </p>
         </>
       )}
 

@@ -30,6 +30,7 @@
     "nav": "Gestione",
     "products": "Prodotti",
     "newProduct": "Aggiungi",
+    "attributes": "Materiali e colori",
     "viewShop": "Negozio"
   },
   "status": {
@@ -106,6 +107,7 @@
       "making": "Realizzazione e disponibilità",
       "dimensions": "Dimensioni",
       "translations": "Testi in tutte le lingue",
+      "taxonomy": "Materiali e colori",
       "photos": "Foto",
       "publication": "Pubblicazione"
     },
@@ -123,6 +125,7 @@
     "heightMm": "Altezza, mm",
     "dimensionsHint": "Facoltativo; in millimetri, al massimo un decimale.",
     "translationsHint": "L’ucraino è necessario per pubblicare; una lingua senza titolo non viene mostrata e il negozio mostra il testo inglese.",
+    "manageTerms": "Modifica gli elenchi di materiali e colori",
     "status": "Stato",
     "position": "Posizione",
     "positionHint": "Un numero per l’ordine manuale; 0 per impostazione predefinita.",
@@ -170,6 +173,7 @@
       "notAuthorized": "Solo la gestione può farlo. Accedi di nuovo.",
       "notFound": "Questo prodotto non esiste più.",
       "conflict": "Un altro prodotto ha appena preso questo indirizzo o codice. Controlla e salva di nuovo.",
+      "termsChanged": "Un materiale o un colore scelto è appena stato eliminato. Controlla l’elenco e salva di nuovo.",
       "unexpectedError": "Impossibile salvare il prodotto. Riprova.",
       "required": "Questo campo è obbligatorio",
       "tooLong": "Al massimo {max} caratteri",
@@ -241,6 +245,50 @@
       "reviewedToast": "{count, plural, =0 {Nessuna traduzione attendeva revisione} one {# traduzione segnata come revisionata} other {# traduzioni segnate come revisionate}}"
     }
   },
+  "taxonomy": {
+    "title": "Materiali e colori",
+    "intro": "I filtri del negozio li elencano. Ognuno ha bisogno del nome in ucraino; una lingua senza nome proprio mostra quello inglese, altrimenti quello ucraino.",
+    "kinds": {
+      "material": "Materiali",
+      "colour": "Colori"
+    },
+    "add": {
+      "material": "Aggiungi un materiale",
+      "colour": "Aggiungi un colore"
+    },
+    "empty": {
+      "material": "Ancora nessun materiale.",
+      "colour": "Ancora nessun colore."
+    },
+    "nameIn": "Nome ({language})",
+    "required": "(obbligatorio)",
+    "otherLocales": "Altre lingue",
+    "slug": "Nei link del negozio: {slug}",
+    "usedBy": "{count, plural, =0 {Non usato} one {Usato da # prodotto} other {Usato da # prodotti}}",
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "create": "Aggiungi",
+    "saved": "Salvato",
+    "created": "Aggiunto",
+    "delete": "Elimina",
+    "deleteTitle": "Eliminare «{name}»?",
+    "deleteDescription": "Scompare dai filtri del negozio. L’operazione non può essere annullata.",
+    "deleteConfirm": "Elimina",
+    "cancel": "Annulla",
+    "deleted": "«{name}» eliminato",
+    "inUseHint": "Alcuni prodotti lo usano: togli la spunta nei loro moduli per eliminarlo.",
+    "loadError": "Impossibile caricare gli elenchi. Riprova.",
+    "errors": {
+      "required": "Inserisci il nome in ucraino",
+      "tooLong": "Al massimo {max} caratteri",
+      "notAuthorized": "Solo l’amministratore può farlo. Accedi di nuovo.",
+      "notFound": "Questa voce non esiste più.",
+      "nameTaken": "Un’altra voce di questo elenco ha già questo nome.",
+      "invalid": "Questa richiesta non è valida.",
+      "unexpectedError": "Qualcosa è andato storto. Riprova.",
+      "inUse": "Alcuni prodotti lo usano: togli prima la spunta nei loro moduli."
+    }
+  },
   "images": {
     "hint": "JPEG, PNG o WebP, fino a {maxMb} MB ciascuna. La prima foto è quella principale nel negozio. I dati sul luogo e sulla fotocamera vengono rimossi al caricamento.",
     "saveFirst": "Salva prima il prodotto, poi aggiungi qui le sue foto.",
@@ -251,6 +299,7 @@
     "makeMain": "Rendi principale",
     "moveEarlier": "Sposta la foto {index} in avanti",
     "moveLater": "Sposta la foto {index} indietro",
+    "moved": "Foto spostata in posizione {position} di {count}.",
     "altTextsOf": "Testi alternativi della foto {index}",
     "altHint": "Una breve descrizione della foto per i lettori di schermo e i motori di ricerca. Un campo vuoto usa il testo mostrato al suo interno.",
     "altSave": "Salva i testi",

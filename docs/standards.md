@@ -77,7 +77,11 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   - A shell entry uses `cacheLife("daysNoSwr")` (`next.config.ts`: `expire` = `revalidate`, one day),
     or a failure life; request-time data stays in its Suspense boundary (e.g. the shop listing), and
     shell texts that need no data stay static (category names come from the messages).
-  - Prefetch stays on: no `prefetch={false}` against this.
+  - Prefetch stays on: no `prefetch={false}` against this. A `prefetch={false}` is allowed only as a
+    stopgap for a cause found and filed: a comment at the link names the cause and links its open issue, and
+    the fix of that issue removes it. Today: the admin product page's "view in shop" link (#92), against the
+    render race of #93 (a prefetch render started before an admin write's `updateTag` and stored after it
+    keeps the old data).
   - Check: `e2e/prefetch.e2e.ts` reloads the shop ten times and fails on any response of the page that
     carries `stale-while-revalidate`; or `curl -sD - -o /dev/null -H "rsc: 1" -H
     "next-router-prefetch: 1" -H "next-router-segment-prefetch: /_tree" <url>` on `next start`.

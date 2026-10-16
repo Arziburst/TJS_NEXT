@@ -4,11 +4,11 @@ import type { ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { PAGE_SIZE, pagerItems, toQuery, totalPagesFor, type ShopQuery } from "./shop-query";
+import { listingQuery, PAGE_SIZE, pagerItems, totalPagesFor, type ListingState } from "./shop-query";
 
 type PaginationProps = {
   pathname: string;
-  query: ShopQuery;
+  state: ListingState;
   total: number;
 };
 
@@ -33,11 +33,12 @@ function ArrowLink({ href, label, children }: { href: Parameters<typeof Link>[0]
 }
 
 /** "Show more" appends the next page; the pager jumps to one page. Both are plain links: the state is the URL. */
-export async function Pagination({ pathname, query, total }: PaginationProps) {
+export async function Pagination({ pathname, state, total }: PaginationProps) {
+  const { query } = state;
   const t = await getTranslations("catalog");
   const totalPages = totalPagesFor(total);
   const shown = Math.min(query.page * PAGE_SIZE, total);
-  const at = (page: number, from = page) => ({ pathname, query: toQuery({ ...query, page, from }) });
+  const at = (page: number, from = page) => ({ pathname, query: listingQuery({ ...state, query: { ...query, page, from } }) });
 
   return (
     <div className="flex flex-col items-center gap-6 font-sans" data-testid="pagination">
