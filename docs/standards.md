@@ -110,6 +110,17 @@ Business values (prices, markets, locales, statuses …) are not here — they l
   hard-coded path. The shell e2e (`expectOnlyEnabledRouteLinks` in `e2e/routes.ts`) assert that enabled
   routes are linked and disabled ones are not; the dev-only `/ui-kit` showcase is not in the registry.
 
+- **SEO files (#30).** `src/app/sitemap.ts` lists only indexable pages: the shop's own pages in every
+  locale and each product in the locales whose translation is indexable (`isIndexable`, an unreviewed
+  machine text never), with hreflang alternates among those and x-default on `/en`; a new indexable page
+  type is added to its builder (`src/lib/seo/sitemap.ts`), a noindex page never. Its data is one
+  `"use cache"` entry tagged `CATALOG_TAG`, so every admin write that calls `revalidateProduct` refreshes it.
+  `src/app/robots.ts` closes private areas per locale prefix (a wildcard would also match product slugs);
+  a noindex page stays crawlable so its noindex can be read. A page that sets `openGraph` in its metadata
+  loses the image of a parent segment's `opengraph-image`: give it its own file. Share images are drawn
+  in Raleway (`src/lib/seo/og-fonts`): the renderer (satori) misplaces the accents of Cormorant's composite
+  glyphs.
+
 ## 4. Data and security
 
 - **Data access only in a server-side layer**: `src/lib/` modules that start with `import "server-only"`.

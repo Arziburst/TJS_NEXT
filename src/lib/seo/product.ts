@@ -6,6 +6,7 @@ import type { ProductAvailability, ProductFulfillment, ProductTranslation } from
 import { fallbackLocale } from "@/lib/catalog/mappers";
 import type { TranslationSlug } from "@/lib/catalog/product-path";
 import { isIndexable, type TranslationReview } from "./indexing";
+import { OG_LOCALES } from "./open-graph";
 
 export function productPath(locale: Locale, slug: string): string {
   return getPathname({ href: `${routes.product.path}/${slug}`, locale });
@@ -33,21 +34,6 @@ export function productAlternates(
 
   return { canonical: productPath(shown.locale, shown.slug), languages };
 }
-
-// Open Graph names a locale as language_TERRITORY: each language in the territory of its main market (D2, D5)
-const OG_LOCALES: Record<Locale, string> = {
-  uk: "uk_UA",
-  en: "en_US",
-  de: "de_DE",
-  fr: "fr_FR",
-  es: "es_ES",
-  it: "it_IT",
-  pl: "pl_PL",
-  nl: "nl_NL",
-  cs: "cs_CZ",
-  pt: "pt_PT",
-  ro: "ro_RO",
-};
 
 /** og:locale of the content shown and og:locale:alternate of the product's other translations. */
 export function productOpenGraphLocales(
