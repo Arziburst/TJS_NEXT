@@ -67,12 +67,16 @@ function clocks(): [earlier: number, later: number] {
 type CachedRoute = Awaited<ReturnType<CacheHandler["get"]>>;
 
 /**
- * Whether Next renders the route again after this read: nothing usable cached (missing, or a tag expired), past
- * its revalidate time, or a tag marked stale since it was stored.
+ * Whether Next may render the route again after this read: nothing usable cached (missing, or a tag expired),
+ * past its revalidate time, a tag marked stale since it was stored, or a lifetime this handler cannot see (#116:
+ * a page seeded by the build has no cacheControl in its metadata, Next takes it from the prerender manifest). An
+ * unknown lifetime counts as due: if no render follows, the next store is checked from this earlier read, which
+ * at worst refuses one store and costs one more render; never a store left unchecked.
  */
 function needsRender(cached: CachedRoute, now: number): boolean {
   if (cached === null || cached.value === null) return true;
-  const revalidate = cached.cacheControl?.revalidate;
+  if (cached.cacheControl === undefined) return true;
+  const revalidate = cached.cacheControl.revalidate;
   if (typeof revalidate === "number" && cached.lastModified + revalidate * 1000 <= now) return true;
   return routeTags(cached.value).some((tag) => (tagsManifest.get(tag)?.stale ?? 0) > cached.lastModified);
 }
