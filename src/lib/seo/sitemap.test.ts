@@ -109,6 +109,29 @@ describe("buildSitemap", () => {
   });
 });
 
+describe("buildSitemap with collections (#67)", () => {
+  it("lists a published collection in its indexable locales only, dated by its newest change", () => {
+    const spring = {
+      updatedAt: "2026-10-14T00:00:00.000Z",
+      translations: [
+        { locale: "uk" as const, slug: "vesna", ...human, updatedAt: "2026-10-15T00:00:00.000Z" },
+        { locale: "en" as const, slug: "spring", ...human, updatedAt: "2026-10-13T00:00:00.000Z" },
+        { locale: "de" as const, slug: "fruehling", source: "machine" as const, reviewedAt: null, updatedAt: "2026-10-13T00:00:00.000Z" },
+      ],
+    };
+    const sitemap = buildSitemap({ base, products: [], categories, collections: [spring] });
+    const urls = sitemap.map((e) => e.url).filter((url) => url.includes("/collections/"));
+    expect(urls).toEqual(["https://tjs.example/uk/collections/vesna", "https://tjs.example/en/collections/spring"]);
+    const uk = sitemap.find((e) => e.url === "https://tjs.example/uk/collections/vesna")!;
+    expect(uk.alternates?.languages).toEqual({
+      uk: "https://tjs.example/uk/collections/vesna",
+      en: "https://tjs.example/en/collections/spring",
+      "x-default": "https://tjs.example/en/collections/spring",
+    });
+    expect(uk.lastModified).toBe("2026-10-15T00:00:00.000Z");
+  });
+});
+
 describe("latest", () => {
   it("picks the newest valid timestamp", () => {
     expect(latest("2026-01-01T00:00:00Z", null, "garbage", "2026-02-01T00:00:00Z", undefined)).toBe("2026-02-01T00:00:00.000Z");
