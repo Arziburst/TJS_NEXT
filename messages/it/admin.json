@@ -624,7 +624,7 @@
     "startsAt": "Inizio (ora di Kyiv)",
     "endsAt": "Fine (ora di Kyiv)",
     "windowHint": "Senza inizio la promozione parte subito, senza fine dura finché non la termini.",
-    "save": "Salva la promozione",
+    "save": "Applica la promozione",
     "remove": "Termina la promozione",
     "saved": "Promozione salvata",
     "removed": "Promozione terminata",

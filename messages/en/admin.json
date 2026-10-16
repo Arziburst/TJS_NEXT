@@ -624,7 +624,7 @@
     "startsAt": "Starts (Kyiv time)",
     "endsAt": "Ends (Kyiv time)",
     "windowHint": "Leave the start empty to start now, the end empty to run until you end it.",
-    "save": "Save the sale",
+    "save": "Apply the sale",
     "remove": "End the sale",
     "saved": "Sale saved",
     "removed": "Sale ended",

@@ -624,7 +624,7 @@
     "startsAt": "Început (ora Kievului)",
     "endsAt": "Sfârșit (ora Kievului)",
     "windowHint": "Fără început, reducerea pornește imediat; fără sfârșit, durează până o încheiați.",
-    "save": "Salvați reducerea",
+    "save": "Aplicați reducerea",
     "remove": "Încheiați reducerea",
     "saved": "Reducere salvată",
     "removed": "Reducere încheiată",

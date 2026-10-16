@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormatter, useTranslations } from "next-intl";
-import { useId, useState, useTransition, type FormEvent } from "react";
+import { useId, useState, useTransition, type KeyboardEvent } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -71,14 +71,20 @@ export function SaleEditor({ target, id: targetId, sale, regularUsdMinor, save, 
     }
   }
 
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function submit() {
     setFields({});
     startTransition(async () => {
       const result = await settle(() => save({ id: targetId, kind, percent, price, startsAt, endsAt }));
       if (result.ok) toast.success(t("saved"));
       else failure(result);
     });
+  }
+
+  // Enter in a field saves the sale, never the product form around it
+  function submitOnEnter(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "Enter" || !(event.target instanceof HTMLInputElement)) return;
+    event.preventDefault();
+    submit();
   }
 
   function end() {
@@ -131,7 +137,8 @@ export function SaleEditor({ target, id: targetId, sale, regularUsdMinor, save, 
           : t("none")}
       </p>
 
-      <form onSubmit={submit} noValidate className="grid gap-4">
+      {/* no <form>: on the product page this section sits inside the product form (nested forms are invalid HTML) */}
+      <div role="group" aria-labelledby={`${id}-title`} onKeyDown={submitOnEnter} className="grid gap-4">
         {target === "product" && (
           <fieldset className="grid gap-2">
             <legend className={cn(labelClass, "mb-2")}>{t("kind")}</legend>
@@ -233,7 +240,7 @@ export function SaleEditor({ target, id: targetId, sale, regularUsdMinor, save, 
         </p>
 
         <div className="flex flex-wrap gap-3">
-          <Button type="submit" disabled={pending} aria-busy={pending || undefined} className="min-h-12">
+          <Button type="button" onClick={submit} disabled={pending} aria-busy={pending || undefined} className="min-h-12">
             {t("save")}
           </Button>
           {sale && (
@@ -242,7 +249,7 @@ export function SaleEditor({ target, id: targetId, sale, regularUsdMinor, save, 
             </Button>
           )}
         </div>
-      </form>
+      </div>
     </section>
   );
 }

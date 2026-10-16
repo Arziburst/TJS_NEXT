@@ -624,7 +624,7 @@
     "startsAt": "Inicio (hora de Kyiv)",
     "endsAt": "Fin (hora de Kyiv)",
     "windowHint": "Sin inicio, la rebaja empieza ya; sin fin, dura hasta que la termines.",
-    "save": "Guardar la rebaja",
+    "save": "Aplicar la rebaja",
     "remove": "Terminar la rebaja",
     "saved": "Rebaja guardada",
     "removed": "Rebaja terminada",
