@@ -270,8 +270,6 @@ export function ProductVariants({ productId, priceUsdMinor, variants, actions }:
                     aria-describedby={variant.ordered ? `variant-ordered-${variant.id}` : undefined}
                     // the reason on hover too
                     title={variant.ordered ? t("ordered") : undefined}
-                    // focusable when disabled, so no `disabled` attribute: look disabled by aria-disabled (#102)
-                    className="aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:bg-transparent aria-disabled:hover:text-destructive"
                     onClick={() => setDeleting(variant)}
                   >
                     <Trash2Icon aria-hidden />
