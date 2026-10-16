@@ -41,7 +41,9 @@ export const PRODUCT_COLUMNS = `
   category:categories!inner(id, slug),
   product_translations!inner(locale, slug, title, description, materials, care, clasp, lead_time_note, alt_text, meta_title, meta_description, source, reviewed_at),
   product_images(id, storage_path, position, width, height, blur_data_url, product_image_alts(locale, alt)),
-  product_variants(id, position, sku_suffix, price_delta_usd_minor, is_available, product_variant_translations(locale, label))
+  product_variants(id, position, sku_suffix, price_delta_usd_minor, is_available, product_variant_translations(locale, label)),
+  product_sales(percent_off, price_usd_minor, starts_at, ends_at),
+  collection_products(collections(collection_sales(percent_off, starts_at, ends_at)))
 `;
 
 function publicUrlFor(client: ServerSupabaseClient) {

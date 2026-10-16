@@ -18,8 +18,10 @@ export type QuoteItem = {
   /** The size as the customer saw it (#66), with the locale of its label; null without a variant. */
   variantLabel: { text: string; locale: Locale } | null;
   sku: string | null;
-  /** The unit price: the variant's price for a line of a variant, else the product's. */
+  /** The unit price charged: the variant's price for a line of a variant, else the product's, under a running sale. */
   priceUsdMinor: number;
+  /** The same without the sale (#67): equal to `priceUsdMinor` unless a sale runs, never below it. */
+  regularPriceUsdMinor: number;
   weightGrams: number;
   quantity: number;
 };
@@ -28,6 +30,7 @@ export type QuoteLine = QuoteItem & {
   position: number;
   // in the quote's currency
   unitMinor: number;
+  regularUnitMinor: number;
   lineMinor: number;
   lineUsdMinor: number;
 };
@@ -58,19 +61,24 @@ export function buildQuote(items: readonly QuoteItem[], currency: Currency, tabl
   for (const [position, item] of items.entries()) {
     if (!Number.isSafeInteger(item.quantity) || item.quantity < 1) return { ok: false, reason: "invalid" };
     if (!Number.isSafeInteger(item.priceUsdMinor) || item.priceUsdMinor < 0) return { ok: false, reason: "invalid" };
+    if (!Number.isSafeInteger(item.regularPriceUsdMinor) || item.regularPriceUsdMinor < item.priceUsdMinor) {
+      return { ok: false, reason: "invalid" };
+    }
     let unit;
+    let regular;
     try {
       unit = priceIn(item.priceUsdMinor, currency, tables);
+      regular = priceIn(item.regularPriceUsdMinor, currency, tables);
     } catch {
       return { ok: false, reason: "noRate" };
     }
-    if (!unit) return { ok: false, reason: "noRate" };
+    if (!unit || !regular) return { ok: false, reason: "noRate" };
     const lineMinor = unit.amountMinor * item.quantity;
     const lineUsdMinor = item.priceUsdMinor * item.quantity;
     totalMinor += lineMinor;
     totalUsdMinor += lineUsdMinor;
     if (![lineMinor, lineUsdMinor, totalMinor, totalUsdMinor].every(Number.isSafeInteger)) return { ok: false, reason: "invalid" };
-    lines.push({ ...item, position, unitMinor: unit.amountMinor, lineMinor, lineUsdMinor });
+    lines.push({ ...item, position, unitMinor: unit.amountMinor, regularUnitMinor: regular.amountMinor, lineMinor, lineUsdMinor });
   }
 
   return {

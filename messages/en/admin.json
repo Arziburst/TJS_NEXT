@@ -34,7 +34,8 @@
     "viewShop": "Shop",
     "orders": "Orders",
     "ordersWithNew": "Orders, {count, plural, one {# new request} other {# new requests}}",
-    "settings": "Settings"
+    "settings": "Settings",
+    "collections": "Collections"
   },
   "status": {
     "draft": "Draft",
@@ -626,6 +627,128 @@
         "tooLong": "This text is too long",
         "textRequired": "Write the text for this language, or clear its description"
       }
+    }
+  },
+  "collections": {
+    "title": "Collections",
+    "intro": "Group pieces into collections with their own page in the shop. The published ones are linked from the home page and the shop.",
+    "new": "New collection",
+    "newTitle": "New collection",
+    "editTitle": "Edit collection",
+    "editTitleOf": "Edit: {name}",
+    "back": "Back to the collections",
+    "empty": "No collections yet.",
+    "loadError": "Could not load the collections. Please try again later.",
+    "productCount": "{count, plural, =0 {No pieces} one {# piece} other {# pieces}}",
+    "onSale": "On sale",
+    "viewInShop": "View in the shop",
+    "saveFirst": "Save the collection first, then add its pieces, cover photo and sale.",
+    "sections": {
+      "details": "Name and description",
+      "publication": "Publication",
+      "cover": "Cover photo",
+      "products": "Pieces",
+      "danger": "Delete"
+    },
+    "fields": {
+      "name": "Name",
+      "slug": "URL slug",
+      "slugHint": "Leave it empty to make it from the name.",
+      "description": "Description",
+      "position": "Place in the list",
+      "positionHint": "Lower numbers come first.",
+      "published": "Published in the shop",
+      "publishedHint": "Needs the Ukrainian name."
+    },
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Collection saved",
+    "created": "Collection created",
+    "publishedNow": "The collection is published",
+    "unpublishedNow": "The collection is hidden from the shop",
+    "errors": {
+      "required": "Enter a name.",
+      "invalidSlug": "Use lowercase Latin letters, digits and hyphens.",
+      "slugTaken": "Another collection already has this slug.",
+      "notAuthorized": "Only an administrator can do this. Sign in again.",
+      "notFound": "This collection no longer exists.",
+      "needsUk": "A published collection needs its Ukrainian name.",
+      "invalid": "Please check the form.",
+      "tooManyRequests": "Too many changes in a short time. Please wait a few minutes and try again.",
+      "unexpectedError": "That did not work. Try again."
+    },
+    "products": {
+      "add": "Add pieces",
+      "pickerTitle": "Add pieces to the collection",
+      "pickerDescription": "Tap a piece to add it; it goes to the end of the list.",
+      "search": "Search by name or SKU",
+      "noResults": "No pieces found.",
+      "empty": "No pieces in this collection yet.",
+      "inCollection": "In the collection",
+      "remove": "Remove {title}",
+      "moveUp": "Move {title} up",
+      "moveDown": "Move {title} down",
+      "added": "{title} added",
+      "removed": "{title} removed",
+      "moved": "Moved to position {position} of {count}",
+      "done": "Done",
+      "notInShop": "Not shown in the shop"
+    },
+    "cover": {
+      "hint": "A wide photo for the home page and the top of the collection's page. JPEG, PNG or WebP, up to {maxMb} MB.",
+      "upload": "Upload a cover photo",
+      "replace": "Replace the cover photo",
+      "remove": "Remove the cover photo",
+      "uploading": "Uploading…",
+      "uploaded": "Cover photo saved",
+      "removed": "Cover photo removed",
+      "none": "No cover photo yet."
+    },
+    "delete": {
+      "button": "Delete the collection",
+      "title": "Delete “{name}”?",
+      "description": "The collection and its sale are removed; its pieces stay in the shop.",
+      "confirm": "Delete",
+      "deleted": "Collection deleted"
+    }
+  },
+  "sale": {
+    "title": "Sale",
+    "introProduct": "A percentage off or a fixed sale price for every size. The shop shows the regular price struck through and charges the sale price while it runs.",
+    "introCollection": "A percentage off every piece of this collection while it is published. Where a piece has a lower sale of its own, the lower price applies.",
+    "kind": "Discount",
+    "kinds": {
+      "percent": "Percentage off",
+      "price": "Fixed sale price"
+    },
+    "percent": "Percent off",
+    "price": "Sale price, USD",
+    "priceHint": "Regular price {price}; each size keeps its difference.",
+    "startsAt": "Starts (Kyiv time)",
+    "endsAt": "Ends (Kyiv time)",
+    "windowHint": "Leave the start empty to start now, the end empty to run until you end it.",
+    "save": "Apply the sale",
+    "remove": "End the sale",
+    "saved": "Sale saved",
+    "removed": "Sale ended",
+    "none": "No sale.",
+    "summaryPercent": "{percent} % off",
+    "summaryPrice": "Sale price {price}",
+    "state": {
+      "running": "Running",
+      "scheduled": "Starts later",
+      "ended": "Ended"
+    },
+    "errors": {
+      "required": "Enter a value.",
+      "invalid": "Enter a valid value.",
+      "notBelowPrice": "The sale price must be below the regular price.",
+      "endBeforeStart": "The end must come after the start.",
+      "collectionPercentOnly": "A collection's sale is a percentage.",
+      "notAuthorized": "Only an administrator can do this. Sign in again.",
+      "notFound": "This product or collection no longer exists.",
+      "tooManyRequests": "Too many changes in a short time. Please wait a few minutes and try again.",
+      "unexpectedError": "That did not work. Try again."
     }
   }
 }

@@ -18,7 +18,8 @@
     "relevance": "Pertinenza",
     "placeholder": "Seleziona un filtro",
     "priceAsc": "Prezzo (dal più basso al più alto)",
-    "priceDesc": "Prezzo (dal più alto al più basso)"
+    "priceDesc": "Prezzo (dal più alto al più basso)",
+    "featured": "In evidenza"
   },
   "filters": {
     "title": "Filtri",
@@ -67,5 +68,11 @@
     "position": "<b>{page}</b> di {total}",
     "gap": "…",
     "first": "Torna alla prima pagina"
+  },
+  "collections": {
+    "title": "Collezioni",
+    "option": "Collezione: {name}",
+    "untranslated": "Questa collezione non è ancora tradotta nella tua lingua.",
+    "metaDescription": "{name}: una collezione di bijoux fatti a mano dall’autrice e designer di TJS."
   }
 }

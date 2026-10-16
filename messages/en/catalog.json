@@ -18,7 +18,8 @@
     "relevance": "Relevance",
     "placeholder": "Select filter",
     "priceAsc": "Price (low to high)",
-    "priceDesc": "Price (high to low)"
+    "priceDesc": "Price (high to low)",
+    "featured": "Featured"
   },
   "filters": {
     "title": "Filters",
@@ -51,6 +52,12 @@
       "title": "Search",
       "description": "Search the handmade jewelry of TJS by name, material or colour."
     }
+  },
+  "collections": {
+    "title": "Collections",
+    "option": "Collection: {name}",
+    "untranslated": "This collection is not translated into your language yet.",
+    "metaDescription": "{name}: a collection of handmade jewelry by the author-designer of TJS."
   },
   "newBadge": "New",
   "loadError": "Could not load the products. Please try again later.",

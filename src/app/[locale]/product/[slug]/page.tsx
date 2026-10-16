@@ -18,6 +18,7 @@ import {
   productAlternates,
   productJsonLd,
   productOpenGraphLocales,
+  priceValidUntil,
   productPath,
   serializeJsonLd,
 } from "@/lib/seo/product";
@@ -98,7 +99,7 @@ async function ProductContent({ params }: { params: PageProps<"/[locale]/product
       <ProductDetails
         product={page.product}
         categoryName={page.categoryName}
-        price={(usdMinor, from) => <Price usdMinor={usdMinor} from={from} />}
+        price={(price) => <Price {...price} />}
       />
       <RecentlyViewed currentId={page.product.id} />
     </>
@@ -110,7 +111,8 @@ async function ProductJsonLd({ locale, page }: { locale: Locale; page: Extract<A
   const { translation } = product;
   const [tCommon, price, variantPrices] = await Promise.all([
     getTranslations("common"),
-    getJsonLdPrice(product.priceUsdMinor, locale),
+    // the price charged now: the sale price while a sale runs (#67), valid until the sale ends
+    getJsonLdPrice(product.offer.usdMinor, locale),
     Promise.all(product.variants.map((variant) => getJsonLdPrice(variant.priceUsdMinor, locale))),
   ]);
   const base = getMetadataBase();
@@ -136,10 +138,12 @@ async function ProductJsonLd({ locale, page }: { locale: Locale; page: Extract<A
     fulfillment: product.fulfillment,
     availability: product.availability,
     price,
+    priceValidUntil: priceValidUntil(product.offer.saleEndsAt),
     variants: product.variants.map((variant, index) => ({
       name: variant.label,
       sku: variantSku(product.sku, variant.skuSuffix),
       price: variantPrices[index] ?? null,
+      priceValidUntil: priceValidUntil(variant.saleEndsAt),
       available: variant.available,
     })),
     breadcrumbs,

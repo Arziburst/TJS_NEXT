@@ -34,7 +34,8 @@
     "viewShop": "Loja",
     "orders": "Encomendas",
     "ordersWithNew": "Encomendas, {count, plural, one {# pedido novo} other {# pedidos novos}}",
-    "settings": "Definições"
+    "settings": "Definições",
+    "collections": "Coleções"
   },
   "status": {
     "draft": "Rascunho",
@@ -626,6 +627,128 @@
         "tooLong": "Este texto é demasiado longo",
         "textRequired": "Escreva o texto nesta língua ou apague a sua descrição"
       }
+    }
+  },
+  "collections": {
+    "title": "Coleções",
+    "intro": "Agrupe peças em coleções com a sua própria página na loja. As publicadas têm ligações a partir da página inicial e da loja.",
+    "new": "Nova coleção",
+    "newTitle": "Nova coleção",
+    "editTitle": "Editar coleção",
+    "editTitleOf": "Editar: {name}",
+    "back": "Voltar às coleções",
+    "empty": "Ainda não há coleções.",
+    "loadError": "Não foi possível carregar as coleções. Tente novamente mais tarde.",
+    "productCount": "{count, plural, =0 {Sem peças} one {# peça} other {# peças}}",
+    "onSale": "Em promoção",
+    "viewInShop": "Ver na loja",
+    "saveFirst": "Guarde primeiro a coleção; depois adicione as peças, a foto de capa e a promoção.",
+    "sections": {
+      "details": "Nome e descrição",
+      "publication": "Publicação",
+      "cover": "Foto de capa",
+      "products": "Peças",
+      "danger": "Eliminar"
+    },
+    "fields": {
+      "name": "Nome",
+      "slug": "Slug do URL",
+      "slugHint": "Deixe vazio para o criar a partir do nome.",
+      "description": "Descrição",
+      "position": "Lugar na lista",
+      "positionHint": "Os números mais baixos vêm primeiro.",
+      "published": "Publicada na loja",
+      "publishedHint": "Precisa do nome em ucraniano."
+    },
+    "save": "Guardar",
+    "saving": "A guardar…",
+    "saved": "Coleção guardada",
+    "created": "Coleção criada",
+    "publishedNow": "A coleção está publicada",
+    "unpublishedNow": "A coleção está oculta na loja",
+    "errors": {
+      "required": "Introduza um nome.",
+      "invalidSlug": "Use letras latinas minúsculas, algarismos e hífenes.",
+      "slugTaken": "Outra coleção já tem este slug.",
+      "notAuthorized": "Só um administrador pode fazer isto. Inicie sessão novamente.",
+      "notFound": "Esta coleção já não existe.",
+      "needsUk": "Uma coleção publicada precisa do nome em ucraniano.",
+      "invalid": "Verifique o formulário.",
+      "tooManyRequests": "Demasiadas alterações em pouco tempo. Aguarde alguns minutos e tente novamente.",
+      "unexpectedError": "Não resultou. Tente novamente."
+    },
+    "products": {
+      "add": "Adicionar peças",
+      "pickerTitle": "Adicionar peças à coleção",
+      "pickerDescription": "Toque numa peça para a adicionar ao fim da lista.",
+      "search": "Pesquisar por nome ou referência",
+      "noResults": "Nenhuma peça encontrada.",
+      "empty": "Esta coleção ainda não tem peças.",
+      "inCollection": "Na coleção",
+      "remove": "Retirar {title}",
+      "moveUp": "Subir {title}",
+      "moveDown": "Descer {title}",
+      "added": "{title}: adicionada",
+      "removed": "{title}: retirada",
+      "moved": "Movida para a posição {position} de {count}",
+      "done": "Concluído",
+      "notInShop": "Não aparece na loja"
+    },
+    "cover": {
+      "hint": "Uma foto larga para a página inicial e o topo da página da coleção. JPEG, PNG ou WebP, até {maxMb} MB.",
+      "upload": "Carregar foto de capa",
+      "replace": "Substituir a foto de capa",
+      "remove": "Retirar a foto de capa",
+      "uploading": "A carregar…",
+      "uploaded": "Foto de capa guardada",
+      "removed": "Foto de capa retirada",
+      "none": "Ainda sem foto de capa."
+    },
+    "delete": {
+      "button": "Eliminar a coleção",
+      "title": "Eliminar «{name}»?",
+      "description": "A coleção e a sua promoção são removidas; as suas peças continuam na loja.",
+      "confirm": "Eliminar",
+      "deleted": "Coleção eliminada"
+    }
+  },
+  "sale": {
+    "title": "Promoção",
+    "introProduct": "Uma percentagem de desconto ou um preço promocional fixo para cada tamanho. A loja mostra o preço normal riscado e cobra o preço promocional enquanto a promoção durar.",
+    "introCollection": "Uma percentagem de desconto em cada peça desta coleção enquanto estiver publicada. Se uma peça tiver uma promoção própria mais baixa, aplica-se o preço mais baixo.",
+    "kind": "Desconto",
+    "kinds": {
+      "percent": "Percentagem",
+      "price": "Preço promocional fixo"
+    },
+    "percent": "Percentagem de desconto",
+    "price": "Preço promocional, USD",
+    "priceHint": "Preço normal {price}; cada tamanho mantém a sua diferença.",
+    "startsAt": "Início (hora de Kyiv)",
+    "endsAt": "Fim (hora de Kyiv)",
+    "windowHint": "Sem início, a promoção começa já; sem fim, dura até a terminar.",
+    "save": "Aplicar a promoção",
+    "remove": "Terminar a promoção",
+    "saved": "Promoção guardada",
+    "removed": "Promoção terminada",
+    "none": "Sem promoção.",
+    "summaryPercent": "{percent} % de desconto",
+    "summaryPrice": "Preço promocional {price}",
+    "state": {
+      "running": "Ativa",
+      "scheduled": "Começa mais tarde",
+      "ended": "Terminada"
+    },
+    "errors": {
+      "required": "Introduza um valor.",
+      "invalid": "Introduza um valor válido.",
+      "notBelowPrice": "O preço promocional tem de ser inferior ao preço normal.",
+      "endBeforeStart": "O fim tem de ser depois do início.",
+      "collectionPercentOnly": "A promoção de uma coleção é uma percentagem.",
+      "notAuthorized": "Só um administrador pode fazer isto. Inicie sessão novamente.",
+      "notFound": "Este produto ou coleção já não existe.",
+      "tooManyRequests": "Demasiadas alterações em pouco tempo. Aguarde alguns minutos e tente novamente.",
+      "unexpectedError": "Não resultou. Tente novamente."
     }
   }
 }

@@ -4,6 +4,7 @@ import { supportedAcceptLanguage } from "./i18n/accept-language";
 import { routing } from "./i18n/routing";
 import { rewriteUnknownCategory } from "./lib/catalog/unknown-category";
 import { refreshSession } from "./lib/supabase/proxy";
+import { collectionNotFoundOrRedirect } from "./proxy/collection-not-found";
 import { productNotFoundOrRedirect } from "./proxy/product-not-found";
 
 const intl = createMiddleware(routing);
@@ -23,6 +24,7 @@ export default async function proxy(request: NextRequest) {
   return applySession(
     rewriteUnknownCategory(request) ??
       (await productNotFoundOrRedirect(request)) ??
+      (await collectionNotFoundOrRedirect(request)) ??
       intl(withSupportedLanguages(request)),
   );
 }

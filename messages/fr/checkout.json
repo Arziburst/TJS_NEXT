@@ -60,7 +60,8 @@
       "emptyCart": "Le panier ne contient rien qui puisse être commandé.",
       "pricesUnavailable": "Les prix ne peuvent pas être calculés pour le moment. Veuillez réessayer plus tard.",
       "unexpected": "La demande n’a pas pu être envoyée. Veuillez réessayer.",
-      "sizeUnavailable": "Désolé, ces tailles ne peuvent pas être commandées pour le moment : {titles}. Rien n’a été envoyé. Choisissez une autre taille ou retirez-les du panier, puis renvoyez la demande."
+      "sizeUnavailable": "Désolé, ces tailles ne peuvent pas être commandées pour le moment : {titles}. Rien n’a été envoyé. Choisissez une autre taille ou retirez-les du panier, puis renvoyez la demande.",
+      "pricesChanged": "Certains prix ont changé entre-temps (des soldes ont commencé ou pris fin). Rien n’a été envoyé. Vérifiez les nouveaux prix et envoyez la demande à nouveau."
     }
   },
   "done": {

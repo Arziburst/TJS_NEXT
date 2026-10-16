@@ -4,14 +4,16 @@ import { cache, Suspense } from "react";
 import { SearchForm } from "@/components/search/search-form";
 import { getPathname, Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import Image from "next/image";
 import { getCachedFacets, getCachedListingPage, getCachedTaxonomyTerms } from "@/lib/catalog/cache";
+import { getCachedCollections, type Collection } from "@/lib/catalog/collections";
 import type { CategorySlug } from "@/lib/catalog/categories";
 import type { Facets, ListingFilters, TaxonomyTerm } from "@/lib/catalog/types";
 import { getCategoryEntries, type CategoryEntry } from "./category-entries";
 import type { FilterGroupView, FilterPanelProps } from "./filter-panel";
 import { FilterPanel } from "./filter-panel";
 import { FilterSheet } from "./filter-sheet";
-import { categoryHref, SEARCH_HREF, SHOP_HREF } from "./links";
+import { categoryHref, collectionHref, SEARCH_HREF, SHOP_HREF } from "./links";
 import { listingFiltersFor, type PriceContext } from "./listing";
 import { MobileFilters, type FilterOption } from "./mobile-filters";
 import { Pagination } from "./pagination";
@@ -37,8 +39,10 @@ type ShopViewProps = {
   /** The category from the URL, null for all products (and for search); read inside the Suspense boundary. */
   slug: Promise<CategorySlug | null>;
   searchParams: Promise<SearchParams>;
-  /** The shop's listings (default) or the search results. */
+  /** The shop's listings (default), the search results or a collection's page. */
   context?: ListingContext;
+  /** A collection's page (#67): the collection, resolved by the page (read inside the Suspense boundary). */
+  collection?: Promise<Collection>;
 };
 
 // the first row is above the fold on desktop: its photos load at once (LCP)
@@ -82,27 +86,42 @@ export function ShopView({ context = "shop", ...props }: ShopViewProps) {
   );
 }
 
-type BodyProps = Required<ShopViewProps>;
+type BodyProps = Omit<Required<ShopViewProps>, "collection"> & Pick<ShopViewProps, "collection">;
 
-// Params and messages only (the category list): prerendered per category, no database read in the shell.
-async function ShopBody({ locale, slug: slugParam, searchParams, context }: BodyProps) {
-  const [slug, categories, t] = await Promise.all([slugParam, getCategoryEntries(locale), getTranslations("catalog")]);
+// Params and messages only (the category list): prerendered per category, no database read in the shell. A
+// collection's page reads its collection (a cached entry without a stale window, as a product page).
+async function ShopBody({ locale, slug: slugParam, searchParams, context, collection: collectionParam }: BodyProps) {
+  const [slug, categories, t, collection] = await Promise.all([
+    slugParam,
+    getCategoryEntries(locale),
+    getTranslations("catalog"),
+    collectionParam ?? null,
+  ]);
   const active = slug ? (categories.find((c) => c.slug === slug) ?? null) : null;
-  const pathname = context === "search" ? SEARCH_HREF : slug ? categoryHref(slug) : SHOP_HREF;
-  const listing = { locale, category: active, pathname, searchParams, context };
+  const pathname =
+    context === "search" ? SEARCH_HREF : collection ? collectionHref(collection.slug) : slug ? categoryHref(slug) : SHOP_HREF;
+  const listing = { locale, category: active, collection, pathname, searchParams, context };
+  // fallback content keeps its own language for screen readers and translators
+  const lang = collection?.isFallback ? collection.locale : undefined;
 
   return (
     <div className="sb:grid sb:grid-cols-[minmax(180px,240px)_1fr] sb:gap-12">
       <aside className="hidden sb:flex sb:flex-col sb:gap-10">
-        {context === "shop" && <CategoryNav categories={categories} active={slug} />}
+        {context !== "search" && (
+          <CategoryNav categories={categories} active={slug} activeCollection={collection?.id ?? null} locale={locale} />
+        )}
         <Suspense>
           <Sidebar {...listing} />
         </Suspense>
       </aside>
       <div className="flex min-w-0 flex-col gap-6 sb:gap-8">
-        <h1 className="text-center font-display text-4xl uppercase sb:text-left sb:text-5xl">
-          {context === "search" ? t("search.title") : (active?.name ?? t("title"))}
-        </h1>
+        {collection ? (
+          <CollectionHeader collection={collection} lang={lang} note={lang ? t("collections.untranslated") : null} />
+        ) : (
+          <h1 className="text-center font-display text-4xl uppercase sb:text-left sb:text-5xl">
+            {context === "search" ? t("search.title") : (active?.name ?? t("title"))}
+          </h1>
+        )}
         <Suspense fallback={<GridSkeleton />}>
           <ShopResults {...listing} categories={categories} />
         </Suspense>
@@ -111,9 +130,47 @@ async function ShopBody({ locale, slug: slugParam, searchParams, context }: Body
   );
 }
 
+// a collection's name, its description and its cover (a wide photo above the grid, never shifting the layout)
+function CollectionHeader({ collection, lang, note }: { collection: Collection; lang: string | undefined; note: string | null }) {
+  return (
+    <div className="flex flex-col gap-4" data-testid="collection-header">
+      {note && (
+        <p role="note" className="text-sm">
+          {note}
+        </p>
+      )}
+      {collection.cover && (
+        <span className="relative block aspect-[3/1] w-full overflow-hidden rounded bg-muted">
+          <Image
+            src={collection.cover.url}
+            alt=""
+            fill
+            sizes="(min-width: 64rem) 75vw, 100vw"
+            quality={75}
+            preload
+            fetchPriority="high"
+            placeholder={collection.cover.blurDataUrl ? "blur" : "empty"}
+            blurDataURL={collection.cover.blurDataUrl ?? undefined}
+            className="object-cover"
+          />
+        </span>
+      )}
+      <h1 lang={lang} className="text-center font-display text-4xl uppercase sb:text-left sb:text-5xl">
+        {collection.name}
+      </h1>
+      {collection.description && (
+        <p lang={lang} className="max-w-3xl text-center whitespace-pre-line sb:text-left">
+          {collection.description}
+        </p>
+      )}
+    </div>
+  );
+}
+
 type ListingProps = {
   locale: Locale;
   category: CategoryEntry | null;
+  collection: Collection | null;
   pathname: string;
   searchParams: Promise<SearchParams>;
   context: ListingContext;
@@ -130,11 +187,17 @@ type Listing = {
 // Request time: the URL state, its database filters, the lists and the counts. Once per request: the sidebar
 // and the results both need it (the reads behind it are shared cache entries).
 const loadListing = cache(
-  async (locale: Locale, categorySlug: string | null, context: ListingContext, params: SearchParams): Promise<Listing> => {
+  async (
+    locale: Locale,
+    categorySlug: string | null,
+    collectionId: string | null,
+    context: ListingContext,
+    params: SearchParams,
+  ): Promise<Listing> => {
     const state = parseListingState(params, context);
-    const { filters, price } = await listingFiltersFor(locale, categorySlug, state);
+    const { filters, price } = await listingFiltersFor(locale, categorySlug, state, collectionId);
     // the search page without a query lists nothing, so it counts nothing
-    const listed = context === "shop" || filters.terms.length > 0;
+    const listed = context !== "search" || filters.terms.length > 0;
     const [terms, facets] = await Promise.all([
       getCachedTaxonomyTerms(locale),
       listed ? getCachedFacets(filters) : null,
@@ -143,8 +206,8 @@ const loadListing = cache(
   },
 );
 
-async function listingOf({ locale, category, searchParams, context }: ListingProps): Promise<Listing> {
-  return loadListing(locale, category?.slug ?? null, context, await searchParams);
+async function listingOf({ locale, category, collection, searchParams, context }: ListingProps): Promise<Listing> {
+  return loadListing(locale, category?.slug ?? null, collection?.id ?? null, context, await searchParams);
 }
 
 /** The panel's lists: an option is shown when products have it under the other filters, or when it is ticked. */
@@ -203,7 +266,7 @@ async function Sidebar(props: ListingProps) {
   return (
     <>
       <SortNav pathname={props.pathname} state={listing.state} />
-      {(props.context === "shop" || listing.filters.terms.length > 0) && (
+      {(props.context !== "search" || listing.filters.terms.length > 0) && (
         <section aria-labelledby="filters-title" className="flex flex-col gap-3">
           <h2 id="filters-title" className="sr-only">
             {t("title")}
@@ -232,11 +295,15 @@ async function ClearFilters({ pathname, state }: { pathname: string; state: List
 
 // Request time: reads the URL state, then the cached listing pages from..page.
 async function ShopResults(props: ListingProps & { categories: CategoryEntry[] }) {
-  const { locale, category, categories, pathname, context } = props;
+  const { locale, category, collection, categories, pathname, context } = props;
   const listing = await listingOf(props);
   const { state, filters: dbFilters } = listing;
   const { query } = state;
-  const [t, messages] = await Promise.all([getTranslations("catalog"), getMessages()]);
+  const [t, messages, collections] = await Promise.all([
+    getTranslations("catalog"),
+    getMessages(),
+    context === "search" ? null : getCachedCollections(locale),
+  ]);
 
   const searchBox =
     context === "search" ? <SearchForm id="search-page-input" defaultValue={state.q} className="w-full max-w-[540px]" /> : null;
@@ -274,13 +341,19 @@ async function ShopResults(props: ListingProps & { categories: CategoryEntry[] }
   const filters = (
     <MobileFilters
       category={
-        context === "shop"
+        context !== "search"
           ? {
               label: t("filterShopBy"),
-              value: category?.slug ?? "",
+              value: collection ? `collection:${collection.id}` : (category?.slug ?? ""),
               options: [
                 { value: "", label: t("categories.all"), href: { pathname: SHOP_HREF, query: restart({}) } },
                 ...categories.map((c) => ({ value: c.slug, label: c.name, href: { pathname: categoryHref(c.slug), query: restart({}) } })),
+                // a collection's page keeps only its own filters: another collection starts without them
+                ...(collections?.ok ? collections.data : []).map((c) => ({
+                  value: `collection:${c.id}`,
+                  label: t("collections.option", { name: c.name }),
+                  href: { pathname: collectionHref(c.slug), query: {} },
+                })),
               ],
             }
           : undefined

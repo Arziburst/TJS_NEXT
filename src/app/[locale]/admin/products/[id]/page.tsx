@@ -18,7 +18,10 @@ import {
   saveProductVariant,
   setProductVariantAvailable,
 } from "@/app/[locale]/admin/variant-actions";
+import { removeProductSale, saveProductSale } from "@/app/[locale]/admin/sale-actions";
 import { AdminPending, AdminShell } from "@/components/admin/admin-shell";
+import { SaleEditor } from "@/components/admin/sale-editor";
+import { getAdminSale } from "@/lib/admin/sales";
 import { DeleteProductButton } from "@/components/admin/delete-product-button";
 import { ADMIN_PRODUCTS_HREF, editProductHref } from "@/components/admin/paths";
 import { ProductForm } from "@/components/admin/product-form";
@@ -88,13 +91,14 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
   const { locale, id } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   await requireAdmin(locale, `/${locale}${editProductHref(id)}`);
-  const [t, categories, product, terms, termIds, variants] = await Promise.all([
+  const [t, categories, product, terms, termIds, variants, sale] = await Promise.all([
     getTranslations("admin.form"),
     getCachedCategories(locale),
     getAdminProduct(id),
     listAdminTerms(locale),
     getProductTermIds(id),
     getAdminVariants(id),
+    getAdminSale("product", id),
   ]);
   if (!product.ok && product.reason === "notFound") notFound();
 
@@ -147,7 +151,23 @@ async function EditProduct({ params }: PageProps<"/[locale]/admin/products/[id]"
               />
             }
             variants={
-              <Variants key="variants" product={product.data} variants={variants.ok ? variants.variants : null} />
+              <div key="variants" className="grid gap-6">
+                <Variants product={product.data} variants={variants.ok ? variants.variants : null} />
+                {sale === undefined ? (
+                  <p role="alert" className="border-2 border-destructive p-3 font-input text-sm">
+                    {t("loadError")}
+                  </p>
+                ) : (
+                  <SaleEditor
+                    target="product"
+                    id={product.data.id}
+                    sale={sale}
+                    regularUsdMinor={usdTextToMinor(product.data.priceUsd)}
+                    save={saveProductSale}
+                    remove={removeProductSale}
+                  />
+                )}
+              </div>
             }
             // keyed like the photos: the translation actions refresh() the page too
             deleteButton={

@@ -41,7 +41,7 @@ select is(
   'admin_delete_taxonomy_term is security definer (it reads products.deleted_at)'
 );
 select ok(not has_function_privilege('anon', 'public.admin_save_product_with_terms(uuid, jsonb, jsonb, uuid[])', 'execute'), 'anon cannot execute admin_save_product_with_terms');
-select ok(has_function_privilege('anon', 'public.shop_search(public.locale, text, text[], text[], text[], bigint, bigint, text[], text, integer, integer)', 'execute'), 'anon may search');
+select ok(has_function_privilege('anon', 'public.shop_search(public.locale, text, text[], text[], text[], bigint, bigint, text[], text, integer, integer, uuid)', 'execute'), 'anon may search');
 
 -- anon
 set local role anon;
@@ -55,7 +55,7 @@ select is(
 );
 select is((select count(*)::int from public.product_taxonomy_terms), 20, 'anon reads the terms of visible products');
 select throws_ok($$insert into public.taxonomy_terms (kind, slug) values ('material', 'anon-term')$$, '42501', null, 'anon cannot add a term');
-select throws_ok($$select private.shop_candidates('en', null, null, null, null, null, null, null)$$, '42501', null, 'anon cannot call the private search helper');
+select throws_ok($$select private.shop_candidates('en', null, null, null, null, null, null, null, null)$$, '42501', null, 'anon cannot call the private search helper');
 reset role;
 
 -- customer

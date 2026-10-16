@@ -60,7 +60,8 @@
       "emptyCart": "Não há nada no carrinho que possa ser encomendado.",
       "pricesUnavailable": "De momento não é possível calcular os preços. Tente novamente mais tarde.",
       "unexpected": "Não foi possível enviar o pedido. Tente novamente.",
-      "sizeUnavailable": "Lamentamos, estes tamanhos não podem ser encomendados de momento: {titles}. Nada foi enviado. Escolha outro tamanho ou retire-os do carrinho e envie o pedido novamente."
+      "sizeUnavailable": "Lamentamos, estes tamanhos não podem ser encomendados de momento: {titles}. Nada foi enviado. Escolha outro tamanho ou retire-os do carrinho e envie o pedido novamente.",
+      "pricesChanged": "Entretanto, alguns preços mudaram (uma promoção começou ou terminou). Nada foi enviado. Verifique os novos preços e envie o pedido novamente."
     }
   },
   "done": {

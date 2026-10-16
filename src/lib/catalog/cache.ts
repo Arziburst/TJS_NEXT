@@ -6,6 +6,8 @@ import { isNewProduct } from "./categories";
 import { FAILED_READ_LIFE } from "@/lib/failed-read";
 import { getCategories } from "./index";
 import { holdRenderForTest } from "./render-hold";
+import { lifeUntilSaleChange } from "./sale";
+import { readNextSaleChange } from "./sale-life";
 import { getFacets, getTaxonomyTerms, searchProducts } from "./search";
 import type { CatalogResult, Category, Facets, ListingFilters, ListingSort, ProductSummary, TaxonomyTerm } from "./types";
 
@@ -21,11 +23,27 @@ export function categoryTag(categoryId: string): string {
   return `category:${categoryId}`;
 }
 
+/** The entries of one collection (#67): its page, its listing and its counts. */
+export function collectionTag(collectionId: string): string {
+  return `collection:${collectionId}`;
+}
+
 // A failure is cached with zero lifetime: the next request reads again, and it is never baked into a prerender
 // (a build without the database still succeeds and renders the data at request time).
 function lifeFor(result: CatalogResult<unknown>) {
   if (result.ok) cacheLife("hours");
   else cacheLife(FAILED_READ_LIFE);
+}
+
+const HOURS_REVALIDATE_SECONDS = 3600;
+
+// An entry with prices (#67) lives no longer than until the next sale starts or ends; without that moment it
+// would keep a sale's prices past its end, so a failure to read it is a failed read.
+function priceLifeFor(result: CatalogResult<unknown>, nextSaleChange: number | null | undefined) {
+  if (!result.ok || nextSaleChange === undefined) return cacheLife(FAILED_READ_LIFE);
+  const bounded = lifeUntilSaleChange(HOURS_REVALIDATE_SECONDS, nextSaleChange, Date.now());
+  if (bounded) cacheLife(bounded);
+  else cacheLife("hours");
 }
 
 export async function getCachedCategories(locale: Locale): Promise<CatalogResult<Category[]>> {
@@ -54,14 +72,16 @@ export async function getCachedListingPage(
   "use cache";
   cacheTag(CATALOG_TAG);
   const { locale, categorySlug } = filters;
-  const [result, categories] = await Promise.all([
+  if (filters.collectionId) cacheTag(collectionTag(filters.collectionId));
+  const [result, categories, nextSaleChange] = await Promise.all([
     searchProducts(filters, sort, { page, pageSize }),
     categorySlug ? getCachedCategories(locale) : null,
+    readNextSaleChange(),
   ]);
   const category = categories?.ok ? categories.data.find((c) => c.slug === categorySlug) : undefined;
   if (category) cacheTag(categoryTag(category.id));
   // without the category's id the entry would miss its tag: an incomplete read, kept no longer than a failure
-  lifeFor(categorySlug && !category ? { ok: false, reason: "unexpectedError" } : result);
+  priceLifeFor(categorySlug && !category ? { ok: false, reason: "unexpectedError" } : result, nextSaleChange);
   if (!result.ok) return result;
   await holdRenderForTest(result.data.items.map((item) => item.id));
   // the badge is as fresh as the entry (at most hours late), never per request
@@ -76,8 +96,10 @@ export async function getCachedListingPage(
 export async function getCachedFacets(filters: ListingFilters): Promise<CatalogResult<Facets>> {
   "use cache";
   cacheTag(CATALOG_TAG);
-  const result = await getFacets(filters);
-  lifeFor(result);
+  if (filters.collectionId) cacheTag(collectionTag(filters.collectionId));
+  // the price filter counts by the sale price
+  const [result, nextSaleChange] = await Promise.all([getFacets(filters), readNextSaleChange()]);
+  priceLifeFor(result, nextSaleChange);
   return result;
 }
 

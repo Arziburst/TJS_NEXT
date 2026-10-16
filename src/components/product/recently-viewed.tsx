@@ -63,7 +63,7 @@ async function RecentlyViewedStrip({ currentId }: { currentId: string }) {
               <span className="font-sans text-sm leading-snug break-words group-hover:text-accent-text">{product.title}</span>
               {product.availability === "available" ? (
                 <span className="font-sans text-sm text-accent-text">
-                  <Price usdMinor={product.listPrice.usdMinor} from={product.listPrice.from} />
+                  <Price usdMinor={product.listPrice.usdMinor} regularUsdMinor={product.listPrice.regularUsdMinor} from={product.listPrice.from} />
                 </span>
               ) : (
                 <Badge variant="outline" className="self-start">
