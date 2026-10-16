@@ -84,6 +84,8 @@
     "back": "All orders",
     "placed": "Sent on {date}",
     "status": "Status",
+    "history": "Status history",
+    "historyError": "The status history could not be loaded. Please try again later.",
     "lines": "Ordered pieces",
     "quantity": "Quantity: {quantity}",
     "goodsTotal": "Total for the pieces",

@@ -84,6 +84,8 @@
     "back": "Tutti gli ordini",
     "placed": "Inviato il {date}",
     "status": "Stato",
+    "history": "Cronologia degli stati",
+    "historyError": "Impossibile caricare la cronologia degli stati. Riprova più tardi.",
     "lines": "Pezzi ordinati",
     "quantity": "Quantità: {quantity}",
     "goodsTotal": "Totale dei pezzi",

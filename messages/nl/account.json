@@ -84,6 +84,8 @@
     "back": "Alle bestellingen",
     "placed": "Verstuurd op {date}",
     "status": "Status",
+    "history": "Statusgeschiedenis",
+    "historyError": "De statusgeschiedenis kon niet worden geladen. Probeer het later opnieuw.",
     "lines": "Bestelde stuks",
     "quantity": "Aantal: {quantity}",
     "goodsTotal": "Totaal voor de stuks",
