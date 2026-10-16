@@ -101,9 +101,9 @@ test.describe("security headers", () => {
       expect(headers["content-security-policy"]).not.toMatch(/nova|resend|telegram/i);
       expect(headers["x-content-type-options"]).toBe("nosniff");
       expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
-      // every feature the shop does not use stays denied
+      // every feature the shop does not use stays denied (bluetooth dropped, unknown to Linux Chromium: #134)
       expect(headers["permissions-policy"]).toBe(
-        "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()",
+        "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), browsing-topics=()",
       );
       expect(headers["x-frame-options"]).toBe("DENY");
       // plain http here: no HSTS
