@@ -62,6 +62,82 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"collection_products": {
+                  Row: {
+                    "collection_id": string,"created_at": string,"position": number,"product_id": string
+                  }
+                  Insert: {
+                    "collection_id": string,"created_at"?: string,"position"?: number,"product_id": string
+                  }
+                  Update: {
+                    "collection_id"?: string,"created_at"?: string,"position"?: number,"product_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "collection_products_collection_id_fkey"
+      columns: ["collection_id"]
+isOneToOne: false
+      referencedRelation: "collections"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "collection_products_product_id_fkey"
+      columns: ["product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"collection_sales": {
+                  Row: {
+                    "collection_id": string,"created_at": string,"created_by": string | null,"ends_at": string | null,"percent_off": number,"starts_at": string | null,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "collection_id": string,"created_at"?: string,"created_by"?: string | null,"ends_at"?: string | null,"percent_off": number,"starts_at"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "collection_id"?: string,"created_at"?: string,"created_by"?: string | null,"ends_at"?: string | null,"percent_off"?: number,"starts_at"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "collection_sales_collection_id_fkey"
+      columns: ["collection_id"]
+isOneToOne: true
+      referencedRelation: "collections"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"collection_translations": {
+                  Row: {
+                    "collection_id": string,"created_at": string,"description": string | null,"locale": string,"name": string,"reviewed_at": string | null,"slug": string,"source": Database["public"]['Enums']["translation_source"],"updated_at": string
+                  }
+                  Insert: {
+                    "collection_id": string,"created_at"?: string,"description"?: string | null,"locale": string,"name": string,"reviewed_at"?: string | null,"slug": string,"source"?: Database["public"]['Enums']["translation_source"],"updated_at"?: string
+                  }
+                  Update: {
+                    "collection_id"?: string,"created_at"?: string,"description"?: string | null,"locale"?: string,"name"?: string,"reviewed_at"?: string | null,"slug"?: string,"source"?: Database["public"]['Enums']["translation_source"],"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "collection_translations_collection_id_fkey"
+      columns: ["collection_id"]
+isOneToOne: false
+      referencedRelation: "collections"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"collections": {
+                  Row: {
+                    "cover_blur_data_url": string | null,"cover_height": number | null,"cover_storage_path": string | null,"cover_width": number | null,"created_at": string,"created_by": string | null,"id": string,"is_published": boolean,"position": number,"published_at": string | null,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "cover_blur_data_url"?: string | null,"cover_height"?: number | null,"cover_storage_path"?: string | null,"cover_width"?: number | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_published"?: boolean,"position"?: number,"published_at"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cover_blur_data_url"?: string | null,"cover_height"?: number | null,"cover_storage_path"?: string | null,"cover_width"?: number | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_published"?: boolean,"position"?: number,"published_at"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"currency_settings": {
                   Row: {
                     "currency": string,"decimals": number,"enabled": boolean,"ending": number,"hysteresis_bps": number,"markup_bps": number,"round_increment": number,"small_ending": number | null,"small_price_below": number | null,"small_round_increment": number | null
@@ -167,13 +243,13 @@ isOneToOne: false
                   ]
                 },"order_items": {
                   Row: {
-                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id": string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id": string | null,"quantity": number,"sku": string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id": string | null,"variant_label": string | null,"variant_label_locale": string | null
+                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id": string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id": string | null,"quantity": number,"regular_unit_price_minor": number,"regular_unit_price_usd_minor": number,"sku": string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id": string | null,"variant_label": string | null,"variant_label_locale": string | null
                   }
                   Insert: {
-                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id"?: string | null,"quantity": number,"sku"?: string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
+                    "fulfillment": Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor": number,"line_total_usd_minor": number,"order_id": string,"position": number,"product_id"?: string | null,"quantity": number,"regular_unit_price_minor": number,"regular_unit_price_usd_minor": number,"sku"?: string | null,"title": string,"title_locale": string,"unit_price_minor": number,"unit_price_usd_minor": number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
                   }
                   Update: {
-                    "fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor"?: number,"line_total_usd_minor"?: number,"order_id"?: string,"position"?: number,"product_id"?: string | null,"quantity"?: number,"sku"?: string | null,"title"?: string,"title_locale"?: string,"unit_price_minor"?: number,"unit_price_usd_minor"?: number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
+                    "fulfillment"?: Database["public"]['Enums']["product_fulfillment"],"id"?: string,"line_total_minor"?: number,"line_total_usd_minor"?: number,"order_id"?: string,"position"?: number,"product_id"?: string | null,"quantity"?: number,"regular_unit_price_minor"?: number,"regular_unit_price_usd_minor"?: number,"sku"?: string | null,"title"?: string,"title_locale"?: string,"unit_price_minor"?: number,"unit_price_usd_minor"?: number,"variant_id"?: string | null,"variant_label"?: string | null,"variant_label_locale"?: string | null
                   }
                   Relationships: [
                     {
@@ -274,6 +350,25 @@ isOneToOne: false
       foreignKeyName: "product_images_product_id_fkey"
       columns: ["product_id"]
 isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"product_sales": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"ends_at": string | null,"percent_off": number | null,"price_usd_minor": number | null,"product_id": string,"starts_at": string | null,"updated_at": string,"updated_by": string | null
+                  }
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"ends_at"?: string | null,"percent_off"?: number | null,"price_usd_minor"?: number | null,"product_id": string,"starts_at"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"ends_at"?: string | null,"percent_off"?: number | null,"price_usd_minor"?: number | null,"product_id"?: string,"starts_at"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "product_sales_product_id_fkey"
+      columns: ["product_id"]
+isOneToOne: true
       referencedRelation: "products"
       referencedColumns: ["id"]
     }
@@ -433,6 +528,9 @@ isOneToOne: false
             "admin_add_product_image":
 { Args: { "p_blur_data_url": string,"p_height": number,"p_product_id": string,"p_storage_path": string,"p_width": number }; Returns: string
                            },
+"admin_delete_collection":
+{ Args: { "p_id": string }; Returns: Json
+                           },
 "admin_delete_product":
 { Args: { "p_id": string }; Returns: boolean
                            },
@@ -447,6 +545,9 @@ isOneToOne: false
                            },
 "admin_reorder_product_variants":
 { Args: { "p_product_id": string,"p_variant_ids": (string)[] }; Returns: undefined
+                           },
+"admin_save_collection":
+{ Args: { "p_collection": Json,"p_id": string,"p_translations": Json }; Returns: string
                            },
 "admin_save_image_alts":
 { Args: { "p_alts": Json,"p_image_id": string,"p_product_id": string }; Returns: boolean
@@ -465,6 +566,15 @@ isOneToOne: false
                            },
 "admin_save_variant_labels":
 { Args: { "p_labels": Json,"p_overwrite": boolean,"p_product_id": string }; Returns: number
+                           },
+"admin_set_collection_cover":
+{ Args: { "p_blur_data_url": string,"p_height": number,"p_id": string,"p_storage_path": string,"p_width": number }; Returns: string
+                           },
+"admin_set_collection_products":
+{ Args: { "p_id": string,"p_product_ids": (string)[] }; Returns: undefined
+                           },
+"admin_set_collection_published":
+{ Args: { "p_id": string,"p_published": boolean }; Returns: boolean
                            },
 "admin_set_product_status":
 { Args: { "p_id": string,"p_status": Database["public"]['Enums']["product_status"] }; Returns: boolean
@@ -505,18 +615,21 @@ isOneToOne: false
 "is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
+"next_sale_change":
+{ Args: Record<PropertyKey, never>; Returns: string
+                           },
 "np_prune_dictionary":
 { Args: Record<PropertyKey, never>; Returns: {
               "settlements": number,"warehouses": number
             }[]
                            },
 "shop_facets":
-{ Args: { "p_availability"?: (string)[],"p_category"?: string,"p_colours"?: (string)[],"p_locale": unknown,"p_materials"?: (string)[],"p_price_max_minor"?: number,"p_price_min_minor"?: number,"p_terms"?: (string)[] }; Returns: {
+{ Args: { "p_availability"?: (string)[],"p_category"?: string,"p_collection"?: string,"p_colours"?: (string)[],"p_locale": unknown,"p_materials"?: (string)[],"p_price_max_minor"?: number,"p_price_min_minor"?: number,"p_terms"?: (string)[] }; Returns: {
               "count": number,"facet": string,"value": string
             }[]
                            },
 "shop_search":
-{ Args: { "p_availability"?: (string)[],"p_category"?: string,"p_colours"?: (string)[],"p_limit"?: number,"p_locale": unknown,"p_materials"?: (string)[],"p_offset"?: number,"p_price_max_minor"?: number,"p_price_min_minor"?: number,"p_sort"?: string,"p_terms"?: (string)[] }; Returns: {
+{ Args: { "p_availability"?: (string)[],"p_category"?: string,"p_collection"?: string,"p_colours"?: (string)[],"p_limit"?: number,"p_locale": unknown,"p_materials"?: (string)[],"p_offset"?: number,"p_price_max_minor"?: number,"p_price_min_minor"?: number,"p_sort"?: string,"p_terms"?: (string)[] }; Returns: {
               "ids": (string)[],"total": number
             }[]
                            }
