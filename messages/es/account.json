@@ -45,7 +45,7 @@
     "sending": "Enviando…",
     "hint": "Enviamos un enlace de confirmación a la dirección actual y a la nueva. El correo cambia cuando se siguen los dos enlaces.",
     "sent": "Revisa los dos buzones: hemos enviado enlaces de confirmación a tu dirección actual y a {email}.",
-    "pending": "Pendiente de confirmación: {email}",
+    "pending": "El cambio a {email} espera confirmación: sigue los enlaces de los correos enviados a tu dirección actual y a la nueva.",
     "errors": {
       "invalid": "Indica una dirección de correo válida.",
       "same": "Este ya es tu correo.",
@@ -70,6 +70,8 @@
     "total": "Total",
     "pieces": "{count, plural, one {# pieza} other {# piezas}}",
     "details": "Detalles del pedido {number}",
+    "pastEnd": "No hay pedidos en esta página.",
+    "lastPage": "Ir a la última página",
     "pagination": {
       "label": "Páginas de los pedidos",
       "previous": "Pedidos más recientes",

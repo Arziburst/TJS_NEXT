@@ -45,7 +45,7 @@
     "sending": "Odesílání…",
     "hint": "Pošleme potvrzovací odkaz na současnou i na novou adresu. E-mail se změní po otevření obou odkazů.",
     "sent": "Zkontrolujte obě schránky: poslali jsme potvrzovací odkazy na vaši současnou adresu a na {email}.",
-    "pending": "Čeká na potvrzení: {email}",
+    "pending": "Změna na {email} čeká na potvrzení: otevřete odkazy v e-mailech na současnou i na novou adresu.",
     "errors": {
       "invalid": "Zadejte platnou e-mailovou adresu.",
       "same": "Toto už je váš e-mail.",
@@ -70,6 +70,8 @@
     "total": "Celkem",
     "pieces": "{count, plural, one {# kus} few {# kusy} many {# kusu} other {# kusů}}",
     "details": "Podrobnosti objednávky {number}",
+    "pastEnd": "Na této stránce nejsou žádné objednávky.",
+    "lastPage": "Na poslední stránku",
     "pagination": {
       "label": "Stránky objednávek",
       "previous": "Novější objednávky",

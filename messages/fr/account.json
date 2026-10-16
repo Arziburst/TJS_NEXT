@@ -45,7 +45,7 @@
     "sending": "Envoi…",
     "hint": "Nous envoyons un lien de confirmation à l’adresse actuelle et à la nouvelle. L’e-mail change une fois les deux liens suivis.",
     "sent": "Consultez les deux boîtes : nous avons envoyé des liens de confirmation à votre adresse actuelle et à {email}.",
-    "pending": "En attente de confirmation : {email}",
+    "pending": "Le passage à {email} attend une confirmation : suivez les liens des e-mails envoyés à votre adresse actuelle et à la nouvelle.",
     "errors": {
       "invalid": "Indiquez une adresse e-mail valide.",
       "same": "C’est déjà votre e-mail.",
@@ -70,6 +70,8 @@
     "total": "Total",
     "pieces": "{count, plural, one {# pièce} other {# pièces}}",
     "details": "Détails de la commande {number}",
+    "pastEnd": "Il n’y a aucune commande sur cette page.",
+    "lastPage": "Aller à la dernière page",
     "pagination": {
       "label": "Pages des commandes",
       "previous": "Commandes plus récentes",

@@ -45,7 +45,7 @@
     "sending": "Invio…",
     "hint": "Inviamo un link di conferma all’indirizzo attuale e a quello nuovo. L’email cambia quando entrambi i link sono stati aperti.",
     "sent": "Controlla entrambe le caselle: abbiamo inviato i link di conferma al tuo indirizzo attuale e a {email}.",
-    "pending": "In attesa di conferma: {email}",
+    "pending": "Il cambio in {email} attende conferma: apri i link delle email inviate al tuo indirizzo attuale e a quello nuovo.",
     "errors": {
       "invalid": "Inserisci un indirizzo email valido.",
       "same": "Questa è già la tua email.",
@@ -70,6 +70,8 @@
     "total": "Totale",
     "pieces": "{count, plural, one {# pezzo} other {# pezzi}}",
     "details": "Dettagli dell’ordine {number}",
+    "pastEnd": "Non ci sono ordini in questa pagina.",
+    "lastPage": "Vai all’ultima pagina",
     "pagination": {
       "label": "Pagine degli ordini",
       "previous": "Ordini più recenti",

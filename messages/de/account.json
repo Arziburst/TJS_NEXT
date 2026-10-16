@@ -45,7 +45,7 @@
     "sending": "Wird gesendet…",
     "hint": "Wir senden einen Bestätigungslink an die aktuelle und an die neue Adresse. Die E-Mail ändert sich, sobald beide Links geöffnet wurden.",
     "sent": "Prüfen Sie beide Postfächer: Wir haben Bestätigungslinks an Ihre aktuelle Adresse und an {email} gesendet.",
-    "pending": "Wartet auf Bestätigung: {email}",
+    "pending": "Die Änderung auf {email} wartet auf Bestätigung: Öffnen Sie die Links in den E-Mails an Ihre aktuelle und an die neue Adresse.",
     "errors": {
       "invalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
       "same": "Das ist bereits Ihre E-Mail.",
@@ -70,6 +70,8 @@
     "total": "Summe",
     "pieces": "{count, plural, one {# Stück} other {# Stück}}",
     "details": "Details der Bestellung {number}",
+    "pastEnd": "Auf dieser Seite gibt es keine Bestellungen.",
+    "lastPage": "Zur letzten Seite",
     "pagination": {
       "label": "Seiten der Bestellungen",
       "previous": "Neuere Bestellungen",

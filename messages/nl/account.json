@@ -45,7 +45,7 @@
     "sending": "Verzenden…",
     "hint": "We sturen een bevestigingslink naar het huidige en naar het nieuwe adres. Het e-mailadres verandert zodra beide links zijn gevolgd.",
     "sent": "Kijk in beide mailboxen: we hebben bevestigingslinks gestuurd naar je huidige adres en naar {email}.",
-    "pending": "Wacht op bevestiging: {email}",
+    "pending": "De wijziging naar {email} wacht op bevestiging: volg de links in de e-mails naar je huidige en naar het nieuwe adres.",
     "errors": {
       "invalid": "Vul een geldig e-mailadres in.",
       "same": "Dit is al je e-mailadres.",
@@ -70,6 +70,8 @@
     "total": "Totaal",
     "pieces": "{count, plural, one {# stuk} other {# stuks}}",
     "details": "Details van bestelling {number}",
+    "pastEnd": "Er staan geen bestellingen op deze pagina.",
+    "lastPage": "Naar de laatste pagina",
     "pagination": {
       "label": "Pagina’s van de bestellingen",
       "previous": "Nieuwere bestellingen",

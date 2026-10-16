@@ -36,8 +36,16 @@ export async function listOwnOrders(client: ServerSupabaseClient, userId: string
     .order("number", { ascending: false })
     .range(from, from + ORDERS_PAGE_SIZE - 1);
   if (error) {
-    // a page past the end is no error: it is empty
-    if (error.code === "PGRST103") return { ok: true, orders: [], total: count ?? 0 };
+    // a page past the end (an old link) is no error: it is empty. PostgREST answers it without the count, so the
+    // count is read on its own; the page then links back to the last page.
+    if (error.code === "PGRST103") {
+      const all = await client.from("orders").select("number", { count: "exact", head: true }).eq("user_id", userId);
+      if (all.error || all.count === null) {
+        console.error("account: orders count failed", all.error);
+        return { ok: false };
+      }
+      return { ok: true, orders: [], total: all.count };
+    }
     console.error("account: orders read failed", error);
     return { ok: false };
   }

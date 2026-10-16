@@ -45,7 +45,7 @@
     "sending": "Se trimite…",
     "hint": "Trimitem un link de confirmare la adresa actuală și la cea nouă. E-mailul se schimbă după ce ambele linkuri au fost accesate.",
     "sent": "Verificați ambele căsuțe: am trimis linkuri de confirmare la adresa dvs. actuală și la {email}.",
-    "pending": "În așteptarea confirmării: {email}",
+    "pending": "Schimbarea la {email} așteaptă confirmarea: accesați linkurile din e-mailurile trimise la adresa actuală și la cea nouă.",
     "errors": {
       "invalid": "Introduceți o adresă de e-mail validă.",
       "same": "Acesta este deja e-mailul dvs.",
@@ -70,6 +70,8 @@
     "total": "Total",
     "pieces": "{count, plural, one {# piesă} few {# piese} other {# de piese}}",
     "details": "Detaliile comenzii {number}",
+    "pastEnd": "Nu există comenzi pe această pagină.",
+    "lastPage": "Mergeți la ultima pagină",
     "pagination": {
       "label": "Paginile comenzilor",
       "previous": "Comenzi mai noi",

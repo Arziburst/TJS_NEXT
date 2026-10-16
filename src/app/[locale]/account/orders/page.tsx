@@ -20,6 +20,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title") };
 }
 
+function pageCount(total: number): number {
+  return Math.max(1, Math.ceil(total / ORDERS_PAGE_SIZE));
+}
+
 // ?page=<n>: positive integers only; anything else is the first page
 function pageOf(value: string | string[] | undefined): number {
   return typeof value === "string" && /^[1-9][0-9]{0,5}$/.test(value) ? Number(value) : 1;
@@ -56,12 +60,17 @@ async function OrdersContents({ searchParams }: Pick<PageProps<"/[locale]/accoun
               {t("orders.toShop")}
             </Link>
           </div>
+        ) : result.orders.length === 0 ? (
+          // a page past the end (an old link): nothing here, the way back to the last page
+          <div className="flex flex-col items-start gap-5" data-testid="orders-past-end">
+            <p className="text-lg">{t("orders.pastEnd")}</p>
+            <Link href={accountOrdersPageHref(pageCount(result.total))} className={cn(buttonVariants({ variant: "outline" }))}>
+              {t("orders.lastPage")}
+            </Link>
+          </div>
         ) : (
           <>
-            <ul
-              className="flex flex-col divide-y divide-hairline border-y border-hairline empty:hidden"
-              data-testid="orders-list"
-            >
+            <ul className="flex flex-col divide-y divide-hairline border-y border-hairline" data-testid="orders-list">
               {result.orders.map((order) => {
                 const money = { currency: order.currency, amountMinor: order.totalMinor, decimals: order.decimals };
                 return (
@@ -95,7 +104,7 @@ async function OrdersContents({ searchParams }: Pick<PageProps<"/[locale]/accoun
                 );
               })}
             </ul>
-            <Pagination page={page} pages={Math.max(1, Math.ceil(result.total / ORDERS_PAGE_SIZE))} />
+            <Pagination page={page} pages={pageCount(result.total)} />
           </>
         )}
       </section>
@@ -104,14 +113,13 @@ async function OrdersContents({ searchParams }: Pick<PageProps<"/[locale]/accoun
 }
 
 async function Pagination({ page, pages }: { page: number; pages: number }) {
-  if (pages <= 1 && page === 1) return null;
+  if (pages <= 1) return null;
   const t = await getTranslations("account.orders.pagination");
   const linkClass = cn(buttonVariants({ variant: "outline", size: "sm" }), "min-h-11");
   return (
     <nav aria-label={t("label")} className="flex flex-wrap items-center justify-between gap-4">
       {page > 1 ? (
-        // past the last page (an old link), "newer" goes back to the last one
-        <Link href={accountOrdersPageHref(Math.min(page - 1, pages))} className={linkClass}>
+        <Link href={accountOrdersPageHref(page - 1)} className={linkClass}>
           <ChevronLeftIcon aria-hidden />
           {t("previous")}
         </Link>

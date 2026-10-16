@@ -247,12 +247,20 @@ test.describe("customer account on the local stack", () => {
     const fromCurrent = await mailLink(user.email, "Confirm your new email");
     const fromNew = await mailLink(next, "Confirm your new email");
     expect(new URL(fromCurrent).pathname).toBe("/en/auth/confirm");
-    await page.goto(fromCurrent);
-    await open(page, "/en/account");
+    // opened in this browser (the links name the configured site host; the session lives on the test's host)
+    const here = (link: string) => new URL(link).pathname + new URL(link).search;
+
+    // the first link lands on the account: the email is unchanged and the hint asks for the other link
+    await page.goto(here(fromCurrent));
+    await expect(page).toHaveURL(/\/en\/account$/);
     await expect(page.getByTestId("current-email")).toHaveText(user.email);
-    await page.goto(fromNew);
-    await open(page, "/en/account");
+    await expect(page.getByTestId("pending-email")).toHaveText(en.email.pending.replace("{email}", next));
+
+    // the second one completes the change
+    await page.goto(here(fromNew));
+    await expect(page).toHaveURL(/\/en\/account$/);
     await expect(page.getByTestId("current-email")).toHaveText(next);
+    await expect(page.getByTestId("pending-email")).toHaveCount(0);
     const { data } = await admin!.auth.admin.getUserById(user.id);
     expect(data.user?.email).toBe(next);
   });
@@ -376,6 +384,14 @@ test.describe("customer account on the local stack", () => {
     await expect(rows).toHaveCount(1);
     await expect(rows.first()).toHaveText(en.orders.number.replace("{number}", String(own[0])));
     await expect(page.getByText(en.orders.pagination.page.replace("{page}", "2").replace("{pages}", "2"))).toBeVisible();
+
+    // a page past the end (an old link) is empty, not "no orders", and leads back to the last page
+    await open(page, "/en/account/orders?page=5");
+    await expect(page.getByTestId("orders-past-end")).toContainText(en.orders.pastEnd);
+    await expect(page.getByTestId("orders-empty")).toHaveCount(0);
+    await page.getByRole("link", { name: en.orders.lastPage }).click();
+    await expect(page).toHaveURL(/\/en\/account\/orders\?page=2$/);
+    await expect(rows).toHaveCount(1);
 
     // the own order's detail: the stored line
     await open(page, `/en/account/orders/${own[0]}`);

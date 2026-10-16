@@ -45,7 +45,7 @@
     "sending": "Sending…",
     "hint": "We send a confirmation link to the current and to the new address. The email changes once both links are followed.",
     "sent": "Check both mailboxes: we sent confirmation links to your current address and to {email}.",
-    "pending": "Waiting for confirmation: {email}",
+    "pending": "The change to {email} waits for confirmation: follow the links in the emails to your current and to the new address.",
     "errors": {
       "invalid": "Enter a valid email address.",
       "same": "This is already your email.",
@@ -70,6 +70,8 @@
     "total": "Total",
     "pieces": "{count, plural, one {# piece} other {# pieces}}",
     "details": "Details of order {number}",
+    "pastEnd": "There are no orders on this page.",
+    "lastPage": "To the last page",
     "pagination": {
       "label": "Pages of the orders",
       "previous": "Newer orders",

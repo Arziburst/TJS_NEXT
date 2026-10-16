@@ -45,7 +45,7 @@
     "sending": "Wysyłanie…",
     "hint": "Wysyłamy link potwierdzający na obecny i na nowy adres. E-mail zmieni się po kliknięciu obu linków.",
     "sent": "Sprawdź obie skrzynki: wysłaliśmy linki potwierdzające na twój obecny adres i na {email}.",
-    "pending": "Oczekuje na potwierdzenie: {email}",
+    "pending": "Zmiana na {email} czeka na potwierdzenie: kliknij linki w wiadomościach wysłanych na obecny i na nowy adres.",
     "errors": {
       "invalid": "Podaj prawidłowy adres e-mail.",
       "same": "To już jest twój e-mail.",
@@ -70,6 +70,8 @@
     "total": "Suma",
     "pieces": "{count, plural, one {# sztuka} few {# sztuki} many {# sztuk} other {# sztuki}}",
     "details": "Szczegóły zamówienia {number}",
+    "pastEnd": "Na tej stronie nie ma zamówień.",
+    "lastPage": "Do ostatniej strony",
     "pagination": {
       "label": "Strony zamówień",
       "previous": "Nowsze zamówienia",
